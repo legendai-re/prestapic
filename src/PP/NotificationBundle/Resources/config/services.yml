@@ -1,0 +1,12 @@
+services:
+    pp_notification.faye.adapter:
+        class:     %pp_notification.faye.adapter.class%
+
+    pp_notification.faye.client:
+        class:     %pp_notification.faye.client.class%
+        arguments: 
+            - @pp_notification.faye.adapter
+            - %pp_notification.faye.endpoint%
+            
+    pp_notification.ago:
+        class: PP\NotificationBundle\DateAgo\PPDateAgo        

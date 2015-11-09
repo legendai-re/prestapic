@@ -1,0 +1,22 @@
+
+
+{% if  is_granted("ROLE_USER") %}
+    {% if  form is defined %}                      
+        <div class="new-demand">
+            <a class="avatar" href="#" title="">
+              <img src="{{ asset(app.user.profilImage.webPath("70x70")) }}">
+            </a>
+            <div class="comp-area">
+              {{ form_start(form) }}                                            
+                {{ form_row(form.title) }}
+                <div id="requestFormRest" style="display: none;">
+                    {{ form_row(form.request) }} 
+                    {{ form_row(form.category) }} 
+                    {{ form_row(form.tagsStr) }} 
+                    {{ form_row(form.save) }} 
+                </div>
+            {{ form_end(form) }}
+            </div>
+          </div>                
+    {% endif %}       
+{% endif %}

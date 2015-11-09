@@ -1,0 +1,84 @@
+<?php
+
+namespace PP\NotificationBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+/**
+ *  @ORM\MappedSuperclass
+ */
+class NotificationBase
+{
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createDate", type="date")
+     */
+    protected $createDate;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isViewed", type="boolean")
+     */
+    protected $isViewed;
+
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="notificationType", type="integer")
+     */
+    private $notificationType;
+    
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     *
+     * @return Notification
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
+    }
+
+    /**
+     * Set isViewed
+     *
+     * @param boolean $isViewed
+     *
+     * @return Notification
+     */
+    public function setIsViewed($isViewed)
+    {
+        $this->isViewed = $isViewed;
+
+        return $this;
+    }
+
+    /**
+     * Get isViewed
+     *
+     * @return boolean
+     */
+    public function getIsViewed()
+    {
+        return $this->isViewed;
+    }
+}

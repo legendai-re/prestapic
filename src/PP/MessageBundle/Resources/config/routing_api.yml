@@ -1,0 +1,4 @@
+pp_message_api_home:
+    type: rest
+    resource: PP\MessageBundle\Controller\MessageApiController
+    name_prefix: pp_message_api_

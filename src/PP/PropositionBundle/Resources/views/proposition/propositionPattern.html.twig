@@ -1,0 +1,34 @@
+{% if (proposition.image is not null) and proposition.accepted == false %}                    
+        <div class="reply">
+            <div class="prop">
+                <img 
+                bn-lazy-src="{{ asset(proposition.image.webPath("380x260")) }}"
+                alt="{{ proposition.image.alt }}"
+                />                
+            </div>
+            <a class="overlay" href="{{ asset(proposition.image.webPath("original"))}}" title=""></a>
+            <div class="img-title">
+            <div class="infos">
+              <div class="name">{{ proposition.title }}</div>
+              <div class="author">
+                by
+                <a href="{{ path('pp_user_profile', {'slug': proposition.author.slug}) }}" title="{{ proposition.author.slug }}">{{ proposition.author.name }}</a>
+              </div>
+            </div>
+          </div>                             
+
+        </div>
+        
+        {% if is_granted('ROLE_USER') %}
+            {% if canUpvoteProposition[proposition.id] == true %}
+                {{ form(upvotePropositionForms[proposition.id]) }}
+                <input id="propositionUpvoteButton_{{ proposition.id }}" ng-click="propositions.postPropositionVote({{ proposition.id }})" type="submit" value="upvote" />
+            {% endif %}
+            {% if canSelectProposition == true %}
+                {{ form(selectPropositionForms[proposition.id]) }}
+                <input id="propositionSelect_{{ proposition.id }}" ng-click="propositions.postRequestSelect({{ proposition.id }})" type="submit" value="select" />
+            {% endif %}
+        {% endif %}
+        <h3 id="propositionUpvote_{{ proposition.id }}" >{{ proposition.upvote }}</h3>
+        
+{% endif %}

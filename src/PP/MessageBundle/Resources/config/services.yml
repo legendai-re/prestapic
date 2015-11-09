@@ -1,0 +1,4 @@
+services:
+#    pp_message.example:
+#        class: PP\MessageBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

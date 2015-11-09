@@ -1,0 +1,5 @@
+    
+pp_proposition_api_home:
+    type: rest
+    resource: PP\PropositionBundle\Controller\PropositionApiController
+    name_prefix: pp_proposition_api_

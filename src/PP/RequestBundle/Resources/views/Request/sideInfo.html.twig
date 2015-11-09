@@ -1,0 +1,71 @@
+
+<div class="widget">
+    <h1>Tag trends </h1>
+    <a class="see-more" href="#" title="">more</a>
+    <ul class="tags">
+        {% for tag in popularTags %}    
+            <li class="tag">
+                <a target="_self" class="tag-name" href="{{ path('pp_request_homepage', {'page': 1, 'search_query':tag.name }) }}" title="">{{ tag.name }}</a>                
+                <span class="subject-count">{{tag.usedNb}} sujets</span>
+            </li>            
+        {% endfor %}
+    </ul>
+</div>
+    
+<div class="widget">    
+    <h1>Most active users</h1>
+    <a class="see-more" href="#" title="">more</a>
+    
+    <ul class="users">
+        {% for user in activeUsers %}    
+            <li class="user">
+                <a target="_self" href="{{ path('pp_user_profile', {'slug': user[0].slug}) }}" class="avatar">
+                    <img src="{{ asset(user[0].profilImage.webPath("70x70")) }}" alt="{{ user[0].profilImage.alt }}">                    
+                </a>
+                <a target="_self" class="username" href="{{ path('pp_user_profile', {'slug': user[0].slug}) }}" title="" >{{ user[0].name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+    
+<div class="widget">    
+    <h1>Most popular subjects </h1>
+    <a class="see-more" href="#" title="">more</a>
+    
+    <ul class="subjects">
+        {% for imageRequest in imageRequests %}    
+            <li class="subject">
+                <a target="_self" class="title" href="{{ path('pp_request_view', {'slug': imageRequest.slug}) }}" title="">{{ imageRequest.title }}</a>
+                <span class="author">
+                    par
+                    <a target="_self" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" title="">{{ imageRequest.author.name }}</a>
+                    {{ imageRequest.upvote }} upvotes
+                </span>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+    
+<div class='widget footer'>
+    <ul>
+        <li>
+            <a href='#' title=''>Français (France)</a>
+        </li>
+        <li>
+            <a href='#' title=''>Confidentialité</a>
+        </li>
+        <li>
+            <a href='#' title=''>Conditions d’utilisation</a>
+        </li>
+        <li>
+            <a href='#' title=''>Cookies</a>
+        </li>
+        <li>
+            <a href='#' title=''>À propos</a>
+        </li>
+        <li>
+            <a href='#' title=''>Aide</a>
+        </li>
+    </ul>
+    <span class='copy'>Prestapic © 2015</span>
+</div>

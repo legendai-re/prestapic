@@ -1,0 +1,71 @@
+pp_header:
+    resource: "@PPHeaderBundle/Resources/config/routing.yml"
+    prefix:   /
+
+pp_notification:
+    resource: "@PPNotificationBundle/Resources/config/routing.yml"
+    prefix:   /
+
+pp_notification_api:
+    type: rest
+    resource: "@PPNotificationBundle/Resources/config/routing_api.yml"
+    prefix:   /api/notification/
+
+pp_message_api:
+    type: rest
+    resource: "@PPMessageBundle/Resources/config/routing_api.yml"
+    prefix:   /api/message/
+
+pp_proposition:
+    resource: "@PPPropositionBundle/Resources/config/routing.yml"
+    prefix:   /
+
+pp_proposition_api:
+    type: rest
+    resource: "@PPPropositionBundle/Resources/config/routing_api.yml"
+    prefix:   /api/proposition/
+
+pp_image:
+    resource: "@PPImageBundle/Resources/config/routing.yml"
+    prefix:   /
+
+pp_user:
+    resource: "@PPUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+pp_request:
+    resource: "@PPRequestBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+pp_request_api:
+    type: rest
+    resource: "@PPRequestBundle/Resources/config/routing_api.yml"
+    prefix:   /api/request/
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    prefix: /profile
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+pp_user_api:
+    type: rest
+    resource: "@PPUserBundle/Resources/config/routing_api.yml"
+    prefix:   /api/user/
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
+
+    
+    

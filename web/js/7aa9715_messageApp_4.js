@@ -1,0 +1,1 @@
+var messageApp=angular.module("messageApp",["ngRoute"]);messageApp.config(["$locationProvider",function(a){a.html5Mode(true)}]);messageApp.controller("inboxController",["$scope","$http",function(a,b){this.test="hello world !"}]);

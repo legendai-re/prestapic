@@ -1,0 +1,175 @@
+<div id="headerApp"  >
+    <div ng-controller="headerController as header">
+        <h1 class="logo">
+            <a target="_self" href="{{ path('pp_request_homepage') }}" title="Prestapic">Prestapic</a> 
+        </h1>
+
+        <div class="search">
+            <form action='{{ path('pp_request_homepage') }}' method='GET'>
+                <input ng-focus="header.showSearchOptions()" type='text' class="stopPropagation" name='search_query' placeholder="Find a picture on Prestapic..." />                
+                
+                <ul style="display: none;" id="searchOptions" class="search-options stopPropagation" >
+                    <li class="option">
+                      <a id="filterButton" ng-click="header.showFilterList()" class="filters" href="" title="Filters"></a>
+                      <div id="filterList" class="dropdown filters">
+                        <div class="dropdown-caret">
+                          <span class="caret-outer"></span>
+                          <span class="caret-inner"></span>
+                        </div>
+                        <div class="filters-type">
+                          <div class="dropdown-title">Search filters</div>
+                          <ul  class="list-filters">
+                            <li class="filter">
+                              <input id="cat" name="cat" type="checkbox">
+                              <label for="cat">by categories</label>
+                            </li>
+                            <li class="filter">
+                              <input id="tags" name="tags" type="checkbox">
+                              <label for="tags">by tags</label>
+                            </li>
+                            <li class="filter">
+                              <input id="user" name="user" type="checkbox">
+                              <label for="user">by username</label>
+                            </li>
+                            <li class="filter">
+                              <input id="me" name="me" type="checkbox">
+                              <label for="me">concerning me</label>
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="filter-cat"></div>
+                        <div class="filter-tags"></div>
+                        <div class="filter-user"></div>
+                        <div class="filter-me"></div>
+                      </div>
+                      </li>
+                      <li class="option">                        
+                          <button class="go-search" type='submit'></button>
+                      </li>
+                </ul>
+                
+            </form>
+        </div>
+        <nav class="menu">
+            <ul>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {# new request button #}
+                <li><a class="red" href="" title="Send your request">Send your request</a></li>                                
+                
+                {# notification #}
+                <li class="stopPropagation">
+                    
+                    {# notification button #}                    
+                    <a id="notificationButton" class="notification {% if currentUser.notificationsNb > 0 %}alert{% endif %}" href="" title="Notifications" id="notificationsNew" ng-click="header.showNotifications()">
+                        <div id="notificationsNb" class="number">{% if currentUser.notificationsNb != null %}{{ currentUser.notificationsNb }}{% else %}0{% endif %}</div>
+                    </a>                   
+                    
+                    {# notification list #}
+                    {% verbatim %}                     
+                        <div id="notificationList" class="dropdown notif">
+                            <div class="dropdown-caret">
+                                <span class="caret-outer"></span>
+                                <span class="caret-inner"></span>
+                            </div>
+                            <ul class="notifs">                          
+                                <li ng-repeat="notification in notifications" ng-cloak class="notif">                                    
+                                    <a  ng-click="header.patchNotificationClicked($index)"  >
+                                        <div class="avatar">
+                                            <img ng-src="{{ notification.authorImg }}" alt="{{ notification.authorName }} profile image" />
+                                        </div>
+                                        
+                                        <!-- follow -->
+                                        <div ng-if="notification.type==1" class="desc">
+                                            <b>{{ notification.authorName }}</b>
+                                            followed you
+                                            <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
+                                        </div>
+                                        
+                                        <!-- new proposition -->
+                                        <div class="desc" ng-if="notification.type==3">
+                                            <b>{{ notification.authorName }}</b>
+                                            sent a reply to
+                                            <b>{{ notification.targetTitle }}</b>
+                                            <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
+                                        </div>
+                                        
+                                        <!-- proposition selected -->
+                                        <div class="desc" ng-if="notification.type==2">
+                                            <b>{{ notification.authorName }}</b>
+                                            selected your picture for
+                                            <b>{{ notification.targetTitle }}</b>
+                                            <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
+                                        </div>
+                                        
+                                        <span ng-if="notification.isClicked"class="dot visited"></span>
+                                        <span ng-if="notification.isViewed && !notification.isClicked" class="dot seen" ></span>
+                                        <span ng-if="!notification.isViewed && !notification.isClicked" class="dot new" ></span></span>
+                                    </a>
+                                    
+                                </li>
+                                <li class="more-notif">
+                                    
+                                    <a ng-if="showMoreNotification" ng-click="header.showMoreNotifications()" href="">Show more notification</a>
+                                </li>                            
+                            </ul>                        
+                        </div>                            
+                    {% endverbatim %}
+                </li>
+                
+                {# profile menu #}
+                <li class="stopPropagation">
+                    {# show profile menu button #}
+                    <a ng-click="header.showUserMenu()" class="account" href="" title="Send your request">
+                        <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.profilImage.alt }}">
+                    </a>
+                    
+                    {# profile menu #}
+                    <div id="userMenu" class="dropdown menu">
+                        <div class="dropdown-caret">
+                            <span class="caret-outer"></span>
+                            <span class="caret-inner"></span>
+                        </div>
+                        <ul>
+                            <li class="username">
+                                <a target="_self" href="{{ path('pp_user_profile', {'slug': app.user.slug}) }}">
+                                <b>{{ app.user.name }}</b>
+                                <small>View profile</small>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="pm">
+                                <a href="" ng-click="header.showMessage()">
+                                Messages
+                                <span class="dot-count">3</span>
+                                </a>
+                            </li>
+                            <li class="follows">
+                                <a href="">Manage follows</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="settings">
+                                <a href="">Settings</a>
+                            </li>
+                            <li class="logout">
+                                <a target="_self" href="{{ path('fos_user_security_logout') }}">Log out</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                
+            {% else %}
+                {# if not connected #}
+                <li><a target="_self" class="grey signInUp" href="" >Send your request</a></li>                                                                       
+                <li><a target="_self" class="red signInUp" href=""  title="Sign in / Sign up">Sign in / Sign up</a></li>
+            {% endif %}
+            </ul>
+        </nav>
+        
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            {{ form(notificationForm) }}
+            {{ form(threadForm) }} 
+            {{ form(setNotificationViewedForm) }}
+                        
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,6 @@
+<h3>Notification : </h3>
+<ul>
+    {% for notification in notificationList %}
+        <li><a target="_self"  href="{{ path('pp_user_profile', {'slug': notification.followYou.slug}) }}">{{ notification.followYou.name }}</a> vous suis</li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,117 @@
+{% extends "PPRequestBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ imageRequest.title }}
+{% endblock %}
+
+{% block requestBody %}
+<div id="viewApp" >
+<base href=" " />
+    
+    <article class="demand" ng-controller="requestController as request">
+        <a href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" class="avatar">
+            <img src="{{ asset(imageRequest.author.profilImage.webPath("70x70")) }}" alt="{{ imageRequest.author.profilImage.alt }}">                    
+        </a>
+
+        <h3 id="imageRequestUpvote">{{ imageRequest.upvote }}</h3>    
+        {% if canUpvoteImageRequest == true %}
+            {{ form_start(upvoteRequestForm) }}            
+            {{ form_end(upvoteRequestForm) }}
+            <input id="imageRequestUpvoteButton" ng-click="request.postRequestVote({{ imageRequest.id }})" type="submit" name="upvote" value='upvote' />
+        {% endif %}
+
+        <div class="infos">          
+            <h1>
+                <a href="">{{ imageRequest.title }}</a>
+            </h1>
+            <div class="author single">
+                Publié par
+                <a href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" title="">{{ imageRequest.author.name }}</a>
+                dans
+                <a href="{{ path('pp_request_homepage', { 'search_query':imageRequest.category.name}) }}" title="">{{ imageRequest.category.name }}</a>
+            </div>
+
+            <div class="content-single">
+                <p> {{ imageRequest.request }} </p>    
+            </div>
+
+            <div class="tag-list">
+                {% for tag in imageRequest.tags %}
+                    <a class="tag" href="{{ path('pp_request_homepage', {'search_query':tag.name}) }}" title="">{{ tag.name }}</a>
+                {% endfor %}
+            </div>            
+        </div>
+
+    </article> 
+
+    <div class="replies" ng-controller="propositionsController as propositions" ng-init="propositions.init({{imageRequest.id}})">
+
+        {% if imageRequest.closed %}
+        <div class="reply selected">
+            <div class="prop">
+              <img src="{{ asset(acceptedProposition.image.webPath("original")) }}" alt="{{ acceptedProposition.image.alt }}">
+            </div>
+            <a class="overlay" href="{{ asset(acceptedProposition.image.webPath("original"))}}"" title=""></a>
+            <div class="img-title">
+            <a href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" class="avatar">
+                <img src="{{ asset(acceptedProposition.author.profilImage.webPath("70x70")) }}" alt="{{ acceptedProposition.author.profilImage.alt }}">                    
+            </a>
+                <div class="infos">
+                <div class="name">{{ acceptedProposition.title }}</div>
+                    <span class="selected-label">Selectionée</span>
+                    <div class="author">
+                        by
+                        <a href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" title="">{{  acceptedProposition.author.name }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div id="propositionForm"  >
+           {% if is_granted("ROLE_USER") %}
+               {% if not imageRequest.closed and imageRequest.author.id != app.user.id %}
+                   {{ form(propositionForm) }}
+               {% endif %}
+           {% endif %}
+        </div>  
+
+        <h2 class="more-replies">Il y a {{ imageRequest.propositionsNb }} autres propositions</h2>
+
+        <div id="propositions" >
+            {{ form(loadPropositionForm) }}
+            <div id="loadPage1"></div>                  
+        </div>
+        
+         <div class="loader" title="7" id="loadingGif" style="margin-left: 350px;">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+               width="50px" height="100px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+              <rect x="0" y="10" width="4" height="10" fill="#b93a3a" opacity="0.2">
+                <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="0.6s" repeatCount="indefinite" />
+                <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
+                <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
+              </rect>
+              <rect x="8" y="10" width="4" height="10" fill="#b93a3a"  opacity="0.2">
+                <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+                <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+                <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+              </rect>
+              <rect x="16" y="10" width="4" height="10" fill="#b93a3a"  opacity="0.2">
+                <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+                <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+                <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+              </rect>
+            </svg>
+          </div>               
+    </div>
+</div>
+    
+          
+{% endblock %}
+
+
+{% block js %}
+    {% javascripts filter='?yui_js' '@PPRequestBundle/Resources/public/js/viewApp.js' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}    
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block bellowHeader %}                
+        {% if  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            
+        {% else %}
+        <section id="bellowHeader" class="jumbotron"> 
+            <div class="jumbotext">      
+                <p class="line">Can't find the picture you'd like ?</p>
+                <p class="line">  People may help you.</p>
+                <p class="line">
+                    <strong> Send your request on Prestapic !</strong>
+                </p>
+                <a class="button learn" href="#" title="Learn more">Learn more</a>                
+             </div>
+         </section>
+        {% endif %}                    
+{% endblock %}
+
+
+{% block body %}
+    <div class="demand-list" >
+        {% block requestBody %}
+        {% endblock %}
+    </div>
+{% endblock %}

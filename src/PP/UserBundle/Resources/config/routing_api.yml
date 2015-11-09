@@ -1,0 +1,7 @@
+    
+pp_user_api_home:
+    type: rest
+    resource: PP\UserBundle\Controller\ShowUserApiController
+    name_prefix: pp_user_api_
+    
+ 

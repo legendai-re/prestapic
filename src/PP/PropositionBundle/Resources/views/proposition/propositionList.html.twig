@@ -1,0 +1,13 @@
+{% for proposition in propositionList %}
+    {{ include("PPPropositionBundle:proposition:propositionPattern.html.twig") }}
+    {% if loop.index == 3 %}
+            {% if nextPage <= nbPages %}
+                <div  id="{{ "loadPageTrigger"~nextPage }}"></div>
+                {{ form(loadPropositionForm) }}
+            {% endif %}
+    {% endif %}
+{% else %}
+    <li>Pas (encore !) de propositions</li>
+{% endfor %} 
+{% if nextPage <= nbPages %}<div  id="{{ "loadPage"~nextPage }}"></div>{% endif %}
+<!--//!->

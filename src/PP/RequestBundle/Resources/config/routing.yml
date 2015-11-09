@@ -1,0 +1,14 @@
+pp_request_homepage:
+    path:     /
+    defaults: { _controller: PPRequestBundle:Request:index}
+
+pp_request_view:
+    path:     /request/{slug}/{page}
+    defaults: { _controller: PPRequestBundle:Request:view, page:1 }
+    requirements:
+        page: \d+
+
+pp_request_add_request:
+    path:     /add/request
+    defaults: { _controller: PPRequestBundle:Request:addRequest }
+    

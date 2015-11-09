@@ -1,0 +1,62 @@
+
+<article class="demand">
+    {# image request author avatar #}
+    <a target="_self" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" class="avatar">
+        <img bn-lazy-src="{{ asset(imageRequest.author.profilImage.webPath("70x70")) }}" alt="{{ imageRequest.author.profilImage.alt }}">
+    </a>                         
+
+    <div class="infos">
+        {# display image request title  #}
+        <h1>
+            <a  target="_self" href="{{ path('pp_request_view', {'slug': imageRequest.slug}) }}">{{ imageRequest.title }}</a>
+            {% if imageRequest.upvote > 0 %}
+            <div style="display: inline-block; float: right; color: #999;">
+                {{ imageRequest.upvote }}
+            </div>
+        {% endif %}
+        </h1>
+
+        {# display image request upvote number #}
+
+
+
+        {% set break = false %}
+        <div class="tag-list">
+            <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'search_query': imageRequest.category.name }) }}" >{{ imageRequest.category.name }}</a>
+            {% for tag in imageRequest.tags if not break%}
+                <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'search_query':tag.name }) }}">{{ tag.name }}</a>
+                {% if loop.index == 3  %}{% set break = true %}{% endif %}
+            {% endfor %}
+        </div>
+        <div class="author">
+            <span title="{{ imageRequest.createdDate|date('Y-m-d H:i:s') }}">{{ imageRequest.dateAgo }}</span>   
+            by <a target="_self"  href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}">{{ imageRequest.author.name }}</a>                    
+        </div>     
+    </div>                                                                                                                                       
+
+    {# display 3 or 2 proposition + x ( #}
+    {% set break = false %}
+    <div class="replies" >
+        {% for proposition in propositionsList['imageRequest_'~imageRequest.id] if not break %}                
+            <a target="_self" class="reply" href="{{ asset(proposition.image.webPath("original"))}}"> 
+                <img 
+                bn-lazy-src="{{ asset(proposition.image.webPath("380x260")) }}"
+                alt="{{ proposition.image.alt }}"
+                />                
+                {% if loop.index == 3  %}{% set break = true %}{% endif %}
+                {% if loop.index == 2 and imageRequest.propositionsNb > 3 %}{% set break = true %}{% endif %}
+            </a> 
+        {% endfor %}
+
+        {# display proposition's number #}
+        {% if imageRequest.propositionsNb > 3  %}
+            <a target="_self" href="{{ path('pp_request_view', {'slug': imageRequest.slug}) }}" title="+ {{ imageRequest.propositionsNb-2 }}" class="more-replies">                    
+                +{{ imageRequest.propositionsNb-2 }}             
+            </a>                
+        {% endif %}
+        
+    </div>
+
+</article>
+   
+    

@@ -1,0 +1,52 @@
+<?php
+
+namespace PP\NotificationBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * NotificationSelected
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PP\NotificationBundle\Entity\NotificationSelectedRepository")
+ */
+class NotificationSelected
+{
+    public function __construct($id)
+    {
+        $this->id = $id;
+    }
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id     
+     */
+    private $id;
+    
+    /**    
+    * @ORM\ManyToOne(targetEntity="PP\RequestBundle\Entity\ImageRequest")     
+    * @Assert\Valid()          
+    */
+    private $imageRequest;        
+    
+    /**    
+    * @ORM\OneToOne(targetEntity="PP\NotificationBundle\Entity\Notification", cascade={"persist", "remove"} )     
+    * @Assert\Valid()          
+    */
+    private $notificationBase;     
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+

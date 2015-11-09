@@ -1,0 +1,16 @@
+{# src/OC/UserBundle/Resources/views/layout.html.twig #}
+
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+  Profile -{{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+ 
+  {% block fos_user_content %}
+  {% endblock fos_user_content %}
+
+{% endblock %}

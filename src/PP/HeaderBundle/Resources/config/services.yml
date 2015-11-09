@@ -1,0 +1,4 @@
+services:
+#    pp_header.example:
+#        class: PP\HeaderBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

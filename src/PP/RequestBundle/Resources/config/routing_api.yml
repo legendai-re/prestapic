@@ -1,0 +1,5 @@
+    
+pp_request_api_home:
+    type: rest
+    resource: PP\RequestBundle\Controller\RequestApiController
+    name_prefix: pp_request_api_

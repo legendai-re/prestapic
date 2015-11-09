@@ -1,0 +1,4 @@
+services:
+#    pp_image.example:
+#        class: PP\ImageBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

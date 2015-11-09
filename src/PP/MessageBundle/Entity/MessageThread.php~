@@ -1,0 +1,194 @@
+<?php
+
+namespace PP\MessageBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+
+
+/**
+ * MessageThread
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PP\MessageBundle\Entity\MessageThreadRepository")
+ */
+class MessageThread
+{
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->createdDate = new \DateTime();
+        $this->lastMessageDate = new \DateTime();
+    }
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createdDate", type="datetime")
+     */
+    private $createdDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastMessageDate", type="datetime")
+     */
+    private $lastMessageDate;
+    
+    /**    
+    * @ORM\OneToOne(targetEntity="PP\MessageBundle\Entity\Message", cascade={"persist"})
+    * @Assert\Valid()          
+    */
+    private $lastMessage;
+
+    /**    
+    * @ORM\ManyToMany(targetEntity="PP\UserBundle\Entity\User", mappedBy="messageThreads", cascade={"persist"})
+    * @Assert\Valid()          
+    */
+    private $users;
+    
+    /**    
+    * @ORM\OneToMany(targetEntity="PP\MessageBundle\Entity\Message", mappedBy="messageThread", cascade={"persist", "remove"})
+    * @Assert\Valid()          
+    */
+    private $messages;
+    
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set createdDate
+     *
+     * @param \DateTime $createdDate
+     *
+     * @return MessageThread
+     */
+    public function setCreatedDate($createdDate)
+    {
+        $this->createdDate = $createdDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createdDate
+     *
+     * @return \DateTime
+     */
+    public function getCreatedDate()
+    {
+        return $this->createdDate;
+    }
+
+    /**
+     * Set lastMessageDate
+     *
+     * @param \DateTime $lastMessageDate
+     *
+     * @return MessageThread
+     */
+    public function setLastMessageDate($lastMessageDate)
+    {
+        $this->lastMessageDate = $lastMessageDate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastMessageDate
+     *
+     * @return \DateTime
+     */
+    public function getLastMessageDate()
+    {
+        return $this->lastMessageDate;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \PP\UserBundle\Entity\User $user
+     *
+     * @return MessageThread
+     */
+    public function addUser(\PP\UserBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \PP\UserBundle\Entity\User $user
+     */
+    public function removeUser(\PP\UserBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * Add message
+     *
+     * @param \PP\MessageBundle\Entity\Message $message
+     *
+     * @return MessageThread
+     */
+    public function addMessage(\PP\MessageBundle\Entity\Message $message)
+    {
+        $this->messages[] = $message;
+
+        return $this;
+    }
+
+    /**
+     * Remove message
+     *
+     * @param \PP\MessageBundle\Entity\Message $message
+     */
+    public function removeMessage(\PP\MessageBundle\Entity\Message $message)
+    {
+        $this->messages->removeElement($message);
+    }
+
+    /**
+     * Get messages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+}

@@ -1,0 +1,65 @@
+
+<div>
+    <h1>Message</h1>
+    <base href=" " />    
+    
+    {% verbatim %}
+        <div ng-controller="inboxController as inbox" style="display: inline-block; width: 300px; background-color: #ABCECF;">
+            {% endverbatim %}{{ form(getInboxForm) }}{% verbatim %}
+            <h2>Inbox</h2>
+            <ul>
+                <li ng-repeat="thread in inboxThreads" >                    
+                    <a href="" ng-click="inbox.gotToConversation(thread)">
+                        <img width="50" heigth="50" class="avatar" src="{{ thread.userImage }}" />
+                        <p>{{ thread.userName }}
+                            <span ng-if="thread.messageFromUs">-></span>
+                            <span ng-if="!thread.messageFromUs"><-</span>
+                        {{ thread.message }}<b ng-if="thread.haveNewMessage">~ NEW</b></p>
+                    </a>
+                </li>
+            </ul>            
+            
+        </div>
+        
+        <div ng-controller="searchController as search" style="display: inline-block;  width: 300px; background-color: #C4DCE0; ">            
+             <h2>Search</h2>
+            
+            
+            <form action="{% endverbatim %}{{ path('pp_message_api_get_search_user') }}{% verbatim %}" name="pp_message_api_get_search_user_form">
+                <input type="text" name="search" ng-model="search.search" ng-change="search.searchUser()"/>
+            </form>                
+            <ul>
+                <li ng-repeat="user in userSearchList" >
+                    <a href="" ng-click="search.getThread(user)">
+                        <img width="50" heigth="50" class="avatar" src="{{ user.image }}" />{{ user.name }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+                
+        <div ng-controller="chatController as chat" style="display: inline-block;  width: 500px; background-color: #DAF4F5;">            
+            <h2>Chat -> {{ currentThread.targetName }}</h2>
+            <div>
+                <ul>                                         
+                    <li ng-repeat="message in conversation">
+                        <div ng-if="message.messageFromUs" style="margin-left: 200px">
+                            {{ message.authorName }} : {{ message.content }}<img width="50" heigth="50" class="avatar" src="{{ currentUser.image }}" />
+                        </div>
+                        
+                        <div ng-if="!message.messageFromUs">
+                            <img width="50" heigth="50" class="avatar" src="{{ message.authorImage }}" />{{ message.authorName }} : {{ message.content }}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <form ng-action="{% endverbatim %}{{ path('pp_message_api_get_search_user') }}{% verbatim %}" name="pp_message_api_get_search_user_form">
+                <textarea type="text" name="search" ng-model="chat.messageContent" ng-change="newMessage.searchUser()"/></textarea>
+                <button type="submit" ng-click="chat.sendMessage()">Send</button>
+            </form>
+            
+        </div>
+    {% endverbatim %}
+    
+</div>
+
+

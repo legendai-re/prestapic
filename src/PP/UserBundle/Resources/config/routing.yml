@@ -1,0 +1,11 @@
+pp_user_profile:
+    path:     /{slug}/{page}
+    defaults: { _controller: PPUserBundle:ShowUser:index, page: 1}
+    requirements:
+        page: \d+
+
+pp_user_edit:
+    path:     /{slug}/edit
+    defaults: { _controller: PPUserBundle:ShowUser:edit}
+    
+ 

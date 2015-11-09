@@ -1,0 +1,5 @@
+    
+pp_notification_api_home:
+    type: rest
+    resource: PP\NotificationBundle\Controller\NotificationApiController
+    name_prefix: pp_notification_api_
