@@ -15,7 +15,7 @@ class b_LoadUserImage implements FixtureInterface{
     public function load(ObjectManager $manager)
     {
 
-        for($i=0; $i<15; $i++){
+        /*for($i=0; $i<15; $i++){
             $profilImage = new \PP\ImageBundle\Entity\Image();
             $profilImage->setUploadDir('user/profile');
             $profilImage->setAlt('profilImg');
@@ -37,6 +37,6 @@ class b_LoadUserImage implements FixtureInterface{
     public function getOrder()
     {
        return 2; 
+    }*/
     }
-  
 }

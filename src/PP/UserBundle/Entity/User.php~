@@ -123,7 +123,14 @@ class User extends BaseUser
     * @Assert\Valid()          
     */
     private $propositionsUpvoted;
-
+    
+     /**
+    * @var boolean $isInMessage
+    *
+    * @ORM\Column(name="isInMessage", type="boolean", nullable=true)
+    */
+    private $isInMessage;
+    
     /**
     * Set name
     *

@@ -123,7 +123,14 @@ class User extends BaseUser
     * @Assert\Valid()          
     */
     private $propositionsUpvoted;
-
+    
+     /**
+    * @var boolean $isInMessage
+    *
+    * @ORM\Column(name="isInMessage", type="boolean", nullable=true)
+    */
+    private $isInMessage;
+    
     /**
     * Set name
     *
@@ -590,5 +597,29 @@ class User extends BaseUser
     public function getMessageThreads()
     {
         return $this->messageThreads;
+    }
+
+    /**
+     * Set isInMessage
+     *
+     * @param boolean $isInMessage
+     *
+     * @return User
+     */
+    public function setIsInMessage($isInMessage)
+    {
+        $this->isInMessage = $isInMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get isInMessage
+     *
+     * @return boolean
+     */
+    public function getIsInMessage()
+    {
+        return $this->isInMessage;
     }
 }

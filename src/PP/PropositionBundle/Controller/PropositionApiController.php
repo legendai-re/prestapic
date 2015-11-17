@@ -120,6 +120,7 @@ class PropositionApiController extends Controller
                             $this->generateUrl('pp_request_view', array('slug' => $notificationSelected->getImageRequest()->getSlug())),
                             $setClickedUrl,
                             $notificationSelected->getImageRequest()->getAuthor()->getName(),
+                            $notificationSelected->getImageRequest()->getAuthor()->getId(),
                             $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $notificationSelected->getImageRequest()->getAuthor()->getProfilImage()->getWebPath("70x70"),
                             $notificationSelected->getImageRequest()->getTitle()  
                 );

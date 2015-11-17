@@ -9,11 +9,9 @@
         {# display image request title  #}
         <h1>
             <a  target="_self" href="{{ path('pp_request_view', {'slug': imageRequest.slug}) }}">{{ imageRequest.title }}</a>
-            {% if imageRequest.upvote > 0 %}
-            <div style="display: inline-block; float: right; color: #999;">
+            <a class="upvote-demand" href="#" title="Up vote">
                 {{ imageRequest.upvote }}
-            </div>
-        {% endif %}
+            </a>                  
         </h1>
 
         {# display image request upvote number #}

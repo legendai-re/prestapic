@@ -5,6 +5,7 @@ namespace PP\RequestBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use PP\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Description of LoadCategory
  *
@@ -22,26 +23,52 @@ class c_LoadUser implements FixtureInterface{
         }
 
         for($i=0; $i<15; $i++){
-                                
-            $imageRepository = $em->getRepository('PPImageBundle:Image');
-            $profilId = rand (1, 4);
-            $profileImg = $imageRepository->find($i+1);
-            $coverImg = $imageRepository->find($i+15+1);
-            if($profileImg !=null && $coverImg!=null){
-                $user = new User();
-                $user->setName($namesList[$i]);
-                $user->setProfilImage($profileImg);
-                $user->setCoverImage($coverImg);
-                if(strcmp($namesList[$i], 'Admin') == 0){
-                    $user->setRoles(array('ROLE_MODERATOR'));
-                }
-                else $user->setRoles(array('ROLE_USER'));
-                $user->setPlainPassword(strtolower($namesList[$i]));
-                $user->setEnabled(true);
-                $user->setEmail($emailList[$i]);
-                $user->setUsername($emailList[$i]);         
-                $em->persist($user);
+             
+            $imgName = rand(1, 7);        
+            copy(__DIR__.'/../../../../../web/Resources/public/images/profile/avatar_'.$imgName.'.jpg',  __DIR__.'/../../../../../web/uploads/img/user/profile/original/new'.$i.'.jpg');
+            $profilImage = new \PP\ImageBundle\Entity\Image();
+            $profilImage->setUploadDir('user/profile');
+            $profilImage->setAlt('profilImg');
+            $profilImage->setUrl('png');        
+            $imgsize = getimagesize(__DIR__.'/../../../../../web/uploads/img/user/profile/original/new'.$i.'.jpg');
+            $mime = $imgsize['mime'];
+            $file = new UploadedFile(__DIR__.'/../../../../../web/uploads/img/user/profile/original/new'.$i.'.jpg', "new".$i, $mime, $imgsize, 0, true );
+            $profilImage->setFile($file);                                   
+            
+            
+            sleep(2);
+            
+            $coverImage = new \PP\ImageBundle\Entity\Image();
+            copy(__DIR__.'/../../../../../web/Resources/public/images/profile/avatar_'.$imgName.'.jpg',  __DIR__.'/../../../../../web/uploads/img/user/cover/original/new'.$i.'.jpg');
+            $coverImage->setUploadDir('user/cover');
+            $coverImage->setAlt('coverImg');
+            $coverImage->setUrl('jpg');
+            $imgsize = getimagesize(__DIR__.'/../../../../../web/uploads/img/user/cover/original/new'.$i.'.jpg');
+            $mime = $imgsize['mime'];
+            $file = new UploadedFile(__DIR__.'/../../../../../web/uploads/img/user/cover/original/new'.$i.'.jpg', "new'.$i.'", $mime, $imgsize, 0, true );
+            $coverImage->setFile($file);
+            $em->persist($coverImage);
+            
+            
+
+            //$imageRepository = $em->getRepository('PPImageBundle:Image');           
+            //$profileImg = $imageRepository->find($i+1);
+            //$coverImg = $imageRepository->find($i+15+1);
+            
+            $user = new User();
+            $user->setName($namesList[$i]);
+            $user->setProfilImage($profilImage);
+            $user->setCoverImage($coverImage);
+            if(strcmp($namesList[$i], 'Admin') == 0){
+                $user->setRoles(array('ROLE_MODERATOR'));
             }
+            else $user->setRoles(array('ROLE_USER'));
+            $user->setPlainPassword(strtolower($namesList[$i]));
+            $user->setEnabled(true);
+            $user->setEmail($emailList[$i]);
+            $user->setUsername($emailList[$i]);         
+            $em->persist($user);
+            
         
         }
         

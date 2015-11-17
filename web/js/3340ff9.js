@@ -11,259 +11,411 @@ $("#signInUpOverClose").click(function () {
    $('#signInUpOver').fadeOut();  
 });
 
-    
-    var headerApp = angular.module('headerApp',[]);       
-    
-    headerApp.config(['$locationProvider',function ($locationProvider) {
-        $locationProvider.html5Mode(true);
-    }]);          
-        
-    /* node */
-    headerApp.service('FayeClient', function () {
-            return new Faye.Client('http://localhost:3000/');
-    })
-    
-    headerApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeClient, $http) {
-        $rootScope.notifications = []        
-               
-        var form = document.forms["pp_notification_api_get_thread_form"];        
-        if(form != null){
-            var formAction = form.action;
-            var notificationThreadSlug = null;
 
-            $http.get(formAction).
-                then(function(response) {
-                    var jsonResponse = JSON.parse(response.data);
-                    notificationThreadSlug = jsonResponse.notifThreadSlug;
 
-                    FayeClient.subscribe('/notification/'+notificationThreadSlug, function (message) {            
-                        $rootScope.$broadcast('notification', message);            
+var headerApp = angular.module('headerApp',[]);       
+
+headerApp.config(['$locationProvider',function ($locationProvider) {
+    $locationProvider.html5Mode(true);
+}]);          
+
+/* node */
+headerApp.service('FayeClient', function () {
+        return new Faye.Client('http://localhost:3000/');
+})
+
+
+headerApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeClient, $http) {
+    $rootScope.notifications = []        
+
+    var form = document.forms["pp_notification_api_get_thread_form"];        
+    if(form != null){
+        var formAction = form.action;
+        var notificationThreadSlug = null;
+
+        $http.get(formAction).
+            then(function(response) {
+                var jsonResponse = JSON.parse(response.data);
+                notificationThreadSlug = jsonResponse.notifThreadSlug;
+
+                FayeClient.subscribe('/notification/'+notificationThreadSlug, function (message) {            
+                    $rootScope.$broadcast('notification', message);            
+                });
+
+            }, function(response) {
+             console.log("Request failed : "+response.statusText );                        
+            }
+        );
+    }
+
+}])
+
+headerApp.filter('reverse', function() {
+    return function(items) {
+      return items.slice().reverse();
+    };
+  });
+
+
+var notificationListIsOpen = false;
+var userMenuIsOpen = false;
+var filterListIsOpen = false;
+var haveOpenMessage = false;
+var messageIsOpen = false;
+
+headerApp.controller('headerController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
+
+        var haveAllreadyOpen = false;            
+        var showMoreNotificationUrl = null;
+        $scope.showMoreNotification = true;
+
+        var closeAll = function(){
+            if(messageIsOpen)closeMessage();
+            if(notificationListIsOpen)closeNotification();
+            if(filterListIsOpen)closeFilterList();
+            if(userMenuIsOpen)closeUserMenu();
+        }
+
+        this.showMessage = function(){
+            closeAll();
+            var messageAppContainer = document.getElementById("messageApp");
+            document.getElementById("body").style.position = "fixed";   
+            if(messageAppContainer != null ){
+                patchIsInMessage(true);
+                if(!haveOpenMessage){
+                    angular.element(document).ready(function() {       
+                            angular.bootstrap(messageAppContainer, ["messageApp"]);
                     });
+                    haveOpenMessage = true;
+                }                                                           
+                messageAppContainer.style.display = 'block';                    
+                messageIsOpen = true;                                        
+            }                
+        }
 
-                }, function(response) {
-                 console.log("Request failed : "+response.statusText );                        
+        var closeMessage = function(){
+            document.getElementById("body").style.position = "relative";
+            if(document.getElementById('messageApp')!=null)document.getElementById('messageApp').style.display = 'none';
+            patchIsInMessage(false);
+            messageIsOpen = false;
+        }
+
+        var patchIsInMessage = function(mode){
+            var isInMessageForm = document.forms["pp_user_api_patch_is_in_message_form"];
+            if(isInMessageForm!=null){
+                var myData = {
+                    mode: mode
+                };                    
+                $http({
+                    method: 'PATCH',
+                    url: isInMessageForm.action,                    
+                    data: JSON.stringify(myData)
+                 }). 
+                    then(function(response) {                                               
+
+                    }, function(response) {
+                        console.log("Request failed : "+response.statusText );                        
+                    }
+                );                        
+            }
+        }
+
+        var closeNotification = function(){
+             /* close notification list */
+            document.getElementById('notificationList').style.display = 'none';
+            $("#notificationButton").removeClass("alert");
+            $("#notificationButton").removeClass("open");
+            document.getElementById('notificationsNb').innerHTML = 0;
+
+             /* set the notification viewed in database */
+            var setNotificationViewedForm = document.forms["pp_notification_api_patch_viewed_form"];
+            if(setNotificationViewedForm!=null){
+
+                var myData = [];                    
+                $http({
+                    method: 'PATCH',
+                    url: setNotificationViewedForm.action,                    
+                    data: JSON.stringify(myData)
+                 }). 
+                    then(function(response) {                                               
+
+                    }, function(response) {
+                        console.log("Request failed : "+response.statusText );                        
+                    }
+                );                        
+            }
+
+            /* set the notification viewed on client */
+            for(var index in $scope.notifications) { 
+                if ($scope.notifications.hasOwnProperty(index)) {
+                    $scope.notifications[index].isViewed = true;
                 }
-            );
+            }
+
+            notificationListIsOpen = false;                
+        }
+
+        this.showNotifications = function(){                
+            if(!notificationListIsOpen){
+                closeAll();
+                /* open notification list */
+                document.getElementById('notificationList').style.display = 'block';                   
+                $("#notificationButton").addClass("open");                    
+
+                /* load notification the first time */
+                if(!haveAllreadyOpen){                    
+                    var getNotificationForm = document.forms["pp_notification_api_get_notification_form"];
+                    if(getNotificationForm!=null){
+                        $http.get(getNotificationForm.action).
+                            then(function(response) {                                  
+                                showMoreNotificationUrl = response.data.showMoreApiUrl;
+                                for(var x=0; x<response.data.notifications.length; x++){                    
+                                    $scope.notifications.push(response.data.notifications[x]);                                                        
+                                }                                
+                                if(!response.data.showMore)$scope.showMoreNotification = false;
+                                haveAllreadyOpen = true;                                
+                            }, function(response) {
+                             console.log("Request failed : "+response.statusText );                        
+                            }
+                        );
+                    }                    
+                }                   
+
+                notificationListIsOpen = true;
+                userMenuIsOpen = false;
+
+            }else{
+                closeAll();
+            }
+        }
+
+
+        this.showMoreNotifications = function(){
+            if(notificationListIsOpen && showMoreNotificationUrl!=null){                                                                                                                                  
+                $http.get(showMoreNotificationUrl).
+                    then(function(response) {                            
+                        showMoreNotificationUrl = response.data.showMoreApiUrl;
+                        for(var x=0; x<response.data.notifications.length; x++){                    
+                            $scope.notifications.push(response.data.notifications[x]);                                
+                        }
+                        if(!response.data.showMore)$scope.showMoreNotification = false;                            
+                    }, function(response) {
+                        console.log("Request failed : "+response.statusText );                        
+                    }
+                );                                        
+            }   
+        }
+
+        this.patchNotificationClicked = function(index){                                
+            closeAll();
+            var currentNotif = $scope.notifications[index];
+            var url = currentNotif.setClickedUrl;
+
+            var myData = [];                
+
+            if(!currentNotif.isCliked){
+                $http({
+                    method: 'PATCH',
+                    url: url,                    
+                    data: JSON.stringify(myData)
+                 }). 
+                    then(function(response) {                                               
+
+                    }, function(response) {
+                        console.log("Request failed : "+response.statusText );                        
+                    }
+                );
+            }
+            /* if not a message */
+            if(currentNotif.type != 4){
+                $window.location.href = currentNotif.redirectUrl;
+            }else{
+                this.showMessage();                                        
+                angular.element(document.getElementById('messageApp')).scope().$emit('showNewMessage', currentNotif.authorId);
+            }
+
+        }
+
+        this.showUserMenu = function(){                
+            if(!userMenuIsOpen){
+                closeAll();                    
+                document.getElementById('userMenu').style.display = 'block';   
+                userMenuIsOpen = true;
+            }else{
+                closeAll();
+            }                
+        }
+
+        var closeUserMenu = function(){
+            document.getElementById('userMenu').style.display = 'none';
+            userMenuIsOpen = false;
+        }
+
+        this.showFilterList = function(){                
+            if(!filterListIsOpen){
+                closeAll();
+                document.getElementById('filterList').style.display = 'block';                   
+                filterListIsOpen = true;
+                $("#filterButton").addClass("open");
+            }else{
+                closeFilterList();
+            }                
+        }
+
+        var closeFilterList = function(){
+            if(filterListIsOpen){
+                document.getElementById('filterList').style.display = 'none';
+                $("#filterButton").removeClass("open");
+                filterListIsOpen = false;
+            }
+            document.getElementById('searchOptions').style.display = 'none';
+        }
+
+        this.showSearchOptions = function(){
+            document.getElementById('searchOptions').style.display = 'block';                                
+        }
+
+        /* handle new notification */
+        $scope.$on('notification', function (event, message) {                
+            if(haveAllreadyOpen){
+                $scope.notifications.unshift(message.notification);
+                $scope.$apply();                    
+            }                
+            document.getElementById('notificationsNb').innerHTML = parseInt(document.getElementById('notificationsNb').innerHTML)+1;
+            $("#notificationButton").addClass("alert");
+        });                     
+
+        /* hide menu on click out */
+        $('html').click(function() {                
+            closeAll();                
+        });
+
+        $('.stopPropagation').click(function(event){
+            event.stopPropagation();
+        });
+
+}]);
+
+headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
+        
+        this.showFiltersTags = function(){
+            closeAll();
+            document.getElementById('filtersTags').style.display = 'block';
+            $("#filtersTagsButton").addClass("open");
+        };
+        
+        this.showFiltersCat = function(){
+            closeAll();
+            document.getElementById('filtersCat').style.display = 'block';
+            $("#filtersCatButton").addClass("open");
+        };
+        
+        var closeAll = function(){
+            document.getElementById('filtersTags').style.display = 'none';
+            document.getElementById('filtersCat').style.display = 'none';
+            $("#filtersCatButton").removeClass("open");
+            $("#filtersTagsButton").removeClass("open");
+        };
+        
+        /*//////////////////////////////
+         *     CATEGORIES MANAGEMENT
+         */
+        this.categoriesList = [];
+        this.addCategory = function(catId, catName){
+            if(this.categoriesList[catId] == null){                
+                this.categoriesList[catId] = catName;
+            }else{                
+                delete this.categoriesList[catId];
+            }            
+            console.log(this.categoriesList);
         }
         
-    }])
-    
-    headerApp.filter('reverse', function() {
-        return function(items) {
-          return items.slice().reverse();
-        };
-      });
-    
-    
-    var notificationListIsOpen = false;
-    var userMenuIsOpen = false;
-    var filterListIsOpen = false;
-    var haveOpenMessage = false;
-    
-    headerApp.controller('headerController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
-            
-            var haveAllreadyOpen = false;            
-            var showMoreNotificationUrl = null;
-            $scope.showMoreNotification = true;
-            
-            this.showMessage = function(){
-                if(!haveOpenMessage){
-                    var messageAppContainer = document.getElementById("messageApp");                    
-                    if(messageAppContainer != null ){
-                        angular.element(document).ready(function() {       
-                                angular.bootstrap(messageAppContainer, ["messageApp"]);
-                        });
-                        haveOpenMessage = true;
-                    }
-                }
-            }
-            
-            var closeNotification = function(){
-                 /* close notification list */
-                document.getElementById('notificationList').style.display = 'none';
-                $("#notificationButton").removeClass("alert");
-                $("#notificationButton").removeClass("open");
-                document.getElementById('notificationsNb').innerHTML = 0;
-                
-                 /* set the notification viewed in database */
-                var setNotificationViewedForm = document.forms["pp_notification_api_patch_viewed_form"];
-                if(setNotificationViewedForm!=null){
-
-                    var myData = [];                    
-                    $http({
-                        method: 'PATCH',
-                        url: setNotificationViewedForm.action,                    
-                        data: JSON.stringify(myData)
-                     }). 
-                        then(function(response) {                                               
-
-                        }, function(response) {
-                            console.log("Request failed : "+response.statusText );                        
-                        }
-                    );                        
-                }
-                
-                /* set the notification viewed on client */
-                for(var index in $scope.notifications) { 
-                    if ($scope.notifications.hasOwnProperty(index)) {
-                        $scope.notifications[index].isViewed = true;
-                    }
-                }
-
-                notificationListIsOpen = false;                
-            }
-            
-            this.showNotifications = function(){
-                
-                if(!notificationListIsOpen){
-                    /* open notification list */
-                    document.getElementById('notificationList').style.display = 'block';
-                    document.getElementById('userMenu').style.display = 'none';
-                    $("#notificationButton").addClass("open");
-                    closeFilterList();
-                    
-                    /* load notification the first time */
-                    if(!haveAllreadyOpen){                    
-                        var getNotificationForm = document.forms["pp_notification_api_get_notification_form"];
-                        if(getNotificationForm!=null){
-                            $http.get(getNotificationForm.action    ).
-                                then(function(response) {                                  
-                                    showMoreNotificationUrl = response.data.showMoreApiUrl;
-                                    for(var x=0; x<response.data.notifications.length; x++){                    
-                                        $scope.notifications.push(response.data.notifications[x]);                                                        
-                                    }                                
-                                    if(!response.data.showMore)$scope.showMoreNotification = false;
-                                    haveAllreadyOpen = true;                                
-                                }, function(response) {
-                                 console.log("Request failed : "+response.statusText );                        
-                                }
-                            );
-                        }                    
-                    }                   
-                    
-                    notificationListIsOpen = true;
-                    userMenuIsOpen = false;
-
-                }else{
-                    closeNotification();
-                }
-            }
-                        
-            
-            this.showMoreNotifications = function(){
-                if(notificationListIsOpen && showMoreNotificationUrl!=null){                                
-                                                                                                  
-                    $http.get(showMoreNotificationUrl).
-                        then(function(response) {                            
-                            showMoreNotificationUrl = response.data.showMoreApiUrl;
-                            for(var x=0; x<response.data.notifications.length; x++){                    
-                                $scope.notifications.push(response.data.notifications[x]);                                
-                            }
-                            if(!response.data.showMore)$scope.showMoreNotification = false;                            
-                        }, function(response) {
-                            console.log("Request failed : "+response.statusText );                        
-                        }
-                    );                                        
-                }   
-            }
-            
-            this.patchNotificationClicked = function(index){
-                
-                closeNotification();
-                
-                var currentNotif = $scope.notifications[index];
-                var url = currentNotif.setClickedUrl;
-               
-                var myData = [];                
-                
-                if(!currentNotif.isCliked){
-                    $http({
-                        method: 'PATCH',
-                        url: url,                    
-                        data: JSON.stringify(myData)
-                     }). 
-                        then(function(response) {                                               
-
-                        }, function(response) {
-                            console.log("Request failed : "+response.statusText );                        
-                        }
-                    );
-                }
-                $window.location.href = currentNotif.redirectUrl;
+        /// END OF CATEGORIES MANAGEMENT
+        ////////////////////////////////
         
-            }
-            
-            this.showUserMenu = function(){
+        
+        /*//////////////////////////
+         *     TAGS MANAGEMENT
+         */
+        this.tagsListClicked = [];
+        this.tagsListStr = null;
+        this.tagList = [];
+        
+        this.addTag = function(tagId, tagName){
+            if(this.tagsListClicked[tagId] == null){
+                $("#tag_"+tagId).addClass("choosen");
+                this.tagsListClicked[tagId] = tagName;
+            }else{
+                $("#tag_"+tagId).removeClass("choosen");
+                delete this.tagsListClicked[tagId];
+            }            
+            console.log(this.tagsListClicked);
+        };
+        
+        this.tagStrToArray = function(){
+            var tempTagList = [];
+            if(this.tagsListStr){
+                this.tagsListStr = this.tagsListStr.toLowerCase()+',';
+                this.tagsListStr = this.tagsListStr.replace(' ', '');
+                var actualTag = '';
+                var tagCharArray = this.tagsListStr.split('');
                 
-                if(!userMenuIsOpen){
-                    if(notificationListIsOpen)closeNotification();
-                    document.getElementById('userMenu').style.display = 'block';
-                    document.getElementById('filterList').style.display = 'none';
-                    filterListIsOpen = false;
-                    userMenuIsOpen = true;                                        
-                }else{
-                    document.getElementById('userMenu').style.display = 'none';
-                    userMenuIsOpen = false;
-                }                
+                tagCharArray.forEach(function(char) {
+                    if(char != ','){
+                        actualTag+=char;
+                    }else{
+                        if(actualTag){
+                            tempTagList.push(actualTag);
+                        }
+                        actualTag = '';
+                    }
+                });
             }
+            this.tagsListClicked.forEach(function(tag) {
+                tempTagList.push(tag);
+            });                        
+
+            var uniqueTags = [];
+            $.each(tempTagList, function(i, el){
+                if($.inArray(el, uniqueTags) === -1) uniqueTags.push(el);
+            });
+
+            this.tagList = uniqueTags;
             
-            this.showFilterList = function(){
-                
-                if(!filterListIsOpen){                    
-                    if(notificationListIsOpen)closeNotification();
-                    document.getElementById('filterList').style.display = 'block';
-                    document.getElementById('userMenu').style.display = 'none';
-                    userMenuIsOpen = false;
-                    filterListIsOpen = true;
-                    $("#filterButton").addClass("open");
-                }else{
-                    closeFilterList();
-                }                
+        };
+        /// END OF TAGS MANAGEMENT
+        //////////////////////////
+        
+        this.searchQuery = '';
+        //////////////////////////
+        //     SUBMIT SEARCH
+        this.submitForm = function(){
+            this.tagStrToArray();
+            
+            var submitFormUrl = document.getElementsByName("search_action")[0].value;
+            var searchQueryParam = 'search_query='+this.searchQuery;
+            var tagListParam = 'tags=';            
+            for(var i =0; i<this.tagList.length; i++){
+                tagListParam += this.tagList[i];
+                if(i<this.tagList.length-1)tagListParam += '+';
             }
-            
-            var closeFilterList = function(){
-                if(filterListIsOpen){
-                    document.getElementById('filterList').style.display = 'none';
-                    $("#filterButton").removeClass("open");
-                    filterListIsOpen = false;
+            var catListParam = 'categories=';
+            for(var i =0; i<this.categoriesList.length; i++){
+                if(this.categoriesList[i]){
+                    catListParam += this.categoriesList[i];
+                    if(i<this.categoriesList.length-1)catListParam += '+';
                 }
-                document.getElementById('searchOptions').style.display = 'none';
             }
-            
-            this.showSearchOptions = function(){
-                document.getElementById('searchOptions').style.display = 'block';                                
-            }
-            
-            /* handle new notification */
-            $scope.$on('notification', function (event, message) {                
-                if(haveAllreadyOpen){
-                    $scope.notifications.unshift(message.notification);
-                    $scope.$apply();
-                }                
-                document.getElementById('notificationsNb').innerHTML = parseInt(document.getElementById('notificationsNb').innerHTML)+1;
-                $("#notificationButton").addClass("alert");
-            });                     
-            
-                /* hide menu on click out */
-            $('html').click(function() {                
-                if(notificationListIsOpen)closeNotification();
-                if(document.getElementById('userMenu')!=null)document.getElementById('userMenu').style.display = 'none';                
-                userMenuIsOpen = false;
-                closeFilterList();                
-            });
-
-            $('.stopPropagation').click(function(event){
-                event.stopPropagation();
-            });
-            
-    }]);
-    
-    
-    
+            $window.location.href = submitFormUrl+'?'+searchQueryParam+'&'+tagListParam+'&'+catListParam;
+        }
+}]); 
 
 
 
-    containerApp.directive(
+containerApp.directive("bnLazySrc",["$window","$document",function(n,e){function r(n){function e(e,r){if(!n.is(":visible"))return!1;null===u&&(u=n.height());var t=n.offset().top,i=t+u;return r>=t&&t>=e||r>=i&&i>=e||e>=t&&i>=r}function r(){c=!0,i()}function t(n){o=n,c&&i()}function i(){n[0].src=o}var o=null,c=!1,u=null;return{isVisible:e,render:r,setSource:t}}function t(n,e,t){var o=new r(e);i.addImage(o),t.$observe("bnLazySrc",function(n){o.setSource(n)}),n.$on("$destroy",function(){i.removeImage(o)})}var i=function(){function r(n){s.push(n),v||u(),z||l()}function t(n){for(var e=0;e<s.length;e++)if(s[e]===n){s.splice(e,1);break}s.length||(c(),f())}function i(){if(!v){var n=b.height();n!==d&&(d=n,u())}}function o(){for(var n=[],e=[],r=g.height(),t=g.scrollTop(),i=t,o=i+r,u=0;u<s.length;u++){var l=s[u];l.isVisible(i,o)?n.push(l):e.push(l)}for(var u=0;u<n.length;u++)n[u].render();s=e,c(),s.length||f()}function c(){clearTimeout(v),v=null}function u(){v=setTimeout(o,h)}function l(){z=!0,g.on("resize.bnLazySrc",a),g.on("scroll.bnLazySrc",a),m=setInterval(i,p)}function f(){z=!1,g.off("resize.bnLazySrc"),g.off("scroll.bnLazySrc"),clearInterval(m)}function a(){v||u()}var s=[],v=null,h=100,g=$(n),b=e,d=b.height(),m=null,p=2e3,z=!1;return{addImage:r,removeImage:t}}();return{link:t,restrict:"A"}}]);
+
+
+    /*containerApp.directive(
                 "bnLazySrc",
                 ['$window', '$document',function( $window, $document ) {
                     // I manage all the images that are currently being
@@ -539,57 +691,120 @@ $("#signInUpOverClose").click(function () {
                         restrict: "A"
                     });
                 }]
-            );
+            );*/
 
+var appLoaded = false;
 
 var haveMessageThread = false;
-var messageThreadId = null;
+var currentMessageThreadId = null;
 var targetUserId = null;
 var postMessageUrl = null;
+var currentUser = null;
+var targetUser = null;
+var currentThread = null;
+var conversationUrl = null;
+var getThreadUrl = null;
+var conversationToLoad = null;
+
+var readyForMessage = false;
 
 var messageApp = angular.module('messageApp',  ['ngRoute']);
 
 messageApp.config(['$locationProvider', function ($locationProvider) {
         $locationProvider.html5Mode(true);        
-}])
+}]);
 
-messageApp.run(['$rootScope', '$http',function ($rootScope, $http) {
+messageApp.service('FayeClient', function () {
+            return new Faye.Client('http://localhost:3000/');
+});
+
+
+/* start app */
+messageApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeClient, $http) {
     console.log('run');
     
     var formAction = document.forms["pp_message_api_get_inbox_form"].action;                                
-
+    var targetId = null;
+    $rootScope.$on('showNewMessage', function(event, authorId){            ;
+            targetId = authorId;
+            if(appLoaded)$rootScope.$emit('loadConversation', authorId);
+    });
+        
+    /* get inbox threads + current user info*/
     $http.get(formAction).
         then(function(response){
-            console.log(response.data.messages);
-            $rootScope.inboxMessages = response.data.messages;
+            currentUser = response.data.currentUser;
+            $rootScope.currentUser = currentUser;
+            $rootScope.inboxThreads = response.data.threads;
+            conversationUrl = response.data.conversationUrl;
+            postMessageUrl = response.data.postMessageUrl;
+            getThreadUrl = response.data.getThreadUrl;
+            
+            /* start message listener */
+            FayeClient.subscribe('/messages/'+currentUser.id, function (message) {            
+                $rootScope.$broadcast('newMessage', message);            
+            });
+            
+            if(targetId!=null){
+                $rootScope.$emit('loadConversation', targetId);
+            }
+            
+            appLoaded = true;
         },function(response) {
             console.log("Request failed : "+response.statusText );                            
         }
     );
-    
+            
+        
 }]);
 
-messageApp.controller('inboxController',['$scope', '$http', function ($scope, $http) {   
-        this.test = "inbox !"
+/* inbox controller */
+messageApp.controller('inboxController',['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {                                           
+        
+        /* when new message received */
+        $rootScope.$on('newMessage', function (event, message) {           
+            if(message.action == 'newThread'){
+                /* if thread whith de message author don't exist yet */
+                /* add thread to inbox */
+                $scope.inboxThreads.unshift(message.message)
+                
+            }else if(message.action == 'newMessage'){
+                /* else just change the last message in inbox thread */
+                for(var i=0; i<$scope.inboxThreads.length; i++){
+                    if($scope.inboxThreads[i].threadId == message.message.threadId){
+                        if(currentMessageThreadId!=message.message.threadId)$scope.inboxThreads[i].haveNewMessage = true;
+                        $scope.inboxThreads[i].message = message.message.content;                       
+                        break;
+                    }
+                }                               
+            }            
+            $scope.$apply();
+        });
+        
+             
+        /* when inbox thread is clicked, go to conversation controller */
+        this.gotToConversation = function(thread){            
+            $rootScope.$emit('loadConversation', thread.userId);
+        };
                
 }]);
 
-messageApp.controller('newMessageController',[ '$scope', '$http',  function ( $scope, $http) {   
+/* search user controller */
+messageApp.controller('searchController',[ '$scope', '$rootScope', '$http',  function ( $scope, $rootScope, $http) {   
         
         this.search = null;
         $scope.userSearchList = [];
-        var waiting = false;
+        var formAction = document.forms["pp_message_api_get_search_user_form"].action;
+        
+        /* on text input change, search user */
         this.searchUser = function(){
-            if(this.search.length > 0){
-                console.log(this.search);
-                
-                var formAction = document.forms["pp_message_api_get_search_user_form"].action;                                
-
+            if(this.search.length > 0){                                                                               
                 $http.get(formAction+'?search='+this.search).
                     then(function(response){
-                        console.log(response.data);
-                        $scope.userSearchList = [] 
-                       for(var x=0; x<response.data.users.length; x++){                    
+                        /* empty text input */
+                        $scope.userSearchList = []; 
+                        for(var x=0; x<response.data.users.length; x++){
+                            /* push user to list */
                             $scope.userSearchList.push(response.data.users[x]);                                                        
                         }                            
                     },function(response) {
@@ -597,62 +812,131 @@ messageApp.controller('newMessageController',[ '$scope', '$http',  function ( $s
                     }
                 );                                            
             }else $scope.userSearchList = [];
-        }
+        };
         
-        this.getThread = function(index){                                                                           
-            
-            var selectedUser = $scope.userSearchList[index];
-            targetUserId = selectedUser.id;
-            
-            $http.get(selectedUser.getThreadApiUrl).
-                then(function(response){                                        
-                    haveMessageThread = response.data.messageThreadFounded;
-                    messageThreadId = response.data.messageThreadId;
-                    postMessageUrl = response.data.postMessageThreadUrl;
-                },function(response) {
-                    console.log("Request failed : "+response.statusText );                            
-                }
-            );                                            
-
-        }
+        /* when user in search list clicked get the message thread with him
+         * if it doesn't exist yet create it, thten load conversation
+         */
+        this.getThread = function(user){                                                                       
+            $rootScope.$emit('loadConversation', user.id);               
+        };
         
            
 }]);
 
-messageApp.controller('chatController',['$scope', '$http', function ( $scope, $http) {   
+/* chat controller */
+messageApp.controller('chatController',['$scope', '$rootScope', '$http', function ( $scope, $rootScope, $http) {   
         
-        this.messageContent = null;
+        this.messageContent = null;          
         
-        this.sendMessage = function(){
-            console.log('haveMessageThread : '+haveMessageThread)
-            console.log('messageThreadId : '+messageThreadId)
-            console.log('postMessageThreadUrl : '+postMessageUrl)
-            console.log('targetUserId : '+targetUserId)
-             
+        /* load new conversation */
+        $rootScope.$on('loadConversation', function (event, targetId) {
+            readyForMessage = false;
+            $("#chatTitle").html("");
+            /* get message thread thread */
+            $http.get(getThreadUrl+'?targetId='+targetId).
+                then(function(response){
+                    haveMessageThread = response.data.messageThreadFounded;
+                    currentThread = response.data.messageThread;
+                    targetUser = response.data.targetUser;
+                    $("#chatTitle").html(targetUser.name);
+                    /* 
+                    * if the current message thread had new messages, set them viewed
+                    */
+                    if(haveMessageThread){
+                        for(var i=0; i<$scope.inboxThreads.length; i++){
+                            if($scope.inboxThreads[i].threadId == currentThread.threadId){
+                                $scope.inboxThreads[i].haveNewMessage = false;                      
+                                break;
+                            }
+                        }
+                    }            
+                    /* set conversation target user name */
+                    $scope.currentThread = {
+                        targetName: targetUser.name
+                    };
+                    
+                    $scope.conversation = [];                                              
+                                    
+                    /* get conversation messages */
+                    if(haveMessageThread){
+                        $http.get(conversationUrl+"?threadId="+currentThread.threadId).
+                            then(function(response){
+                                $scope.conversation = response.data.messages;                                ;
+                            },function(response) {
+                                console.log("Request failed : "+response.statusText );                            
+                            }
+                        );
+                    }                                        
+                    
+                    readyForMessage = true;
+                },function(response) {
+                    console.log("Request failed : "+response.statusText );                            
+                }
+            );
+                        
+        });
+        
+        /* when new message received, change inbox thread last message */
+        $rootScope.$on('newMessage', function (event, message) {
+            if(currentThread != null && message.message.threadId == currentThread.threadId){
+                $scope.conversation.push(message.message);
+                $scope.$apply();
+            }
+        });
+                                      
+        /* send message */
+        this.sendMessage = function(){                                   
+            var threadId = null;
+            if(currentThread!=null)threadId = currentThread.threadId;
             myData = {
                 haveMessageThread: haveMessageThread,
-                targetUserId: targetUserId,
-                messageThreadId: messageThreadId,
+                targetUserId: targetUser.id,
+                currentMessageThreadId: threadId,
                 messageContent: this.messageContent
             };
+            
+            if(readyForMessage){
+                $http({
+                       method: 'POST',
+                       url: postMessageUrl,                    
+                       data: JSON.stringify(myData)
+                }). 
+                   then(function(response) {
+                        /* if it's the first message with this person, thread have been created so handle it and add it to inbox */
+                        if(!haveMessageThread){
+                            currentThread = response.data.newThread;                            
+                            haveMessageThread = true;
+                            $scope.inboxThreads.unshift(response.data.newThread);                        
+                        }
+                   }, function(response) {
+                       console.log("Request failed : "+response.statusText );                        
+                   }
+                );
+            
+            
+                /* add new message to conversation (client only) */
+                var newMessage = {
+                    content: this.messageContent,
+                    authorName: currentUser.name,
+                    messageFromUs: true
+                };                        
+                $scope.conversation.push(newMessage);
 
-            $http({
-                   method: 'POST',
-                   url: postMessageUrl,                    
-                   data: JSON.stringify(myData)
-            }). 
-               then(function(response) {
-                    if(!haveMessageThread){
-                        console.log(response);
-                        haveMessageThread = true;
-                        messageThreadId = response.data.messageThreadId;
+                /* update last message in inbox thread */
+                if(currentThread!=null){
+                    for(var i=0; i<$scope.inboxThreads.length; i++){
+                        if($scope.inboxThreads[i].threadId == currentThread.threadId){
+                            $scope.inboxThreads[i].message = this.messageContent;  
+                            $scope.inboxThreads[i].messageFromUs = true;
+                            break;
+                        }
                     }
-               }, function(response) {
-                   console.log("Request failed : "+response.statusText );                        
-               }
-           );
-             
-        }
+                }
+
+                this.messageContent = null;
+            }
+        };
                
 }]);
 

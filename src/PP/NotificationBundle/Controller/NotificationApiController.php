@@ -78,6 +78,7 @@ class NotificationApiController extends Controller
             $notificationFolowRepository = $em->getRepository('PPNotificationBundle:NotificationFollow');
             $notificationNewPropositionRepository = $em->getRepository('PPNotificationBundle:NotificationNewProposition');
             $notificationSelectedRepository = $em->getRepository('PPNotificationBundle:NotificationSelected');                    
+            $notificationMessageRepository = $em->getRepository('PPNotificationBundle:NotificationMessage');                    
                     
             if($currentUser != null){
                 $data["notifThreadSlug"] = $currentUser->getNotificationThread()->getSlug();
@@ -94,7 +95,8 @@ class NotificationApiController extends Controller
                     foreach ($notificationsList as $notification){                                                                
                         
                         $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));                        
-                                
+                        $messageThreadId = null;
+                        
                         switch ($notification->getNotificationType()){
                             
                            
@@ -103,6 +105,7 @@ class NotificationApiController extends Controller
                                 $type = NotificationType::FOLLOW;
                                 $redirectUrl = $this->generateUrl('pp_user_profile', array('slug' => $notificationFollow->getFollowYou()->getSlug())); 
                                 $authorName =  $notificationFollow->getFollowYou()->getName();
+                                $authorId =  $notificationFollow->getFollowYou()->getId();
                                 $authorImg = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $notificationFollow->getFollowYou()->getProfilImage()->getWebPath("70x70");
                                 $targetTitle = null;;                                                                                                
                                 break;                           
@@ -112,6 +115,7 @@ class NotificationApiController extends Controller
                                 $type = NotificationType::NEW_PROPOSITION;                                                                        
                                 $redirectUrl = $this->generateUrl('pp_request_view', array('slug' => $notificationNewProposition->getProposition()->getImageRequest()->getSlug()));                                    
                                 $authorName = $notificationNewProposition->getProposition()->getAuthor()->getName();
+                                $authorId =  $notificationNewProposition->getProposition()->getAuthor()->getId();
                                 $authorImg = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $notificationNewProposition->getProposition()->getAuthor()->getProfilImage()->getWebPath("70x70");
                                 $targetTitle = $notificationNewProposition->getProposition()->getImageRequest()->getTitle();
                                 break;
@@ -121,8 +125,20 @@ class NotificationApiController extends Controller
                                 $type = NotificationType::PROPOSITION_SELECTED;
                                 $redirectUrl = $this->generateUrl('pp_request_view', array('slug' => $notificationSelected->getImageRequest()->getSlug()));
                                 $authorName = $notificationSelected->getImageRequest()->getAuthor()->getName();
+                                $authorId =  $notificationSelected->getImageRequest()->getAuthor()->getId();
                                 $authorImg = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $notificationSelected->getImageRequest()->getAuthor()->getProfilImage()->getWebPath("70x70");
                                 $targetTitle = $notificationSelected->getImageRequest()->getTitle();                                                                 
+                                break;
+                            
+                            case NotificationType::MESSAGE:
+                                $notificationMessage = $notificationMessageRepository->find($notification->getId());                                
+                                $type = NotificationType::MESSAGE;
+                                $redirectUrl = $this->generateUrl('pp_user_profile', array('slug' => $notificationMessage->getAuthor()->getSlug()));
+                                $authorName = $notificationMessage->getAuthor()->getName();
+                                $authorId =  $notificationMessage->getAuthor()->getId();
+                                $authorImg = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $notificationMessage->getAuthor()->getProfilImage()->getWebPath("70x70");
+                                $targetTitle = null;
+                                $messageThreadId = $notificationMessage->getMessage()->getMessageThread()->getId();
                                 break;
                         }
                         
@@ -134,9 +150,11 @@ class NotificationApiController extends Controller
                                     $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
                                     $redirectUrl,
                                     $setClickedUrl,
+                                    $authorId,
                                     $authorName,
                                     $authorImg,
-                                    $targetTitle
+                                    $targetTitle,
+                                    $messageThreadId
                         );
                         array_push($data["notifications"], $jsonNotication );
                     }

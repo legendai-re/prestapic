@@ -18,17 +18,19 @@ use PP\NotificationBundle\Constant\NotificationType;
  */
 class JsonNotification {
     
-    public function __construct($type, $isViewed, $isClicked, $date, $dateLight, $redirectUrl, $setClickedUrl, $authorName, $authorImg, $targetTitle){
+    public function __construct($type, $isViewed, $isClicked, $date, $dateLight, $redirectUrl, $setClickedUrl, $authorId, $authorName, $authorImg, $targetTitle, $messageThreadId = null){
         $this->type = $type;
         $this->isViewed = $isViewed;
         $this->isClicked = $isClicked;
         $this->redirectUrl = $redirectUrl;
+        $this->authorId = $authorId;
         $this->date = $date->format('Y-m-d H:i:s');
         $this->dateLight = $dateLight;
         $this->setClickedUrl =$setClickedUrl;
         $this->authorName = $authorName;
         $this->authorImg = $authorImg;
         $this->targetTitle = $targetTitle;
+        $this->messageThreadId =$messageThreadId;
     }
     
     public $type;
@@ -36,10 +38,11 @@ class JsonNotification {
     public $dateLight;    
     public $isViewed;
     public $isClicked;
-    public $setClickedUrl;
-    
+    public $setClickedUrl;    
     public $redirectUrl; 
+    public $authorId;
     public $authorName;
     public $authorImg;
-    public $targetTitle;               
+    public $targetTitle;
+    public $messageThreadId;
 }

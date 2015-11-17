@@ -7,28 +7,33 @@
                 />                
             </div>
             <a class="overlay" href="{{ asset(proposition.image.webPath("original"))}}" title=""></a>
-            <div class="img-title">
-            <div class="infos">
-              <div class="name">{{ proposition.title }}</div>
-              <div class="author">
-                by
-                <a href="{{ path('pp_user_profile', {'slug': proposition.author.slug}) }}" title="{{ proposition.author.slug }}">{{ proposition.author.name }}</a>
-              </div>
-            </div>
-          </div>                             
-
-        </div>
-        
-        {% if is_granted('ROLE_USER') %}
-            {% if canUpvoteProposition[proposition.id] == true %}
-                {{ form(upvotePropositionForms[proposition.id]) }}
-                <input id="propositionUpvoteButton_{{ proposition.id }}" ng-click="propositions.postPropositionVote({{ proposition.id }})" type="submit" value="upvote" />
-            {% endif %}
             {% if canSelectProposition == true %}
-                {{ form(selectPropositionForms[proposition.id]) }}
-                <input id="propositionSelect_{{ proposition.id }}" ng-click="propositions.postRequestSelect({{ proposition.id }})" type="submit" value="select" />
+                    {{ form(selectPropositionForms[proposition.id]) }}
+                <a class="selecting-prop" id="propositionSelect_{{ proposition.id }}" ng-click="propositions.postRequestSelect({{ proposition.id }})" href="" title="Select this picture">Select this picture</a>                
             {% endif %}
-        {% endif %}
-        <h3 id="propositionUpvote_{{ proposition.id }}" >{{ proposition.upvote }}</h3>
-        
+            <div class="img-title">                                
+                <div class="infos">
+                  <div class="name">{{ proposition.title }}</div>
+                  <div class="author">
+                    by
+                    <a href="{{ path('pp_user_profile', {'slug': proposition.author.slug}) }}" title="{{ proposition.author.slug }}">{{ proposition.author.name }}</a>
+                  </div>
+                </div>
+            </div>                             
+            <div class="actions">
+                {% if canUpvoteProposition[proposition.id] == true %}
+                     {{ form(upvotePropositionForms[proposition.id]) }}
+                {% endif %}
+                <a id="propositionUpvoteButton_{{ proposition.id }}"  href="" title="Up vote"
+                    {% if canUpvoteProposition[proposition.id] == true %}
+                        ng-click="propositions.postPropositionVote({{ proposition.id }})"
+                        class="count-vote"
+                    {% else %}
+                        class="count-vote voted"
+                    {% endif %}
+                    >
+                    {{ proposition.upvote }}
+                </a>
+            </div>            
+        </div>                        
 {% endif %}

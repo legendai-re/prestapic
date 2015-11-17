@@ -24,7 +24,7 @@
     </style>
 </head>
 
-<body>
+<body id="body">
     <div class="container">
         <header id="header" class="navbar">
             <div class="content" ng-app="headerApp">
@@ -33,7 +33,7 @@
         </header>
         
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        <section id="messageApp" style="display:none;" class="stopPropagation">
+        <section id="messageApp" style="display:none;" class="overlay-messages">
             {{ render(controller("PPMessageBundle:Message:initMessageBox"))}}
         </section>
         {% endif %}

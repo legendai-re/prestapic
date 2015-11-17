@@ -1,45 +1,47 @@
 <?php
 
 namespace PP\NotificationBundle\Entity;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * NotificationNewProposition
+ * NotificationMessage
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="PP\NotificationBundle\Entity\NotificationNewPropositionRepository")
+ * @ORM\Entity(repositoryClass="PP\NotificationBundle\Entity\NotificationMessageRepository")
  */
-class NotificationNewProposition
+class NotificationMessage
 {
-    public function __construct($id)
-    {
-        $this->id = $id;
-    }
-    
     /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
-     * @ORM\Id    
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     
     /**    
-    * @ORM\ManyToOne(targetEntity="PP\PropositionBundle\Entity\Proposition")     
+    * @ORM\ManyToOne(targetEntity="PP\UserBundle\Entity\User", cascade={"persist"} )     
     * @Assert\Valid()
     */
-    private $proposition;
+    private $author;
+    
+    /**    
+    * @ORM\ManyToOne(targetEntity="PP\MessageBundle\Entity\Message", cascade={"persist"} )     
+    * @Assert\Valid()
+    */
+    private $message;
     
     /**    
     * @ORM\OneToOne(targetEntity="PP\NotificationBundle\Entity\Notification", cascade={"persist", "remove"} )     
     * @Assert\Valid()          
     */
     private $notificationBase;
-    
+
     /**
      * Get id
      *
@@ -51,42 +53,27 @@ class NotificationNewProposition
     }
 
     /**
-     * Set proposition
+     * Set author
      *
-     * @param \PP\PropositionBundle\Entity\Proposition $proposition
+     * @param \PP\UserBundle\Entity\User $author
      *
-     * @return NotificationNewProposition
+     * @return NotificationMessage
      */
-    public function setProposition(\PP\PropositionBundle\Entity\Proposition $proposition = null)
+    public function setAuthor(\PP\UserBundle\Entity\User $author = null)
     {
-        $this->proposition = $proposition;
+        $this->author = $author;
 
         return $this;
     }
 
     /**
-     * Get proposition
+     * Get author
      *
-     * @return \PP\PropositionBundle\Entity\Proposition
+     * @return \PP\UserBundle\Entity\User
      */
-    public function getProposition()
+    public function getAuthor()
     {
-        return $this->proposition;
-    }
-
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     *
-     * @return NotificationNewProposition
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->author;
     }
 
     /**
@@ -94,10 +81,10 @@ class NotificationNewProposition
      *
      * @param \PP\NotificationBundle\Entity\Notification $notificationBase
      *
-     * @return NotificationNewProposition
+     * @return NotificationMessage
      */
     public function setNotificationBase(\PP\NotificationBundle\Entity\Notification $notificationBase = null)
-    {        
+    {
         $this->notificationBase = $notificationBase;
 
         return $this;

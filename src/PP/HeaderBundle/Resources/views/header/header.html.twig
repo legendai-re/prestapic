@@ -4,51 +4,8 @@
             <a target="_self" href="{{ path('pp_request_homepage') }}" title="Prestapic">Prestapic</a> 
         </h1>
 
-        <div class="search">
-            <form action='{{ path('pp_request_homepage') }}' method='GET'>
-                <input ng-focus="header.showSearchOptions()" type='text' class="stopPropagation" name='search_query' placeholder="Find a picture on Prestapic..." />                
-                
-                <ul style="display: none;" id="searchOptions" class="search-options stopPropagation" >
-                    <li class="option">
-                      <a id="filterButton" ng-click="header.showFilterList()" class="filters" href="" title="Filters"></a>
-                      <div id="filterList" class="dropdown filters">
-                        <div class="dropdown-caret">
-                          <span class="caret-outer"></span>
-                          <span class="caret-inner"></span>
-                        </div>
-                        <div class="filters-type">
-                          <div class="dropdown-title">Search filters</div>
-                          <ul  class="list-filters">
-                            <li class="filter">
-                              <input id="cat" name="cat" type="checkbox">
-                              <label for="cat">by categories</label>
-                            </li>
-                            <li class="filter">
-                              <input id="tags" name="tags" type="checkbox">
-                              <label for="tags">by tags</label>
-                            </li>
-                            <li class="filter">
-                              <input id="user" name="user" type="checkbox">
-                              <label for="user">by username</label>
-                            </li>
-                            <li class="filter">
-                              <input id="me" name="me" type="checkbox">
-                              <label for="me">concerning me</label>
-                            </li>
-                          </ul>
-                        </div>
-                        <div class="filter-cat"></div>
-                        <div class="filter-tags"></div>
-                        <div class="filter-user"></div>
-                        <div class="filter-me"></div>
-                      </div>
-                      </li>
-                      <li class="option">                        
-                          <button class="go-search" type='submit'></button>
-                      </li>
-                </ul>
-                
-            </form>
+        <div class="search">                                                        
+            {{ render(controller('PPHeaderBundle:header:showFilters')) }}
         </div>
         <nav class="menu">
             <ul>
@@ -98,6 +55,13 @@
                                             <b>{{ notification.authorName }}</b>
                                             selected your picture for
                                             <b>{{ notification.targetTitle }}</b>
+                                            <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
+                                        </div>
+                                        
+                                        <!-- proposition selected -->
+                                        <div class="desc" ng-if="notification.type==4">
+                                            <b>{{ notification.authorName }}</b>
+                                            send you a private message
                                             <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
                                         </div>
                                         
@@ -169,7 +133,7 @@
             {{ form(notificationForm) }}
             {{ form(threadForm) }} 
             {{ form(setNotificationViewedForm) }}
-                        
+            {{ form(patchInMessageForm) }}            
         {% endif %}
     </div>
 </div>

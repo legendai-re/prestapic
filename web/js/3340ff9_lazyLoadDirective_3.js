@@ -1,5 +1,7 @@
+containerApp.directive("bnLazySrc",["$window","$document",function(n,e){function r(n){function e(e,r){if(!n.is(":visible"))return!1;null===u&&(u=n.height());var t=n.offset().top,i=t+u;return r>=t&&t>=e||r>=i&&i>=e||e>=t&&i>=r}function r(){c=!0,i()}function t(n){o=n,c&&i()}function i(){n[0].src=o}var o=null,c=!1,u=null;return{isVisible:e,render:r,setSource:t}}function t(n,e,t){var o=new r(e);i.addImage(o),t.$observe("bnLazySrc",function(n){o.setSource(n)}),n.$on("$destroy",function(){i.removeImage(o)})}var i=function(){function r(n){s.push(n),v||u(),z||l()}function t(n){for(var e=0;e<s.length;e++)if(s[e]===n){s.splice(e,1);break}s.length||(c(),f())}function i(){if(!v){var n=b.height();n!==d&&(d=n,u())}}function o(){for(var n=[],e=[],r=g.height(),t=g.scrollTop(),i=t,o=i+r,u=0;u<s.length;u++){var l=s[u];l.isVisible(i,o)?n.push(l):e.push(l)}for(var u=0;u<n.length;u++)n[u].render();s=e,c(),s.length||f()}function c(){clearTimeout(v),v=null}function u(){v=setTimeout(o,h)}function l(){z=!0,g.on("resize.bnLazySrc",a),g.on("scroll.bnLazySrc",a),m=setInterval(i,p)}function f(){z=!1,g.off("resize.bnLazySrc"),g.off("scroll.bnLazySrc"),clearInterval(m)}function a(){v||u()}var s=[],v=null,h=100,g=$(n),b=e,d=b.height(),m=null,p=2e3,z=!1;return{addImage:r,removeImage:t}}();return{link:t,restrict:"A"}}]);
 
-    containerApp.directive(
+
+    /*containerApp.directive(
                 "bnLazySrc",
                 ['$window', '$document',function( $window, $document ) {
                     // I manage all the images that are currently being
@@ -275,4 +277,4 @@
                         restrict: "A"
                     });
                 }]
-            );
+            );*/

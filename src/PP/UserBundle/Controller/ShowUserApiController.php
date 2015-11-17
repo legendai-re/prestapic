@@ -130,6 +130,7 @@ class ShowUserApiController extends Controller
                             $this->generateUrl('pp_user_profile', array('slug' => $currentUser->getSlug())),
                             $setClickedUrl,
                             $currentUser->getName(),
+                            $currentUser->getId(),
                             $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $currentUser->getProfilImage()->getWebPath("70x70"),
                             null  
                     );
@@ -149,6 +150,26 @@ class ShowUserApiController extends Controller
         
         return $response;
         
+    }
+    
+    public function patchIsInMessageAction(Request $request){
+        
+        $response = new JsonResponse();
+        $response->headers->set('Content-Type', 'application/json');
+        
+        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+            $currentUser= $this->getUser();
+            if($currentUser != null){
+                $em = $this->getDoctrine()->getManager();
+                
+                $currentUser->setIsInMessage($request->get('mode'));
+                
+                $em->persist($currentUser);
+                $em->flush();
+                $response->setStatusCode(Response::HTTP_OK);
+            }else $response->setStatusCode(Response::HTTP_FORBIDDEN);            
+        }else $response->setStatusCode(Response::HTTP_FORBIDDEN);        
+        return $response;;        
     }
     
     private function getViewHandler()

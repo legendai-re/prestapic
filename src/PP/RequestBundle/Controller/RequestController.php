@@ -11,6 +11,7 @@ use PP\RequestBundle\Entity\ImageRequest;
 use PP\PropositionBundle\Form\Type\PropositionType;
 use PP\PropositionBundle\Entity\Proposition;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use PP\RequestBundle\Constant\Constants;
 
@@ -25,7 +26,9 @@ class RequestController extends Controller
     
     
     public function indexAction(Request $request)
-    {                  
+    {   
+       
+        
         /* get session and currentUser*/
         $session = $this->getRequest()->getSession();
         $currentUser = $this->getUser();
@@ -41,16 +44,27 @@ class RequestController extends Controller
                 $haveSearchParam = true;
                 $searchParam = $request->get('search_query');
                 $getParameters['search_query'] = $searchParam;                
-            }
-        }
-                  
+            }            
+        }               
+        
         /* init repositories */
         $em = $this->getDoctrine()->getManager();
 	$imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
         $propositionRepository = $em->getRepository('PPPropositionBundle:Proposition');
         $userRepository = $em->getRepository('PPUserBundle:User');
         $tagRepository = $em->getRepository('PPRequestBundle:Tag');                                                
-        
+                
+        /*copy(__DIR__.'/../../../../web/Resources/public/images/profile/test.jpeg', __DIR__.'/../../../../web/uploads/img/user/profile/original/new.jpeg');
+        $profilImage = new \PP\ImageBundle\Entity\Image();
+        $profilImage->setUploadDir('user/profile');
+        $profilImage->setAlt('profilImg');
+        $profilImage->setUrl('jpeg');  
+        $imgsize = getimagesize(__DIR__.'/../../../../web/uploads/img/user/profile/original/new.jpeg');
+        $mime = $imgsize['mime'];
+        $file = new UploadedFile(__DIR__.'/../../../../web/uploads/img/user/profile/original/new.jpeg', "new", $mime, $imgsize, 0, true );
+        $profilImage->setFile($file);        
+        $em->persist($profilImage);
+        $em->flush();*/     
         
         /* set displayMode (default ORDER_BY_DATE) */
         if($session->get('imageRequestOrder') != null){
@@ -94,8 +108,7 @@ class RequestController extends Controller
                 return $this->redirect($this->generateUrl('pp_request_homepage', $getParameters));
             }
         }                
-                
-        
+                        
         /////////////////////////////////
         ////////////// FORM /////////////
         
@@ -232,8 +245,18 @@ class RequestController extends Controller
                              
         /* get selected propositon if exist */
         $accepetedProposition = new Proposition();
+        $canUpvotePropositionSelected = null;
+        $upvotePropositionSelectedForm = null;
         if($imageRequest->getClosed()){
             $accepetedProposition = $imageRequest->getAcceptedProposition();
+            if($currentUser!=null && $currentUser->getId() != $accepetedProposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $accepetedProposition->getId())){
+                $canUpvotePropositionSelected = true;
+            }
+            /* create upvote proposition form */
+             $upvotePropositionSelectedForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_patch_proposition_vote_form_'.$accepetedProposition->getId(), 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_proposition_api_patch_proposition_vote', array('propositionId'=>$accepetedProposition->getId()), true))
+            ->getForm()
+            ->createView();
         }
         
         /////////////////////////////////
@@ -302,6 +325,7 @@ class RequestController extends Controller
                             $this->generateUrl('pp_request_view', array('slug' => $imageRequest->getSlug())), 
                             $setClickedUrl,
                             $currentUser->getName(),
+                            $currentUser->getId(),
                             $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $currentUser->getProfilImage()->getWebPath("70x70"),
                             $imageRequest->getTitle()  
                     );
@@ -349,8 +373,10 @@ class RequestController extends Controller
         return $this->render('PPRequestBundle:Request:view.html.twig', array(
             'imageRequest' => $imageRequest,
             'propositionForm' => $propositionForm->createView(),            
-            'acceptedProposition' => $accepetedProposition,                       
-            'canUpvoteImageRequest' => $canUpvoteImageRequest,
+            'acceptedProposition' => $accepetedProposition,
+            'canUpvotePropositionSelected' => $canUpvotePropositionSelected,
+            'upvotePropositionSelectedForm' => $upvotePropositionSelectedForm,
+            'canUpvoteImageRequest' => $canUpvoteImageRequest,            
             'loadPropositionForm' => $loadPropositionForm->createView(),
             'upvoteRequestForm' => $upvoteRequestForm->createView()
         ));

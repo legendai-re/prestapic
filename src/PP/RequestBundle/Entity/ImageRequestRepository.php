@@ -22,7 +22,7 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                         ->getSingleScalarResult();
         }
         
-        public function getImageRequestsId($em, $searchParam, $limit, $page, $displayMode, $userId, $followingIds)
+        public function getImageRequestsId($em, $searchParam, $limit, $page, $displayMode, $userId, $followingIds, $tagsParam = null, $categoriesParam = null)
 	{
              $qb = $this->createQueryBuilder('ir')
                         ->select('ir.id')
@@ -40,6 +40,26 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                         ->orWhere($qb->expr()->like('c.name', ':cat'))
                         ->setParameter('cat', '%'.$searchParam.'%');
                         
+            }
+            
+            if($tagsParam != null){
+                $i = 0;
+                foreach ($tagsParam as $tagName){
+                    $qb = $qb
+                        ->orWhere('t.name = :name'.$i)
+                        ->setParameter('name'.$i, $tagName);
+                    $i++;
+                }                
+            }
+            
+            if($categoriesParam != null){
+                $i = 0;
+                foreach ($categoriesParam as $cat){
+                    $qb = $qb
+                        ->orWhere('c.name = :name'.$i)
+                        ->setParameter('name'.$i, $cat);
+                    $i++;
+                }                
             }
             
             if($displayMode == Constants::ORDER_BY_DATE){
@@ -69,9 +89,7 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                ->getResult()
             ;           		  
 	}
-        
-        
-        
+                        
     	public function getOneImageRequest($id)
 	{
             $qb = $this

@@ -311,7 +311,7 @@ class Image
         $thumbnailDir = $this->getUploadRootDir().'/'.$foldername.'/'. $this->id .'.'. $this->url;
         
         imagecopyresampled($destination, $source, 0, 0, 0, 0, $width,$height,$size[0],$size[1]);        
-        imagejpeg($destination, $thumbnailDir);
+        imagejpeg($destination, $thumbnailDir, 100);
         $this->crop($cropWidth, $cropHeight, $thumbnailDir, $thumbnailDir);                
         
     }
@@ -337,7 +337,7 @@ class Image
                     case 'image/jpeg':
                             $image_create = "imagecreatefromjpeg";
                             $image = "imagejpeg";
-                            $quality = 80;
+                            $quality = 100;
                             break;
 
                     default:

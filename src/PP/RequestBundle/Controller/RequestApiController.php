@@ -44,6 +44,8 @@ class RequestApiController extends Controller
         /* will be true if search was done */
         $haveSearchParam = false;
         $searchParam = null;
+        $tagsParam = array();
+        $categoriesParam = array();
         $getParameters = array('page'=>1);
         
          /* handle GET data */
@@ -52,6 +54,12 @@ class RequestApiController extends Controller
                 $haveSearchParam = true;
                 $searchParam = $request->get('search_query');
                 $getParameters['search_query'] = $searchParam;                
+            }
+            if($request->get('tags') != null){                
+                $tagsParam = explode(" ",  $request->get('tags'));
+            }
+            if($request->get('categories') != null){
+                $categoriesParam = explode(" ",  $request->get('categories'));
             }
         }                
         
@@ -82,7 +90,7 @@ class RequestApiController extends Controller
         if($currentUser != null)$userId = $currentUser->getId();
         else $userId = 0;
         $followingIds = $userRepository->getFollonwingIds($userId);            
-        $imageRequestsId = $imageRequestRepository->getImageRequestsId($em, $searchParam, Constants::REQUEST_PER_PAGE, $page, $displayMode, $userId, $followingIds);
+        $imageRequestsId = $imageRequestRepository->getImageRequestsId($em, $searchParam, Constants::REQUEST_PER_PAGE, $page, $displayMode, $userId, $followingIds, $tagsParam, $categoriesParam);
         
         $imageRequestList = array();
         $propositionsList = array();

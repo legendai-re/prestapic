@@ -11,18 +11,25 @@
     <article class="demand" ng-controller="requestController as request">
         <a href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" class="avatar">
             <img src="{{ asset(imageRequest.author.profilImage.webPath("70x70")) }}" alt="{{ imageRequest.author.profilImage.alt }}">                    
-        </a>
-
-        <h3 id="imageRequestUpvote">{{ imageRequest.upvote }}</h3>    
-        {% if canUpvoteImageRequest == true %}
-            {{ form_start(upvoteRequestForm) }}            
-            {{ form_end(upvoteRequestForm) }}
-            <input id="imageRequestUpvoteButton" ng-click="request.postRequestVote({{ imageRequest.id }})" type="submit" name="upvote" value='upvote' />
-        {% endif %}
+        </a>                                       
 
         <div class="infos">          
             <h1>
-                <a href="">{{ imageRequest.title }}</a>
+                <a href="">{{ imageRequest.title }}</a>                
+                <a id="imageRequestUpvoteButton"  href="" title="Up vote"
+                    {% if canUpvoteImageRequest == true %}
+                        ng-click="request.postRequestVote({{ imageRequest.id }})"
+                        class="upvote-demand"
+                    {% else %}
+                        class="upvote-demand voted"
+                    {% endif %}
+                   >
+                        {{ imageRequest.upvote }}
+                </a>
+                {% if canUpvoteImageRequest == true %}
+                    {{ form_start(upvoteRequestForm) }}            
+                    {{ form_end(upvoteRequestForm) }}           
+                {% endif %}
             </h1>
             <div class="author single">
                 Publié par
@@ -52,18 +59,34 @@
               <img src="{{ asset(acceptedProposition.image.webPath("original")) }}" alt="{{ acceptedProposition.image.alt }}">
             </div>
             <a class="overlay" href="{{ asset(acceptedProposition.image.webPath("original"))}}"" title=""></a>
+            <a class="selecting-prop selected" href="#" title="Select this picture">Selected picture</a>
             <div class="img-title">
-            <a href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" class="avatar">
-                <img src="{{ asset(acceptedProposition.author.profilImage.webPath("70x70")) }}" alt="{{ acceptedProposition.author.profilImage.alt }}">                    
-            </a>
+                <a href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" class="avatar">
+                    <img src="{{ asset(acceptedProposition.author.profilImage.webPath("70x70")) }}" alt="{{ acceptedProposition.author.profilImage.alt }}">                    
+                </a>
                 <div class="infos">
-                <div class="name">{{ acceptedProposition.title }}</div>
-                    <span class="selected-label">Selectionée</span>
+                <div class="name">{{ acceptedProposition.title }}</div>                   
                     <div class="author">
                         by
                         <a href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" title="">{{  acceptedProposition.author.name }}</a>
                     </div>
                 </div>
+            </div>
+            <div class="actions">
+                {% if is_granted('ROLE_USER') %}
+                {% if canUpvotePropositionSelected == true %}
+                    {{ form(upvotePropositionSelectedForm) }}                    
+                {% endif %}
+                {% endif %}
+                <a id="propositionUpvoteButton_{{ acceptedProposition.id }}" 
+                    {% if is_granted('ROLE_USER') and canUpvotePropositionSelected == true %}
+                       ng-click="propositions.postPropositionVote({{ acceptedProposition.id }})"
+                       class="count-vote"
+                    {% else %}
+                        class="count-vote voted"
+                    {% endif %}  href="" title="Up vote">
+                    {{ acceptedProposition.upvote }}
+                </a>
             </div>
         </div>
         {% endif %}
@@ -76,7 +99,7 @@
            {% endif %}
         </div>  
 
-        <h2 class="more-replies">Il y a {{ imageRequest.propositionsNb }} autres propositions</h2>
+        {#<h2 class="more-replies">Il y a {{ imageRequest.propositionsNb }} autres propositions</h2>#}
 
         <div id="propositions" >
             {{ form(loadPropositionForm) }}

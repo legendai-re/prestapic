@@ -35,7 +35,7 @@ class d_LoadImageRequest implements FixtureInterface{
     $lastWeek->sub(new \DateInterval('P14D'));  
     
     
-    for($i=0; $i<1000; $i++){
+    for($i=0; $i<100; $i++){
         $nbTag = rand(2, 6);
         $currentTags = array();
           
@@ -56,7 +56,7 @@ class d_LoadImageRequest implements FixtureInterface{
 Aliquam finibus fringilla erat, et bibendum tortor iaculis et. Praesent id arcu interdum, ultrices enim nec, iaculis enim. Nulla feugiat purus sit amet tristique rutrum. Ut a tellus commodo nisi euismod facilisis. Donec posuere mauris et ante egestas, eu convallis nulla eleifend. Donec eget tortor eu lorem tincidunt ultrices sit amet non velit. Morbi malesuada turpis quis est sagittis porttitor.');        
         $imageRequest->setCreatedDate($date);
         $imageRequest->setCategory($categoryRepository->find(rand($minId, $maxId)));
-        $imageRequest->setUpvote(rand(0, 15));
+        $imageRequest->setUpvote(rand(0, 300));
         $author = $userRepository->find(rand(1, $maxUserId)); 
         $imageRequest->setAuthor($author);
         

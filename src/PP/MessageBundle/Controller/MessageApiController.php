@@ -15,6 +15,11 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use PP\NotificationBundle\Entity\Notification;
+use PP\NotificationBundle\Constant\NotificationType;
+use PP\NotificationBundle\JsonNotificationModel\JsonNotification;
+use PP\NotificationBundle\Entity\NotificationMessage;
+
 use PP\MessageBundle\JsonModel\JsonMessageModel;
 use PP\MessageBundle\JsonModel\JsonUserModel;
 use PP\MessageBundle\JsonModel\JsonMessageThreadModel;
@@ -57,30 +62,49 @@ class MessageApiController extends Controller
         return $response;
     }
     
-    public function getThreadAction($targetId){
+    public function getThreadAction(Request $request){
         
         $response = new Response();
         $response->headers->set('Content-Type', 'application/x-javascript');
         $data = array();
         
         if ($this->get('security.context')->isGranted('ROLE_USER')) {
-            
-            
+                        
+            $targetId = $request->get('targetId');
             $currentUser = $this->getUser();
             $em = $this->getDoctrine()->getManager();
             $messageRepository = $em->getRepository('PPMessageBundle:Message');
+            $messageThreadRepository = $em->getRepository('PPMessageBundle:MessageThread');
             $userRepositoy = $em->getRepository('PPUserBundle:User');
+            $targetUser = $userRepositoy->find($targetId);
             
-            
-            if($currentUser!=null){
-                                 
-                $messageThread = $messageRepository->getCommonMessageThread($currentUser->getId(), $targetId);
+            if($currentUser!=null && $targetUser!=null){
+                $messageThread = null;
+                $messageThreadId = $messageRepository->getCommonMessageThread($currentUser->getId(), $targetId);
+                if($messageThreadId!=null)$messageThread = $messageThreadRepository->find($messageThreadId);
                 if($messageThread != null){
                     $data['messageThreadFounded'] = true;
-                    $data['messageThreadId'] = $messageThread;
+                    $data['messageThread'] = new JsonMessageThreadModel(
+                                        $messageThread->getId(),
+                                        $targetUser->getName(),
+                                        $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$targetUser->getProfilImage()->getWebPath('70x70'),
+                                        $currentUser->getId(),
+                                        $messageThread->getLastMessage()->getContent(),                                        
+                                        false,
+                                        $messageThread->getLastMessage()->getCreatedDate(),
+                                        $this->container->get('pp_notification.ago')->ago($messageThread->getLastMessage()->getCreatedDate()),                                     
+                                        false
+                    );
                 }else{
                     $data['messageThreadFounded'] = false;
                 }
+                
+                $data['targetUser'] = new JsonUserModel(
+                                                            $targetUser->getId(),
+                                                            $targetUser->getname(),
+                                                            $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$targetUser->getProfilImage()->getWebPath('70x70'),
+                                                            null                                                        
+                );
                 
                 $data['postMessageThreadUrl'] = $this->generateUrl('pp_message_api_post_message', array(), true);
                 $data['getConversationUrl'] = $this->generateUrl('pp_message_api_get_conversation', array(), true);
@@ -134,9 +158,7 @@ class MessageApiController extends Controller
                                         $postData->messageContent,
                                         false,
                                         new \DateTime(),
-                                        $this->container->get('pp_notification.ago')->ago(new \DateTime()),
-                                        $this->generateUrl('pp_message_api_get_conversation', array(), true),
-                                        $this->generateUrl('pp_message_api_post_message', array(), true),
+                                        $this->container->get('pp_notification.ago')->ago(new \DateTime()),                                     
                                         true
                     );
                     
@@ -149,11 +171,9 @@ class MessageApiController extends Controller
                                         true,
                                         new \DateTime(),
                                         $this->container->get('pp_notification.ago')->ago(new \DateTime()),
-                                        $this->generateUrl('pp_message_api_get_conversation', array(), true),
-                                        $this->generateUrl('pp_message_api_post_message', array(), true),
                                         false
                     );
-                     $data['newThread'] = $newThread;
+                    $data['newThread'] = $newThread;
                     
                 }else{
                     $messageThread = $messageThreadRepository->find($postData->currentMessageThreadId);
@@ -169,8 +189,8 @@ class MessageApiController extends Controller
                 $em->persist($messageThread);
                 $em->flush();                
                 
-               
-                
+                $faye = $this->container->get('pp_notification.faye.client');
+                /* if the target user is in message send message */                
                 if($postData->haveMessageThread){                    
                     $jsonMessage = new JsonMessageModel(
                             $messageThread->getId(),
@@ -183,12 +203,48 @@ class MessageApiController extends Controller
                             $this->container->get('pp_notification.ago')->ago($message->getCreatedDate())
                     );
                 }
-                 
-                $faye = $this->container->get('pp_notification.faye.client');                    
+
                 $channel = '/messages/'.$targetUser->getId();               
                 $jsonMessageData = array('message' => $jsonMessage, 'action'=>$action);
-                
                 $faye->send($channel, $jsonMessageData);
+                
+                /* else if target user not in message send notification */
+                if(!$targetUser->getIsInMessage()){
+                    $targetUserNotifThread = $targetUser->getNotificationThread();
+                    $notification = new Notification(NotificationType::MESSAGE);
+                    $targetUserNotifThread->addNotification($notification);
+                    $targetUser->incrementNotificationsNb();
+                    $em->persist($targetUserNotifThread);
+                    $em->persist($targetUser);
+                    $em->flush();
+                    
+                    
+                    $notificationMessage = new NotificationMessage($notification->getId());
+                    $notificationMessage->setAuthor($currentUser);
+                    $notificationMessage->setMessage($message);
+                    $notificationMessage->setNotificationBase($notification);
+                    $em->persist($notificationMessage);
+                    $em->flush();
+                    
+                    $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
+                    $channel = '/notification/'.$targetUser->getSlug();                    
+                    $jsonNotication = new JsonNotification(
+                            NotificationType::MESSAGE,
+                            false,
+                            false,
+                            $notification->getCreateDate(),
+                            $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
+                            $this->generateUrl('pp_user_profile', array('slug' => $currentUser->getSlug())),
+                            $setClickedUrl,
+                            $currentUser->getId(),
+                            $currentUser->getName(),                            
+                            $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $currentUser->getProfilImage()->getWebPath("70x70"),
+                            null,
+                            $messageThread->getId()
+                    );
+                    $notifData = array('notification' => $jsonNotication);                    
+                    $faye->send($channel, $notifData);
+                }
                 
                 
                 echo json_encode($data);
@@ -237,22 +293,23 @@ class MessageApiController extends Controller
                                             $fromUs,
                                             $lastMessage->getCreatedDate(),
                                             $this->container->get('pp_notification.ago')->ago($lastMessage->getCreatedDate()),
-                                            $this->generateUrl('pp_message_api_get_conversation', array(), true),
-                                            $this->generateUrl('pp_message_api_post_message', array(), true),
                                             false
 
                         );                    
                         array_push($jsonMessages['threads'],$tempMessage);
                     }                                        
-
-                    $jsonMessages['currentUser'] = new JsonUserModel(
+                    
+                }
+                $jsonMessages['currentUser'] = new JsonUserModel(
                                                             $currentUser->getId(),
                                                             $currentUser->getname(),
                                                             $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70'),
                                                             null                                                        
-                    );
-                }
+                );
                 
+                $jsonMessages['conversationUrl'] = $this->generateUrl('pp_message_api_get_conversation', array(), true);
+                $jsonMessages['postMessageUrl'] = $this->generateUrl('pp_message_api_post_message', array(), true);                                        
+                $jsonMessages['getThreadUrl'] = $this->generateUrl('pp_message_api_get_thread', array(), true);
                 echo json_encode($jsonMessages);
                 
             }else $response->setStatusCode(Response::HTTP_FORBIDDEN);            

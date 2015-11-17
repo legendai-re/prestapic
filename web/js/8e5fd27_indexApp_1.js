@@ -13,12 +13,21 @@
                         
     containerApp.controller('requestsController', ['$scope', '$http', '$compile', '$location', function ($scope, $http, $compile, $location) {                                                                                                 
             
-            var getParams = "";
-            
+            var getParams = "?";
+            var searchQueryParam = 'search_query=';
+            var tagListParam = 'tags='; 
+            var catListParam = 'categories=';
             this.init = function(){
                 if($location.search().search_query != null){
-                    getParams = "?search_query="+encodeURIComponent($location.search().search_query);  
+                    searchQueryParam += $location.search().search_query;  
                 }
+                if($location.search().tags != null){
+                    tagListParam += $location.search().tags;  
+                }
+                if($location.search().categories != null){
+                    catListParam += $location.search().categories;  
+                }
+                getParams += searchQueryParam+'&'+tagListParam+'&'+catListParam;
                 getRequests(1);                                
             }
             

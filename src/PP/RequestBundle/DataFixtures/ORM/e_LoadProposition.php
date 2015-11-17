@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use PP\PropositionBundle\Entity\Proposition;
 use PP\ImageBundle\Entity\Image;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Description of LoadCategory
  *
@@ -16,16 +17,7 @@ class e_LoadProposition implements FixtureInterface{
     
   public function load(ObjectManager $manager)
   {
-    
-      
-    for($x = 31; $x<88; $x++){
-        $image = new Image();
-        $image->setAlt('image'.$x);
-        $image->setUrl('jpeg');
-        $image->setUploadDir('proposition');
-        $manager->persist($image);                
-    }
-    $manager->flush();
+              
     
     $imageRepository = $manager->getRepository('PPImageBundle:Image');
     $userRepository = $manager->getRepository('PPUserBundle:User');
@@ -38,7 +30,19 @@ class e_LoadProposition implements FixtureInterface{
     $lastWeek = new \DateTime();        
     $lastWeek->sub(new \DateInterval('P14D'));
     
-    for($i=31; $i<88; $i++){
+    for($i=1; $i<500; $i++){
+        
+        $imgName = rand(31, 97);        
+        copy(__DIR__.'/../../../../../web/Resources/public/images/proposition/'.$imgName.'.jpeg', __DIR__.'/../../../../../web/uploads/img/proposition/original/new'.$i.'.jpeg');
+        $profilImage = new \PP\ImageBundle\Entity\Image();
+        $profilImage->setUploadDir('proposition');
+        $profilImage->setAlt('profilImg');
+        $profilImage->setUrl('jpeg');        
+        $imgsize = getimagesize(__DIR__.'/../../../../../web/uploads/img/proposition/original/new'.$i.'.jpeg');
+        $mime = $imgsize['mime'];
+        $file = new UploadedFile(__DIR__.'/../../../../../web/uploads/img/proposition/original/new'.$i.'.jpeg', "new'.$i.'", $mime, $imgsize, 0, true );
+        $profilImage->setFile($file);                                                 
+        
         
         $maxDay = $today->format('d');
         $minDay = $lastWeek->format('d');
@@ -50,9 +54,9 @@ class e_LoadProposition implements FixtureInterface{
         $day = rand($minDay, $maxDay);                
         $date = date_create("$year-$month-$day $hour:$min:$sec.000000");
         
-        $imageId = rand (9, 29);
+        //$imageId = rand (9, 29);
         $irId = rand(1, $maxIR);
-        $image = $imageRepository->find($i);
+        //$image = $imageRepository->find($i);
         $imageRequest = $imageRequestRepository->find($irId);
         $author = $userRepository->find(rand(1, $maxUserId)); 
         
@@ -65,12 +69,14 @@ class e_LoadProposition implements FixtureInterface{
         $proposition->setCreatedDate($date);
         
         $proposition->setAuthor($author);
-        $proposition->setImage($image);
+        $proposition->setImage($profilImage);
         $proposition->setImageRequest($imageRequest);
                 
         $imageRequest->addProposition($proposition);
         
         $manager->persist($proposition);
+        $manager->persist($profilImage);
+        
     }   
     
     $manager->flush();

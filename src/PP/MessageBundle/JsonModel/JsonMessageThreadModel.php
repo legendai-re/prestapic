@@ -4,7 +4,7 @@ namespace PP\MessageBundle\JsonModel;
 
 class JsonMessageThreadModel {
     
-    public function __construct($threadId, $userName, $userImage, $userId, $message, $messageFromUs, $date, $dateLight, $getConversationUrl, $postMessageUrl, $haveNewMessage){
+    public function __construct($threadId, $userName, $userImage, $userId, $message, $messageFromUs, $date, $dateLight, $haveNewMessage){
         $this->threadId = $threadId;
         $this->userName = $userName;
         $this->userImage = $userImage;
@@ -13,8 +13,6 @@ class JsonMessageThreadModel {
         $this->messageFromUs = $messageFromUs;
         $this->date = $date;
         $this->dateLight = $dateLight;    
-        $this->getConversationUrl = $getConversationUrl;
-        $this->postMessageUrl = $postMessageUrl;
         $this->haveNewMessage = $haveNewMessage;
     }
     
@@ -26,8 +24,6 @@ class JsonMessageThreadModel {
     public $messageFromUs;
     public $date;
     public $dateLight;
-    public $getConversationUrl;
-    public $postMessageUrl;
     public $haveNewMessage;
     
 }

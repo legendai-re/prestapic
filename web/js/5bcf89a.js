@@ -23,8 +23,8 @@
                     then(function(response) {
                         var jsonResponse = JSON.parse(response.data);    
                         if(jsonResponse.succes){                        
-                            document.getElementById('imageRequestUpvoteButton').style.display = 'none';
-                            document.getElementById('imageRequestUpvote').innerHTML = jsonResponse.upvote;
+                            $("#imageRequestUpvoteButton").addClass("voted");
+                            document.getElementById('imageRequestUpvoteButton').innerHTML = jsonResponse.upvote;
                         }
                     }, function(response) {
                         console.log("Request failed : "+response.statusText );                        
@@ -73,8 +73,8 @@
                     then(function(response){                     
                         var jsonResponse = JSON.parse(response.data);    
                         if(jsonResponse.succes){                        
-                            document.getElementById('propositionUpvoteButton_'+propositionId).style.display = 'none';
-                            document.getElementById('propositionUpvote_'+propositionId).innerHTML = jsonResponse.upvote;
+                            $("#propositionUpvoteButton_"+propositionId).addClass("voted");
+                            document.getElementById('propositionUpvoteButton_'+propositionId).innerHTML = jsonResponse.upvote;
                         }
                     },function(response) {
                         console.log("Request failed : "+response.statusText );                        
