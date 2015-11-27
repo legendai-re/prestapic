@@ -21,10 +21,11 @@
         "incenteev/composer-parameter-handler": "~2.0",
 		"doctrine/doctrine-fixtures-bundle": "~2.2",
 		"stof/doctrine-extensions-bundle": "~1.1",
+		"jms/serializer-bundle": "1.1.0",
 		"friendsofsymfony/user-bundle": "dev-master",
-        "friendsofsymfony/comment-bundle": "^2.0",        
+		"friendsofsymfony/rest-bundle": "dev-master",    
         "coresphere/console-bundle": "dev-master",
-        "nc/faye-client": "v1.1.0"
+        "nc/faye-client": "v1.1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

@@ -1,3 +1,7 @@
+pp_user_register:
+    path:     /profile/register
+    defaults: { _controller: PPUserBundle:Registration:myRegister}
+
 pp_user_search:
     path:     /users
     defaults: { _controller: PPUserBundle:ShowUser:searchResult}
