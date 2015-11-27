@@ -1,0 +1,14 @@
+<div class="replies">
+    {% for proposition in propositionList %}
+        {{ include("PPRequestBundle:Request:propositionPattern.html.twig") }}
+        {% if loop.index == 3 %}
+                {% if haveNextPage == true %}
+                    <div  id="{{ "loadPageTrigger"~nextPage }}"></div>
+                    {{ form(loadRequestForm) }}
+                {% endif %}
+        {% endif %}
+    {% else %}        
+    {% endfor %} 
+    {% if haveNextPage == true %}<div  id="{{ "loadPage"~nextPage }}"></div>{% endif %}
+</div>
+<!--//!->

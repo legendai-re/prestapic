@@ -5,252 +5,38 @@
     
         <base href=" " />
         <div ng-controller="requestsController as requests" ng-init="requests.init()">            
-
+            
+            
             {# display choose displayMode form #}
-            <div class="demand-selector">                
-                {{ form_start(displayModeForm) }}
-                    {{ form_errors(displayModeForm) }}
-                    {% if displayMode == 1 %}
+            <div class="demand-selector">
 
-                        <p>Recent</p>
-                        <div class="noselect">
-                            {{ form_row(displayModeForm.byupvote, { 'label': 'popular', 'class': 'noselect' }) }}
-                        </div>
-                         {% if  is_granted('ROLE_USER') %}
-                        <div class="noselect">
-                            {{ form_row(displayModeForm.byinterest, { 'label': 'follows', 'class': 'noselect' }) }}
-                        </div>
-                        {% endif %}
+                <select id="contentToDisplaySelect" ng-change="requests.update()" ng-model="requests.contentToDisplay">
+                    <option {% if contentToDisplay == 1 %}selected{% endif %} value="1">Request</option>
+                    <option {% if contentToDisplay == 2 %}selected{% endif %} value="2">Proposition</option>
+                </select>
+
+                <select id="displayModeSelect" ng-change="requests.update()" ng-model="requests.displayMode" >
+                    <option {% if displayMode == 1 %}selected{% endif %} value="1">Recent</option>
+                    <option {% if displayMode == 2 %}selected{% endif %} value="2">Popular</option>
+                    {% if  is_granted('ROLE_USER') %}
+                        <option {% if displayMode == 3 %}selected{% endif %} value="3">Follows</option>
                     {% endif %}
-                     {% if displayMode == 2 %}
-                        <p>Popular</p>
-                        <div class="noselect">
-                            {{ form_row(displayModeForm.bydate, { 'label': 'recent', 'class': 'noselect' }) }}
-                        </div>
-                        {% if  is_granted('ROLE_USER') %}
-                        <div class="noselect">
-                            {{ form_row(displayModeForm.byinterest, { 'label': 'follows', 'class': 'noselect' }) }}
-                        </div>
-                        {% endif %}
-                    {% endif %}
-                    {% if displayMode == 3 and is_granted('ROLE_USER') %}
-                        <p>Follows</p>
-                        <div class="noselect">
-                            {{ form_row(displayModeForm.bydate, { 'label': 'recent', 'class': 'noselect' }) }}
-                        </div>
-                        <div class="noselect">
-                            {{ form_row(displayModeForm.byupvote, { 'label': 'popular', 'class': 'noselect' }) }}
-                        </div>
-                    {% endif %} 
-                {{ form_end(displayModeForm) }}
+                </select>               
             </div>
-
-            {{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}
+            {% if haveSearchParam == false %}
+                {{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}
+            {% endif %}
             
             {{ form(loadRequestForm) }}
-             <div id="loadPage1"> </div>
+            {{ form(upvoteRequestForm) }}
+            {{ form(upvotePropositionForm) }}
+            <div id="loadPage1"></div>
                      
-            <div class="loader" title="7" id="loadingGif" style="margin-left: 0px;">
-            {#<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-               width="50px" height="100px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-              <rect x="0" y="10" width="4" height="10" fill="#b93a3a" opacity="0.2">
-                <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
-              </rect>
-              <rect x="8" y="10" width="4" height="10" fill="#b93a3a"  opacity="0.2">
-                <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
-              </rect>
-              <rect x="16" y="10" width="4" height="10" fill="#b93a3a"  opacity="0.2">
-                <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
-              </rect>#}
-            
-            <div id="contentArea">
-                <div class="_4-u2 mbm _2iwp">
-                    <div class="_2iwo">
-                        <div class="_2iwq">
-                            <div class="_2iwr"></div>
-                            <div class="_2iws"></div>
-                            <div class="_2iwt"></div>
-                            <div class="_2iwu"></div>
-                            <div class="_2iwv"></div>
-                            <div class="_2iww"></div>
-                            <div class="_2iwx"></div>
-                            <div class="_2iwy"></div>
-                            <div class="_2iwz"></div>
-                            <div class="_2iw-"></div>
-                            <div class="_2iw_"></div>
-                            <div class="_2ix0"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="contentArea">
-                <div class="_4-u2 mbm _2iwp">
-                    <div class="_2iwo">
-                        <div class="_2iwq">
-                            <div class="_2iwr"></div>
-                            <div class="_2iws"></div>
-                            <div class="_2iwt"></div>
-                            <div class="_2iwu"></div>
-                            <div class="_2iwv"></div>
-                            <div class="_2iww"></div>
-                            <div class="_2iwx"></div>
-                            <div class="_2iwy"></div>
-                            <div class="_2iwz"></div>
-                            <div class="_2iw-"></div>
-                            <div class="_2iw_"></div>
-                            <div class="_2ix0"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <style type="text/css">
-                #contentArea {                  
-                  width: 496px;
-                }
-
-                .mbm {
-                  margin-bottom: 10px;
-                }
-
-                ._4-u2 {
-                  background: #eeeeee;
-                }
-
-                ._2iwo {
-                  height: 300px;
-                  padding: 12px;
-                }
-
-                ._2iwq {
-                  -webkit-animation-duration: 1s;
-                  -webkit-animation-fill-mode: forwards;
-                  -webkit-animation-iteration-count: infinite;
-                  -webkit-animation-name: placeHolderShimmer;
-                  -webkit-animation-timing-function: linear;
-                  background: #e2d6d6;
-                  background-image: -webkit-gradient(linear, left center, right center, from(#e2d6d6), color-stop(0.2, #eae0e0), color-stop(0.4, #2d6d6), to(#c78f8f));
-                  background-image: -webkit-linear-gradient(left, #d6b4b4 0%, #cea6a6 20%, #e2d6d6 40%, #d3a5a5 100%);
-                  background-repeat: no-repeat;
-                  background-size: 800px 104px;
-                  height: 104px;
-                  position: relative;
-                }
-
-                ._2rtk ._2iwq {
-                  -webkit-animation-name: prideShimmer;
-                  background-image: -webkit-gradient(linear, center top, center bottom, from(deg), color-stop(0, red), color-stop(0.15, orange), color-stop(0.3, yellow), color-stop(0.45, green), color-stop(0.6, blue), color-stop(0.75, indigo), color-stop(0.8, violet), to(red));
-                  background-image: -webkit-linear-gradient(135deg, red 0%, orange 15%, yellow 30%, green 45%, blue 60%, indigo 75%, violet 80%, red 100%);
-                  background-repeat: repeat;
-                  background-size: 50% auto;
-                }
-
-                .direction_rtl ._2iwq {
-                  -webkit-animation-direction: reverse;
-                }
-
-                ._2iwq div {
-                  background: #eeeeee;
-                  height: 6px;
-                  left: 0;
-                  position: absolute;
-                  right: 0;
-                }
-
-                div._2iwr {
-                  height: 40px;
-                  left: 40px;
-                  right: auto;
-                  top: 0;
-                  width: 8px;
-                }
-
-                div._2iws {
-                  height: 8px;
-                  left: 48px;
-                  top: 0;
-                }
-
-                div._2iwt {
-                  left: 136px;
-                  top: 8px;
-                }
-
-                div._2iwu {
-                  height: 12px;
-                  left: 48px;
-                  top: 14px;
-                }
-
-                div._2iwv {
-                  left: 100px;
-                  top: 26px;
-                }
-
-                div._2iww {
-                  height: 10px;
-                  left: 48px;
-                  top: 32px;
-                }
-
-                div._2iwx {
-                  height: 20px;
-                  top: 40px;
-                }
-
-                div._2iwy {
-                  left: 410px;
-                  top: 60px;
-                }
-
-                div._2iwz {
-                  height: 13px;
-                  top: 66px;
-                }
-
-                div._2iw- {
-                  left: 440px;
-                  top: 79px;
-                }
-
-                div._2iw_ {
-                  height: 13px;
-                  top: 85px;
-                }
-
-                div._2ix0 {
-                  left: 178px;
-                  top: 98px;
-                }
-
-                @-webkit-keyframes placeHolderShimmer {
-                  0% {
-                    background-position: -468px 0;
-                  }
-
-                  100% {
-                    background-position: 468px 0;
-                  }
-                }
-                @-webkit-keyframes prideShimmer {
-                  from {
-                    background-position: top left;
-                  }
-
-                  to {
-                    background-position: top right;
-                  }
-                }
-
-            </style>
+            <div class="load-content"  id="loadingGif" >
+                <span class="bubble"></span>
             </div>
 
-        </div>       
+        </div>                
 {% endblock %}
 
 {% block js %}

@@ -1,2 +1,5 @@
 
 services:
+     pp_user.service.role:
+        class: PP\UserBundle\Services\RoleService
+        arguments: [@security.role_hierarchy]

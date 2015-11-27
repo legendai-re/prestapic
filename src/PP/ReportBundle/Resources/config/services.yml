@@ -1,0 +1,4 @@
+services:
+#    pp_report.example:
+#        class: PP\ReportBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

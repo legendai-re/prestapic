@@ -1,0 +1,33 @@
+{% if (proposition.image is not null) %}                    
+    <div class="reply">
+        <div class="prop">
+            <img 
+            bn-lazy-src="{{ asset(proposition.image.webPath("380x260")) }}"
+            alt="{{ proposition.image.alt }}"
+            />                
+        </div>
+        <a class="overlay" href="{{ asset(proposition.image.webPath("original"))}}" title=""></a>        
+        <div class="img-title">                                
+            <div class="infos">
+              <div class="name">{{ proposition.title }}</div>
+              <div class="author">
+                by
+                <a href="{{ path('pp_user_profile', {'slug': proposition.author.slug}) }}" title="{{ proposition.author.slug }}">{{ proposition.author.name }}</a>
+              </div>
+            </div>
+        </div>
+        <div class="actions">
+          
+        <a id="propositionUpvoteButton_{{ proposition.id }}"  href="" title="Up vote"         
+                    {% if canUpvoteProposition[proposition.id] == true %}
+                        ng-click="requests.postPropositionVote({{ proposition.id }})"
+                        class="count-vote"
+                    {% else %}
+                        class="count-vote voted"
+                    {% endif %}
+        >                 
+            {{ proposition.upvote }}
+        </a>
+      </div> 
+    </div>                        
+{% endif %}

@@ -18,11 +18,15 @@ use PP\PropositionBundle\Form\Type\PropositionType;
 use PP\PropositionBundle\Entity\Proposition;
 use PP\RequestBundle\Constant\Constants;
 
+use PP\UserBundle\Form\Type\EditProfileFormType;
+
 use PP\NotificationBundle\Entity\Notification;
 use PP\NotificationBundle\Entity\NotificationFollow;
 use PP\NotificationBundle\Constant\NotificationType;
 use PP\NotificationBundle\JsonNotificationModel\JsonNotification;
- 
+
+use PP\MessageBundle\JsonModel\JsonUserModel;
+
 class ShowUserApiController extends Controller
 {
     
@@ -46,13 +50,20 @@ class ShowUserApiController extends Controller
                 
         $imageRequestIds = $imageRequestRepository->getUserImageRequestContributionIds($pageProfile->getId(), Constants::REQUEST_PER_PAGE, $page);
         
+        $currentUser = $this->getUser();
         $imageRequestList = array();
         $propositionsList = array();      
-
-        foreach($imageRequestIds as $id){            
-            array_push($imageRequestList, $imageRequestRepository->getOneImageRequest($id["id"]));
+        $canUpvoteImageRequest = array();
+        
+        foreach($imageRequestIds as $id){
+            $tempImageRequest = $imageRequestRepository->getOneImageRequest($id["id"]);
+            array_push($imageRequestList, $tempImageRequest);
             $tempPropositions = $propositionRepository->getPropositions($id["id"], 3, 1);
-            $propositionsList['imageRequest_'.$id['id']] =  $tempPropositions;            
+            $propositionsList['imageRequest_'.$id['id']] =  $tempPropositions;
+            
+            if($currentUser!=null && $currentUser->getId() != $tempImageRequest->getAuthor()->getId() && !$userRepository->haveLikedRequest($currentUser->getId(), $tempImageRequest->getId())){
+                $canUpvoteImageRequest[$tempImageRequest->getId()] = true;
+            }else{ $canUpvoteImageRequest[$tempImageRequest->getId()] = false;}
         }
         
         $nextPage = $page+1;
@@ -74,7 +85,8 @@ class ShowUserApiController extends Controller
                 'nextPage' => $nextPage,
                 'imageRequestList' => $imageRequestList,                
                 'propositionsList' => $propositionsList,
-                'loadRequestForm' => $loadRequestForm->createView()
+                'loadRequestForm' => $loadRequestForm->createView(),
+                'canUpvoteImageRequest' => $canUpvoteImageRequest
             ))
             ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'requestList'));
 
@@ -170,6 +182,127 @@ class ShowUserApiController extends Controller
             }else $response->setStatusCode(Response::HTTP_FORBIDDEN);            
         }else $response->setStatusCode(Response::HTTP_FORBIDDEN);        
         return $response;;        
+    }
+    
+    /*
+     * Get users from string
+     * 
+     * @params String   search
+     * 
+     * @return JsonResponse
+     */
+    public function getSearchUserAction(Request $request)
+    {
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/x-javascript');
+        
+        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+            
+            $currentUser = $this->getUser();
+            $em = $this->getDoctrine()->getManager();
+            $userRepository = $em->getRepository('PPUserBundle:User');
+            
+            if($currentUser!=null){
+                
+                $jsonUsers = array();
+                $jsonUsers['users'] = array();         
+                
+                $userList = $userRepository->searchUser($currentUser->getId(), $request->get('search'), Constants::USER_PER_PAGE, 1);
+                foreach ($userList as $user){                    
+                    array_push($jsonUsers['users'], new JsonUserModel(
+                                                                $user->getId(),
+                                                                $user->getName(),
+                                                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$user->getProfilImage()->getWebPath('70x70')
+                    ));                       
+                }
+                
+                echo json_encode($jsonUsers);
+                
+            }else {$response->setStatusCode(Response::HTTP_FORBIDDEN);}
+        }else {$response->setStatusCode(Response::HTTP_FORBIDDEN);}
+        return $response;
+    }
+    
+    /*
+     * Get users from string
+     * 
+     * @params String   search
+     * 
+     * @return JsonResponse
+     */
+    public function getSearchUserViewAction(Request $request)
+    {
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/x-javascript');
+        
+        $page = $request->get("page");
+        $name = $request->get("name");
+       
+            
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository('PPUserBundle:User');
+                                                                            
+        $userList = $userRepository->searchUser(null, $name, Constants::USER_PER_PAGE, $page);                               
+        
+        $haveNextPage = true;       
+        if(sizeof($userList) < Constants::USER_PER_PAGE){
+            $haveNextPage = false;
+        }
+        
+        $nextPage = $page+1;
+        $view = View::create()
+            ->setData(array(                                      
+                'page'=>$page,
+                'nextPage' => $nextPage,
+                'haveNextPage' => $haveNextPage,
+                'userList' => $userList
+            ))
+            ->setTemplate(new TemplateReference('PPUserBundle', 'Search', 'userList'));
+
+        return $this->getViewHandler()->handle($view);
+    }
+    
+    public function getEditProfileFormAction(){
+        
+        $currentUser = $this->getUser();
+        
+        if ($this->get('security.context')->isGranted('ROLE_USER') && $currentUser!=null) {
+            
+            $editUserForm = $this->get('form.factory')->create(new EditProfileFormType($currentUser), $currentUser, array(                            
+            ));
+            
+            $view = View::create()
+                ->setData(array( 
+                    'currentUser' => $currentUser,
+                    'editUserForm' => $editUserForm->createView()
+                ))
+                ->setTemplate(new TemplateReference('PPUserBundle', 'Profile', 'edit_profile_form'));
+        
+            return $this->getViewHandler()->handle($view);
+        }
+        
+        else return new Response();
+    }
+
+    public function patchModeratorAction(Request $request){
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/x-javascript');
+        
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository('PPUserBundle:User');
+        
+        $currentUser = $this->getUser();
+        $pageProfile = null;
+        if($request->get("id")!=null){
+            $pageProfile = $userRepository->find($request->get("id"));
+        }        
+        if($this->get('security.context')->isGranted('ROLE_ADMIN') && $currentUser != null && $pageProfile != null) {
+            if(!$pageProfile->hasRole("ROLE_MODERATOR")){$pageProfile->addRole("ROLE_MODERATOR");}
+            else {$pageProfile->removeRole("ROLE_MODERATOR");}
+            $em->flush();
+        }else $response->setStatusCode (Response::HTTP_FORBIDDEN);        
+        
+        return $response;
     }
     
     private function getViewHandler()

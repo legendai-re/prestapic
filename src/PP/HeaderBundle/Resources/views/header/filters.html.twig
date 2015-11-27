@@ -1,10 +1,14 @@
 <form ng-controller="filtersController as filters" name="pp_request_homepage_form" novalidate ng-submit="filters.submitForm()" >
     <input type="hidden" name="search_action" value='{{ url('pp_request_homepage', {}, true) }}' />
-    <input ng-focus="header.showSearchOptions()" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find a picture on Prestapic..." />                                
+    
+    <input ng-focus="header.showSearchOptions()" name="name" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find a picture on Prestapic..." />
+       
+    <div style="display:none;" id="searchUser" class="stopPropagation">search users : <a href="{{ path('pp_user_search') }}?name={% verbatim %}{{ filters.searchQuery }} {% endverbatim %}" >{% verbatim %}{{ filters.searchQuery }}{% endverbatim %}</a></div>
+
     <ul style="display: none;" id="searchOptions" class="search-options stopPropagation" >
         <li class="option">
             <a id="filterButton" ng-click="header.showFilterList()" class="filters" href="" title="Filters"></a>
-        <div id="filterList" class="dropdown filters" >
+        <div id="filterList" class="dropdown filters fixeBodyHover" >
             <div class="dropdown-caret">
                 <span class="caret-outer"></span>
                 <span class="caret-inner"></span>
@@ -18,10 +22,12 @@
                     <li class="filter-group">
                         <a id="filtersTagsButton" ng-click="filters.showFiltersTags()" href="#">Tags</a>
                     </li>
+                    {% if is_granted("ROLE_USER") %}
                     <li class="filter">
-                        <input id="me" name="me" type="checkbox">
+                        <input ng-model="filters.conceringMe" id="me" name="me" type="checkbox">
                         <label for="me">Concerning me</label>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
 

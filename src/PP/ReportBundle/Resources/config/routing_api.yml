@@ -1,0 +1,4 @@
+pp_report_api_home:
+    type: rest
+    resource: PP\ReportBundle\Controller\ReportApiController
+    name_prefix: pp_report_api_

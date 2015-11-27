@@ -16,11 +16,30 @@ class a_LoadCategory implements FixtureInterface{
   {
     
     $names = array(
-      'Black & White',
-      'Landscape',
-      'Portrait',
-      'Nature',
-      'Animals'
+        'Abstract',
+        'Macro',
+        'Animals',
+        'Nature',
+        'Black&White',
+        'Celebrities',
+        'People',
+        'Architecture',        
+        'Commercial',
+        'Sport',
+        'Concert',       
+        'Family',
+        'Street',
+        'Fashion',
+        'Transportation',
+        'Film',
+        'Travel',        
+        'Underwater',
+        'Food',
+        'Urban',
+        'Journalism',
+        'Wedding',
+        'Landscapes',
+        'Uncategorize'
     );
 
     foreach ($names as $name) {

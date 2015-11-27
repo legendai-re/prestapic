@@ -1,0 +1,52 @@
+
+<style>
+    input{
+        color: #000;
+    }
+</style>
+<form action="{{ path('pp_user_edit')}}" {{ form_enctype(editUserForm) }} method="POST" class="editProfileForm" >
+
+    {{ form_errors(editUserForm) }}
+    {{ form_row(editUserForm.coverImage) }}
+    <div class="banner">
+        <div id="coverImageContainer">
+        {% if currentUser.coverImage != null %}
+            <img src="{{ asset(currentUser.coverImage.webPath("1500x500")) }}" alt="{{ currentUser.coverImage.alt }}">            
+        {% endif %}       
+        </div>
+        <div class="overlay"></div>
+    </div>    
+     
+    <div class="profile-details">        
+        <a class="avatar" id="profileImageContainer" href="#" title="">          
+          <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.profilImage.alt }}">         
+        </a>
+        {{ form_widget(editUserForm.profilImage) }}
+        <output id="list"></output>
+        <h1 class="username">{{ form_row(editUserForm.name) }}</h1>
+        <p class="bio">{{ form_row(editUserForm.description) }}</p>
+
+        
+             <input type="submit" value="Save" />
+        
+        <a id="cancelButton" class="button follow" ng-click="profile.cancelEditProfile()" >
+            Cancel
+        </a>
+
+        <ul class="details">
+            <li>
+                <strong>Following</strong>
+                {% if currentUser.followingNb != null %}{{ currentUser.followingNb }}{% else %}0{% endif %}
+            </li>
+            <li>
+                <strong>Followers</strong>
+                {% if currentUser.followersNb != null %}{{ currentUser.followersNb }}{% else %}0{% endif %}
+            </li>               
+            <li class="link">
+                <a href="#" title="">{{ form_row(editUserForm.contact) }}</a>                    
+            </li>
+        </ul>
+    </div>               
+            
+    {{ form_rest(editUserForm) }}
+</form>

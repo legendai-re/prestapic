@@ -30,7 +30,17 @@ class e_LoadProposition implements FixtureInterface{
     $lastWeek = new \DateTime();        
     $lastWeek->sub(new \DateInterval('P14D'));
     
-    for($i=1; $i<500; $i++){
+    $reuseTime = 0;
+    $y = 1;
+    
+    for($i=1; $i<800; $i++){
+        
+        if ($y > $reuseTime){
+            $irId = rand(1, $maxIR);
+            $reuseTime = rand(1, 25);
+            $imageRequest = $imageRequestRepository->find($irId);
+            $y=0;
+        } else $y++;
         
         $imgName = rand(31, 97);        
         copy(__DIR__.'/../../../../../web/Resources/public/images/proposition/'.$imgName.'.jpeg', __DIR__.'/../../../../../web/uploads/img/proposition/original/new'.$i.'.jpeg');
@@ -55,9 +65,9 @@ class e_LoadProposition implements FixtureInterface{
         $date = date_create("$year-$month-$day $hour:$min:$sec.000000");
         
         //$imageId = rand (9, 29);
-        $irId = rand(1, $maxIR);
+        
         //$image = $imageRepository->find($i);
-        $imageRequest = $imageRequestRepository->find($irId);
+        
         $author = $userRepository->find(rand(1, $maxUserId)); 
         
         while($imageRequest->getAuthor()->getId() == $author->getId()){           
@@ -65,7 +75,7 @@ class e_LoadProposition implements FixtureInterface{
         }
         
         $proposition = new Proposition();
-        $proposition->setTitle("propsition $i");
+        $proposition->setTitle("proposition $i");
         $proposition->setCreatedDate($date);
         
         $proposition->setAuthor($author);

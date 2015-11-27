@@ -1,0 +1,15 @@
+
+
+{% for user in userList%}
+        {{ include("PPUserBundle:Search:userPattern.html.twig") }}
+        {% if loop.index == 4 %}
+            {% if haveNextPage == true %}
+                <div  id="{{ "loadPageTrigger"~nextPage }}">
+                    
+                </div>                
+            {% endif %}
+        {% endif %}
+{% else %}
+        
+{% endfor %}
+{% if haveNextPage == true %}<div  id="{{ "loadPage"~nextPage }}"></div>{% endif %}

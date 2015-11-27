@@ -41,7 +41,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        ["PPRequestBundle","PPUserBundle"]
+    bundles:        ["PPRequestBundle","PPUserBundle","PPDashboardBundle"]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

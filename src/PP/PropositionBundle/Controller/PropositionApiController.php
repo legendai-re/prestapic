@@ -2,21 +2,9 @@
 
 namespace PP\PropositionBundle\Controller;
 
-use FOS\RestBundle\Util\Codes;
-use FOS\RestBundle\View\RouteRedirectView;
-use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
-use PP\PropositionBundle\Form\Type\PropositionType;
-use PP\PropositionBundle\Entity\Proposition;
-
 use PP\NotificationBundle\JsonNotificationModel\JsonNotification;
 use PP\NotificationBundle\Entity\NotificationSelected;
 use PP\NotificationBundle\Entity\Notification;
@@ -32,12 +20,14 @@ class PropositionApiController extends Controller
      *
      * @return JsonResponse
      */
-    public function patchPropositionVoteAction($propositionId){
+    public function patchPropositionVoteAction(Request $request){
         
         $response = new JsonResponse();
         $response->headers->set('Content-Type', 'application/json');
-       
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        
+        $propositionId = $request->get("id");
+        
+        if ($this->get('security.context')->isGranted('ROLE_USER') && $propositionId!=null) {
             
             /* init repositories */
             $em = $this->getDoctrine()->getManager();
@@ -80,14 +70,13 @@ class PropositionApiController extends Controller
             
             /* init repositories */
             $em = $this->getDoctrine()->getManager();
-            $propositionRepository = $em->getRepository('PPPropositionBundle:Proposition');            
-            $userRepository = $em->getRepository('PPUserBundle:User');
+            $propositionRepository = $em->getRepository('PPPropositionBundle:Proposition');                        
             $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
             
             $proposition = $propositionRepository->find($propositionId);
             $imageRequest = $imageRequestRepository->find($imageRequestId);
             
-            if($proposition!=null && $imageRequest!=null && $currentUser!=null && $imageRequest->getAuthor()->getId() == $currentUser->getId()){
+            if($proposition!=null && $imageRequest!=null && $currentUser!=null && $imageRequest->getAuthor()->getId() == $currentUser->getId() && !$imageRequest->getClosed()){
                 $proposition->setAccepted(true);                    
                 $imageRequest->setClosed(true);
                 $imageRequest->setAcceptedProposition($proposition); 

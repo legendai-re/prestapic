@@ -1,3 +1,17 @@
+pp_dashboard:
+    resource: "@PPDashboardBundle/Resources/config/routing.yml"
+    prefix:   /dashboard/
+
+pp_report:
+    resource: "@PPReportBundle/Resources/config/routing.yml"
+    prefix:   /
+
+pp_report_api:
+    type: rest
+    resource: "@PPReportBundle/Resources/config/routing_api.yml"
+    prefix:   /api/report/
+
+
 pp_header:
     resource: "@PPHeaderBundle/Resources/config/routing.yml"
     prefix:   /

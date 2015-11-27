@@ -37,19 +37,26 @@ class EditProfileFormType extends AbstractType
                 'required'  => false,
                 'data'      => $this->user->getName()
                 ))           
-            ->add('profilImage',    new ImageType(),array(
-                'label'     => false,
+            ->add('profilImage',    new ImageType(),array(                
+                'label'     => "profile image",
                 'required'  => false,
                 'data'      => $this->user->getProfilImage()
                 ))
             ->add('coverImage',    new ImageType(),array(
+                'label'     => "cover Image",
+                'required'  => false,
+                'data'      => $this->user->getCoverImage()
+                ))
+            ->add('description',     'text',array(
                 'label'     => false,
                 'required'  => false,
-                 'data'      => $this->user->getCoverImage()
+                'data'      => $this->user->getDescription()
                 ))
-            ->add('save', 		'submit', array(  
-                'label'=> 'Envoyer',
-                ))  
+            ->add('contact',     'text',array(
+                'label'     => false,
+                'required'  => false,
+                'data'      => $this->user->getContact()
+                ))
         ;
         
         $builder->addEventListener(

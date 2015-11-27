@@ -1,0 +1,9 @@
+
+<article>
+    <a target="_self" href="{{ path('pp_user_profile', {'slug': user.slug}) }}" class="avatar">
+        <img bn-lazy-src="{{ asset(user.profilImage.webPath("70x70")) }}" alt="{{ user.profilImage.alt }}">
+    </a>
+        <a target="_self" href="{{ path('pp_user_profile', {'slug': user.slug}) }}"><h2>{{ user.name }}</h2></a>
+</article>
+   
+    

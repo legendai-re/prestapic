@@ -9,20 +9,23 @@
         {# display image request title  #}
         <h1>
             <a  target="_self" href="{{ path('pp_request_view', {'slug': imageRequest.slug}) }}">{{ imageRequest.title }}</a>
-            <a class="upvote-demand" href="#" title="Up vote">
+            <a id="imageRequestUpvoteButton_{{ imageRequest.id }}" href="#" title="Up vote"
+                {% if canUpvoteImageRequest[imageRequest.id] == true%}
+                    ng-click="requests.postRequestVote({{ imageRequest.id }})"
+                    class="upvote-demand"
+                {% else %}
+                    class="upvote-demand voted"
+                {% endif %}
+            >
                 {{ imageRequest.upvote }}
             </a>                  
-        </h1>
-
-        {# display image request upvote number #}
-
-
+        </h1>       
 
         {% set break = false %}
         <div class="tag-list">
-            <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'search_query': imageRequest.category.name }) }}" >{{ imageRequest.category.name }}</a>
+            <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'categories': imageRequest.category.name }) }}" >{{ imageRequest.category.name }}</a>
             {% for tag in imageRequest.tags if not break%}
-                <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'search_query':tag.name }) }}">{{ tag.name }}</a>
+                <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'tags':tag.name }) }}">{{ tag.name }}</a>
                 {% if loop.index == 3  %}{% set break = true %}{% endif %}
             {% endfor %}
         </div>

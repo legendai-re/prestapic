@@ -2,6 +2,12 @@
 
 
 {% if error %}
+    <script type="text/javascript">
+        function init() {
+            $('#signInUpOver').css("display","block");            
+        }
+    window.onload = init;
+    </script>
     <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
 

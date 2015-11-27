@@ -18,6 +18,7 @@ class ImageRequest
 {   
     public function __construct()
     {
+            $this->enabled = true;
             $this->createdDate = new \Datetime();
             $this->propositions = new ArrayCollection();
             $this->tags = new ArrayCollection();
@@ -89,7 +90,20 @@ class ImageRequest
      * @ORM\Column(name="propositions_nb", type="integer")
      */
     private $propositionsNb;
-
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean")
+     */
+    private $enabled;
+    
+    /**    
+     * @ORM\OneToOne(targetEntity="PP\ReportBundle\Entity\DisableTicket", cascade={"persist", "remove"})     
+     * @Assert\Valid()          
+     */
+    private $disableTicket;
+    
     /**
      * @var string
      *
@@ -599,5 +613,53 @@ class ImageRequest
     public function removeAuthor(\PP\UserBundle\Entity\User $author)
     {
         $this->author->removeElement($author);
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     *
+     * @return ImageRequest
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set disableTicket
+     *
+     * @param \PP\ReportBundle\Entity\DisableTicket $disableTicket
+     *
+     * @return ImageRequest
+     */
+    public function setDisableTicket(\PP\ReportBundle\Entity\DisableTicket $disableTicket = null)
+    {
+        $this->disableTicket = $disableTicket;
+
+        return $this;
+    }
+
+    /**
+     * Get disableTicket
+     *
+     * @return \PP\ReportBundle\Entity\DisableTicket
+     */
+    public function getDisableTicket()
+    {
+        return $this->disableTicket;
     }
 }

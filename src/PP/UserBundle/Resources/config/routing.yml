@@ -1,11 +1,16 @@
+pp_user_search:
+    path:     /users
+    defaults: { _controller: PPUserBundle:ShowUser:searchResult}
+    
 pp_user_profile:
-    path:     /{slug}/{page}
-    defaults: { _controller: PPUserBundle:ShowUser:index, page: 1}
+    path:     /{slug}
+    defaults: { _controller: PPUserBundle:ShowUser:index}
     requirements:
         page: \d+
 
 pp_user_edit:
-    path:     /{slug}/edit
+    path:     /profile/edit
     defaults: { _controller: PPUserBundle:ShowUser:edit}
+
     
  

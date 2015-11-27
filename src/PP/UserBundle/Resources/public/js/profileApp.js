@@ -12,7 +12,7 @@
         
     /* node */
     containerApp.service('FayeClient', function () {
-            return new Faye.Client('http://localhost:3000/');
+            return new Faye.Client('http://alexandrejolly.com:3000/');
     })
 
     // souscription au channel "/messages"
@@ -24,8 +24,51 @@
     })
 
     containerApp.controller('profileController', ['$scope', '$http', '$compile', '$location', function ($scope, $http, $compile, $location) {
+
+            function handleProfileFileSelect(evt) {
+                    console.log(evt.target);
+                    var files = evt.target.files; // FileList object
+                   
+                    for (var i = 0, f; f = files[i]; i++) {                                          
+                      if (!f.type.match('image.*')) {
+                        continue;
+                      }
+
+                      var reader = new FileReader();                                            
+                      reader.onload = (function(theFile) {
+                        return function(e) {
+                          var div = document.getElementById('profileImageContainer');
+                          div.innerHTML = ['<img src="', e.target.result,
+                                            '" title="', escape(theFile.name), '"/>'].join('');                          
+                          
+                        };
+                      })(f);
+                      reader.readAsDataURL(f);                    
+                }
+            }
             
-           
+            function handleCoverFileSelect(evt) {
+                    console.log(evt.target);
+                    var files = evt.target.files; // FileList object
+                   
+                    for (var i = 0, f; f = files[i]; i++) {                                          
+                      if (!f.type.match('image.*')) {
+                        continue;
+                      }
+
+                      var reader = new FileReader();                                            
+                      reader.onload = (function(theFile) {
+                        return function(e) {
+                          var div = document.getElementById('coverImageContainer');
+                          div.innerHTML = ['<img src="', e.target.result,
+                                            '" title="', escape(theFile.name), '"/>'].join('');                          
+                          
+                        };
+                      })(f);
+                      reader.readAsDataURL(f);                    
+                }
+            }
+            
             
             this.patchFollow = function(){                
                 var formAction = document.forms["pp_user_api_patch_user_follow_form"].action;
@@ -44,6 +87,65 @@
                      console.log("Request failed : "+response.statusText );                        
                     }
                 );   
+            }
+            
+            var canPatchModerator = true;
+            this.patchModerator = function(id){
+                canPatchModerator = false;
+                if($("#setModeratorButton").html() == "Set moderator"){
+                    $("#setModeratorButton").html("unset moderator");
+                }else{
+                     $("#setModeratorButton").html("Set moderator");
+                }
+                var formAction = document.forms["pp_user_api_patch_moderator_form"].action;                
+                var myData = {
+                    id: id
+                };                
+                $http({
+                    method: 'PATCH',
+                    url: formAction,                    
+                    data: JSON.stringify(myData)
+                 }). 
+                    then(function(response) {                       
+                        canPatchModerator = true;
+                    }, function(response) {
+                        console.log("Request failed : "+response.statusText );
+                        canPatchModerator = true;
+                    }
+                );   
+            }
+            
+            var haveLoadEditForm = false;
+            this.getEditProfileForm = function(){
+                if(!haveLoadEditForm){
+                    haveLoadEditForm = true;
+                    var formAction = document.forms["pp_user_api_get_edit_profile_form"].action;                
+                    $http.get(formAction+".html").
+                        then(function(response) {                                    
+                            var editForm = angular.element(response.data);                        
+                            $compile(editForm)($scope);
+                            $('#profileHeaderContainer').css("display", "none");
+                            angular.element( document.querySelector('#editProfilContainer')).append(editForm);
+                            document.getElementById('pp_userbundle_profile_edit_profilImage_file').addEventListener('change', handleProfileFileSelect, false);
+                            document.getElementById('pp_userbundle_profile_edit_coverImage_file').addEventListener('change', handleCoverFileSelect, false);
+                            $(".editProfileForm").preventDoubleSubmission();
+                        }, function(response) {
+                         console.log("Request failed : "+response.statusText );                        
+                        }
+                    );
+                }else{
+                    showEditProfile();
+                }
+            }                        
+            
+            var showEditProfile = function(){
+                $('#profileHeaderContainer').css("display", "none");
+                $('#editProfilContainer').css("display", "block");
+            }
+            
+            this.cancelEditProfile = function(){
+                $('#profileHeaderContainer').css("display", "block");
+                $('#editProfilContainer').css("display", "none");
             }
     }]);
     
@@ -64,8 +166,7 @@
                 var formAction = document.forms["pp_user_api_get_user_request_form_"+page].action;
                 
                 $http.get(formAction+".html").
-                    then(function(response) {
-                        console.log('loadPage : '+page)                        
+                    then(function(response) {                                              
                         var newPage = angular.element(response.data);                        
                         $compile(newPage)($scope);                             
                         angular.element( document.querySelector('#loadPage'+page)).append(newPage);  
@@ -76,7 +177,31 @@
                     }
                 );                                            
             }                       
-                        
+            
+            var readyForRequestVote = true;
+            this.postRequestVote = function(id){
+                if(readyForRequestVote){
+                    readyForRequestVote=false;
+                    $("#imageRequestUpvoteButton_"+id).addClass("voted");
+                    document.getElementById('imageRequestUpvoteButton_'+id).innerHTML = parseInt($('#imageRequestUpvoteButton_'+id).html())+1;                            
+                    var myData = {
+                        id: id
+                    }
+                    var formAction = document.forms["pp_request_api_patch_request_vote"].action;
+                    $http({
+                        method: 'PATCH',
+                        url: formAction,                    
+                        data: JSON.stringify(myData)
+                         }).               
+                        then(function(response) {
+                            readyForRequestVote = true;                            
+                        }, function(response) {
+                            console.log("Request failed : "+response.statusText );
+                            readyForRequestVote = true;
+                        }                                 
+                    );
+                }
+            }
             
             $(window).scroll(function() {
                 if($(nextLoadTrigger).offset() != null){

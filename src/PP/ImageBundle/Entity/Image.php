@@ -148,6 +148,10 @@ class Image
     //////////////////////////////////////////////
     
     /**
+    *@Assert\File(
+    *     maxSize = "5M",   
+    *     maxSizeMessage = "The file is too large ({{ size }}Mo). Allowed maximum size is {{ limit }}Mo"
+    *)
     *@Assert\Image()
     */
     private $file;
@@ -264,6 +268,7 @@ class Image
     }
     
     public function resize($foldername, $cropWidth, $cropHeight){
+        ini_set('memory_limit', '600M');
         $resizeRatio = $cropWidth;
         if($cropHeight > $resizeRatio)$resizeRatio =$cropHeight;
         //$resizeRatio *= 3;
@@ -273,27 +278,28 @@ class Image
         $mime = $size['mime'];
         
         switch($mime){
-                    case 'image/gif':
-                            $image_create = "imagecreatefromgif";
-                            $image = "imagegif";
-                            break;
+            case 'image/gif':
+                    $image_create = "imagecreatefromgif";
+                    $image = "imagegif";
+                    break;
 
-                    case 'image/png':
-                            $image_create = "imagecreatefrompng";
-                            $image = "imagepng";
-                            $quality = 7;
-                            break;
+            case 'image/png':
+                    $image_create = "imagecreatefrompng";
+                    $image = "imagepng";
+                    $quality = 7;
+                    break;
 
-                    case 'image/jpeg':
-                            $image_create = "imagecreatefromjpeg";
-                            $image = "imagejpeg";
-                            $quality = 80;
-                            break;
+            case 'image/jpeg':
+                    $image_create = "imagecreatefromjpeg";
+                    $image = "imagejpeg";
+                    $quality = 80;
+                    break;
 
-                    default:
-                            return false;
-                            break;
-            }
+            default:
+                    return false;
+                    break;
+        }
+                    
         $source = $image_create($this->getUploadRootDir().'/original/'. $this->id .'.'. $this->url);
                         
         
@@ -365,6 +371,6 @@ class Image
             if($dst_img)imagedestroy($dst_img);
             if($src_img)imagedestroy($src_img);
     }
-
+    
     
 }

@@ -1,0 +1,12 @@
+{# On �tend notre layout #}
+{% extends "PPDashboardBundle::layout.html.twig" %}
+
+{% block dashbordBody %}
+    hello   
+{% endblock %}
+
+{% block js %}
+    {% javascripts filter='?yui_js' '@PPUserBundle/Resources/public/js/profileApp.js' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}    
+{% endblock %}

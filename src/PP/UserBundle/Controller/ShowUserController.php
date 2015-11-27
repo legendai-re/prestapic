@@ -16,7 +16,7 @@ use PP\UserBundle\Form\Type\EditProfileFormType;
 
 class ShowUserController extends Controller 
 {
-    public function indexAction(Request $request, $slug, $page)
+    public function indexAction(Request $request, $slug)
     {
         /* get session and currentUser*/
         $session = $this->getRequest()->getSession();
@@ -44,9 +44,17 @@ class ShowUserController extends Controller
             if($pageProfile->getId() == $currentUser->getId())$isHownProfile = true;
         }
         
-        
-       
-        
+        $setModeratorForm = null;
+        $isModerator = false;
+        if($this->get('security.context')->isGranted('ROLE_ADMIN') && $currentUser != null) {
+            if($this->get('pp_user.service.role')->isGranted('ROLE_MODERATOR', $pageProfile))$isModerator = true;
+            
+            /* create set moderator form */        
+            $setModeratorForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_patch_moderator_form', 'form', array(), array())         
+                ->setAction($this->generateUrl('pp_user_api_patch_moderator', array("userId"=>$pageProfile->getId(), "page"=>1), true))
+                ->getForm()
+                ->createView();
+        }               
         
         /////////////////////////////////
         ////////////// FORM /////////////
@@ -59,7 +67,21 @@ class ShowUserController extends Controller
         /*create following form */
         $followForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_patch_user_follow_form', 'form', array(), array())         
             ->setAction($this->generateUrl('pp_user_api_patch_user_follow', array("userId"=>$pageProfile->getId()), true))
-            ->getForm();                                
+            ->getForm();
+        
+        /* create upote request form */
+        $upvoteRequestForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_patch_request_vote', 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_request_api_patch_request_vote', array(), true))
+            ->getForm();
+        
+        $editProfileForm = null;
+        if($isHownProfile){
+            /*create following form */
+            $editProfileForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_get_edit_profile_form', 'form', array(), array())         
+                ->setAction($this->generateUrl('pp_user_api_get_edit_profile_form', array(), true))
+                ->getForm()
+                ->createView();
+        }
         
         /* create new image request form */         
         $imageRequest = new ImageRequest();
@@ -84,8 +106,7 @@ class ShowUserController extends Controller
                     }
                     $em->flush();
                      return $this->redirect($this->generateUrl('pp_user_profile', array(
-                        'slug' => $slug,
-                        'page' => 1
+                        'slug' => $slug,                        
                     )));
                 }
             }
@@ -103,29 +124,26 @@ class ShowUserController extends Controller
             'followForm' => $followForm->createView(),
             'form' => $form->createView(),
             'loadRequestForm' => $loadRequestForm->createView(),
-            'isFollowing' => $isFollowing
+            'editProfileForm' => $editProfileForm,
+            'isFollowing' => $isFollowing,
+            'upvoteRequestForm' => $upvoteRequestForm->createView(),
+            'setModeratorForm' => $setModeratorForm,
+            'isModerator' => $isModerator
         ));
     }
     
-    public function editAction(Request $request, $slug)
+    public function editAction(Request $request)
     {
-        /* get session and currentUser*/
-        $session = $this->getRequest()->getSession();
-        $currentUser = $this->getUser();
-        
         /* init repositories */
-        $em = $this->getDoctrine()->getManager();	
-        $userRepository = $em->getRepository('PPUserBundle:User');       
+        $em = $this->getDoctrine()->getManager();       
         
-        $currentUser = $this->getUser();
-        $pageProfile = $userRepository->getUserBySlug($slug);                
+        $currentUser = $this->getUser();            
         
-        if($this->get('security.context')->isGranted('ROLE_USER') && $pageProfile != null && $currentUser != null && $currentUser->getId() == $pageProfile->getId()) {
+        if($this->get('security.context')->isGranted('ROLE_USER') && $currentUser != null) {
                                   
             $editUserForm = $this->get('form.factory')->create(new EditProfileFormType($currentUser), $currentUser, array(                            
             ));                          
-            
-            
+                        
             if ($request->isMethod('POST')) {            
                 $editUserForm->handleRequest($request);
                 if ($editUserForm->isValid()) {
@@ -135,23 +153,31 @@ class ShowUserController extends Controller
                     $currentUser->createThumbnail();
                     
                     return $this->redirect($this->generateUrl('pp_user_profile', array(
-                        'slug' => $currentUser->getSlug(),
-                        'page' => 1
+                        'slug' => $currentUser->getSlug()                        
                     )));
                 }
             }
             
-            return $this->render('PPUserBundle:Profile:edit_profile.html.twig', array(
-                'currentUser' =>$currentUser,
-                'editUserForm' => $editUserForm->createView()
-            ));
+            return $this->redirect($this->generateUrl('pp_user_profile', array(
+                        'slug' => $currentUser->getSlug()
+            )));
         }else{
-            return $this->redirect($this->generateUrl('pp_request_homepage', array(
-                'page' => 1 
+            return $this->redirect($this->generateUrl('pp_request_homepage', array(                
             )));
         }
     }
     
-   
+   public function searchResultAction(){
+       
+       $loadUsersForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_get_search_user_view_form', 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_user_api_get_search_user_view', array(), true))
+            ->getForm()
+            ->createView();    
+       
+       return $this->render('PPUserBundle:Search:search_result.html.twig', array(
+           "loadUsersForm" => $loadUsersForm
+       ));
+       
+   }
 
 }

@@ -11,29 +11,23 @@
 
 namespace PP\RequestBundle\Controller;
 
-
-use FOS\RestBundle\Util\Codes;
-use FOS\RestBundle\View\RouteRedirectView;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use PP\RequestBundle\Form\Type\ImageRequestType;
-use PP\RequestBundle\Entity\ImageRequest;
-use PP\PropositionBundle\Form\Type\PropositionType;
-use PP\PropositionBundle\Entity\Proposition;
-use Symfony\Component\Validator\Constraints\DateTime;
 use PP\RequestBundle\Constant\Constants;
 
 class RequestApiController extends Controller
 {
-           
+    /*
+     * get Image request
+     * 
+     * @params integer page
+     * 
+     * @return View
+     */
     public function getRequestAction(Request $request, $page)
     {
                 
@@ -46,20 +40,31 @@ class RequestApiController extends Controller
         $searchParam = null;
         $tagsParam = array();
         $categoriesParam = array();
+        $concerningMeParam = false;
         $getParameters = array('page'=>1);
         
          /* handle GET data */
-        if ($request->isMethod('GET')) {            
+        if ($request->isMethod('GET')) {
+            if($request->get('display_mode') != null){
+                $session->set('imageRequestOrder', $request->get('display_mode'));
+            }
+            if($request->get('content_to_display') != null){
+                $session->set('contentToDisplay', $request->get('content_to_display'));
+            }
             if($request->get('search_query') != null){
                 $haveSearchParam = true;
                 $searchParam = $request->get('search_query');
                 $getParameters['search_query'] = $searchParam;                
             }
             if($request->get('tags') != null){                
-                $tagsParam = explode(" ",  $request->get('tags'));
+                $tagsParam = explode(" ",  $request->get('tags'));                
             }
             if($request->get('categories') != null){
                 $categoriesParam = explode(" ",  $request->get('categories'));
+            }
+            
+            if($currentUser!=null && $request->get('me') != null && $request->get('me') == "true"){
+                $concerningMeParam = true;
             }
         }                
         
@@ -67,8 +72,7 @@ class RequestApiController extends Controller
         $em = $this->getDoctrine()->getManager();
 	$imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
         $propositionRepository = $em->getRepository('PPPropositionBundle:Proposition');
-        $userRepository = $em->getRepository('PPUserBundle:User');
-        $tagRepository = $em->getRepository('PPRequestBundle:Tag');                                
+        $userRepository = $em->getRepository('PPUserBundle:User');        
         
         /* set page to GET parameters */
         $getParameters['page'] = $page;
@@ -83,51 +87,115 @@ class RequestApiController extends Controller
         /* set displayMode (default ORDER_BY_DATE) */
         if($session->get('imageRequestOrder') != null){
             $displayMode = $session->get('imageRequestOrder');
-        }else $displayMode = Constants::ORDER_BY_DATE;
-        if($currentUser == null && $displayMode == Constants::ORDER_BY_INTEREST )$displayMode = Constants::ORDER_BY_DATE;               
+        }else{
+            $displayMode = Constants::ORDER_BY_DATE;
+        }
+        if($currentUser == null && $displayMode == Constants::ORDER_BY_INTEREST ){
+            $displayMode = Constants::ORDER_BY_DATE;
+        }
+        
+        if($session->get('contentToDisplay') != null){
+            $contentToDisplay = $session->get('contentToDisplay');
+        }else {$contentToDisplay = Constants::DISPLAY_REQUEST;}
                                                                             
         /* get image requests  and create edit image request form  */
-        if($currentUser != null)$userId = $currentUser->getId();
-        else $userId = 0;
-        $followingIds = $userRepository->getFollonwingIds($userId);            
-        $imageRequestsId = $imageRequestRepository->getImageRequestsId($em, $searchParam, Constants::REQUEST_PER_PAGE, $page, $displayMode, $userId, $followingIds, $tagsParam, $categoriesParam);
+        if($currentUser != null){
+            $userId = $currentUser->getId();
+        }
+        else{
+            $userId = 0;
+        }
+
+        $followingIds = $userRepository->getFollonwingIds($userId);                    
         
         $imageRequestList = array();
         $propositionsList = array();
         
-        foreach($imageRequestsId as $id){
-            $tempImageRequest = $imageRequestRepository->getOneImageRequest($id["id"]);
-            $tempImageRequest->setDateAgo($this->container->get('pp_notification.ago')->ago($tempImageRequest->getCreatedDate()));
-            array_push($imageRequestList, $tempImageRequest);
-            $tempPropositions = $propositionRepository->getPropositions($id["id"], 3, 1);
-            $propositionsList['imageRequest_'.$id['id']] =  $tempPropositions;           
-        }                                          
-        
+        $contentToDisplay = $session->get("contentToDisplay");
         $haveNextPage = true;       
-        if(sizeof($imageRequestList) < Constants::REQUEST_PER_PAGE)$haveNextPage = false;        
         
-        $view = View::create()
-            ->setData(array(                                      
-                'page'=>$page,
-                'nextPage' => $nextPage,
-                'haveNextPage' => $haveNextPage,
-                'imageRequestList' => $imageRequestList,                
-                'displayMode' => $displayMode,
-                'propositionsList' => $propositionsList,
-                'loadRequestForm' => $loadRequestForm->createView(),
-            ))
-            ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'requestList'));
+        if($contentToDisplay == Constants::DISPLAY_REQUEST){
+            $canUpvoteImageRequest = array();
+            $imageRequestsId = $imageRequestRepository->getImageRequestsId($em, $searchParam, Constants::REQUEST_PER_PAGE, $page, $displayMode, $userId, $followingIds, $tagsParam, $categoriesParam, $concerningMeParam);            
+            foreach($imageRequestsId as $id){
+                $tempImageRequest = $imageRequestRepository->getOneImageRequest($id["id"]);
+                $tempImageRequest->setDateAgo($this->container->get('pp_notification.ago')->ago($tempImageRequest->getCreatedDate()));
+                array_push($imageRequestList, $tempImageRequest);
+                $tempPropositions = $propositionRepository->getPropositions($id["id"], 3, 1);
+                $propositionsList['imageRequest_'.$id['id']] =  $tempPropositions;
+                if($currentUser!=null && $currentUser->getId() != $tempImageRequest->getAuthor()->getId() && !$userRepository->haveLikedRequest($currentUser->getId(), $tempImageRequest->getId())){
+                    $canUpvoteImageRequest[$tempImageRequest->getId()] = true;
+                }else{ $canUpvoteImageRequest[$tempImageRequest->getId()] = false;}
+            }
+            if(sizeof($imageRequestList) < Constants::REQUEST_PER_PAGE){
+                $haveNextPage = false;
+            }
+                     
+        }else if($contentToDisplay == Constants::DISPLAY_PROPOSITION){
+            $canUpvoteProposition = array();            
+            $propositionsList =  $propositionRepository->getPropositions(null, Constants::PROPOSITION_PER_HOME_PAGE, $page, $displayMode, $userId, $followingIds, $searchParam, $tagsParam, $categoriesParam, $concerningMeParam);
+            
+            if($currentUser!=null){
+                foreach($propositionsList as $proposition){
+                    $canUpvoteProposition[$proposition->getId()] = false;
+                    if($currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
+                        $canUpvoteProposition[$proposition->getId()] = true;
+                    } 
+                }                        
+            }
+            
+            if(sizeof($propositionsList) < Constants::PROPOSITION_PER_HOME_PAGE){
+                $haveNextPage = false;
+            }            
+        }                        
+        
+        if($contentToDisplay == Constants::DISPLAY_REQUEST){
+            $view = View::create()
+                ->setData(array(                                      
+                    'page'=>$page,
+                    'nextPage' => $nextPage,
+                    'haveNextPage' => $haveNextPage,
+                    'imageRequestList' => $imageRequestList,                
+                    'displayMode' => $displayMode,
+                    'propositionsList' => $propositionsList,
+                    'loadRequestForm' => $loadRequestForm->createView(),
+                    'canUpvoteImageRequest' => $canUpvoteImageRequest
+                ))
+                ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'requestList'));
+        }else if($contentToDisplay == Constants::DISPLAY_PROPOSITION){
+            $view = View::create()
+                ->setData(array(                                      
+                    'page'=>$page,
+                    'nextPage' => $nextPage,
+                    'haveNextPage' => $haveNextPage,                    
+                    'propositionList' => $propositionsList,
+                    'loadRequestForm' => $loadRequestForm->createView(),
+                    'canUpvoteProposition' => $canUpvoteProposition
+                ))
+                ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'propositionList'));
+        }else{
+            return new \Symfony\Component\HttpFoundation\Response();
+        }
 
         return $this->getViewHandler()->handle($view);
         
     }
     
-    public function patchRequestVoteAction($id){
+    /*
+     * Upvote an image request
+     * 
+     * @params integer id (imageRequest id)
+     * 
+     * @return JsonResponse
+     */
+    public function patchRequestVoteAction(Request $request){
         
         $response = new JsonResponse();
         $response->headers->set('Content-Type', 'application/json');
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        $id = $request->get("id");
+        
+        if ($this->get('security.context')->isGranted('ROLE_USER') && $id != null) { 
             
             $em = $this->getDoctrine()->getManager();
             $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
@@ -143,13 +211,21 @@ class RequestApiController extends Controller
                 $em->flush();
                 $response->setData(json_encode(array('succes'=>true, 'upvote'=>$imageRequest->getUpvote())));
             }
-            else $response->setData(json_encode(array('succes'=>false)));
+            else {$response->setData(json_encode(array('succes'=>false)));}
         }
-        else $response->setData(json_encode(array('succes'=>false)));
+        else {$response->setData(json_encode(array('succes'=>false)));}
         
         return $response;
     }
     
+    /*
+     * Get propositions of one image request
+     * 
+     * @params  integer imageRequestId
+     *          integer page
+     * 
+     * @return  View
+     */
     public function getRequestPropositionAction($imageRequestId, $page){
         
         /* init repositories */
@@ -178,19 +254,16 @@ class RequestApiController extends Controller
         $selectPropositionForms = array();
         $canSelectProposition = false;
         
-        if($currentUser!=null && $imageRequest->getAuthor()->getId() == $currentUser->getId() && !$imageRequest->getClosed())$canSelectProposition = true;                
-        
+        if ($currentUser != null && $imageRequest->getAuthor()->getId() == $currentUser->getId() && !$imageRequest->getClosed()) {
+            $canSelectProposition = true;
+        }
+
         foreach ($propositionList as $proposition){
             $canUpvoteProposition[$proposition->getId()] = false;
             
             if($currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
                 $canUpvoteProposition[$proposition->getId()] = true;
-            }
-            /* create upvote proposition form */
-             $upvotePropositionForms[$proposition->getId()] = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_patch_proposition_vote_form_'.$proposition->getId(), 'form', array(), array())         
-            ->setAction($this->generateUrl('pp_proposition_api_patch_proposition_vote', array('propositionId'=>$proposition->getId()), true))
-            ->getForm()
-            ->createView();
+            }            
                         
             if($canSelectProposition){                
                 /* create select proposition form */
@@ -199,10 +272,7 @@ class RequestApiController extends Controller
                ->getForm()
                ->createView();
             }
-        }
-        
-        
-        
+        }                
         $view = View::create()
             ->setData(array(                      
                 'nbPages'=>$nbPages,
@@ -211,8 +281,7 @@ class RequestApiController extends Controller
                 'propositionList' => $propositionList,
                 'canUpvoteProposition' => $canUpvoteProposition,
                 'canSelectProposition' => $canSelectProposition,
-                'loadPropositionForm' => $loadPropositionForm->createView(),
-                'upvotePropositionForms' => $upvotePropositionForms,
+                'loadPropositionForm' => $loadPropositionForm->createView(),                
                 'selectPropositionForms' => $selectPropositionForms
             ))
             ->setTemplate(new TemplateReference('PPPropositionBundle', 'proposition', 'propositionList'));

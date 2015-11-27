@@ -1,0 +1,32 @@
+{# src/OC/UserBundle/Resources/views/layout.html.twig #}
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    Prestapic
+{% endblock %}
+
+{% block bellowHeader %}
+
+{% endblock %}
+
+{% block body %}   
+    <div id="containerApp" class="demand-list" > 
+        <div> </div>
+        <div ng-controller="searchResultController as searchResult" ng-init="searchResult.init()" >
+            
+            {{ form(loadUsersForm) }}
+            <div id="loadPage1"> </div>
+            <div class="load-content"  id="loadingGif" >
+                <span class="bubble"></span>
+            </div>            
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+      {% javascripts filter='?yui_js' '@PPUserBundle/Resources/public/js/searchUserApp.js' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}  
+{% endblock %}

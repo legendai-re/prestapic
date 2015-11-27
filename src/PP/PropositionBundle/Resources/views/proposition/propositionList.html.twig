@@ -6,8 +6,7 @@
                 {{ form(loadPropositionForm) }}
             {% endif %}
     {% endif %}
-{% else %}
-    <li>Pas (encore !) de propositions</li>
+{% else %}    
 {% endfor %} 
 {% if nextPage <= nbPages %}<div  id="{{ "loadPage"~nextPage }}"></div>{% endif %}
 <!--//!->

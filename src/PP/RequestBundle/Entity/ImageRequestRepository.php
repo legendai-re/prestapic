@@ -22,13 +22,17 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                         ->getSingleScalarResult();
         }
         
-        public function getImageRequestsId($em, $searchParam, $limit, $page, $displayMode, $userId, $followingIds, $tagsParam = null, $categoriesParam = null)
+        public function getImageRequestsId($em, $searchParam, $limit, $page, $displayMode, $userId, $followingIds, $tagsParam = null, $categoriesParam = null, $concerningMeParam = false)
 	{
              $qb = $this->createQueryBuilder('ir')
                         ->select('ir.id')
                         ->distinct(true)
                         ->leftJoin('ir.tags', 't')
                         ->leftJoin('ir.category', 'c')
+                        ->leftJoin('ir.author', 'irA')
+                        ->leftJoin('ir.propositions', 'p')
+                        ->leftJoin('p.author', 'pA')
+                        ->where('ir.enabled = true')
             ;
              
             if($searchParam != null){
@@ -46,29 +50,38 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                 $i = 0;
                 foreach ($tagsParam as $tagName){
                     $qb = $qb
-                        ->orWhere('t.name = :name'.$i)
-                        ->setParameter('name'.$i, $tagName);
+                            ->andWhere($qb->expr()->like('t.name', ':nameT'.$i))
+                            ->setParameter('nameT'.$i, '%'.$tagName.'%');
                     $i++;
                 }                
             }
             
             if($categoriesParam != null){
                 $i = 0;
+                $request = '';
                 foreach ($categoriesParam as $cat){
-                    $qb = $qb
-                        ->orWhere('c.name = :name'.$i)
-                        ->setParameter('name'.$i, $cat);
+                    if($i>0)$request .= ' OR ';
+                    $request .= 'c.name = :nameC'.$i;
+                    $qb = $qb                            
+                            ->setParameter('nameC'.$i, $cat);
                     $i++;
-                }                
+                }
+                 $qb = $qb
+                            ->andWhere($request);
+            }
+            
+            if($concerningMeParam){
+                $qb = $qb
+                        ->andWhere("irA.id = :userId2 OR pA.id = :userId2")
+                        ->setParameter('userId2', $userId);
             }
             
             if($displayMode == Constants::ORDER_BY_DATE){
                 $qb = $qb->orderBy('ir.createdDate', 'DESC'); 
             }else if($displayMode == Constants::ORDER_BY_UPVOTE){
-                $qb = $qb->orderBy('ir.upvote + ir.propositionsNb', 'DESC'); 
+                $qb = $qb->orderBy('ir.upvote + (ir.propositionsNb*2)', 'DESC'); 
             }else if($displayMode == Constants::ORDER_BY_INTEREST){
-                $qb = $qb
-                        ->leftJoin('ir.author', 'irA')                        
+                $qb = $qb                                               
                         ->from('PPUserBundle:User', 'u')                         
                         ->andwhere('u.id = :userId')
                          ->setParameter('userId', $userId)
@@ -100,7 +113,7 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                 ->addSelect('irA')
                 ->leftJoin('ir.category', 'c')
                 ->addSelect('c')
-                ->leftJoin('ir.tags', 't')
+                ->leftJoin('ir.tags', 't')                
                 ->addSelect('t')                
             ;                                    
           
@@ -117,6 +130,7 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                 ->createQueryBuilder('ir')
                 ->select('ir.id')
                 ->where('ir.author = :userId')
+                ->andWhere('ir.enabled = true')
                 ->leftJoin('ir.propositions', 'p')
                 ->orWhere('p.author = :userId')
                 ->setParameter('userId', $userid)

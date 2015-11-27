@@ -98,10 +98,9 @@ class NotificationApiController extends Controller
                         $messageThreadId = null;
                         
                         switch ($notification->getNotificationType()){
-                            
-                           
+                                                       
                             case NotificationType::FOLLOW:
-                                $notificationFollow = $notificationFolowRepository->find($notification->getId());
+                                $notificationFollow = $notificationFolowRepository->findOneBy(array("notificationBase"=>$notification));
                                 $type = NotificationType::FOLLOW;
                                 $redirectUrl = $this->generateUrl('pp_user_profile', array('slug' => $notificationFollow->getFollowYou()->getSlug())); 
                                 $authorName =  $notificationFollow->getFollowYou()->getName();
@@ -111,7 +110,7 @@ class NotificationApiController extends Controller
                                 break;                           
                             
                             case NotificationType::NEW_PROPOSITION:
-                                $notificationNewProposition = $notificationNewPropositionRepository->find($notification->getId());                                
+                                $notificationNewProposition = $notificationNewPropositionRepository->findOneBy(array("notificationBase"=>$notification));                                
                                 $type = NotificationType::NEW_PROPOSITION;                                                                        
                                 $redirectUrl = $this->generateUrl('pp_request_view', array('slug' => $notificationNewProposition->getProposition()->getImageRequest()->getSlug()));                                    
                                 $authorName = $notificationNewProposition->getProposition()->getAuthor()->getName();
@@ -121,7 +120,7 @@ class NotificationApiController extends Controller
                                 break;
                             
                             case NotificationType::PROPOSITION_SELECTED:
-                                $notificationSelected = $notificationSelectedRepository->find($notification->getId());                                
+                                $notificationSelected = $notificationSelectedRepository->findOneBy(array("notificationBase"=>$notification));                                
                                 $type = NotificationType::PROPOSITION_SELECTED;
                                 $redirectUrl = $this->generateUrl('pp_request_view', array('slug' => $notificationSelected->getImageRequest()->getSlug()));
                                 $authorName = $notificationSelected->getImageRequest()->getAuthor()->getName();
@@ -131,7 +130,7 @@ class NotificationApiController extends Controller
                                 break;
                             
                             case NotificationType::MESSAGE:
-                                $notificationMessage = $notificationMessageRepository->find($notification->getId());                                
+                                $notificationMessage = $notificationMessageRepository->findOneBy(array("notificationBase"=>$notification));                                
                                 $type = NotificationType::MESSAGE;
                                 $redirectUrl = $this->generateUrl('pp_user_profile', array('slug' => $notificationMessage->getAuthor()->getSlug()));
                                 $authorName = $notificationMessage->getAuthor()->getName();

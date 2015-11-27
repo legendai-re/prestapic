@@ -10,7 +10,7 @@ namespace PP\MessageBundle\Entity;
  */
 class MessageThreadRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getConversation($threadId){
+    public function getConversation($threadId, $limit, $page){
         $qb = $this->createQueryBuilder('mThread')                                              
                         ->leftJoin('mThread.messages', 'm')
                         ->leftJoin('m.author', 'mA')
@@ -20,8 +20,13 @@ class MessageThreadRepository extends \Doctrine\ORM\EntityRepository
                         ->addSelect('m')
                         ->addSelect('mA')
                         ->addSelect('mT')
-                        ->orderBy('m.createdDate');
-                        
+                        ->orderBy('m.createdDate', 'DESC');
+        
+         $qb = $qb
+                      ->setFirstResult(($page-1) * $limit)
+                      ->setMaxResults($limit)
+            ;   
+        
         try{
             $result = $qb
                     ->getQuery()

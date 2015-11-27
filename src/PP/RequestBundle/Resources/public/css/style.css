@@ -9,7 +9,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 audio, canvas, progress, video { display: inline-block; vertical-align: baseline; }
 
 audio:not([controls]) { display: none; height: 0; }
-
 [hidden], template { display: none; }
 
 a { background-color: transparent; }
@@ -86,6 +85,10 @@ html, body { width: 100%; height: 100%; }
 a { color: #C24C4A; text-decoration: none; transition-duration: none; }
 a:hover { color: #5E1C1B; }
 
+a[ng-click] { cursor: pointer; }
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak { display: none !important; }
+
 ::selection { background: #C24C4A; color: white; }
 
 body { margin: 0px; padding: 0px; font-family: "Source Sans Pro", Helvetica, Arial, sans-serif; background-color: #EEEEEE; color: #444; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
@@ -95,6 +98,8 @@ input, textarea { outline: none; }
 b, strong { font-weight: 600; }
 
 h1, h2, h3, h4, h5, h6 { font-weight: 300; }
+
+img { border: none; }
 
 [type="checkbox"]:not(:checked), [type="checkbox"]:checked { position: absolute; left: -9999px; }
 
@@ -232,7 +237,7 @@ section.profile .profile-details h1.username { font-size: 40px; font-weight: 600
 section.profile .profile-details p.bio { font-size: 20px; margin: 0; }
 section.profile .profile-details ul.details { margin: 15px auto 0; padding: 0; }
 section.profile .profile-details ul.details li { list-style: none; margin: 0; padding: 0 10px; display: inline; border-right: 1px solid white; }
-section.profile .profile-details ul.details li:nth-child(3), section.profile .profile-details ul.details li:last-child { border-right: none; }
+section.profile .profile-details ul.details li:nth-last-child(2), section.profile .profile-details ul.details li:nth-last-child(1) { border-right: none; }
 section.profile .profile-details ul.details li.link { display: block; margin: 10px 0 0; }
 section.profile .profile-details ul.details li.link a { color: rgba(255, 255, 255, 0.75); font-size: 18px; }
 section.profile .profile-details .follow, section.profile .profile-details .pm { background: white; color: #222; font-size: 14px; margin: 20px 0 0; }
@@ -257,8 +262,9 @@ section.main .demand-list .demand-selector .noselect button { border: none; back
 section.main .demand-list .demand-selector .noselect button:hover { background: #ddd; color: #444; border-radius: 3px; }
 section.main .demand-list article.demand, section.main .demand-list .new-demand { width: 760px; height: auto; border-bottom: 1px solid #ddd; display: block; margin: 0 5px 20px; padding-bottom: 10px; overflow: hidden; }
 section.main .demand-list article.demand:last-child, section.main .demand-list .new-demand:last-child { border-bottom: none; }
-section.main .demand-list article.demand a.avatar, section.main .demand-list .new-demand a.avatar { width: 70px; height: 70px; display: inline-block; float: left; border-radius: 50%; overflow: hidden; margin: 0 15px 15px 0; }
-section.main .demand-list article.demand a.avatar img, section.main .demand-list .new-demand a.avatar img { width: 100%; }
+section.main .demand-list article.demand a.avatar, section.main .demand-list .new-demand a.avatar { background: rgba(0, 0, 0, 0.1); width: 70px; height: 70px; display: inline-block; float: left; border-radius: 50%; overflow: hidden; margin: 0 15px 15px 0; }
+section.main .demand-list article.demand a.avatar:hover, section.main .demand-list .new-demand a.avatar:hover { background: rgba(0, 0, 0, 0.15); }
+section.main .demand-list article.demand a.avatar img, section.main .demand-list .new-demand a.avatar img { width: 100%; color: rgba(255, 255, 255, 0.5); }
 section.main .demand-list article.demand .infos, section.main .demand-list .new-demand .infos { width: 665px; height: auto; display: inline-block; float: left; }
 section.main .demand-list article.demand .infos h1, section.main .demand-list .new-demand .infos h1 { padding: 0; margin: 0 0 10px; font-size: 30px; }
 section.main .demand-list article.demand .infos h1 a.upvote-demand, section.main .demand-list .new-demand .infos h1 a.upvote-demand { float: right; font-size: 30px; color: rgba(0, 0, 0, 0.25); }
@@ -273,17 +279,21 @@ section.main .demand-list article.demand .infos .tag-list a.tag.cat:hover, secti
 section.main .demand-list article.demand .infos .author, section.main .demand-list .new-demand .infos .author { display: inline-block; float: right; font-size: 15px; }
 section.main .demand-list article.demand .infos .author.single, section.main .demand-list .new-demand .infos .author.single { float: left; }
 section.main .demand-list article.demand .replies, section.main .demand-list .new-demand .replies { width: 675px; height: auto; display: block; float: left; margin: 0 0 10px 85px; }
-section.main .demand-list article.demand .replies a.reply, section.main .demand-list article.demand .replies a.more-replies, section.main .demand-list .new-demand .replies a.reply, section.main .demand-list .new-demand .replies a.more-replies { background: #d8d8d8; width: 220px; max-width: 220px; height: 150px; display: inline-block; float: left; margin: 0 0 0 5px; color: rgba(0, 0, 0, 0.25); overflow: hidden; }
+section.main .demand-list article.demand .replies a.reply, section.main .demand-list article.demand .replies a.more-replies, section.main .demand-list .new-demand .replies a.reply, section.main .demand-list .new-demand .replies a.more-replies { background: rgba(0, 0, 0, 0.1); width: 220px; max-width: 220px; height: 150px; display: inline-block; float: left; margin: 0 0 0 5px; overflow: hidden; }
+section.main .demand-list article.demand .replies a.reply:hover, section.main .demand-list article.demand .replies a.more-replies:hover, section.main .demand-list .new-demand .replies a.reply:hover, section.main .demand-list .new-demand .replies a.more-replies:hover { background: rgba(0, 0, 0, 0.15); }
 section.main .demand-list article.demand .replies a.reply img, section.main .demand-list article.demand .replies a.more-replies img, section.main .demand-list .new-demand .replies a.reply img, section.main .demand-list .new-demand .replies a.more-replies img { width: 220px; height: 150px; }
 section.main .demand-list article.demand .replies a.reply:first-child, section.main .demand-list article.demand .replies a.more-replies:first-child, section.main .demand-list .new-demand .replies a.reply:first-child, section.main .demand-list .new-demand .replies a.more-replies:first-child { margin: 0; }
-section.main .demand-list article.demand .replies a.more-replies, section.main .demand-list .new-demand .replies a.more-replies { text-align: center; font-size: 50px; padding: 45px 0; }
-section.main .demand-list article.demand .comp-area, section.main .demand-list .new-demand .comp-area { width: 665px; display: block; float: left; overflow: hidden; }
-section.main .demand-list article.demand .comp-area input, section.main .demand-list article.demand .comp-area textarea, section.main .demand-list article.demand .comp-area select, section.main .demand-list .new-demand .comp-area input, section.main .demand-list .new-demand .comp-area textarea, section.main .demand-list .new-demand .comp-area select { background: transparent; border: none; width: 100%; font-size: 20px; font-weight: normal; padding: 0; margin: 0 0 10px; }
-section.main .demand-list article.demand .comp-area input.init, section.main .demand-list article.demand .comp-area textarea.init, section.main .demand-list article.demand .comp-area select.init, section.main .demand-list .new-demand .comp-area input.init, section.main .demand-list .new-demand .comp-area textarea.init, section.main .demand-list .new-demand .comp-area select.init { height: 70px; font-size: 28px; font-weight: 300; }
-section.main .demand-list article.demand .comp-area .title, section.main .demand-list .new-demand .comp-area .title { font-size: 24px; }
+section.main .demand-list article.demand .replies a.more-replies, section.main .demand-list .new-demand .replies a.more-replies { text-align: center; font-size: 50px; padding: 45px 0; color: rgba(0, 0, 0, 0.25); }
+section.main .demand-list article.demand .replies a.more-replies:hover, section.main .demand-list .new-demand .replies a.more-replies:hover { color: rgba(0, 0, 0, 0.5); }
+section.main .demand-list .new-demand { background: rgba(255, 255, 255, 0.25); border-radius: 3px; border: 1px solid rgba(0, 0, 0, 0.075); padding: 10px; }
+section.main .demand-list .new-demand a.avatar { margin: 0 15px 0 0; }
+section.main .demand-list .new-demand .comp-area { width: 653px; display: block; float: left; overflow: hidden; }
+section.main .demand-list .new-demand .comp-area input, section.main .demand-list .new-demand .comp-area textarea, section.main .demand-list .new-demand .comp-area select { background: transparent; border: none; width: 100%; font-size: 20px; font-weight: normal; padding: 0; }
+section.main .demand-list .new-demand .comp-area input.init, section.main .demand-list .new-demand .comp-area textarea.init, section.main .demand-list .new-demand .comp-area select.init { height: 70px; font-size: 28px; font-weight: 300; background: none; border: none; }
+section.main .demand-list .new-demand .comp-area .title { font-size: 24px; }
 section.main .demand-list .replies { width: 100%; height: auto; margin: 0; }
 section.main .demand-list .replies .more-replies { width: 760px; font-size: 28px; font-weight: 300; display: inline-block; margin: 15px 5px; }
-section.main .demand-list .replies .reply { width: 375px; height: 260px; display: inline-block; overflow: hidden; margin: 0 5px 10px; float: left; position: relative; }
+section.main .demand-list .replies .reply { background: rgba(0, 0, 0, 0.25); width: 375px; height: 260px; display: inline-block; overflow: hidden; margin: 0 5px 10px; float: left; position: relative; }
 section.main .demand-list .replies .reply .prop { width: 380px; height: 260px; display: block; }
 section.main .demand-list .replies .reply .prop img { width: 380px; height: 260px; }
 section.main .demand-list .replies .reply a.overlay { background: url(../images/img-title-mini.png) repeat-x bottom; width: 380px; height: 260px; display: block; position: absolute; top: 0; }
@@ -304,7 +314,7 @@ section.main .demand-list .replies .reply.selected { width: 760px; height: 525px
 section.main .demand-list .replies .reply.selected .prop { width: 760px; height: 525px; display: block; }
 section.main .demand-list .replies .reply.selected .prop img { width: 760px; height: 525px; }
 section.main .demand-list .replies .reply.selected a.overlay { background: url(../images/img-title.png) repeat-x bottom; width: 760px; height: 525px; }
-section.main .demand-list .replies .reply.selected .img-title a.avatar { width: 60px; height: 60px; overflow: hidden; border-radius: 50%; display: block; float: left; }
+section.main .demand-list .replies .reply.selected .img-title a.avatar { background: rgba(255, 255, 255, 0.25); width: 60px; height: 60px; overflow: hidden; border-radius: 50%; display: block; float: left; }
 section.main .demand-list .replies .reply.selected .img-title a.avatar img { width: 100%; }
 section.main .demand-list .replies .reply.selected .img-title .infos { float: left; margin-left: 10px; }
 section.main .demand-list .replies .reply.selected .img-title .infos .name { font-size: 28px; display: inline; }
@@ -326,7 +336,7 @@ section.main .sidebar .widget ul.tags li.tag span.subject-count, section.main .s
 section.main .sidebar .widget ul.tags li.tag .tag-desc, section.main .sidebar .widget ul.users li.tag .tag-desc, section.main .sidebar .widget ul.subjects li.tag .tag-desc { font-size: 14px; display: block; padding: 5px 0; }
 section.main .sidebar .widget ul.tags li.user, section.main .sidebar .widget ul.users li.user, section.main .sidebar .widget ul.subjects li.user { width: 100%; height: auto; display: block; float: left; margin-bottom: 5px; }
 section.main .sidebar .widget ul.tags li.user:last-child, section.main .sidebar .widget ul.users li.user:last-child, section.main .sidebar .widget ul.subjects li.user:last-child { margin-bottom: 15px; }
-section.main .sidebar .widget ul.tags li.user a.avatar, section.main .sidebar .widget ul.users li.user a.avatar, section.main .sidebar .widget ul.subjects li.user a.avatar { width: 25px; height: 25px; border-radius: 50%; display: inline-block; float: left; margin-right: 10px; overflow: hidden; }
+section.main .sidebar .widget ul.tags li.user a.avatar, section.main .sidebar .widget ul.users li.user a.avatar, section.main .sidebar .widget ul.subjects li.user a.avatar { background: rgba(0, 0, 0, 0.1); width: 25px; height: 25px; border-radius: 50%; display: inline-block; float: left; margin-right: 10px; overflow: hidden; }
 section.main .sidebar .widget ul.tags li.user a.avatar img, section.main .sidebar .widget ul.users li.user a.avatar img, section.main .sidebar .widget ul.subjects li.user a.avatar img { width: 100%; }
 section.main .sidebar .widget ul.tags li.user a.username, section.main .sidebar .widget ul.users li.user a.username, section.main .sidebar .widget ul.subjects li.user a.username { font-size: 18px; }
 section.main .sidebar .widget ul.tags li.subject, section.main .sidebar .widget ul.users li.subject, section.main .sidebar .widget ul.subjects li.subject { width: 100%; height: auto; display: block; float: left; margin-bottom: 15px; }
@@ -397,9 +407,20 @@ section.overlay-messages .messages .container .message-bottom .chat-container .c
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-conversation .chat-scroller .message .avatar img { width: 40px; height: 40px; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-conversation .message-state { font-size: 15px; color: #ccc; text-align: right; padding-right: 65px; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-conversation .message-date { font-size: 16px; color: #777; text-align: center; padding: 15px 0 5px; display: block; }
-section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer { background: rgba(0, 0, 0, 0.5); width: 100%; height: auto; min-height: 50px; float: right; display: -webkit-flex; display: -moz-box; display: -ms-flexbox; display: flex; align-self: flex-end; border-top: 1px solid #ccc; position: relative; }
+section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer { background: rgba(0, 0, 0, 0.5); width: 100%; height: auto; float: right; display: -webkit-flex; display: -moz-box; display: -ms-flexbox; display: flex; align-self: flex-end; border-top: 1px solid #ccc; position: relative; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form { width: 100%; }
-section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form input { width: 100%; height: 100%; padding: 15px; border: none; }
+section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form textarea { width: 100%; height: 100%; padding: 15px; border: none; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form button { background: #ccc; border: none; color: #777; width: 30px; height: 30px; overflow: hidden; border-radius: 50%; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: "icomoon"; content: ""; text-indent: -9999px; position: absolute; top: 10px; right: 10px; bottom: 10px; outline: none; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form button:hover { background: #ccc; color: #777; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form button:active { background: #777; color: white; }
+
+.load-content { display: block; width: 54px; margin: 0 auto; padding: 40px 0 80px; }
+.load-content .bubble, .load-content:before, .load-content:after { content: ""; display: inline-block; width: 15px; height: 15px; border-radius: 15px; background-color: rgba(0, 0, 0, 0.25); }
+.load-content:before { animation: pop-wave 1.2s 0.2s linear infinite; }
+.load-content .bubble { animation: pop-wave 1.2s 0.4s linear infinite; }
+.load-content:after { animation: pop-wave 1.2s 0.6s linear infinite; }
+
+@keyframes pop-wave { 0% { transform: scale(1); }
+  50% { transform: scale(0); }
+  75% { transform: scale(0.75); }
+  100% { transform: scale(1); } }

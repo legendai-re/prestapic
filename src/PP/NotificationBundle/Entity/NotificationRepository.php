@@ -12,14 +12,13 @@ class NotificationRepository extends \Doctrine\ORM\EntityRepository
 {
     public function getNotifications($userId, $limit, $page){
         
-        $qb = $this->createQueryBuilder('n')                        
+        $qb = $this->createQueryBuilder('n')
                         ->distinct(true)   
                         ->leftJoin('n.notificationThread', 'nThread') 
                         ->leftJoin('nThread.user', 'u') 
                         ->where('u.id = :userId')
-                        ->setParameter('userId', $userId)                        
-                                                                
-                        ->orderBy('n.createDate', 'DESC')                                                                 
+                        ->setParameter('userId', $userId)                                                                                        
+                        ->orderBy('n.createDate', 'DESC')
                         ->setFirstResult(($page-1) * $limit)
                         ->setMaxResults($limit);
         

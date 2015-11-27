@@ -1,6 +1,7 @@
 
 
 
+
 var headerApp = angular.module('headerApp',[]);       
 
 headerApp.config(['$locationProvider',function ($locationProvider) {
@@ -9,8 +10,8 @@ headerApp.config(['$locationProvider',function ($locationProvider) {
 
 /* node */
 headerApp.service('FayeClient', function () {
-        return new Faye.Client('http://localhost:3000/');
-})
+        return new Faye.Client('http://alexandrejolly.com:3000/');
+});
 
 
 headerApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeClient, $http) {
@@ -36,7 +37,7 @@ headerApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeCli
         );
     }
 
-}])
+}]);
 
 headerApp.filter('reverse', function() {
     return function(items) {
@@ -52,7 +53,10 @@ var haveOpenMessage = false;
 var messageIsOpen = false;
 
 headerApp.controller('headerController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
-
+        
+        $(".fixeBodyHover").mouseover(function() { $("#body").css("position", "fixed");});
+        $(".fixeBodyHover").mouseout(function() { $("#body").css("position", "absolute");});
+        
         var haveAllreadyOpen = false;            
         var showMoreNotificationUrl = null;
         $scope.showMoreNotification = true;
@@ -62,7 +66,8 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             if(notificationListIsOpen)closeNotification();
             if(filterListIsOpen)closeFilterList();
             if(userMenuIsOpen)closeUserMenu();
-        }
+            $('#searchUser').css("display", "none");
+        };
 
         this.showMessage = function(){
             closeAll();
@@ -79,14 +84,14 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
                 messageAppContainer.style.display = 'block';                    
                 messageIsOpen = true;                                        
             }                
-        }
+        };
 
         var closeMessage = function(){
             document.getElementById("body").style.position = "relative";
             if(document.getElementById('messageApp')!=null)document.getElementById('messageApp').style.display = 'none';
             patchIsInMessage(false);
             messageIsOpen = false;
-        }
+        };
 
         var patchIsInMessage = function(mode){
             var isInMessageForm = document.forms["pp_user_api_patch_is_in_message_form"];
@@ -106,7 +111,7 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
                     }
                 );                        
             }
-        }
+        };
 
         var closeNotification = function(){
              /* close notification list */
@@ -141,7 +146,7 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             }
 
             notificationListIsOpen = false;                
-        }
+        };
 
         this.showNotifications = function(){                
             if(!notificationListIsOpen){
@@ -155,8 +160,10 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
                     var getNotificationForm = document.forms["pp_notification_api_get_notification_form"];
                     if(getNotificationForm!=null){
                         $http.get(getNotificationForm.action).
-                            then(function(response) {                                  
+                            then(function(response) {
+                                $("#loadingNotif").css("display", "none");
                                 showMoreNotificationUrl = response.data.showMoreApiUrl;
+                                if(response.data.notifications.length == 0)$("#noNotification").css("display", "block");
                                 for(var x=0; x<response.data.notifications.length; x++){                    
                                     $scope.notifications.push(response.data.notifications[x]);                                                        
                                 }                                
@@ -175,7 +182,7 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             }else{
                 closeAll();
             }
-        }
+        };
 
 
         this.showMoreNotifications = function(){
@@ -192,7 +199,7 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
                     }
                 );                                        
             }   
-        }
+        };
 
         this.patchNotificationClicked = function(index){                                
             closeAll();
@@ -218,11 +225,18 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             if(currentNotif.type != 4){
                 $window.location.href = currentNotif.redirectUrl;
             }else{
-                this.showMessage();                                        
-                angular.element(document.getElementById('messageApp')).scope().$emit('showNewMessage', currentNotif.authorId);
+                this.showMessage();
+                var thread ={ 
+                    id: currentNotif.messageThreadId,
+                    target: {
+                        id: currentNotif.authorId,
+                        name: currentNotif.authorName,
+                        image: currentNotif.authorImg
+                    }
+                }               
+                angular.element(document.getElementById('messageApp')).scope().$emit('showNewMessage', thread);
             }
-
-        }
+        };
 
         this.showUserMenu = function(){                
             if(!userMenuIsOpen){
@@ -232,12 +246,12 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             }else{
                 closeAll();
             }                
-        }
+        };
 
         var closeUserMenu = function(){
             document.getElementById('userMenu').style.display = 'none';
             userMenuIsOpen = false;
-        }
+        };
 
         this.showFilterList = function(){                
             if(!filterListIsOpen){
@@ -248,7 +262,7 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             }else{
                 closeFilterList();
             }                
-        }
+        };
 
         var closeFilterList = function(){
             if(filterListIsOpen){
@@ -257,17 +271,19 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
                 filterListIsOpen = false;
             }
             document.getElementById('searchOptions').style.display = 'none';
-        }
+        };
 
         this.showSearchOptions = function(){
-            document.getElementById('searchOptions').style.display = 'block';                                
-        }
+            document.getElementById('searchOptions').style.display = 'block';
+            $('#searchUser').css("display", "block");
+        };
 
         /* handle new notification */
         $scope.$on('notification', function (event, message) {                
             if(haveAllreadyOpen){
                 $scope.notifications.unshift(message.notification);
-                $scope.$apply();                    
+                $scope.$apply();
+                $("#noNotification").css("display", "none");
             }                
             document.getElementById('notificationsNb').innerHTML = parseInt(document.getElementById('notificationsNb').innerHTML)+1;
             $("#notificationButton").addClass("alert");
@@ -281,6 +297,20 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
         $('.stopPropagation').click(function(event){
             event.stopPropagation();
         });
+        
+        function wireUpEvents() {
+                function goodbye(e) {
+                  angular.element(document.getElementById('headerController')).scope().leave();
+                }
+                window.onbeforeunload=goodbye;
+        }
+        $(document).ready(function() {
+          wireUpEvents();
+        });
+        
+        $scope.leave = function(){
+            closeAll();
+        }
 
 }]);
 
@@ -314,9 +344,8 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
                 this.categoriesList[catId] = catName;
             }else{                
                 delete this.categoriesList[catId];
-            }            
-            console.log(this.categoriesList);
-        }
+            }                        
+        };
         
         /// END OF CATEGORIES MANAGEMENT
         ////////////////////////////////
@@ -336,8 +365,7 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
             }else{
                 $("#tag_"+tagId).removeClass("choosen");
                 delete this.tagsListClicked[tagId];
-            }            
-            console.log(this.tagsListClicked);
+            }                        
         };
         
         this.tagStrToArray = function(){
@@ -348,9 +376,9 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
                 var actualTag = '';
                 var tagCharArray = this.tagsListStr.split('');
                 
-                tagCharArray.forEach(function(char) {
-                    if(char != ','){
-                        actualTag+=char;
+                tagCharArray.forEach(function(myChar) {
+                    if(myChar != ','){
+                        actualTag+=myChar;
                     }else{
                         if(actualTag){
                             tempTagList.push(actualTag);
@@ -374,6 +402,7 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
         /// END OF TAGS MANAGEMENT
         //////////////////////////
         
+        this.conceringMe = false;
         this.searchQuery = '';
         //////////////////////////
         //     SUBMIT SEARCH
@@ -394,8 +423,14 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
                     if(i<this.categoriesList.length-1)catListParam += '+';
                 }
             }
-            $window.location.href = submitFormUrl+'?'+searchQueryParam+'&'+tagListParam+'&'+catListParam;
-        }
+            
+            var concerningMeParam = '';
+            if(this.conceringMe){
+                concerningMeParam = 'me=true'
+            }
+            
+            $window.location.href = submitFormUrl+'?'+searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam;
+        };
 }]); 
 
 

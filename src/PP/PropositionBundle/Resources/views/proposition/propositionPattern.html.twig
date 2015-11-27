@@ -20,10 +20,7 @@
                   </div>
                 </div>
             </div>                             
-            <div class="actions">
-                {% if canUpvoteProposition[proposition.id] == true %}
-                     {{ form(upvotePropositionForms[proposition.id]) }}
-                {% endif %}
+            <div class="actions">               
                 <a id="propositionUpvoteButton_{{ proposition.id }}"  href="" title="Up vote"
                     {% if canUpvoteProposition[proposition.id] == true %}
                         ng-click="propositions.postPropositionVote({{ proposition.id }})"

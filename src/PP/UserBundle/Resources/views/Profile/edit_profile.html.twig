@@ -20,7 +20,9 @@
                 <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.profilImage.alt }}">
             </div>
             {{ form_row(editUserForm.profilImage) }}
-            <img style="width: 50%;" src="{{ asset(currentUser.coverImage.webPath("1500x500")) }}" alt="{{ currentUser.coverImage.alt }}"> 
+            {% if currentUser.coverImage != null %}
+                <img style="width: 50%;" src="{{ asset(currentUser.coverImage.webPath("1500x500")) }}" alt="{{ currentUser.coverImage.alt }}"> 
+            {% endif %}
             {{ form_row(editUserForm.coverImage) }}
             
             {{ form_row(editUserForm.save) }}

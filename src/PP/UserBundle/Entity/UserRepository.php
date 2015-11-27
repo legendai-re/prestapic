@@ -44,19 +44,27 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
     }
     
     
-    public function searchUser($userId, $search, $limit){
+    public function searchUser($userId, $search, $limit, $page){
         
         $qb = $this->createQueryBuilder('u');
         $qb = $qb   
                     ->distinct(true)
                     ->where($qb->expr()->like('u.name', ':search'))
-                    ->setParameter('search', '%'.$search.'%')
-                    ->andWhere('u.id != :userId')
-                    ->setParameter('userId', $userId)
+                    ->setParameter('search', '%'.$search.'%')                    
                     ->leftJoin('u.messageThreads', 'mT')   
                     ->leftJoin('u.profilImage', 'pI')
                     ->addSelect('pI')
                     ->setMaxResults($limit);
+        
+        if($userId!=null){
+            $qb = $qb->andWhere('u.id != :userId')
+                    ->setParameter('userId', $userId);
+        }
+        
+        $qb = $qb
+                      ->setFirstResult(($page-1) * $limit)
+                      ->setMaxResults($limit)
+            ;
         
         try{
                return  $qb

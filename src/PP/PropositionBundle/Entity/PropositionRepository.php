@@ -1,6 +1,7 @@
 <?php
 
 namespace PP\PropositionBundle\Entity;
+use PP\RequestBundle\Constant\Constants;
 
 /**
  * PropositionRepository
@@ -24,25 +25,96 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
                     ->getSingleScalarResult();                                                    
     }
     
-    public function getPropositions($imageRequestId, $limit, $page)
+    public function getPropositions($imageRequestId, $limit, $page, $displayMode = null, $userId = 0, $followingIds = null, $searchParam = null, $tagsParam = null, $categoriesParam = null, $concerningMeParam = false)
     {
-      $qb = $this
-            ->createQueryBuilder('p')
-            ->leftJoin('p.image', 'i')
-            ->addSelect('i')
-            ->leftJoin('p.author', 'pA')
-            ->addSelect('pA')
-            ->where('p.imageRequest = :imageRequestId')
-            ->setParameter('imageRequestId', $imageRequestId)
-            ->orderBy('p.createdDate', 'DESC')
-            ->distinct(true)
-            
-      ;
+        $qb = $this
+              ->createQueryBuilder('p')
+              ->leftJoin('p.image', 'i')
+              ->addSelect('i')
+              ->leftJoin('p.author', 'pA')
+              ->addSelect('pA')              
+              ->leftJoin("p.imageRequest", "ir")
+              ->leftJoin('ir.tags', 't')
+              ->leftJoin('ir.category', 'c')
+              ->where('ir.enabled = true')
+              ->distinct(true)
+              ->andWhere('ir.enabled = true')
+        ;
+        
+        if($searchParam != null){
+            $qb = $qb
+                    ->where($qb->expr()->like('ir.title', ':title'))
+                    ->setParameter('title', '%'.$searchParam.'%')
+                    ->orWhere($qb->expr()->like('t.name', ':name'))
+                    ->setParameter('name', '%'.$searchParam.'%')
+                    ->orWhere($qb->expr()->like('c.name', ':cat'))
+                    ->setParameter('cat', '%'.$searchParam.'%')
+                    ->orWhere($qb->expr()->like('p.title', ':propTitle'))
+                    ->setParameter('propTitle', '%'.$searchParam.'%');
+
+        }
+
+        if($tagsParam != null){
+            $i = 0;
+            foreach ($tagsParam as $tagName){
+                $qb = $qb
+                        ->andWhere($qb->expr()->like('t.name', ':nameT'.$i))
+                        ->setParameter('nameT'.$i, '%'.$tagName.'%');
+                $i++;
+            }                
+        }
+
+        if($categoriesParam != null){
+            $i = 0;
+            $request = '';
+            foreach ($categoriesParam as $cat){
+                if($i>0)$request .= ' OR ';
+                $request .= 'c.name = :nameC'.$i;
+                $qb = $qb                            
+                        ->setParameter('nameC'.$i, $cat);
+                $i++;
+            }
+             $qb = $qb
+                        ->andWhere($request);
+        }
+
+        if($concerningMeParam){
+            $qb = $qb
+                    ->andWhere("pA.id = :userId2")
+                    ->setParameter('userId2', $userId);
+        }
+        
+        if($displayMode == Constants::ORDER_BY_DATE){
+            $qb = $qb
+                    ->orderBy('p.createdDate', 'DESC');
+        }else if($displayMode == Constants::ORDER_BY_UPVOTE){
+             $qb = $qb
+                    ->orderBy('p.upvote', 'DESC');
+        }else if($displayMode == Constants::ORDER_BY_INTEREST){
+            $qb = $qb                                               
+                ->from('PPUserBundle:User', 'u')                         
+                ->andwhere('u.id = :userId')
+                ->setParameter('userId', $userId)
+                ->leftJoin('u.following', 'uF')                       
+                ->andwhere("pA.id IN(:followingIds)")
+                ->setParameter('followingIds', array_values($followingIds))
+                ->orderBy('p.createdDate', 'DESC'); 
+            ;
+        }else{
+            $qb = $qb
+                    ->orderBy('p.createdDate', 'DESC');
+        }
+        
+        if($imageRequestId!=null){
+            $qb = $qb
+                   ->andwhere("ir.id = :imageRequestId")
+                   ->setParameter('imageRequestId', $imageRequestId);
+        }
       
-      $qb = $qb
-            ->setFirstResult(($page-1) * $limit)
-            ->setMaxResults($limit)
-      ;      
+        $qb = $qb
+              ->setFirstResult(($page-1) * $limit)
+              ->setMaxResults($limit)
+        ;      
 
       return $qb
             ->getQuery()
@@ -52,9 +124,12 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
     
     public function countOneUserPropositions($userId){
         $qb = $this->createQueryBuilder('p')
+                ->leftJoin('p.imageRequest', 'ir')
                 ->select('COUNT(p.id)')
                 ->where('p.author = :userId')
-                ->setParameter('userId', $userId);
+                ->setParameter('userId', $userId)
+                ->andWhere('ir.enabled = true');
+        
          return  $qb
                     ->getQuery()
                     ->getSingleScalarResult();
@@ -69,6 +144,7 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
                 ->leftJoin('p.imageRequest', 'ir')
                 ->addSelect('ir')
                 ->orderBy('p.createdDate', 'DESC')
+                ->andWhere('ir.enabled = true')
                 ->setMaxResults($limit);
         
         return $qb

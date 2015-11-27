@@ -9,16 +9,14 @@ namespace PP\MessageBundle\JsonModel;
  */
 class JsonUserModel {
     
-    public function __construct($id, $name, $image, $getThreadApiUrl){
+    public function __construct($id, $name, $image){
         $this->id = $id;
         $this->name = $name;
-        $this->image = $image;
-        $this->getThreadApiUrl = $getThreadApiUrl;
+        $this->image = $image;        
     }
     
     public $id;
     public $name;
-    public $image;
-    public $getThreadApiUrl;
+    public $image;    
     
 }

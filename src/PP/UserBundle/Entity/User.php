@@ -37,9 +37,38 @@ class User extends BaseUser
     /**
     * @var string $name
     *
-    * @ORM\Column(name="name", type="string", length=255)
+    * @ORM\Column(name="name", type="string", length=40)
+    * @Assert\Length(
+    *      min = 2,
+    *      max = 40,
+    *      minMessage = "Your name must be at least {{ limit }} characters long",
+    *      maxMessage = "Your name cannot be longer than {{ limit }} characters"
+    * )
     */
     protected $name;
+    
+    
+    /**
+    * @var string $description
+    *
+    * @ORM\Column(name="description", type="string", length=255, nullable=true)
+    * @Assert\Length(    
+    *      max = 255,    
+    *      maxMessage = "Your description cannot be longer than {{ limit }} characters"
+    * )
+    */
+    private $description;
+    
+    /**
+    * @var string $contact
+    *
+    * @ORM\Column(name="contact", type="string", length=100, nullable=true)
+    * @Assert\Length(    
+    *      max = 100,    
+    *      maxMessage = "Your description cannot be longer than {{ limit }} characters"
+    * )
+    */
+    private $contact;
     
     /**
     * @ORM\OneToOne(targetEntity="PP\ImageBundle\Entity\Image", cascade={"persist", "remove"})
@@ -49,6 +78,7 @@ class User extends BaseUser
 
     /**
     * @ORM\OneToOne(targetEntity="PP\ImageBundle\Entity\Image", cascade={"persist", "remove"})
+    * @ORM\JoinColumn(name="profile_image_id", referencedColumnName="id", nullable=true)
     * @Assert\Valid()
     */
     private $coverImage;
@@ -71,7 +101,7 @@ class User extends BaseUser
      * @ORM\Column(name="notificationsNb", type="integer", nullable=true)
      */
     private $notificationsNb;
-    
+        
     /**    
     * @ORM\ManyToMany(targetEntity="PP\MessageBundle\Entity\MessageThread", inversedBy="users")
     * @Assert\Valid()          
@@ -130,6 +160,18 @@ class User extends BaseUser
     * @ORM\Column(name="isInMessage", type="boolean", nullable=true)
     */
     private $isInMessage;
+    
+    /**    
+    * @ORM\OneToMany(targetEntity="PP\ReportBundle\Entity\ReportTicket", mappedBy="author")
+    * @Assert\Valid()
+    */
+    private $reportTickets;
+    
+    /**    
+    * @ORM\OneToMany(targetEntity="PP\ReportBundle\Entity\DisableTicket", mappedBy="author")
+    * @Assert\Valid()
+    */
+    private $disabletTickets;
     
     /**
     * Set name
@@ -367,11 +409,12 @@ class User extends BaseUser
     //////// create thumbnail ///////
     
     /**
-    * @ORM\PostPersist()       
+    * @ORM\PostPersist()
+    * @ORM\PostUpdate()     
     */
     public function createThumbnail(){               
         $this->profilImage->resize("70x70",120, 120);
-        $this->coverImage->resize("1500x500", 1500,500);
+        if($this->coverImage!=null)$this->coverImage->resize("1500x500", 1500,500);
     }
 
     /**
@@ -621,5 +664,121 @@ class User extends BaseUser
     public function getIsInMessage()
     {
         return $this->isInMessage;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return User
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param string $contact
+     *
+     * @return User
+     */
+    public function setContact($contact)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return string
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
+     * Add reportTicket
+     *
+     * @param \PP\ReportBundle\Entity\ReportTicket $reportTicket
+     *
+     * @return User
+     */
+    public function addReportTicket(\PP\ReportBundle\Entity\ReportTicket $reportTicket)
+    {
+        $this->reportTickets[] = $reportTicket;
+
+        return $this;
+    }
+
+    /**
+     * Remove reportTicket
+     *
+     * @param \PP\ReportBundle\Entity\ReportTicket $reportTicket
+     */
+    public function removeReportTicket(\PP\ReportBundle\Entity\ReportTicket $reportTicket)
+    {
+        $this->reportTickets->removeElement($reportTicket);
+    }
+
+    /**
+     * Get reportTickets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReportTickets()
+    {
+        return $this->reportTickets;
+    }
+
+    /**
+     * Add disabletTicket
+     *
+     * @param \PP\ReportBundle\Entity\disableTicket $disabletTicket
+     *
+     * @return User
+     */
+    public function addDisabletTicket(\PP\ReportBundle\Entity\disableTicket $disabletTicket)
+    {
+        $this->disabletTickets[] = $disabletTicket;
+
+        return $this;
+    }
+
+    /**
+     * Remove disabletTicket
+     *
+     * @param \PP\ReportBundle\Entity\disableTicket $disabletTicket
+     */
+    public function removeDisabletTicket(\PP\ReportBundle\Entity\disableTicket $disabletTicket)
+    {
+        $this->disabletTickets->removeElement($disabletTicket);
+    }
+
+    /**
+     * Get disabletTickets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDisabletTickets()
+    {
+        return $this->disabletTickets;
     }
 }

@@ -1,0 +1,51 @@
+<?php
+
+namespace PP\ReportBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * ImageRequestRT
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PP\ReportBundle\Entity\ImageRequestRTRepository")
+ */
+class ImageRequestRT
+{
+    public function __construct($id)
+    {
+        $this->id = $id;
+    }
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     */
+    private $id;
+    
+    /**    
+    * @ORM\ManyToOne(targetEntity="PP\RequestBundle\Entity\ImageRequest")     
+    * @Assert\Valid()          
+    */
+    private $imageRequest;        
+    
+    /**    
+    * @ORM\OneToOne(targetEntity="PP\ReportBundle\Entity\ReportTicket", cascade={"persist", "remove"} )     
+    * @Assert\Valid()          
+    */
+    private $reportTicketBase; 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+

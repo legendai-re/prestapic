@@ -5,28 +5,28 @@
         <div class="message-top">
             <div class="inbox-top">
                 Inbox (1 new)
-            <a class="new-message" href="#"></a>
+            <a id="searchButton" class="new-message" href=""></a>
             </div>
             <div class="chat-top">
                   <div class="chat-name" id="chatTitle"></div>
-                  <button class="button-close">×</button>
+                  <button  class="button-close">×</button>
             </div>
         </div>
 
 
         {% verbatim %}
         <div class="message-bottom" >
-            <div ng-controller="inboxController as inbox" class="inbox">
-                {% endverbatim %}{{ form(getInboxForm) }}{% verbatim %}
+            <div id="inboxBlock" ng-controller="inboxController as inbox" class="inbox">
+                {% endverbatim %}{{ form(getCurrentUserForm) }}{% verbatim %}
                 <ul class="list-mess">
-                    <li ng-repeat="thread in inboxThreads" class="message" >                    
+                    <li ng-repeat="thread in currentUser.threadList" class="message" >                    
                         <a href="" ng-click="inbox.gotToConversation(thread)" class="open">
                             <div class="avatar">
-                                <img ng-src="{{ thread.userImage }}">
+                                <img ng-src="{{ thread.target.image }}">
                             </div>
                             <div class="desc">
-                                <div class="name">{{ thread.userName }}</div>
-                                <div class="last-message"><span ng-if="thread.messageFromUs">You: </span>{{ thread.message }}</div>
+                                <div class="name">{{ thread.target.name }}</div>
+                                <div class="last-message"><span ng-if="thread.lastMessage.messageFromUs">You: </span>{{ thread.lastMessage.content | limitTo: 23 }}</div>
                                 <span class="dot new"></span>
                             </div>
                             <span ng-if="thread.haveNewMessage"></span>
@@ -35,9 +35,9 @@
                 </ul>                        
             </div>
 
-            <!--<div ng-controller="searchController as search" style="display: inline-block;  width: 300px; background-color: #C4DCE0; ">            
+            <div id="searchBlock" ng-controller="searchController as search" style="display: none;  background: #fafafa; width: 300px; border-right: 1px solid #ccc; ">            
                 <h2>Search</h2>                        
-                <form action="{% endverbatim %}{{ path('pp_message_api_get_search_user') }}{% verbatim %}" name="pp_message_api_get_search_user_form">
+                <form action="{% endverbatim %}{{ path('pp_user_api_get_search_user') }}{% verbatim %}" name="pp_user_api_get_search_user_form">
                     <input type="text" name="search" ng-model="search.search" ng-change="search.searchUser()"/>
                 </form>                
                 <ul>
@@ -47,36 +47,39 @@
                         </a>
                     </li>
                 </ul>
-            </div>-->
+            </div>
 
             <div ng-controller="chatController as chat" class="chat-container" >
-                <div class="chat-conversation">
-                    <div class="chat-scroller">                                                       
-                        <div ng-repeat="message in conversation">
+                <div id="conversation" class="chat-conversation">
+                    <div class="chat-scroller">
+                        <a href="" ng-click="chat.loadMore()">load more</a>
+                        <div  ng-repeat="message in currentUser.threadList[currentThread.id].messageList" >
                             <div ng-if="message.messageFromUs" class="message me">
-                                <div class="message-content">
+                                <div class="message-content" ng-bind-html="message.content | linky ">
                                     {{ message.content }}
                                 </div>
                                 <div class="avatar" >
-                                    <img  ng-if="!conversation[$index+1].messageFromUs" ng-src="{{ currentUser.image }}">
+                                    <img  ng-if="!currentUser.threadList[currentThread.id].messageList[$index+1].messageFromUs" ng-src="{{ currentUser.image }}">
                                 </div>                            
                             </div>
 
                             <div ng-if="!message.messageFromUs" class="message">
-                                <div class="message-content">
+                                <div class="message-content" ng-bind-html="message.content | linky ">
                                     {{ message.content }}
                                 </div>
                                 <div class="avatar">
-                                    <img  ng-if="conversation[$index+1].messageFromUs" ng-src="{{ message.authorImage }}">
+                                    <img  ng-if="!currentUser.threadList[currentThread.id].messageList[$index+1]" ng-src="{{ message.author.image }}">
+                                    <img  ng-if="currentUser.threadList[currentThread.id].messageList[$index+1].messageFromUs" ng-src="{{ message.author.image }}">
                                 </div>
                             </div>
-                        </div>                   
+                        </div>
+                        <div ng-show="!currentUser.threadList[currentThread.id].messageList.length">No message yet</div>
                     </div>
                 </div>
                 <div class="chat-composer">                    
-                    <form ng-action="{% endverbatim %}{{ path('pp_message_api_get_search_user') }}{% verbatim %}" name="pp_message_api_get_search_user_form">
-                        <input placeholder="Type your text here ..." type="text" name="message_value" ng-model="chat.messageContent" />
-                        <button type="submit" ng-click="chat.sendMessage()">Send</button>
+                    <form>
+                        <textarea  id="chatTextArea" placeholder="Type your text here ..."  name="message_value" ng-model="messageContent"></textarea>
+                        <button type="submit" ng-click="chat.callSendMessage()">Send</button>
                     </form>
                 </div>
             </div>

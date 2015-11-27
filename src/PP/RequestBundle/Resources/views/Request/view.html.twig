@@ -7,8 +7,9 @@
 {% block requestBody %}
 <div id="viewApp" >
 <base href=" " />
-    
+    {% if imageRequest.enabled == true %}
     <article class="demand" ng-controller="requestController as request">
+        
         <a href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" class="avatar">
             <img src="{{ asset(imageRequest.author.profilImage.webPath("70x70")) }}" alt="{{ imageRequest.author.profilImage.alt }}">                    
         </a>                                       
@@ -43,12 +44,42 @@
             </div>
 
             <div class="tag-list">
+                <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'categories': imageRequest.category.name }) }}" >{{ imageRequest.category.name }}</a>
                 {% for tag in imageRequest.tags %}
-                    <a class="tag" href="{{ path('pp_request_homepage', {'search_query':tag.name}) }}" title="">{{ tag.name }}</a>
+                    <a class="tag" href="{{ path('pp_request_homepage', {'tags':tag.name}) }}" title="">{{ tag.name }}</a>
                 {% endfor %}
             </div>            
         </div>
-
+        
+        {# report and delete image request form #}
+        {% if is_granted("ROLE_USER") %}
+            {% if imageRequest.author.id == currentUser.id %}
+                <input type="submit" value="Delete request" ng-click="request.postDisableRequest({{ imageRequest.id }})" />
+                {{ form(disableTicketForm) }}
+            {% elseif is_granted("ROLE_MODERATOR") %}                
+                <form ng-model="request.reportData" ng-submit="request.postDisableRequest({{ imageRequest.id }})" >
+                    <select ng-model="request.reportData.reasonId">
+                    {% for reason in reportReasonList %}
+                        <option value="{{ reason.id }}">{{ reason.name }}</option>
+                    {% endfor %}
+                    </select>
+                    <textarea ng-model="request.reportData.details">More details...</textarea>
+                    <input type="submit" value="Delete"/>
+                </form>
+                {{ form(disableTicketForm) }}                                                
+            {% else %}
+                <form ng-model="request.reportData" ng-submit="request.postReport({{ imageRequest.id }})" >
+                    <select ng-model="request.reportData.reasonId">
+                    {% for reason in reportReasonList %}
+                        <option value="{{ reason.id }}">{{ reason.name }}</option>
+                    {% endfor %}
+                    </select>
+                    <textarea ng-model="request.reportData.details">More details...</textarea>
+                    <input type="submit" value="send report"/>
+                </form>
+                {{ form(reportTicketForm) }}            
+            {% endif %}
+        {% endif %}                
     </article> 
 
     <div class="replies" ng-controller="propositionsController as propositions" ng-init="propositions.init({{imageRequest.id}})">
@@ -72,12 +103,7 @@
                     </div>
                 </div>
             </div>
-            <div class="actions">
-                {% if is_granted('ROLE_USER') %}
-                {% if canUpvotePropositionSelected == true %}
-                    {{ form(upvotePropositionSelectedForm) }}                    
-                {% endif %}
-                {% endif %}
+            <div class="actions">               
                 <a id="propositionUpvoteButton_{{ acceptedProposition.id }}" 
                     {% if is_granted('ROLE_USER') and canUpvotePropositionSelected == true %}
                        ng-click="propositions.postPropositionVote({{ acceptedProposition.id }})"
@@ -103,30 +129,22 @@
 
         <div id="propositions" >
             {{ form(loadPropositionForm) }}
+            {{ form(upvotePropositionForm) }}
             <div id="loadPage1"></div>                  
         </div>
         
-         <div class="loader" title="7" id="loadingGif" style="margin-left: 350px;">
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-               width="50px" height="100px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-              <rect x="0" y="10" width="4" height="10" fill="#b93a3a" opacity="0.2">
-                <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
-              </rect>
-              <rect x="8" y="10" width="4" height="10" fill="#b93a3a"  opacity="0.2">
-                <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
-              </rect>
-              <rect x="16" y="10" width="4" height="10" fill="#b93a3a"  opacity="0.2">
-                <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
-                <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
-              </rect>
-            </svg>
-          </div>               
+        <div class="load-content"  id="loadingGif" >
+                <span class="bubble"></span>
+        </div>      
     </div>
+            
+    {% else %}
+        {# if image request disabled #}
+        <h2>This image request have been deleted</h2>
+        <p>reason : {{ imageRequest.disableTicket.reason.name }}</p>
+        <p>Details : {{  imageRequest.disableTicket.details }}</p>
+    {% endif %}
+    
 </div>
     
           

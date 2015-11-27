@@ -1,0 +1,3 @@
+pp_dashboard_homepage:
+    path:     /report
+    defaults: { _controller: PPDashboardBundle:Report:index }
