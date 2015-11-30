@@ -9,6 +9,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 audio, canvas, progress, video { display: inline-block; vertical-align: baseline; }
 
 audio:not([controls]) { display: none; height: 0; }
+
 [hidden], template { display: none; }
 
 a { background-color: transparent; }
@@ -222,6 +223,12 @@ header div.content .dropdown .filter-tags ul.sugg-tags li.sugg a, header div.con
 header div.content .dropdown .filter-tags ul.sugg-tags li.sugg a:hover, header div.content nav.menu .dropdown .filter-tags ul.sugg-tags li.sugg a:hover { background: #dedede; }
 header div.content .dropdown .filter-tags ul.sugg-tags li.sugg a.choosen, header div.content nav.menu .dropdown .filter-tags ul.sugg-tags li.sugg a.choosen { background: #C24C4A; color: rgba(255, 255, 255, 0.75); }
 
+section.alert-banner { display: none; color: white; padding: 13px 0; }
+section.alert-banner.info { display: block; background-color: #02AAE9; }
+section.alert-banner.success { display: block; background-color: #0ABC4B; }
+section.alert-banner.warning { display: block; background-color: #F7CA18; }
+section.alert-banner.danger { display: block; background-color: #F23F2D; }
+
 section.jumbotron { background: url(../images/jumbotron.jpeg) no-repeat bottom #C24C4A; background-size: cover; width: 100%; height: auto; padding: 90px 0 70px; text-align: center; font-size: 30px; font-weight: 300; }
 section.jumbotron .line { margin: 0; padding: 0; color: white; }
 section.jumbotron .learn { margin-top: 40px; }
@@ -268,7 +275,7 @@ section.main .demand-list article.demand a.avatar img, section.main .demand-list
 section.main .demand-list article.demand .infos, section.main .demand-list .new-demand .infos { width: 665px; height: auto; display: inline-block; float: left; }
 section.main .demand-list article.demand .infos h1, section.main .demand-list .new-demand .infos h1 { padding: 0; margin: 0 0 10px; font-size: 30px; }
 section.main .demand-list article.demand .infos h1 a.upvote-demand, section.main .demand-list .new-demand .infos h1 a.upvote-demand { float: right; font-size: 30px; color: rgba(0, 0, 0, 0.25); }
-section.main .demand-list article.demand .infos h1 a.upvote-demand:hover, section.main .demand-list article.demand .infos h1 a.upvote-demand.voted, section.main .demand-list .new-demand .infos h1 a.upvote-demand:hover, section.main .demand-list .new-demand .infos h1 a.upvote-demand.voted { color: #00D084; }
+section.main .demand-list article.demand .infos h1 a.upvote-demand:hover, section.main .demand-list article.demand .infos h1 a.upvote-demand.voted, section.main .demand-list .new-demand .infos h1 a.upvote-demand:hover, section.main .demand-list .new-demand .infos h1 a.upvote-demand.voted { color: #0ABC4B; }
 section.main .demand-list article.demand .infos h1 a.upvote-demand:after, section.main .demand-list .new-demand .infos h1 a.upvote-demand:after { display: block; width: 20px; height: 20px; padding: 10px; text-align: center; font-family: "icomoon"; speak: none; font-size: 20px; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; content: ""; float: right; }
 section.main .demand-list article.demand .infos .content-single, section.main .demand-list .new-demand .infos .content-single { font-size: 18px; float: left; display: block; width: 100%; }
 section.main .demand-list article.demand .infos .tag-list, section.main .demand-list .new-demand .infos .tag-list { float: left; display: inline-block; margin-bottom: 20px; }
@@ -293,7 +300,7 @@ section.main .demand-list .new-demand .comp-area input.init, section.main .deman
 section.main .demand-list .new-demand .comp-area .title { font-size: 24px; }
 section.main .demand-list .replies { width: 100%; height: auto; margin: 0; }
 section.main .demand-list .replies .more-replies { width: 760px; font-size: 28px; font-weight: 300; display: inline-block; margin: 15px 5px; }
-section.main .demand-list .replies .reply { background: rgba(0, 0, 0, 0.25); width: 375px; height: 260px; display: inline-block; overflow: hidden; margin: 0 5px 10px; float: left; position: relative; }
+section.main .demand-list .replies .reply { background: rgba(0, 0, 0, 0.1); width: 375px; height: 260px; display: inline-block; overflow: hidden; margin: 0 5px 10px; float: left; position: relative; }
 section.main .demand-list .replies .reply .prop { width: 380px; height: 260px; display: block; }
 section.main .demand-list .replies .reply .prop img { width: 380px; height: 260px; }
 section.main .demand-list .replies .reply a.overlay { background: url(../images/img-title-mini.png) repeat-x bottom; width: 380px; height: 260px; display: block; position: absolute; top: 0; }
@@ -407,9 +414,9 @@ section.overlay-messages .messages .container .message-bottom .chat-container .c
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-conversation .chat-scroller .message .avatar img { width: 40px; height: 40px; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-conversation .message-state { font-size: 15px; color: #ccc; text-align: right; padding-right: 65px; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-conversation .message-date { font-size: 16px; color: #777; text-align: center; padding: 15px 0 5px; display: block; }
-section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer { background: rgba(0, 0, 0, 0.5); width: 100%; height: auto; float: right; display: -webkit-flex; display: -moz-box; display: -ms-flexbox; display: flex; align-self: flex-end; border-top: 1px solid #ccc; position: relative; }
+section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer { background: rgba(0, 0, 0, 0.5); width: 100%; height: auto; min-height: 50px; float: right; display: -webkit-flex; display: -moz-box; display: -ms-flexbox; display: flex; align-self: flex-end; border-top: 1px solid #ccc; position: relative; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form { width: 100%; }
-section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form textarea { width: 100%; height: 100%; padding: 15px; border: none; }
+section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form input { width: 100%; height: 100%; padding: 15px; border: none; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form button { background: #ccc; border: none; color: #777; width: 30px; height: 30px; overflow: hidden; border-radius: 50%; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: "icomoon"; content: ""; text-indent: -9999px; position: absolute; top: 10px; right: 10px; bottom: 10px; outline: none; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form button:hover { background: #ccc; color: #777; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form button:active { background: #777; color: white; }
