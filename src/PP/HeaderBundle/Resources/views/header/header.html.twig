@@ -123,6 +123,12 @@
                                 </a>
                             </li>
                             <li class="divider"></li>
+                            {% if is_granted("ROLE_MODERATOR") %}                            
+                            <li class="follows">
+                                <a target="_self" href="{{ path('pp_dashboard_report') }}">Dashboard</a>
+                            </li>
+                            <li class="divider"></li>
+                            {% endif %}
                             <li class="pm">
                                 <a href="" ng-click="header.showMessage()">
                                 Messages
@@ -131,7 +137,7 @@
                             </li>
                             <li class="follows">
                                 <a href="">Manage follows</a>
-                            </li>
+                            </li>                            
                             <li class="divider"></li>
                             <li class="settings">
                                 <a href="">Settings</a>

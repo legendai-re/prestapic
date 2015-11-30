@@ -2,6 +2,11 @@ pp_dashboard:
     resource: "@PPDashboardBundle/Resources/config/routing.yml"
     prefix:   /dashboard/
 
+pp_dashboard_api:
+    type: rest
+    resource: "@PPDashboardBundle/Resources/config/routing_api.yml"
+    prefix:   /api/dashboard/
+
 pp_report:
     resource: "@PPReportBundle/Resources/config/routing.yml"
     prefix:   /

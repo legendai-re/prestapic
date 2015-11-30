@@ -1,3 +1,7 @@
-pp_dashboard_homepage:
+pp_dashboard_report:
     path:     /report
     defaults: { _controller: PPDashboardBundle:Report:index }
+
+pp_dashboard_content:
+    path:     /content
+    defaults: { _controller: PPDashboardBundle:Content:index }

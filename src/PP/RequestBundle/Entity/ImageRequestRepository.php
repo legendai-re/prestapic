@@ -11,8 +11,23 @@ use PP\RequestBundle\Constant\Constants;
  * repository methods below.
  */
 class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
-{                
-        public function getIdBySlug($slug){
+{       
+    public function getReportedImageRequest(){
+        $qb = $this->createQueryBuilder('ir')                        
+                        ->distinct(true)
+                        ->leftJoin('ir.author', 'irA')
+                        ->addSelect('irA')
+                        ->where('ir.enabled = true')
+                        ->andWhere('ir.reportNb > 0')
+        ;
+        
+        return $qb
+               ->getQuery()
+               ->getResult()
+            ;  
+    }
+
+    public function getIdBySlug($slug){
             $qb = $this->createQueryBuilder('ir')
                         ->select('ir.id')
                         ->where('ir.slug = :slug')
@@ -32,7 +47,7 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                         ->leftJoin('ir.author', 'irA')
                         ->leftJoin('ir.propositions', 'p')
                         ->leftJoin('p.author', 'pA')
-                        ->where('ir.enabled = true')
+                        ->where('ir.enabled = true AND irA.enabled = true')
             ;
              
             if($searchParam != null){
@@ -48,12 +63,16 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
             
             if($tagsParam != null){
                 $i = 0;
+                $request = '';
                 foreach ($tagsParam as $tagName){
-                    $qb = $qb
-                            ->andWhere($qb->expr()->like('t.name', ':nameT'.$i))
-                            ->setParameter('nameT'.$i, '%'.$tagName.'%');
-                    $i++;
-                }                
+                    if($i>0)$request .= ' OR ';
+                    $request .= 't.name = :nameT'.$i;
+                    $qb = $qb                            
+                            ->setParameter('nameT'.$i, $tagName);
+                    $i++;                    
+                }
+                $qb = $qb
+                            ->andWhere($request);
             }
             
             if($categoriesParam != null){
@@ -82,11 +101,11 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                 $qb = $qb->orderBy('ir.upvote + (ir.propositionsNb*2)', 'DESC'); 
             }else if($displayMode == Constants::ORDER_BY_INTEREST){
                 $qb = $qb                                               
-                        ->from('PPUserBundle:User', 'u')                         
-                        ->andwhere('u.id = :userId')
-                         ->setParameter('userId', $userId)
+                        ->from('PPUserBundle:User', 'u')                        
+                        ->andwhere('u.id = :userId')                        
+                        ->setParameter('userId', $userId)                        
                         ->leftJoin('u.following', 'uF')                       
-                        ->andwhere("irA.id IN(:followingIds)")
+                        ->andwhere("irA.id IN(:followingIds) AND irA.enabled = true")
                         ->setParameter('followingIds', array_values($followingIds))
                         ->orderBy('ir.createdDate', 'DESC'); 
                 ;
@@ -129,8 +148,8 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
              $qb = $this
                 ->createQueryBuilder('ir')
                 ->select('ir.id')
-                ->where('ir.author = :userId')
-                ->andWhere('ir.enabled = true')
+                ->where('ir.enabled = true')
+                ->andWhere('ir.author = :userId')                
                 ->leftJoin('ir.propositions', 'p')
                 ->orWhere('p.author = :userId')
                 ->setParameter('userId', $userid)
@@ -157,9 +176,10 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                         ->distinct(true)
                         ->leftJoin('ir.author', 'irA')
                         ->addSelect('irA')
-                        ->where('ir.createdDate BETWEEN :lastWeek AND :today')                        
+                        ->where('ir.createdDate BETWEEN :lastWeek AND :today' )                        
                         ->setParameter('lastWeek', $lastWeek)
-                        ->setParameter('today', $today)                                         
+                        ->setParameter('today', $today)
+                        ->andWhere('irA.enabled = true')
                         ->addOrderBy('ir.upvote + ir.propositionsNb', 'DESC')
                         ->setMaxResults($limit)
         ; 

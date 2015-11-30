@@ -19,6 +19,7 @@ class ReportTicketRepository extends \Doctrine\ORM\EntityRepository
                 ->setParameter('type', $type)
                 ->andWhere('rt.targetId = :targetId')
                 ->setParameter('targetId', $targetId)
+                ->andWhere('rt.finished = false')
                 ->orderBy('rt.createdDate', 'DESC')
                 ->distinct(true)                
             ;
@@ -28,4 +29,5 @@ class ReportTicketRepository extends \Doctrine\ORM\EntityRepository
                ->getResult()
             ;  
     }
+        
 }

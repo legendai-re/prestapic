@@ -10,6 +10,21 @@ namespace PP\UserBundle\Entity;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getReportedUser(){
+        $qb = $this->createQueryBuilder('u')                        
+                        ->distinct(true)
+                        ->leftJoin('u.profilImage', 'uP')
+                        ->addSelect('uP')
+                        ->where('u.enabled = true')
+                        ->andWhere('u.reportNb > 0')
+        ;
+        
+        return $qb
+               ->getQuery()
+               ->getResult()
+            ;  
+    }
+    
     public function getActiveUsers($limit){
         $today = new \DateTime();         
         $lastWeek = new \DateTime();        
@@ -17,9 +32,9 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         
         $qb = $this->createQueryBuilder('u')                    
                     ->leftJoin('u.imageRequests', 'ir')
-                    ->leftJoin('u.propositions', 'p')                    
-                    ->where('ir.createdDate BETWEEN :lastWeek AND :today')
-                    ->orWhere('p.createdDate BETWEEN :lastWeek AND :today')
+                    ->leftJoin('u.propositions', 'p')
+                    ->where('u.enabled = true')
+                    ->andWhere('ir.createdDate BETWEEN :lastWeek AND :today OR p.createdDate BETWEEN :lastWeek AND :today')
                     ->setParameter('lastWeek', $lastWeek)
                     ->setParameter('today', $today)
                     ->groupBy('u.id')
@@ -36,7 +51,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('u')
                     ->leftJoin('u.following', 'uF')
                     ->select('uF.id')
-                    ->where('u.id = :userId')
+                    ->where('u.enabled = true AND u.id = :userId')                    
                     ->setParameter('userId', $userId);
         return $qb
                     ->getQuery()
@@ -50,7 +65,8 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $qb = $qb   
                     ->distinct(true)
                     ->where($qb->expr()->like('u.name', ':search'))
-                    ->setParameter('search', '%'.$search.'%')                    
+                    ->setParameter('search', '%'.$search.'%')
+                    ->andWhere("u.enabled = true")
                     ->leftJoin('u.messageThreads', 'mT')   
                     ->leftJoin('u.profilImage', 'pI')
                     ->addSelect('pI')

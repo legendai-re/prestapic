@@ -148,6 +148,13 @@ class ImageRequest
      */
     private $upvote;
     
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="reportNb", type="integer")
+     */
+    private $reportNb;
+    
     public function setDateAgo($dateAgo){
         $this->dateAgo = $dateAgo;
         return $this;
@@ -640,26 +647,26 @@ class ImageRequest
     }
 
     /**
-     * Set reportTicket
+     * Set disableTicket
      *
-     * @param \PP\ReportBundle\Entity\ImageRequestRT $reportTicket
+     * @param \PP\ReportBundle\Entity\DisableTicket $disableTicket
      *
      * @return ImageRequest
      */
-    public function setReportTicket(\PP\ReportBundle\Entity\ImageRequestRT $reportTicket = null)
+    public function setDisableTicket(\PP\ReportBundle\Entity\DisableTicket $disableTicket = null)
     {
-        $this->reportTicket = $reportTicket;
+        $this->disableTicket = $disableTicket;
 
         return $this;
     }
 
     /**
-     * Get reportTicket
+     * Get disableTicket
      *
-     * @return \PP\ReportBundle\Entity\ImageRequestRT
+     * @return \PP\ReportBundle\Entity\DisableTicket
      */
-    public function getReportTicket()
+    public function getDisableTicket()
     {
-        return $this->reportTicket;
+        return $this->disableTicket;
     }
 }

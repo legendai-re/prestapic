@@ -2,11 +2,96 @@
 {% extends "PPDashboardBundle::layout.html.twig" %}
 
 {% block dashbordBody %}
-    hello   
+    {{ form(getReportObjectsForm) }}
+    {{ form(getReportTicketForm) }}
+    {{ form(disableTicketForm) }}
+    {{ form(ignoreTicketsForm) }}
+    {% verbatim %}
+        
+        <div ng-controller="objectReportedController as objectReported" style="display: inline-block; width: 500px; overflow: auto; overflow-x: hidden; max-height: 600px; height: 600px; background-color: #CCC;">
+            <div style="height: 50px; background-color: #BBB; padding-top: 10px; padding-bottom: 15px;">
+                <ul style="list-style-type: none;" >
+                    <a style="float:left; margin-right: 20px;" href="" ng-click="objectReported.changeCurrentType(1)"><li>Image Requests</li></a>
+                    <a style="float:left;" href="" ng-click="objectReported.changeCurrentType(3)"><li>Users</li></a>
+                </ul> 
+            </div>
+            <ul ng-switch on="objectReported.currentType" style="list-style-type: none;">
+                <!-- IMAGE REQUEST PATTERN -->
+                <a ng-switch-when="1" ng-repeat="request in reportObjects.imageRequestList" ng-if="request.title" href="" ng-click="objectReported.getReportTicket(1, request.id)">
+                    <li>                    
+                            <strong>{{ request.title}}</strong>
+                            <p>by {{ request.author.name }}</p>
+                            <p>{{ request.reportNb }} report(s)</p>                   
+                        <div style=" width: 500px; margin-left: -40px; border-bottom: 1px solid #EEE"></div>
+                    </li>
+                </a>
+                <!-- USER PATTERN -->
+                <a ng-switch-when="3" ng-repeat="user in reportObjects.userList" ng-if="user.name" href="" ng-click="objectReported.getReportTicket(3, user.id)">
+                    <li>                    
+                            <strong>{{ user.name }}</strong>
+                            <img ng-src="{{ user.image }}" alt="{{ user.name }} profile image" />
+                            <p>{{ user.reportNb }} report(s)</p>                   
+                        <div style=" width: 500px; margin-left: -40px; border-bottom: 1px solid #EEE"></div>
+                    </li>
+                </a>
+            </ul>            
+        </div>
+        
+        <div ng-controller="reportController as report" style="display: inline-block; width: 700px; overflow: auto; max-height: 600px; height: 600px; float:right; background-color: #DDD;">           
+            
+            <div ng-if="currentObject">
+                <div ng-switch on="currentObject.type">
+                    <!-- IMAGE REQUEST PATTERN -->
+                    <div ng-switch-when="1">
+                        <h2>{{ currentObject.title }}</h2>
+                        <p>{{ currentObject.request }}</p>
+                        <p>by {{ currentObject.author.name }} the {{ currentObject.createdDate.date }}<p>                    
+                    </div>
+
+                    <!-- USER PATTERN -->
+                    <div ng-switch-when="3">
+                        <h2>{{ currentObject.name }}</h2>
+                        <img ng-src="{{ currentObject.image }}" alt="{{ currentObject.name }} profile image" />
+                        <img ng-if="currentObject.coverImage" ng-src="{{ currentObject.coverImage }}" alt="{{ currentObject.name }} cover image" style="width: 100%;"/>                                       
+                    </div>
+                    <div ng-switch-default>nothing selected</div>
+                </div>
+
+
+                <input type="submit" value="ignore reports" ng-click="report.patchIgnoreReport()" style="display: inline-block; width: 200px; height: 96px; margin-left: 150px; float: left;"/>
+                {% endverbatim %}
+                <form ng-model="disableData" ng-submit="report.postDisableRequest()" style="display: inline-block; margin-right: 50px;" >
+                    <select ng-model="disableData.reasonId" style="display:block; width:200px">
+                    {% for reason in reportReasonList %}
+                        <option value="{{ reason.id }}">{{ reason.name }}</option>
+                    {% endfor %}
+                    </select>
+                    <textarea ng-model="disableData.details"  style="display:block; width:200px">More details...</textarea>
+                    <input type="submit" value="Delete"  style="display:block; width:200px"/>
+                </form>
+                {% verbatim %}                           
+
+                <div>
+                    <h2>Report list : </h2>
+                    <ul>
+                        <li ng-repeat="report in currentObject.reportTicketList">
+                            <h3> Reason : {{ report.reason.name }}
+                            <p> {{ report.details }}</p>
+                            <p>by {{ report.author.name }} the {{ report.createdDate.date }}<p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div ng-if="!currentObject">
+                <h2>Nothing selected</h2>
+            </div>
+        </div>        
+    {% endverbatim %}
+    
 {% endblock %}
 
 {% block js %}
-    {% javascripts filter='?yui_js' '@PPUserBundle/Resources/public/js/profileApp.js' %}
+    {% javascripts filter='?yui_js' '@PPDashboardBundle/Resources/public/js/reportApp.js' %}
       <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}    
 {% endblock %}

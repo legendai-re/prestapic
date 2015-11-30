@@ -168,10 +168,28 @@ class User extends BaseUser
     private $reportTickets;
     
     /**    
-    * @ORM\OneToMany(targetEntity="PP\ReportBundle\Entity\disableTicket", mappedBy="author")
+    * @ORM\OneToMany(targetEntity="PP\ReportBundle\Entity\DisableTicket", mappedBy="author")
     * @Assert\Valid()
     */
     private $disabletTickets;
+    
+     /**    
+     * @ORM\OneToOne(targetEntity="PP\ReportBundle\Entity\DisableTicket", cascade={"persist", "remove"})     
+     * @Assert\Valid()          
+     */
+    private $disableTicket;
+    
+    /**
+     * @var integer $reportNb
+     * 
+     * @ORM\Column(name="reportNb", type="integer", nullable=true)
+     */
+    private $reportNb;
+    
+    public function addReportNb(){
+        $this->reportNb++;
+        return $this;
+    }
     
     /**
     * Set name
@@ -746,5 +764,63 @@ class User extends BaseUser
     public function getReportTickets()
     {
         return $this->reportTickets;
+    }
+
+    /**
+     * Add disabletTicket
+     *
+     * @param \PP\ReportBundle\Entity\disableTicket $disabletTicket
+     *
+     * @return User
+     */
+    public function addDisabletTicket(\PP\ReportBundle\Entity\disableTicket $disabletTicket)
+    {
+        $this->disabletTickets[] = $disabletTicket;
+
+        return $this;
+    }
+
+    /**
+     * Remove disabletTicket
+     *
+     * @param \PP\ReportBundle\Entity\disableTicket $disabletTicket
+     */
+    public function removeDisabletTicket(\PP\ReportBundle\Entity\disableTicket $disabletTicket)
+    {
+        $this->disabletTickets->removeElement($disabletTicket);
+    }
+
+    /**
+     * Get disabletTickets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDisabletTickets()
+    {
+        return $this->disabletTickets;
+    }
+
+    /**
+     * Set reportNb
+     *
+     * @param integer $reportNb
+     *
+     * @return User
+     */
+    public function setReportNb($reportNb)
+    {
+        $this->reportNb = $reportNb;
+
+        return $this;
+    }
+
+    /**
+     * Get reportNb
+     *
+     * @return integer
+     */
+    public function getReportNb()
+    {
+        return $this->reportNb;
     }
 }

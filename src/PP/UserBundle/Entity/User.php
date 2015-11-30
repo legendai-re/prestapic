@@ -173,6 +173,24 @@ class User extends BaseUser
     */
     private $disabletTickets;
     
+     /**    
+     * @ORM\OneToOne(targetEntity="PP\ReportBundle\Entity\DisableTicket", cascade={"persist", "remove"})     
+     * @Assert\Valid()          
+     */
+    private $disableTicket;
+    
+    /**
+     * @var integer $reportNb
+     * 
+     * @ORM\Column(name="reportNb", type="integer", nullable=true)
+     */
+    private $reportNb;
+    
+    public function addReportNb(){
+        $this->reportNb++;
+        return $this;
+    }
+    
     /**
     * Set name
     *
@@ -780,5 +798,53 @@ class User extends BaseUser
     public function getDisabletTickets()
     {
         return $this->disabletTickets;
+    }
+
+    /**
+     * Set reportNb
+     *
+     * @param integer $reportNb
+     *
+     * @return User
+     */
+    public function setReportNb($reportNb)
+    {
+        $this->reportNb = $reportNb;
+
+        return $this;
+    }
+
+    /**
+     * Get reportNb
+     *
+     * @return integer
+     */
+    public function getReportNb()
+    {
+        return $this->reportNb;
+    }
+
+    /**
+     * Set disableTicket
+     *
+     * @param \PP\ReportBundle\Entity\DisableTicket $disableTicket
+     *
+     * @return User
+     */
+    public function setDisableTicket(\PP\ReportBundle\Entity\DisableTicket $disableTicket = null)
+    {
+        $this->disableTicket = $disableTicket;
+
+        return $this;
+    }
+
+    /**
+     * Get disableTicket
+     *
+     * @return \PP\ReportBundle\Entity\DisableTicket
+     */
+    public function getDisableTicket()
+    {
+        return $this->disableTicket;
     }
 }

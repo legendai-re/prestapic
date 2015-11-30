@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 use PP\RequestBundle\Constant\Constants;
 use PP\ReportBundle\Constant\ReportTicketType;
 
@@ -22,12 +24,13 @@ class ReportApiController extends Controller
         $response = new Response();
         $currentUser = $this->getUser();
         
-        if ($this->get('security.context')->isGranted('ROLE_USER') && $currentUser != null) {
+        if ($this->get('security.context')->isGranted('ROLE_USER') && $currentUser != null) {            
             if($request->get("ticketType")!=null && $request->get("reasonId")!=null && $request->get("targetId")!=null){
                 
                 $targetId = $request->get("targetId");
                 $em = $this->getDoctrine()->getManager();
                 $imageRequestRepository = $em->getRepository("PPRequestBundle:ImageRequest");
+                $userRepository = $em->getRepository("PPUserBundle:User");
                 $reason = $em->getRepository("PPReportBundle:ReportReason")->find($request->get("reasonId")); 
                 if($reason != null){
                     $reportTicket = new ReportTicket();                    
@@ -40,16 +43,29 @@ class ReportApiController extends Controller
                     switch ($request->get("ticketType")){
                         case ReportTicketType::IMAGE_REQUEST:
                             $imageRequest = $imageRequestRepository->find($targetId);
-                            if($imageRequest != null){                                
+                            if($imageRequest != null){
+                                $imageRequest->addReportNb();
                                 $reportTicket->setReportTicketType(ReportTicketType::IMAGE_REQUEST);
                                 $reportTicket->setTargetId($imageRequest->getId());
+                                $em->persist($imageRequest);
                                 $em->persist($reportTicket);
                                 $em->flush();                                
                             }
                             break;
+                        case ReportTicketType::USER:
+                            $user = $userRepository->find($targetId);
+                            if($user != null){
+                                $user->addReportNb();
+                                $reportTicket->setReportTicketType(ReportTicketType::USER);
+                                $reportTicket->setTargetId($user->getId());
+                                $em->persist($reportTicket);
+                                $em->persist($user);
+                                $em->flush();
+                            }
+                            break;
                     }
                 }
-            }                        
+            }else{$response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);}                        
         }else {$response->setStatusCode(Response::HTTP_FORBIDDEN);}
         
         return $response;
@@ -66,6 +82,7 @@ class ReportApiController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $imageRequestRepository = $em->getRepository("PPRequestBundle:ImageRequest");
                 $reportTicketRepository = $em->getRepository("PPReportBundle:ReportTicket");
+                $userRepository = $em->getRepository("PPUserBundle:User");
                 $reason = $em->getRepository("PPReportBundle:ReportReason")->find($request->get("reasonId")); 
                 if($reason != null){
                     $disableTicket = new DisableTicket();                    
@@ -83,8 +100,20 @@ class ReportApiController extends Controller
                                 $imageRequest->setEnabled(false);
                                 $em->persist($disableTicket);
                                 $em->persist($imageRequest);
+                                $em->flush();                                                                
+                            }
+                            break;
+                        case ReportTicketType::USER:
+                            $user = $userRepository->find($targetId);
+                            if($user != null && ($this->get('security.context')->isGranted('ROLE_MODERATOR') || $currentUser->getId() == $user->getId())){
+                                $user->addReportNb();
+                                $disableTicket->setDisableTicketType(ReportTicketType::USER);
+                                $disableTicket->setTargetId($user->getId());
+                                $user->setEnabled(false);
+                                $user->setDisableTicket($disableTicket);
+                                $em->persist($disableTicket);
+                                $em->persist($user);
                                 $em->flush();
-                                                                
                             }
                             break;
                     }
@@ -101,6 +130,46 @@ class ReportApiController extends Controller
         
         return $response;
      }
+    
+    /**
+    * @Security("has_role('ROLE_MODERATOR')")
+    */
+    public function patchIgnoreTicketsAction(Request $request){
+        $response = new Response();
+        
+        $type = $request->get("ticketType");
+        $targetId = $request->get("targetId");
+        
+        if($type != null && $targetId != null){
+            $em = $this->getDoctrine()->getManager();            
+            $reportTicketRepository = $em->getRepository('PPReportBundle:ReportTicket');
+            $imageRequestRepository = $em->getRepository("PPRequestBundle:ImageRequest");
+            $userRepository = $em->getRepository("PPUserBundle:User");
+            
+            $ticketList = $reportTicketRepository->getTicketByType($type, $targetId);
+            
+             switch ($request->get("ticketType")){
+                case ReportTicketType::IMAGE_REQUEST:
+                   $imageRequest = $imageRequestRepository->find($targetId);
+                   $imageRequest->setReportNb(0);
+                   $em->persist($imageRequest);
+                   break;
+                case ReportTicketType::USER:
+                   $user = $userRepository->find($targetId);
+                   $user->setReportNb(0);
+                   $em->persist($user);
+                   break;
+             }
+            
+            foreach($ticketList as $ticket){
+                $ticket->setFinished(true);
+                $em->persist($ticket);
+            };
+            $em->flush();
+        }else {$response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);}
+        
+        return $response;
+    }
     
     private function getViewHandler()
     {

@@ -1,0 +1,37 @@
+{# On �tend notre layout #}
+{% extends "PPDashboardBundle::layout.html.twig" %}
+
+{% block dashbordBody %}
+    {{ form(getContentForm) }}
+        
+    <h1>Categories</h1>
+    {% verbatim %}
+    <div ng-controller="categoriesController as categories" style="width: 300px; background-color: #DDD;">
+        <div  style="width: 300px; height: 400px; max-height: 400px; overflow: auto;">
+            <ul style="list-style-type: none; padding: 0px; margin: 0px;">
+                <li ng-repeat="category in content.categories" ng-if="category.name && category.name != 'Uncategorize'" style="padding-top: 5px; padding-bottom: 5px;">
+                    {{ category.name }}
+                    <div style="float: right;">
+                        <input style="display: inline;" type="submit" value="delete" ng-click="categories.deleteCategory( category.id )" />
+                        <input style="display: inline;" type="submit" value="edit" ng-click="categories.patchCategory( category.id )" />
+                    </div>
+                </li>            
+            </ul>
+        </div>
+        <div style="width: 300px; padding-top: 10px;">
+            <h3>Add new category</h3>
+            <form ng-submit="categories.postCategory()">
+                <input style="display: inline;" type="text" ng-model="newCategory.name" />
+                <input style="display: inline;" type="submit" value="submit" />
+                <p>{{ postCategoryError }}</p>
+            </form>
+        </div>
+    </div>
+    {% endverbatim %}
+{% endblock %}
+
+{% block js %}
+    {% javascripts filter='?yui_js' '@PPDashboardBundle/Resources/public/js/contentApp.js' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}    
+{% endblock %}

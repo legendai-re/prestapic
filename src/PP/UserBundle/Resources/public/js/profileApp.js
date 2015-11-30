@@ -23,7 +23,7 @@
         });
     })
 
-    containerApp.controller('profileController', ['$scope', '$http', '$compile', '$location', function ($scope, $http, $compile, $location) {
+    containerApp.controller('profileController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
 
             function handleProfileFileSelect(evt) {
                     console.log(evt.target);
@@ -113,7 +113,7 @@
                         canPatchModerator = true;
                     }
                 );   
-            }
+            }                        
             
             var haveLoadEditForm = false;
             this.getEditProfileForm = function(){
@@ -136,7 +136,55 @@
                 }else{
                     showEditProfile();
                 }
-            }                        
+            }
+            
+            this.reportData = {
+                ticketType: 3,
+                targetId: null,
+                reasonId: 1,
+                details: null
+            };
+            var haveAlreadyReport = false;
+
+            // send report //
+            this.postReport = function(id){
+                if(!haveAlreadyReport){
+                    haveAlreadyReport = true;
+                    this.reportData.targetId = id;
+                    console.log(this.reportData);
+                    var formAction = document.forms["pp_report_api_post_report_ticket_form"].action;
+                    $http({
+                        method: 'POST',
+                        url: formAction,                    
+                        data: JSON.stringify(this.reportData)
+                         }).
+                        then(function(response){                        
+                        },function(response) {
+                            console.log("Request failed : "+response.statusText );                        
+                        }
+                    );
+                }
+            };
+            
+            this.postDisableRequest = function(id){
+                if(!haveAlreadyReport){
+                    haveAlreadyReport = true;
+                    this.reportData.targetId = id;
+                    console.log(this.reportData);
+                    var formAction = document.forms["pp_report_api_post_disable_ticket_form"].action;
+                    $http({
+                        method: 'POST',
+                        url: formAction,                    
+                        data: JSON.stringify(this.reportData)
+                         }).
+                        then(function(response){
+                            $window.location.href = $location.$$absUrl;
+                        },function(response) {
+                            console.log("Request failed : "+response.statusText );                        
+                        }
+                    );
+                }
+            };
             
             var showEditProfile = function(){
                 $('#profileHeaderContainer').css("display", "none");

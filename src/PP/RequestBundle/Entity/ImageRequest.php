@@ -148,6 +148,13 @@ class ImageRequest
      */
     private $upvote;
     
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="reportNb", type="integer", nullable=true)
+     */
+    private $reportNb;
+    
     public function setDateAgo($dateAgo){
         $this->dateAgo = $dateAgo;
         return $this;
@@ -661,5 +668,34 @@ class ImageRequest
     public function getDisableTicket()
     {
         return $this->disableTicket;
+    }
+
+    /**
+     * Set reportNb
+     *
+     * @param integer $reportNb
+     *
+     * @return ImageRequest
+     */
+    public function setReportNb($reportNb)
+    {
+        $this->reportNb = $reportNb;
+
+        return $this;
+    }
+
+    /**
+     * Get reportNb
+     *
+     * @return integer
+     */
+    public function getReportNb()
+    {
+        return $this->reportNb;
+    }
+    
+    public function addReportNb(){
+        $this->reportNb++;
+        return $this;
     }
 }

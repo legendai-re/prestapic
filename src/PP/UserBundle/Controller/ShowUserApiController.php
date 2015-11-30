@@ -57,18 +57,20 @@ class ShowUserApiController extends Controller
         
         foreach($imageRequestIds as $id){
             $tempImageRequest = $imageRequestRepository->getOneImageRequest($id["id"]);
-            array_push($imageRequestList, $tempImageRequest);
-            $tempPropositions = $propositionRepository->getPropositions($id["id"], 3, 1);
-            $propositionsList['imageRequest_'.$id['id']] =  $tempPropositions;
-            
-            if($currentUser!=null && $currentUser->getId() != $tempImageRequest->getAuthor()->getId() && !$userRepository->haveLikedRequest($currentUser->getId(), $tempImageRequest->getId())){
-                $canUpvoteImageRequest[$tempImageRequest->getId()] = true;
-            }else{ $canUpvoteImageRequest[$tempImageRequest->getId()] = false;}
+            if($tempImageRequest->getEnabled()){
+                array_push($imageRequestList, $tempImageRequest);
+                $tempPropositions = $propositionRepository->getPropositions($id["id"], 3, 1);
+                $propositionsList['imageRequest_'.$id['id']] =  $tempPropositions;
+
+                if($currentUser!=null && $currentUser->getId() != $tempImageRequest->getAuthor()->getId() && !$userRepository->haveLikedRequest($currentUser->getId(), $tempImageRequest->getId())){
+                    $canUpvoteImageRequest[$tempImageRequest->getId()] = true;
+                }else{ $canUpvoteImageRequest[$tempImageRequest->getId()] = false;}
+            }
         }
         
         $nextPage = $page+1;
         $haveNextPage = true;
-        if(sizeof($imageRequestList) < Constants::REQUEST_PER_PAGE)$haveNextPage = false;
+        if(sizeof($imageRequestIds) < Constants::REQUEST_PER_PAGE)$haveNextPage = false;
         
         /////////////////////////
         ////////// FORM /////////

@@ -36,7 +36,7 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
               ->leftJoin("p.imageRequest", "ir")
               ->leftJoin('ir.tags', 't')
               ->leftJoin('ir.category', 'c')
-              ->where('ir.enabled = true')
+              ->where('ir.enabled = true AND pA.enabled = true')
               ->distinct(true)
               ->andWhere('ir.enabled = true')
         ;
@@ -96,7 +96,7 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
                 ->andwhere('u.id = :userId')
                 ->setParameter('userId', $userId)
                 ->leftJoin('u.following', 'uF')                       
-                ->andwhere("pA.id IN(:followingIds)")
+                ->andwhere("pA.id IN(:followingIds) AND pA.enabled = true")
                 ->setParameter('followingIds', array_values($followingIds))
                 ->orderBy('p.createdDate', 'DESC'); 
             ;

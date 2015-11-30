@@ -10,7 +10,7 @@ containerApp.config(['$locationProvider', function ($locationProvider) {
     $locationProvider.html5Mode(true);        
 }]);                 
 
-containerApp.controller('requestController',['$scope', '$http', function ($scope, $http) {                                                                                                                                                                                                                                          
+containerApp.controller('requestController',['$scope', '$http', '$location', '$window', function ($scope, $http, $location, $window) {                                                                                                                                                                                                                                          
 
         var readyForRequestVote = true;
         this.postRequestVote = function(id){
@@ -38,17 +38,17 @@ containerApp.controller('requestController',['$scope', '$http', function ($scope
         }
         this.reportData = {
             ticketType: 1,
-            imageRequestId: null,
-            reasonId: null,
+            targetId: null,
+            reasonId: 1,
             details: null
         };
         var haveAlreadyReport = false;
         
         // send report //
         this.postReport = function(id){
-            //if(!haveAlreadyReport){
+            if(!haveAlreadyReport){
                 haveAlreadyReport = true;
-                this.reportData.imageRequestId = id;
+                this.reportData.targetId = id;
                 console.log(this.reportData);
                 var formAction = document.forms["pp_report_api_post_report_ticket_form"].action;
                 $http({
@@ -61,7 +61,27 @@ containerApp.controller('requestController',['$scope', '$http', function ($scope
                         console.log("Request failed : "+response.statusText );                        
                     }
                 );
-            //}
+            }
+        };
+        console.log($location);
+        this.postDisableRequest = function(id){
+            if(!haveAlreadyReport){
+                haveAlreadyReport = true;
+                this.reportData.targetId = id;
+                console.log(this.reportData);
+                var formAction = document.forms["pp_report_api_post_disable_ticket_form"].action;
+                $http({
+                    method: 'POST',
+                    url: formAction,                    
+                    data: JSON.stringify(this.reportData)
+                     }).
+                    then(function(response){
+                        $window.location.href = $location.$$absUrl;
+                    },function(response) {
+                        console.log("Request failed : "+response.statusText );                        
+                    }
+                );
+            }
         };
 }]);
 

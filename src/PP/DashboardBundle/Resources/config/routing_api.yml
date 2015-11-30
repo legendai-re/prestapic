@@ -1,0 +1,10 @@
+pp_dashboard_report_api:
+    type: rest
+    resource: PP\DashboardBundle\Controller\ReportManageApiController
+    name_prefix: pp_dashboard_report_api_
+    
+pp_dashboard_content_api:
+    type: rest
+    resource: PP\DashboardBundle\Controller\ContentManageApiController
+    name_prefix: pp_dashboard_content_api_
+

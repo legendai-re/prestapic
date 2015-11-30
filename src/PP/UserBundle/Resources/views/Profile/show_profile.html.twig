@@ -10,7 +10,8 @@
 {% block bellowHeader %}
 <div id="profileApp" >
     <base href=" " />
-    
+    {% if pageProfile.enabled == true %}
+        
     {# display profile header #}
     <section class="profile" ng-controller="profileController as profile" >
         <div id="profileHeaderContainer">
@@ -44,7 +45,32 @@
                                 follow
                             {% endif %}
                         </a>
+                    {% endif %} 
+                    {# report and delete image request form #}                            
+                    {% if is_granted("ROLE_MODERATOR") and isHownProfile == false %}                
+                        <form ng-model="profile.reportData" ng-submit="profile.postDisableRequest({{ pageProfile.id }})" >
+                            <select ng-model="profile.reportData.reasonId">
+                            {% for reason in reportReasonList %}
+                                <option value="{{ reason.id }}">{{ reason.name }}</option>
+                            {% endfor %}
+                            </select>
+                            <textarea ng-model="profile.reportData.details">More details...</textarea>
+                            <input type="submit" value="Delete"/>
+                        </form>
+                        {{ form(disableTicketForm) }}                                                
+                    {% elseif isHownProfile == false %}
+                        <form ng-model="profile.reportData" ng-submit="profile.postReport({{ pageProfile.id }})" >
+                            <select ng-model="profile.reportData.reasonId">
+                            {% for reason in reportReasonList %}
+                                <option value="{{ reason.id }}">{{ reason.name }}</option>
+                            {% endfor %}
+                            </select>
+                            <textarea ng-model="profile.reportData.details">More details...</textarea>
+                            <input type="submit" value="send report"/>
+                        </form>
+                        {{ form(reportTicketForm) }}            
                     {% endif %}
+       
                 {% endif %}
                 {% if is_granted("ROLE_ADMIN") and isHownProfile == false %}                    
                         <a id="setModeratorButton" class="button follow" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}unset moderator{% else %}Set moderator{% endif %}</a>
@@ -92,24 +118,32 @@
             </ul>
         </div>
     </section>
+    {% endif %}
 {% endblock %}
 
 {% block body %}   
     <div class="demand-list" > 
-        
-        {% if isHownProfile == true %}{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}{% endif %}
-        
-        <div ng-controller="requestsController as requests" ng-init="requests.init({{ pageProfile.id }})" >
+        {% if pageProfile.enabled == true %}
             
-            {{ form(loadRequestForm) }}
-            {{ form(upvoteRequestForm) }}
-            <div id="loadPage1"> </div>
-            
-            <div class="load-content"  id="loadingGif" >
-                <span class="bubble"></span>
+            {% if isHownProfile == true %}{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}{% endif %}
+
+            <div ng-controller="requestsController as requests" ng-init="requests.init({{ pageProfile.id }})" >
+
+                {{ form(loadRequestForm) }}
+                {{ form(upvoteRequestForm) }}
+                <div id="loadPage1"> </div>
+
+                <div class="load-content"  id="loadingGif" >
+                    <span class="bubble"></span>
+                </div>
             </div>
-        </div>
-    </div>
+        {% else %}    
+            {# if user disabled #}
+            <h2>This user have been deleted</h2>
+            <p>reason : {{ pageProfile.disableTicket.reason.name }}</p>
+            <p>Details : {{ pageProfile.disableTicket.details }}</p>
+        {% endif %}
+    </div>        
 {% endblock %}
 
 
