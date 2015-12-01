@@ -23,7 +23,6 @@
                     </div>
             </header>
 
-<<<<<<< HEAD
         {# ALERT BANNER #}        
         <section id="alert-banner" class="alert-banner">
         {# info success warning danger #}
@@ -43,27 +42,7 @@
             <base href=" " />
             {% block bellowHeader %}                     
             {% endblock %}  
-=======
-            {# ALERT BANNER #}
-            <section id="alert-banner" class="alert-banner">
-            {# info success warning danger #}
-                    <div class="content">
-                            <strong id="alert-banner-strong"></strong> 
-                            <span id="alert-banner-span"></span>
-                    </div>
-            </section>
 
-            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-            <section id="messageApp" style="display:none;" class="overlay-messages">
-                    {{ render(controller("PPMessageBundle:Message:initMessageBox"))}}
-            </section>
-            {% endif %}
-                    
-            <div id="containerApp">
-                    <base href=" " />
-                    {% block bellowHeader %}                                         
-                    {% endblock %}    
->>>>>>> 7f6dd62bf9723ab1ba8d0f6566a08274d794bdd5
 
                     <section class="main">
                             <div class="content">
@@ -122,8 +101,7 @@
     
     {% block js %}                                         
     {% endblock %}
-    
-<<<<<<< HEAD
+
     {% javascripts filter='yui_js''@PPRequestBundle/Resources/public/js/global.js' 
                                    '@PPHeaderBundle/Resources/public/js/headerApp.js'
                                    '@PPRequestBundle/Resources/public/js/lazyLoadDirective.js' 
@@ -131,15 +109,6 @@
                                    '@PPMessageBundle/Resources/public/js/elastic.js'
     %}   
         <script type="text/javascript" src="{{ asset_url }}"></script>
-=======
-    {% javascripts filter='yui_js''@PPRequestBundle/Resources/public/js/signInUp.js' 
-                                                                 '@PPHeaderBundle/Resources/public/js/headerApp.js'
-                                                                 '@PPRequestBundle/Resources/public/js/lazyLoadDirective.js' 
-                                                                 '@PPMessageBundle/Resources/public/js/messageApp.js'
-                                                                 '@PPMessageBundle/Resources/public/js/elastic.js'
-    %}     
-            <script type="text/javascript" src="{{ asset_url }}"></script>
->>>>>>> 7f6dd62bf9723ab1ba8d0f6566a08274d794bdd5
     {% endjavascripts %}
 
 </body>
