@@ -45,12 +45,18 @@
                             then(function(response){
                                 $rootScope.content.categories[response.data.id] = {id: response.data.id, name: $scope.newCategory.name};
                                 $scope.newCategory.name = null;
-                                $scope.postCategoryError = "Category added !";
+                                $("#alert-banner").addClass("success");
+                                $("#alert-banner-span").html("Category added !");                               
                             },function(response) {                            
                                 $scope.newCategory.name = null;
+                                $("#alert-banner").addClass("danger");
                                 if(response.status == 409){
-                                    $scope.postCategoryError = "already exist";
-                                }else $scope.postCategoryError = "server error";                            
+                                    $("#alert-banner-strong").html("Error 409 ");
+                                    $("#alert-banner-span").html("Category already exist !");                                    
+                                }else {
+                                    $("#alert-banner-strong").html("Error ");
+                                    $("#alert-banner-span").html("Server error !");
+                                }                            
                             }
                     );
                 }
@@ -92,6 +98,27 @@
                     }
                 );
            }else $scope.postCategoryError = "Do not match with category's name";          
+       }
+        
+    }]);
+    
+    containerApp.controller('tagsController', ['$scope', '$rootScope', '$http', '$compile', '$location', function ($scope, $rootScope, $http, $compile, $location) {
+        
+        this.deleteTag = function(id){
+            var deleteName = prompt("Enter the tag's name to delete it : ");
+            if (deleteName == $rootScope.content.tags[id].name) {
+                $http({
+                    method: 'POST',
+                    url: $rootScope.content.deleteTagUrl,                    
+                    data: JSON.stringify({id: id})
+                     }).
+                    then(function(response){
+                        $rootScope.content.tags[id] = null;
+                        $scope.tagError = "Category deleted !";
+                    },function(response) {                                                    
+                    }
+                );
+           }else $scope.tagError = "Do not match with tag's name";          
        }
         
     }]);

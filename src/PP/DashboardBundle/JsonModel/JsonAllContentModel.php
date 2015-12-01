@@ -9,12 +9,14 @@ namespace PP\DashboardBundle\JsonModel;
  */
 class JsonAllContentModel {
     
-    public function __construct($categories, $tags, $postCategoryUrl, $deleteCategoryUrl, $patchCategoryUrl){
+    public function __construct($categories, $tags, $postCategoryUrl, $deleteCategoryUrl, $patchCategoryUrl, $deleteTagUrl){
         $this->categories = $categories;
         $this->tags = $tags;
         $this->postCategoryUrl = $postCategoryUrl;
         $this->deleteCategoryUrl = $deleteCategoryUrl;
         $this->patchCategoryUrl = $patchCategoryUrl;
+        
+        $this->deleteTagUrl = $deleteTagUrl;
     }
     
     public $categories;
@@ -22,5 +24,5 @@ class JsonAllContentModel {
     public $postCategoryUrl;
     public $deleteCategoryUrl;
     public $patchCategoryUrl;
-    
+    public $deleteTagUrl;
 }

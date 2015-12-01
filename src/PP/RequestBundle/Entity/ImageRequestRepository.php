@@ -11,7 +11,21 @@ use PP\RequestBundle\Constant\Constants;
  * repository methods below.
  */
 class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
-{       
+{   
+    public function getImageRequestByTag($tagId){
+        $qb = $this->createQueryBuilder('ir')                        
+                        ->distinct(true)
+                        ->leftJoin('ir.tags', 't')
+                        ->where("t.id = :tagId")                        
+                         ->setParameter('tagId', $tagId);
+        ;
+        
+        return $qb
+               ->getQuery()
+               ->getResult()
+            ;  
+    }
+    
     public function getReportedImageRequest(){
         $qb = $this->createQueryBuilder('ir')                        
                         ->distinct(true)

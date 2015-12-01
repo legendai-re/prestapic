@@ -12,6 +12,13 @@
 {% endblock %}
 
 {% block body %}
+    <nav>
+        <ul>
+            <a target="_self" href="{{ path('pp_dashboard_content') }}"><li>Content</li></a>
+            <a target="_self" href="{{ path('pp_dashboard_report') }}"><li>Report</li></a>
+        </ul>
+    </nav>
+    
     {% block dashbordBody %}
         
     {% endblock %}

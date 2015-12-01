@@ -18,6 +18,7 @@ use PP\RequestBundle\Entity\Category;
 use PP\DashboardBundle\JsonModel\JsonAllContentModel;
 use PP\DashboardBundle\JsonModel\JsonCategoryModel;
 use PP\DashboardBundle\JsonModel\JsonUserReportedModel;
+use PP\DashboardBundle\JsonModel\JsonTagModel;
 use PP\ReportBundle\JsonModel\JsonReportReasonModel;
 use PP\ReportBundle\JsonModel\JsonReportTicketModel;
 use PP\MessageBundle\JsonModel\JsonUserModel;
@@ -34,20 +35,28 @@ class ContentManageApiController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         $categoryRepository = $em->getRepository('PPRequestBundle:Category');
+        $tagRepository = $em->getRepository('PPRequestBundle:Tag');
         
         $categories = $categoryRepository->findAll();
+        $tags = $tagRepository->findAll();
         
         $jsonCategories = array();
         foreach ($categories as $category){
             $jsonCategories[$category->getId()] = new JsonCategoryModel($category->getId(), $category->getName());
         }
         
+        $jsonTags = array();
+        foreach ($tags as $tag){
+            $jsonTags[$tag->getId()] = new JsonTagModel($tag->getId(), $tag->getName());
+        }
+                
         echo json_encode(new JsonAllContentModel(
                 $jsonCategories,
-                array(),
+                $jsonTags,
                 $this->generateUrl("pp_dashboard_content_api_post_category", array(), true),
                 $this->generateUrl("pp_dashboard_content_api_post_delete_category", array(), true),
-                $this->generateUrl("pp_dashboard_content_api_patch_category", array(), true)
+                $this->generateUrl("pp_dashboard_content_api_patch_category", array(), true),
+                $this->generateUrl("pp_dashboard_content_api_post_delete_tag", array(), true)
         ));
         
         return $response;
@@ -136,7 +145,38 @@ class ContentManageApiController extends Controller
         
         return $response;
     }
+    
+    /**
+    * @Security("has_role('ROLE_MODERATOR')")
+    */
+    public function postDeleteTagAction(Request $request){
+        $response = new Response();          
+        $tagId = $request->get("id");
 
+        if($tagId != null){
+            
+            $em = $this->getDoctrine()->getManager();
+            $tagRepository = $em->getRepository('PPRequestBundle:Tag');
+            $imageRequestRepository = $em->getRepository("PPRequestBundle:ImageRequest");
+                               
+            $tagToDelete = $tagRepository->find($tagId);
+            
+            if($tagToDelete){                
+                $imageRequests = $imageRequestRepository->getImageRequestByTag($tagId);
+                foreach ($imageRequests as $imageRequest){                    
+                    $imageRequest->removeTag($tagToDelete);
+                    $em->persist($imageRequest);
+                }                
+                $em->remove($tagToDelete);
+                $em->flush();
+            }
+                             
+        }
+        
+        return $response;
+    }
+    
+    
     private function getViewHandler()
     {
         return $this->container->get('fos_rest.view_handler');

@@ -3,31 +3,53 @@
 
 {% block dashbordBody %}
     {{ form(getContentForm) }}
-        
-    <h1>Categories</h1>
-    {% verbatim %}
-    <div ng-controller="categoriesController as categories" style="width: 300px; background-color: #DDD;">
-        <div  style="width: 300px; height: 400px; max-height: 400px; overflow: auto;">
-            <ul style="list-style-type: none; padding: 0px; margin: 0px;">
-                <li ng-repeat="category in content.categories" ng-if="category.name && category.name != 'Uncategorize'" style="padding-top: 5px; padding-bottom: 5px;">
-                    {{ category.name }}
-                    <div style="float: right;">
-                        <input style="display: inline;" type="submit" value="delete" ng-click="categories.deleteCategory( category.id )" />
-                        <input style="display: inline;" type="submit" value="edit" ng-click="categories.patchCategory( category.id )" />
-                    </div>
-                </li>            
-            </ul>
-        </div>
-        <div style="width: 300px; padding-top: 10px;">
-            <h3>Add new category</h3>
-            <form ng-submit="categories.postCategory()">
-                <input style="display: inline;" type="text" ng-model="newCategory.name" />
-                <input style="display: inline;" type="submit" value="submit" />
-                <p>{{ postCategoryError }}</p>
-            </form>
+    
+    <div style="display: inline-block;">
+        <h1>Categories</h1>
+        {% verbatim %}
+        <div ng-controller="categoriesController as categories" style="width: 300px; background-color: #DDD;">
+            <div  style="width: 300px; height: 400px; max-height: 400px; overflow: auto;">
+                <ul style="list-style-type: none; padding: 0px; margin: 0px;">
+                    <li ng-repeat="category in content.categories" ng-if="category.name && category.name != 'Uncategorize'" style="padding-top: 5px; padding-bottom: 5px;">
+                        {{ category.name }}
+                        <div style="float: right;">
+                            <input style="display: inline;" type="submit" value="delete" ng-click="categories.deleteCategory( category.id )" />
+                            <input style="display: inline;" type="submit" value="edit" ng-click="categories.patchCategory( category.id )" />
+                        </div>
+                    </li>            
+                </ul>
+            </div>
+            <div style="width: 300px; padding-top: 10px;">
+                <h3>Add new category</h3>
+                <form ng-submit="categories.postCategory()">
+                    <input style="display: inline;" required type="text" ng-model="newCategory.name" />
+                    <input style="display: inline;" type="submit" value="submit" />
+                    <p>{{ postCategoryError }}</p>
+                </form>
+            </div>
         </div>
     </div>
     {% endverbatim %}
+    
+    <div style="display: inline-block; margin-left: 50px;">
+        <h1>Tags</h1>
+        {% verbatim %}
+        <div ng-controller="tagsController as tags" style="width: 300px; background-color: #DDD;">
+            <div  style="width: 300px; height: 496px; max-height: 496px; overflow: auto;">
+                <ul style="list-style-type: none; padding: 0px; margin: 0px;">
+                    <li ng-repeat="tag in content.tags" ng-if="tag.name" style="padding-top: 5px; padding-bottom: 5px;">
+                        {{ tag.name }}
+                        <div style="float: right;">
+                            <input type="submit" value="delete" ng-click="tags.deleteTag( tag.id )" />                            
+                        </div>
+                    </li>            
+                </ul>
+            </div>
+            <p>{{ tagError }}</p>
+        </div>
+    </div>
+    {% endverbatim %}
+    
 {% endblock %}
 
 {% block js %}

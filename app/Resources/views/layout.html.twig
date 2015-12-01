@@ -22,15 +22,15 @@
             </div>
         </header>
 
-        {# ALERT BANNER #}
+        {# ALERT BANNER #}        
         <section id="alert-banner" class="alert-banner">
         {# info success warning danger #}
             <div class="content">
-                <strong id="alert-banner-strong">Well done!</strong> 
-                <span id="alert-banner-span">You successfully read this important alert message.</span>
+                <strong id="alert-banner-strong"></strong> 
+                <span id="alert-banner-span"></span>
             </div>
         </section>
-
+                
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         <section id="messageApp" style="display:none;" class="overlay-messages">
             {{ render(controller("PPMessageBundle:Message:initMessageBox"))}}
@@ -99,7 +99,7 @@
     {% block js %}                     
     {% endblock %}
     
-    {% javascripts filter='yui_js''@PPRequestBundle/Resources/public/js/signInUp.js' 
+    {% javascripts filter='yui_js''@PPRequestBundle/Resources/public/js/global.js' 
                                    '@PPHeaderBundle/Resources/public/js/headerApp.js'
                                    '@PPRequestBundle/Resources/public/js/lazyLoadDirective.js' 
                                    '@PPMessageBundle/Resources/public/js/messageApp.js'
