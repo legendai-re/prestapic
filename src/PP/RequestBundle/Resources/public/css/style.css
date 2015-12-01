@@ -81,7 +81,7 @@ td, th { padding: 0; }
 @font-face { font-family: "icomoon"; src: url("../fonts/icomoon.eot?oykrxp"); src: url("../fonts/icomoon.eot?oykrxp#iefix") format("embedded-opentype"), url("../fonts/icomoon.ttf?oykrxp") format("truetype"), url("../fonts/icomoon.woff?oykrxp") format("woff"), url("../fonts/icomoon.svg?oykrxp#icomoon") format("svg"); font-weight: normal; font-style: normal; }
 * { -webkit-box-sizing: border-box; -ms-box-sizing: border-box; -moz-box-sizing: border-box; -o-box-sizing: border-box; box-sizing: border-box; }
 
-html, body { width: 100%; height: 100%; }
+html, body, #main { width: 100%; height: 100%; overflow-y: auto; }
 
 a { color: #C24C4A; text-decoration: none; transition-duration: none; }
 a:hover { color: #5E1C1B; }
@@ -420,6 +420,9 @@ section.overlay-messages .messages .container .message-bottom .chat-container .c
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form button { background: #ccc; border: none; color: #777; width: 30px; height: 30px; overflow: hidden; border-radius: 50%; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: "icomoon"; content: ""; text-indent: -9999px; position: absolute; top: 10px; right: 10px; bottom: 10px; outline: none; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form button:hover { background: #ccc; color: #777; }
 section.overlay-messages .messages .container .message-bottom .chat-container .chat-composer form button:active { background: #777; color: white; }
+
+.fixed section.page { margin-top: 60px; }
+.fixed section.alert-banner { position: fixed; top: 0; }
 
 .load-content { display: block; width: 54px; margin: 0 auto; padding: 40px 0 80px; }
 .load-content .bubble, .load-content:before, .load-content:after { content: ""; display: inline-block; width: 15px; height: 15px; border-radius: 15px; background-color: rgba(0, 0, 0, 0.25); }
