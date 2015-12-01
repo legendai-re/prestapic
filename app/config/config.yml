@@ -42,9 +42,14 @@ assetic:
     debug:          "%kernel.debug%"
     use_controller: false
     bundles:        ["PPRequestBundle","PPUserBundle","PPDashboardBundle"]
+    ruby:           "D:/Program/Ruby22-x64/bin/ruby.exe"
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
+        sass:
+            bin: "%sass%"
+        compass: 
+            bin: "%compass%"
         yui_js:
             jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.2.jar"
         yui_css:

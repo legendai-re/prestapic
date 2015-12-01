@@ -8,90 +8,90 @@
 
     <title>{% block title %} Prestapic{% endblock %}</title>
 
-        {% stylesheets filter='cssrewrite, ?yui_css'
-            '@PPRequestBundle/Resources/public/css/style.css' %}
+        {% stylesheets filter='cssrewrite, sass, ?yui_css'
+            '@PPRequestBundle/Resources/public/css/*.sass' %}
             <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
         {% endstylesheets %}        
 </head>
 
 <body id="body">
-    <div id="main">
-        <div class="container">
-            <header id="header" class="navbar">
-                    <div class="content" ng-app="headerApp">
-                            {{ render(controller("PPHeaderBundle:Header:showHeader")) }}                                        
-                    </div>
-            </header>
+    
+    <div class="container">
+        <header id="header" class="navbar">
+                <div class="content" ng-app="headerApp">
+                        {{ render(controller("PPHeaderBundle:Header:showHeader")) }}                                        
+                </div>
+        </header>
 
-        {# ALERT BANNER #}        
-        <section id="alert-banner" class="alert-banner">
-        {# info success warning danger #}
-            <div class="content">
-                <strong id="alert-banner-strong"></strong> 
-                <span id="alert-banner-span"></span>
-            </div>
-        </section>
-                
-        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        <section id="messageApp" style="display:none;" class="overlay-messages">
-            {{ render(controller("PPMessageBundle:Message:initMessageBox"))}}
-        </section>
-        {% endif %}
-            
-        <div id="containerApp">
-            <base href=" " />
-            {% block bellowHeader %}                     
-            {% endblock %}  
+    {# ALERT BANNER #}        
+    <section id="alert-banner" class="alert-banner">
+    {# info success warning danger #}
+        <div class="content">
+            <strong id="alert-banner-strong"></strong> 
+            <span id="alert-banner-span"></span>
+        </div>
+    </section>
 
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    <section id="messageApp" style="display:none;" class="overlay-messages">
+        {{ render(controller("PPMessageBundle:Message:initMessageBox"))}}
+    </section>
+    {% endif %}
 
-                    <section class="main">
-                            <div class="content">
+    <div id="containerApp">
+        <base href=" " />
+        {% block bellowHeader %}                     
+        {% endblock %}  
 
 
-                                    {% block body %}
-                                    {% endblock %}
+                <section class="main">
+                        <div class="content">
 
-                                    {% block sideInfo %}
-                                            <div id="sideInfo" class="sidebar">
-                                                    {{ render(controller("PPRequestBundle:Request:sideInfo")) }}                                        
-                                            </div>
-                                    {% endblock %}
-                            </div>
-                    </section>
-            </div>                                                        
-            <section class="overlay sign" id="signInUpOver" style="display:none;" >
-                    
-                <button class="button-close"    id="signInUpOverClose" >×</button>
-                <div class="overlay-content">
-                    <h3 class="overlay-title">Prestapic</h3>
-                    <p class="ind">Sign in to Prestapic or create an account</p>
-                    <div class="overlay-actions">                                                                
-                        <div class="signin-form">
-                            {{ render(controller("FOSUserBundle:Security:login"))}}
+
+                                {% block body %}
+                                {% endblock %}
+
+                                {% block sideInfo %}
+                                        <div id="sideInfo" class="sidebar">
+                                                {{ render(controller("PPRequestBundle:Request:sideInfo")) }}                                        
+                                        </div>
+                                {% endblock %}
                         </div>
-                        <div class="signup-form">
-                            <div class="message">If you want to post applications you need to register</div>
-                            <a class="button signup" href="{{ path('pp_user_register') }}">Sign up</a>
-                        </div>
+                </section>
+        </div>                                                        
+        <section class="overlay sign" id="signInUpOver" style="display:none;" >
+
+            <button class="button-close"    id="signInUpOverClose" >×</button>
+            <div class="overlay-content">
+                <h3 class="overlay-title">Prestapic</h3>
+                <p class="ind">Sign in to Prestapic or create an account</p>
+                <div class="overlay-actions">                                                                
+                    <div class="signin-form">
+                        {{ render(controller("FOSUserBundle:Security:login"))}}
                     </div>
-                    <div class="terms">
-                        <p>
-                            By clicking Sign Up, you agree to our
-                            <a href="#">Terms</a>
-                            and that you have read our
-                            <a href="#">Data Policy</a>
-                            , including our
-                            <a href="#">Cookie Use</a>.
-                        </p>
+                    <div class="signup-form">
+                        <div class="message">If you want to post applications you need to register</div>
+                        <a class="button signup" href="{{ path('pp_user_register') }}">Sign up</a>
                     </div>
                 </div>
-            </section>                                                
-                        
-                        
-            <footer>         
-            </footer>
-        </div>
+                <div class="terms">
+                    <p>
+                        By clicking Sign Up, you agree to our
+                        <a href="#">Terms</a>
+                        and that you have read our
+                        <a href="#">Data Policy</a>
+                        , including our
+                        <a href="#">Cookie Use</a>.
+                    </p>
+                </div>
+            </div>
+        </section>                                                
+
+
+        <footer>         
+        </footer>
     </div>
+   
     
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
     <script src="https://code.angularjs.org/1.4.7/angular.min.js" type="text/javascript"></script>

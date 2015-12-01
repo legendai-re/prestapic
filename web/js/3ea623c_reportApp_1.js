@@ -19,8 +19,7 @@
         $http.get(formAction).
             then(function(response){
                 $rootScope.reportObjects = response.data;                
-            },function(response) {
-                console.log(response);
+            },function(response) {                
                 console.log("Request failed : "+response.statusText );                            
             }
         );
@@ -46,20 +45,17 @@
                            $scope.reportObjects.imageRequestList[targetId].reportTicketList = response.data;
                            $scope.currentObject =  $scope.reportObjects.imageRequestList[targetId];
                            $scope.currentObject.type = IMAGE_REQUEST;
-                           console.log($scope.currentObject);
                            $rootScope.$emit('changeCurrentObject', $scope.currentObject);
                            break;
                         case USER:
                           $scope.reportObjects.userList[targetId].reportTicketList = response.data;
                           $scope.currentObject =  $scope.reportObjects.userList[targetId];
-                          $scope.currentObject.type = USER;
-                          console.log($scope.currentObject);
+                          $scope.currentObject.type = USER;                          
                           $rootScope.$emit('changeCurrentObject', $scope.currentObject);
                           break;
                     }              
-                },function(response) {
-                    console.log(response);
-                    console.log("Request failed : "+response.statusText );                            
+                },function(response) {                    
+                    console.log("Request failed : "+response.statusText );                    
                 }
             );            
         };
@@ -86,52 +82,76 @@
             $scope.disableData.ticketType = type;            
         });
         
-        this.postDisableRequest = function(){                            
-            var formAction = document.forms["pp_report_api_post_disable_ticket_form"].action;
-            if($scope.disableData.targetId != null){
-                console.log($scope.disableData);
-                $scope.disableData.reasonId = parseInt($scope.disableData.reasonId);
-                $http({
-                    method: 'POST',
-                    url: formAction,                    
-                    data: JSON.stringify($scope.disableData)
-                     }).
-                    then(function(response){
-                        switch($scope.disableData.ticketType){
-                            case IMAGE_REQUEST:
-                                $scope.currentObject = null;
-                                $scope.reportObjects.userList[$scope.disableData.targetId] = null;
-                            case USER:
-                                $scope.currentObject = null;
-                                $scope.reportObjects.userList[$scope.disableData.targetId] = null;
-                        }
-                    },function(response) {
-                        console.log("Request failed : "+response.statusText );                        
-                    }
-                );  
+        this.postDisableRequest = function(){
+            var type = $scope.disableData.ticketType;
+            switch(type){
+                case IMAGE_REQUEST:
+                    var promptValue = prompt("Enter \"YES\" to comfirm");
+                    break;
+                case USER:
+                    var promptValue = prompt("Enter user name to comfirm");
+                    break;
             }
+            
+            if((type == IMAGE_REQUEST && promptValue == "YES") || (type == USER && promptValue == $scope.currentObject.name)){
+                var formAction = document.forms["pp_report_api_post_disable_ticket_form"].action;
+                if($scope.disableData.targetId != null){
+                    console.log($scope.disableData);
+                    $scope.disableData.reasonId = parseInt($scope.disableData.reasonId);
+                    $http({
+                        method: 'POST',
+                        url: formAction,                    
+                        data: JSON.stringify($scope.disableData)
+                         }).
+                        then(function(response){
+                            switch($scope.disableData.ticketType){
+                                case IMAGE_REQUEST:
+                                    $scope.currentObject = null;
+                                    $scope.reportObjects.userList[$scope.disableData.targetId] = null;
+                                    showBannerAlert("success", "Image request deleted !", "");
+                                    break;
+                                case USER:
+                                    $scope.currentObject = null;
+                                    $scope.reportObjects.userList[$scope.disableData.targetId] = null;
+                                    showBannerAlert("success", "User deleted !", "");
+                                    break;
+                            }
+                        },function(response) {
+                            console.log("Request failed : "+response.statusText );
+                            showBannerAlert("danger", response.statusText, "");
+                        }
+                    );  
+                }
+            }else showBannerAlert("warning", "Wrong text entered", "");
         };
         
         this.patchIgnoreReport = function(){
             var formAction = document.forms["pp_report_api_patch_ignore_tickets_form"].action;
-            $http({
-                    method: 'PATCH',
-                    url: formAction,                    
-                    data: JSON.stringify($scope.disableData)
-                     }).
-                    then(function(response){
-                        switch($scope.disableData.ticketType){
-                            case IMAGE_REQUEST:
-                                $scope.currentObject = null;
-                                $scope.reportObjects.imageRequestList[$scope.disableData.targetId] = null;
-                            case USER:
-                                $scope.currentObject = null;
-                                $scope.reportObjects.userList[$scope.disableData.targetId] = null;
+            if(confirm("Do you realy want to ignore reports ?")){
+                $http({
+                        method: 'PATCH',
+                        url: formAction,                    
+                        data: JSON.stringify($scope.disableData)
+                         }).
+                        then(function(response){
+                            switch($scope.disableData.ticketType){
+                                case IMAGE_REQUEST:
+                                    $scope.currentObject = null;
+                                    $scope.reportObjects.imageRequestList[$scope.disableData.targetId] = null;
+                                    showBannerAlert("success", "Image request's reports ignored !", "");
+                                    break;
+                                case USER:
+                                    $scope.currentObject = null;
+                                    $scope.reportObjects.userList[$scope.disableData.targetId] = null;
+                                    showBannerAlert("success", "User's reports ignored !", "");
+                                    break;
+                            }
+                        },function(response) {
+                            console.log("Request failed : "+response.statusText );
+                            showBannerAlert("danger", response.statusText, "");
                         }
-                    },function(response) {
-                        console.log("Request failed : "+response.statusText );                        
-                    }
-            );
+                );
+            }
         };
         
     }]);

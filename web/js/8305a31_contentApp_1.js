@@ -45,22 +45,18 @@
                             then(function(response){
                                 $rootScope.content.categories[response.data.id] = {id: response.data.id, name: $scope.newCategory.name};
                                 $scope.newCategory.name = null;
-                                $("#alert-banner").addClass("success");
-                                $("#alert-banner-span").html("Category added !");                               
+                                showBannerAlert("success", "Well done !", "Category added");
                             },function(response) {                            
-                                $scope.newCategory.name = null;
-                                $("#alert-banner").addClass("danger");
+                                $scope.newCategory.name = null;                                
                                 if(response.status == 409){
-                                    $("#alert-banner-strong").html("Error 409 ");
-                                    $("#alert-banner-span").html("Category already exist !");                                    
+                                    showBannerAlert("danger", "Error 409 ! ", "Category already exist");                               
                                 }else {
-                                    $("#alert-banner-strong").html("Error ");
-                                    $("#alert-banner-span").html("Server error !");
+                                    showBannerAlert("danger", "Error "+response.status+" !", "");
                                 }                            
                             }
                     );
                 }
-            }else $scope.postCategoryError = "no value";
+            }else showBannerAlert("warning", "Warning", "You must enter some value");;
         };                
         
         this.patchCategory = function(id){
@@ -72,12 +68,12 @@
                     data: JSON.stringify({id: id, name: newName})
                      }).
                     then(function(response){
-                        $rootScope.content.categories[id].name = newName;
-                        $scope.postCategoryError = "Category Modified !";
+                        $rootScope.content.categories[id].name = newName;                        
+                        showBannerAlert("success", "Well done !", "Category Modified");
                     },function(response) {                            
                         if(response.status == 409){
-                            $scope.postCategoryError = "already exist";
-                        }else $scope.postCategoryError = "server error"; 
+                            showBannerAlert("danger", "Error 409 ! ", "Category already exist");  
+                        }else showBannerAlert("danger", "Error "+response.status+" !", "");
                     }
                 );
             }           
@@ -93,11 +89,12 @@
                      }).
                     then(function(response){
                         $rootScope.content.categories[id] = null;
-                        $scope.postCategoryError = "Category deleted !";
-                    },function(response) {                                                    
+                        showBannerAlert("success", "Well done !", "Category deleted ");                        
+                    },function(response) {
+                        showBannerAlert("danger", "Error "+response.status+" !", "");
                     }
                 );
-           }else $scope.postCategoryError = "Do not match with category's name";          
+           }else showBannerAlert("warning", "Warning", "Text entered not match with category's name");          
        }
         
     }]);
@@ -113,12 +110,13 @@
                     data: JSON.stringify({id: id})
                      }).
                     then(function(response){
-                        $rootScope.content.tags[id] = null;
-                        $scope.tagError = "Category deleted !";
-                    },function(response) {                                                    
+                        $rootScope.content.tags[id] = null;                        
+                        showBannerAlert("success", "Well done !", "Tag deleted ");
+                    },function(response) {
+                        showBannerAlert("danger", "Error "+response.status+" !", "");
                     }
                 );
-           }else $scope.tagError = "Do not match with tag's name";          
+           }else showBannerAlert("warning", "Warning", "Text entered not match with tag's name");          
        }
         
     }]);

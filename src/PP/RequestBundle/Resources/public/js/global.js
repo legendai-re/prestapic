@@ -29,7 +29,7 @@ $("#signInUpOverClose").click(function () {
    $('#signInUpOver').fadeOut();  
 });
 
-var showBannerAlert = function(type, strongMessage, lightMessage){        
+var showBannerAlert = function(type, strongMessage, lightMessage){    
     $("#alert-banner").slideDown("slow");
     $("#alert-banner").addClass(type);
     $("#alert-banner-strong").html(strongMessage);

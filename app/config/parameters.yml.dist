@@ -17,3 +17,8 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+    pp_notification.faye.endpoint:       http://nodeserver.com:3000/
+    pp_notification.faye.adapter.class: 'Nc\FayeClient\Adapter\CurlAdapter'
+    pp_notification.faye.client.class:  'Nc\FayeClient\Client'
+    compass: 'Path/bin/compass'
+    sass: 'Path/bin/sass'

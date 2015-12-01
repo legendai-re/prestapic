@@ -1,0 +1,1971 @@
+// VARS
+$main-color: #C24C4A
+$content: #444
+$background: #EEEEEE
+
+@import mixin
+@import normalize
+@include google-font("Source+Sans+Pro", "200,300,400,600,700&subset=latin,latin")
+
+@include icomoon()
+
+* 
+	@include vendor-prefix(box-sizing, border-box)
+
+html, body
+	width: 100%
+	height: 100%	
+
+a
+	color: $main-color
+	text-decoration: none
+	transition-duration: none
+
+	&:hover
+		color: #5E1C1B
+
+a[ng-click]
+	cursor: pointer
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
+	display: none !important
+
+::selection
+	background: $main-color
+	color: white
+
+body
+	margin: 0px
+	padding: 0px
+	font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif
+	background-color: $background
+	color: $content
+	-webkit-font-smoothing: antialiased
+	-moz-osx-font-smoothing: grayscale
+	text-rendering: optimizeLegibility
+
+input, textarea
+	outline: none
+
+b, strong
+	font-weight: 600
+
+h1, h2, h3, h4, h5, h6
+	font-weight: 300
+
+img
+	border: none
+
+[type="checkbox"]:not(:checked), [type="checkbox"]:checked
+	position: absolute
+	left: -9999px
+
+[type="checkbox"]:not(:checked) + label, [type="checkbox"]:checked + label
+	position: relative
+	padding-left: 26px
+	cursor: pointer
+
+[type="checkbox"]:not(:checked) + label:before, [type="checkbox"]:checked + label:before
+	content: ''
+	position: absolute
+	left: 0
+	top: 4px
+	width: 16px
+	height: 16px
+	border: 1px solid #ccc
+	background: white
+	border-radius: 1px
+	@include vendor-prefix(box-sizing, border-box)
+
+[type="checkbox"]:checked + label:before
+	border: 1px solid $main-color
+	background: $main-color
+
+[type="checkbox"]:not(:checked) + label:after, [type="checkbox"]:checked + label:after
+	content: "\e900"
+	speak: none
+	font-style: normal
+	font-weight: normal
+	font-variant: normal
+	text-transform: none
+	line-height: 1
+	-webkit-font-smoothing: antialiased
+	-moz-osx-font-smoothing: grayscale
+	font-family: "icomoon"
+	position: absolute
+	top: 4px
+	left: 0
+	font-size: 8px
+	padding: 4px 3px
+	color: white
+	transition: all .2s
+	@include vendor-prefix(box-sizing, border-box)
+
+[type="checkbox"]:not(:checked) + label:after
+	opacity: 0
+	transform: scale(0)
+
+[type="checkbox"]:checked + label:after
+	opacity: 1
+	transform: scale(1)
+
+.button
+	background: transparent
+	display: inline-block
+	padding: 8px 40px 8px
+	margin: 0 5px
+	font-size: 20px
+	font-weight: normal
+	color: white
+	border: 1px solid white
+	border-radius: 3px
+
+	&:hover, &:active
+		background: white
+		color: #222
+
+div.content
+	width: 1260px
+	margin: 0 auto
+	padding: 0 30px
+
+header
+	background: white
+	width: 100%
+	height: 80px
+	padding: 0 30px
+	border-bottom: 1px solid #ccc
+
+	div.content
+		max-width: 1230px
+
+		h1.logo
+			background: url("../images/logo.png") no-repeat
+			background-size: contain
+			width: 60px
+			height: 48px
+			text-indent: -99999px
+			font-size: 0px
+			color: transparent
+			padding: 0
+			margin: 16px 20px 16px 0
+			display: inline-block
+			float: left
+
+			a
+				display: block
+				width: 60px
+				height: 48px
+
+		.search
+			width: calc(100% - 80px - 400px)
+			height: 80px
+			display: inline-block
+			float: left
+
+			form
+				position: relative
+
+				input.main-search
+					width: 100%
+					height: 80px
+					font-size: 20px
+					font-weight: 300
+					color: #444
+					padding: 25px 30px
+					border: none
+					border-left: 1px solid #eee
+					border-bottom: 1px solid #ccc
+
+					&:active, &:focus
+						border-bottom: 2px solid $main-color
+						border-right: 1px solid #eee
+
+				ul.search-options
+					margin: 0
+					padding: 0
+					width: 106px
+					height: 80px
+					position: absolute
+					top: 0
+					right: 10px
+
+					li.option
+						list-style: none
+						display: inline-block
+						float: left
+
+						a.filters, button.go-search
+							display: block
+							background: white
+							width: 48px
+							height: 48px
+							margin: 16px 0 16px
+							padding: 0
+							overflow: hidden
+							border-radius: 50%
+							color: #ccc
+							border: 1px solid transparent
+
+							&:hover, &.open
+								border: 1px solid $main-color
+								color: $main-color
+
+							&.open
+								box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
+
+						a.filters
+							margin-right: 5px
+
+							&:before
+								display: block
+								width: 18px
+								height: 16px
+								padding: 15px 14px
+								font-family: 'icomoon'
+								speak: none
+								font-style: normal
+								font-weight: normal
+								font-variant: normal
+								text-transform: none
+								line-height: 1
+								/* Better Font Rendering =========== */
+								-webkit-font-smoothing: antialiased
+								-moz-osx-font-smoothing: grayscale
+								content: "\e901"
+
+						button.go-search
+							margin-right: 5px
+
+							&:before
+								display: block
+								width: 18px
+								height: 18px
+								padding: 15px
+								font-family: 'icomoon'
+								speak: none
+								font-style: normal
+								font-weight: normal
+								font-variant: normal
+								text-transform: none
+								line-height: 1
+								/* Better Font Rendering =========== */
+								-webkit-font-smoothing: antialiased
+								-moz-osx-font-smoothing: grayscale
+								content: "\e904"
+
+		nav.menu
+			width: 400px
+			height: 80px
+			display: inline-block
+			float: right
+
+			ul
+				margin: 0
+				padding: 0
+				float: right
+
+				li
+					list-style: none
+					display: inline-block
+					float: left
+					margin-left: 15px
+
+					a
+						width: auto
+						height: 80px
+						display: block
+						padding: 28px 15px
+						font-size: 18px
+
+						&:hover
+							color: #999
+
+						&.active
+							color: #999
+							border-bottom: 2px solid #999
+
+						&.grey
+							color: #777
+							padding: 28px 20px
+
+							&:hover
+								color: #222
+
+						&.red
+							background: transparent
+							color: $main-color
+							height: auto
+							padding: 8px 15px
+							border-radius: 3px
+							margin: 20px 0
+							border: 1px solid $main-color
+
+							&:hover
+								background: $main-color
+								color: white
+
+						&.notification, &.account
+							display: block
+							background: #ccc
+							width: 48px
+							height: 48px
+							margin: 16px 0
+							padding: 0
+							overflow: hidden
+							border-radius: 50%
+
+						&.notification
+							background: transparent
+							color: #ccc
+							border: 1px solid #ccc
+
+							&:hover
+								border: 1px solid $main-color
+								color: $main-color
+
+						&.notification:before
+							display: block
+							width: 20px
+							height: 20px
+							padding: 14px
+							text-align: center
+							font-family: 'icomoon'
+							speak: none
+							font-style: normal
+							font-weight: normal
+							font-variant: normal
+							text-transform: none
+							line-height: 1
+							/* Better Font Rendering =========== */
+							-webkit-font-smoothing: antialiased
+							-moz-osx-font-smoothing: grayscale
+							content: "\e903"
+
+						&.notification.alert
+							border-color: $main-color
+							background: $main-color
+
+							&:before
+								display: none
+
+							.number
+								display: block
+								font-size: 25px
+								padding: 6px 16px
+								text-align: center
+								color: white
+
+						&.notification.open
+							border-color: $main-color
+							color: $main-color
+							box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
+
+						&.account
+							img
+								width: 48px
+								height: 48px
+
+		.dropdown, & nav.menu .dropdown
+			position: absolute
+			z-index: 999
+			display: none
+			float: left
+			padding: 5px 0
+			margin: 2px 0 0 -252px
+			background: #fff
+			border: 1px solid #ccc
+			border-radius: 3px
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
+			background-clip: padding-box
+
+			&.menu, &.notif
+				width: 300px
+
+			&.filters
+				background: #fafafa
+				width: 600px
+				margin-left: -552px
+
+				.dropdown-caret .caret-inner
+					border-bottom: 9px solid #fafafa
+
+			.dropdown-caret
+				position: absolute
+				top: -10px
+				width: 18px
+				height: 10px
+				float: left
+				overflow: hidden
+				right: 14px
+
+				.caret-outer
+					border-bottom: 10px solid #eee
+					border-left: 10px solid transparent
+					border-right: 10px solid transparent
+					height: auto
+					left: 0
+					top: 0
+					width: auto
+					position: absolute
+					display: inline-block
+					margin-left: -1px
+
+				.caret-inner
+					position: absolute
+					display: inline-block
+					top: 2px
+					border-left: 9px solid transparent
+					border-right: 9px solid transparent
+					border-bottom: 9px solid #fff
+
+			ul
+
+				&.notifs
+					max-height: 400px
+					overflow: auto
+					margin-bottom: 34px
+					float: left
+
+				&::-webkit-scrollbar
+					width: 2px
+
+				&::-webkit-scrollbar-track
+					background-color: transparent
+					border: none
+				
+				&::-webkit-scrollbar-thumb
+					background-color: transparent
+					border-radius: 1px
+
+				&::-webkit-scrollbar-thumb:hover
+					background-color: rgba(0,0,0,.5)
+
+				&:hover
+					&::-webkit-scrollbar
+						width: 2px
+
+					&::-webkit-scrollbar-thumb
+						background-color: rgba(0,0,0,.25)
+
+				li
+					display: block
+					width: 100%
+					margin: 0
+
+					a
+						display: block
+						width: 100%
+						height: auto
+						padding: 10px 25px
+						color: #777
+						overflow: hidden
+
+						&:hover
+							background: $main-color
+							color: white
+
+					&.divider
+						height: 1px
+						margin: 5px 0
+						background: #eee
+
+					&.username
+						a
+							color: #444
+
+							small
+								display: block
+								color: #777
+
+							&:hover
+								color: white
+
+								small
+									color: white
+
+					&.pm
+						span.dot-count
+							float: right
+
+							&:after
+								display: block
+								content: ''
+								float: right
+								width: 10px
+								height: 10px
+								border-radius: 50%
+								margin: 7px 0 0 5px
+								background: $main-color
+								box-shadow: 0 0 0 1px white
+
+					&.notif 
+						a
+							color: #444
+							font-size: 14px
+							padding: 15px 15px
+							border-bottom: 1px solid #eee
+							position: relative
+
+							&:hover
+								background: rgba(0, 0, 0, .05)
+
+							.avatar
+								width: 48px
+								height: 48px
+								overflow: hidden
+								border-radius: 50%
+								float: left
+								margin-right: 15px
+								border: 1px solid white
+
+								img
+									width: 48px
+									height: 48px
+
+							.desc
+								width: 203px
+								overflow: hidden
+
+								small
+									display: block
+									color: #777
+									font-size: 14px
+
+							span.dot
+								display: block
+								width: 10px
+								height: 10px
+								margin: 19px 0 19px 5px
+								float: right
+								border: 1px solid $main-color
+								background: $main-color
+								border-radius: 50%
+								position: absolute
+								right: 15px
+								top: 20px
+								box-shadow: 0 0 0 1px white
+
+								&.seen
+									background: white
+
+								&.visited
+									background: white
+									border-color: rgba(0, 0, 0, .1)
+
+
+					&.more-notif
+						position: absolute
+						bottom: 2px
+						height: 38px
+						background: white
+						border-top: 1px solid #eee
+
+						&:before
+							content: ''
+							display: block
+							width: 100%
+							height: auto
+
+						a
+							font-size: 14px
+							color: #777
+							text-align: center
+							padding: 10px 0 5px
+
+							&:hover
+								text-decoration: underline
+								background: transparent
+
+			.filters-type
+				background: white
+				border-right: 1px solid #ccc
+
+			.filters-type, .filter-cat, .filter-tags
+				width: 50%
+				height: 290px
+				padding: 20px 25px
+				margin: -5px 0
+				float: left
+				display: block
+				overflow: auto
+
+				.dropdown-title
+					color: #444
+					font-size: 16px
+					display: block
+					margin-bottom: 10px
+
+				ul.list-filters
+					margin: 0
+					padding: 0
+					display: block
+					width: 100%
+					height: auto
+
+					li.filter, li.filter-group
+						padding-top: 15px
+						color: #777
+						font-size: 18px
+
+					li.filter-group
+						padding: 0
+						margin-left: -25px
+
+						a
+							width: 298px
+							display: block
+							padding: 7px 25px
+
+							&:hover
+								color: #444
+								background: #efefef
+
+							&.open
+								border-bottom: 1px solid #ccc
+								border-top: 1px solid #ccc
+								background: #fafafa
+
+								&:hover
+									background: #efefef
+
+			.filter-cat, .filter-tags
+				&::-webkit-scrollbar
+					width: 2px
+
+				&::-webkit-scrollbar-track
+					background-color: transparent
+					border: none
+				
+				&::-webkit-scrollbar-thumb
+					background-color: transparent
+					border-radius: 1px
+
+				&::-webkit-scrollbar-thumb:hover
+					background-color: rgba(0,0,0,.5)
+
+				&:hover
+					&::-webkit-scrollbar
+						width: 2px
+
+					&::-webkit-scrollbar-thumb
+						background-color: rgba(0,0,0,.25)
+
+				.dropdown-title
+					position: absolute
+					background: #fafafa
+					padding: 0 0 5px
+					display: block
+					z-index: 1
+					width: 250px
+					box-shadow: 0 0 10px 10px #fafafa
+
+					&.no-shadow
+						box-shadow: none
+
+				ul.list-filters
+					padding-top: 21px
+
+			.filter-tags
+				display: none
+
+				input.list-tags
+					width: 100%
+					position: relative
+					margin-top: 30px
+					padding: 7px
+
+				small.comment
+					display: block
+					margin-bottom: 15px
+
+				.sugg-title
+					margin-bottom: 10px
+
+				ul.sugg-tags
+					margin: 0
+					padding: 0
+
+					li.sugg
+						list-style: none
+						display: inline-block
+						width: auto
+
+						a
+							background: white
+							display: inline-block
+							padding: 4px 10px
+							color: rgba(0, 0, 0, 0.5)
+							font-size: 15px
+							border-radius: 3px
+							border: 1px solid rgba(0, 0, 0, 0.1)
+							width: auto
+							height: auto
+
+							&:hover
+								background: #dedede
+
+							&.choosen
+								background: #C24C4A
+								color: rgba(255, 255, 255, 0.75)
+
+section.alert-banner
+	width: 100%
+	display: none
+	color: white
+	padding: 13px 0
+	position: absolute
+
+	&.info
+		display: block
+		background-color: #02AAE9
+
+	&.success
+		display: block
+		background-color: #0ABC4B
+
+	&.warning
+		display: block
+		background-color: #F7CA18
+
+	&.danger
+		display: block
+		background-color: #F23F2D
+
+section.jumbotron
+	background: url(../images/jumbotron.jpeg) no-repeat bottom $main-color
+	background-size: cover
+	width: 100%
+	height: auto
+	padding: 90px 0 70px
+	text-align: center
+	font-size: 30px
+	font-weight: 300
+
+	.line
+		margin: 0
+		padding: 0
+		color: white
+
+	.learn
+		margin-top: 40px
+
+section.profile
+	position: relative
+	width: 100%
+	height: 470px
+
+	.banner
+		position: absolute
+		background: #999
+		width: 100%
+		height: 470px
+		overflow: hidden
+
+		img
+			width: 100%
+			position: absolute
+			left: 0
+			right: 0
+			top: -9999px
+			bottom: -9999px
+			margin: auto 0
+
+		.overlay
+			width: 100%
+			height: 470px
+			background: rgba(0,0,0,.5)
+			position: absolute
+			top: 0
+			z-index: 1
+
+	.profile-details
+		width: 750px
+		height: auto
+		margin: 0 auto
+		padding: 70px 0
+		position: relative
+		z-index: 1
+		color: white
+		text-align: center
+
+		a.avatar
+			width: 100px
+			height: 100px
+			border-radius: 50%
+			overflow: hidden
+			display: block
+			margin: 0 auto
+
+			img
+				width: 100%
+
+		h1.username
+			font-size: 40px
+			font-weight: 600
+			margin: 7px 0 0
+
+		p.bio
+			font-size: 20px
+			margin: 0
+
+		ul.details
+			margin: 15px auto 0
+			padding: 0
+
+			li
+				list-style: none
+				margin: 0
+				padding: 0 10px
+				display: inline
+				border-right: 1px solid white
+
+				&:nth-last-child(2), &:nth-last-child(1)
+					border-right: none
+
+			li.link
+				display: block
+				margin: 10px 0 0
+
+				a
+					color: rgba(255,255,255,.75)
+					font-size: 18px
+
+		.follow, .pm
+			background: white
+			color: #222
+			font-size: 14px
+			margin: 20px 0 0
+
+			&:hover
+				background: #4AC25E
+				border: 1px solid #4AC25E
+				color: white
+
+		.unfollow:hover
+			background: $main-color
+			border: 1px solid $main-color
+
+section.galery
+	width: 100%
+	height: auto
+	padding: 45px 0 0
+
+	div.content
+		padding: 0 45px
+
+		ul
+			margin: 0
+			padding: 0
+			overflow: hidden
+			display: block
+
+			li
+				list-style: none
+				display: block
+				float: left
+				margin-right: 10px
+
+				&:last-child
+					margin: 0
+
+				a
+					display: block
+					width: 285px
+					height: 195px
+					overflow: hidden
+
+					&.more
+						background: #d8d8d8
+						color: rgba(0,0,0,.25)
+						text-align: center
+						padding: 65px 0
+						font-size: 60px
+						font-weight: 300
+
+					img
+						width: 285px
+						height: 195px
+
+section.main
+	width: 100%
+	padding: 45px 0
+
+	.demand-list
+		width: 770px
+		height: auto
+		display: inline-block
+		float: left
+		margin: 0 10px
+		overflow: hidden
+
+		.demand-selector
+			width: 100%
+			height: auto
+			margin: 0 5px
+
+			p
+				margin: 0 10px 30px 0
+				padding: 0
+				font-size: 30px
+				font-weight: 300
+				display: inline-block
+
+			.noselect
+				font-size: 20px
+				font-weight: 300
+				margin-left: 5px
+				display: inline-block
+
+				button
+					border: none
+					background: none
+					color: #777
+					padding: 3px 8px
+
+					&:hover
+						background: #ddd
+						color: #444
+						border-radius: 3px
+
+		article.demand, .new-demand
+			width: 760px
+			height: auto
+			border-bottom: 1px solid #ddd
+			display: block
+			margin: 0 5px 20px
+			padding-bottom: 10px
+			overflow: hidden
+
+			&:last-child
+				border-bottom: none
+
+			a.avatar
+				background: rgba(0,0,0,.1)
+				width: 70px
+				height: 70px
+				display: inline-block
+				float: left
+				border-radius: 50%
+				overflow: hidden
+				margin: 0 15px 15px 0
+
+				&:hover
+					background: rgba(0,0,0,.15)
+
+				img
+					width: 100%
+					color: rgba(255,255,255,.5)
+
+			.infos
+				width: 665px
+				height: auto
+				display: inline-block
+				float: left
+
+				h1
+					padding: 0
+					margin: 0 0 10px
+					font-size: 30px
+
+					a.upvote-demand
+						float: right
+						font-size: 30px
+						color: rgba(0,0,0,0.25)
+
+						&:hover, &.voted
+							color: #0ABC4B
+
+						&:after
+							display: block
+							width: 20px
+							height: 20px
+							padding: 10px
+							text-align: center
+							font-family: "icomoon"
+							speak: none
+							font-size: 20px
+							font-style: normal
+							font-weight: normal
+							font-variant: normal
+							text-transform: none
+							line-height: 1
+							-webkit-font-smoothing: antialiased
+							-moz-osx-font-smoothing: grayscale
+							content: "\e905"
+							float: right
+
+				.content-single
+					font-size: 18px
+					float: left
+					display: block
+					width: 100%
+
+				.tag-list
+					float: left
+					display: inline-block
+					margin-bottom: 20px
+
+					a.tag
+						background: white
+						color: rgba(0, 0, 0, 0.5)
+						padding: 4px 10px
+						margin-right: 5px
+						font-size: 15px
+						border-radius: 3px
+						border: 1px solid rgba(0, 0, 0, 0.1)
+
+						&:hover
+							background: #C24C4A
+							color: rgba(255, 255, 255, 0.75)
+
+						&.cat
+							color: rgba(0, 0, 0, 0.75)
+
+							&:hover
+								color: white
+
+				.author
+					display: inline-block
+					float: right
+					font-size: 15px
+
+					&.single
+						float: left
+
+
+			.replies
+				width: 675px
+				height: auto
+				display: block
+				float: left
+				margin: 0 0 10px 85px
+
+				a.reply, a.more-replies
+					background: rgba(0,0,0,.1)
+					width: 220px
+					max-width: 220px
+					height: 150px
+					display: inline-block
+					float: left
+					margin: 0 0 0 5px
+					overflow: hidden
+
+					&:hover
+						background: rgba(0,0,0,.15)
+
+					img
+						width: 220px
+						height: 150px
+
+					&:first-child
+						margin: 0
+
+				a.more-replies
+					text-align: center
+					font-size: 50px
+					padding: 45px 0
+					color: rgba(0,0,0,.25)
+
+					&:hover
+						color: rgba(0,0,0,.5)
+
+		.new-demand
+			background: rgba(255,255,255,0.25)
+			border-radius: 3px
+			border: 1px solid rgba(0,0,0,.075)
+			padding: 10px
+
+			a.avatar
+				margin: 0 15px 0 0
+
+			.comp-area
+				width: 653px
+				display: block
+				float: left
+				overflow: hidden
+
+				input, textarea, select
+					background: transparent
+					border: none
+					width: 100%
+					font-size: 20px
+					font-weight: normal
+					padding: 0
+
+					&.init
+						height: 70px
+						font-size: 28px
+						font-weight: 300
+						background: none
+						border: none
+
+				.title
+					font-size: 24px
+
+				.content
+					//
+
+				.categories
+					//
+
+				.add-tag
+					//
+
+		.replies
+			width: 100%
+			height: auto
+			margin: 0
+
+			.more-replies
+				width: 760px
+				font-size: 28px
+				font-weight: 300
+				display: inline-block
+				margin: 15px 5px
+
+			.reply
+				background: rgba(0,0,0,0.1)
+				width: 375px
+				height: 260px
+				display: inline-block
+				overflow: hidden
+				margin: 0 5px 10px
+				float: left
+				position: relative
+
+				.prop
+					width: 380px
+					height: 260px
+					display: block
+
+					img
+						width: 380px
+						height: 260px
+
+				a.overlay
+					background: url(../images/img-title-mini.png) repeat-x bottom
+					width: 380px
+					height: 260px
+					display: block
+					position: absolute
+					top: 0
+
+				.img-title
+					position: absolute
+					width: auto
+					height: auto
+					bottom: 0
+					padding: 0 20px 20px
+
+					.infos
+						.name
+							font-size: 24px
+							color: white
+							font-weight: 300
+
+						.author
+							font-size: 14px
+							color: rgba(255,255,255,.75)
+
+							a
+								color: rgba(255,255,255,.75)
+								font-weight: bold
+
+				a.selecting-prop
+					color: rgba(255,255,255,0)
+					display: block
+					position: absolute
+					top: 15px
+					right: 20px
+					padding: 5px 5px 5px 10px
+					font-size: 15px
+					line-height: 20px
+					text-transform: uppercase
+
+					&:hover, &.selected
+						color: rgba(0,0,0,0.5)
+						background: rgba(255,255,255,0.5)
+						border-radius: 3px
+						border: 1px solid rgba(0,0,0,0.1)
+
+						&:after
+							color: #EB154C
+
+
+					&:after
+						margin-left: 5px
+						display: block
+						text-align: center
+						font-family: "icomoon"
+						speak: none
+						font-size: 20px
+						font-style: normal
+						font-weight: normal
+						font-variant: normal
+						text-transform: none
+						text-align: center
+						line-height: 1
+						-webkit-font-smoothing: antialiased
+						-moz-osx-font-smoothing: grayscale
+						content: "\e906"
+						float: right
+						color: rgba(255,255,255,.75)
+
+				.actions
+					position: absolute
+					bottom: 0
+					right: 0
+					padding: 0 20px 20px
+
+					a.count-vote
+						font-size: 30px
+						font-weight: 300
+						color: rgba(255,255,255,.75)
+						display: block
+
+						&:hover
+							color: #00D084
+
+						&.voted
+							color: #00D084
+							text-shadow: 0 0 10px rgba(0,0,0,.25)
+
+						&:after
+							display: block
+							width: 20px
+							height: 20px
+							padding: 10px
+							text-align: center
+							font-family: "icomoon"
+							speak: none
+							font-size: 20px
+							font-style: normal
+							font-weight: normal
+							font-variant: normal
+							text-transform: none
+							line-height: 1
+							-webkit-font-smoothing: antialiased
+							-moz-osx-font-smoothing: grayscale
+							content: "\e905"
+							float: right
+
+				&.selected
+					width: 760px
+					height: 525px
+
+					.prop
+						width: 760px
+						height: 525px
+						display: block
+
+						img
+							width: 760px
+							height: 525px
+
+					a.overlay
+						background: url(../images/img-title.png) repeat-x bottom
+						width: 760px
+						height: 525px
+
+					.img-title
+
+						a.avatar
+							background: rgba(255,255,255,0.25)
+							width: 60px
+							height: 60px
+							overflow: hidden
+							border-radius: 50%
+							display: block
+							float: left
+
+							img
+								width: 100%
+
+						.infos
+							float: left
+							margin-left: 10px
+
+							.name
+								font-size: 28px
+								display: inline
+
+							.author
+								font-size: 18px
+
+					.actions
+						a.count-vote
+							font-size: 35px
+
+							&:after
+								width: 25px
+								height: 25px
+								font-size: 25px
+
+	.sidebar
+		width: 370px
+		height: auto
+		display: inline-block
+		float: left
+		margin: 0 15px
+		overflow: hidden
+
+		.widget
+			width: 370px
+			height: auto
+			display: block
+			float: left
+			margin-bottom: 20px
+			padding-bottom: 10px
+			border-bottom: 1px solid #ddd
+
+			&:last-child
+				border-bottom: none
+
+			h1
+				margin: 0 0 15px
+				padding: 0
+				font-size: 24px
+				display: inline-block
+
+			a.see-more
+				font-size: 18px
+				margin-left: 10px
+				padding: 3px 8px
+				color: #777
+				font-weight: 300
+
+				&:hover
+					background: #ddd
+					color: #555
+					border-radius: 3px
+
+			ul.tags, ul.users, ul.subjects
+				margin: 0
+				padding: 0
+
+				li
+					list-style: none
+
+				li.tag
+					margin-bottom: 10px
+
+					a.tag-name
+						background: white
+						display: inline-block
+						padding: 4px 10px
+						color: rgba(0,0,0,.5)
+						font-size: 15px
+						border-radius: 3px
+						border: 1px solid rgba(0, 0, 0, 0.1)
+
+						&:hover
+							background: #C24C4A
+							color: rgba(255,255,255,.75)
+
+					span.subject-count
+						margin-left: 5px
+						font-size: 14px
+						color: #a2a2a2
+
+					.tag-desc
+						font-size: 14px
+						display: block
+						padding: 5px 0
+
+				li.user
+					width: 100%
+					height: auto
+					display: block
+					float: left					
+					margin-bottom: 5px
+
+					&:last-child
+						margin-bottom: 15px
+
+					a.avatar
+						background: rgba(0,0,0,.1)
+						width: 25px
+						height: 25px
+						border-radius: 50%
+						display: inline-block
+						float: left
+						margin-right: 10px
+						overflow: hidden
+
+						img
+							width: 100%
+
+					a.username
+						font-size: 18px
+
+				li.subject
+					width: 100%
+					height: auto
+					display: block
+					float: left					
+					margin-bottom: 15px
+
+					a.title
+						display: block
+						font-size: 18px
+
+					span.author, a.data
+						font-size: 14px
+
+					a.data
+						color: #a2a2a2
+						margin-left: 5px
+
+		.footer
+			color: #aaa
+			font-size: 14px
+
+			a
+				color: #aaa
+
+				&:hover
+					text-decoration: underline
+
+			ul
+				margin: 0
+				padding: 0
+
+				li
+					list-style: none
+					display: inline
+
+					&:after
+						content: "·"
+						margin: 0 5px
+
+				li:last-child:after
+					content: " "
+
+			.copy
+				margin-top: 10px
+				display: block
+
+section.overlay
+	position: fixed
+	overflow: auto
+	top: 0
+	left: 0
+	bottom: 0
+	right: 0
+	display: block
+	z-index: 900
+	background-color: rgba(255,255,255,0.97)
+	width: 100%
+	padding: 0
+	margin: 0
+	border: 0
+
+	button.button-close
+		background: transparent
+		border: 0
+		font-size: 32px
+		padding: 10px 20px
+		position: absolute
+		top: 0
+		right: 0
+		font-family: -apple-system,".SFNSText-Regular","Helvetica Neue","Roboto","Segoe UI",sans-serif
+		letter-spacing: 0
+		font-weight: 300
+		font-style: normal
+		color: #777
+
+		&:hover
+			color: $main-color
+
+	.overlay-content
+		width: 100%
+		max-width: 750px
+		height: auto
+		position: absolute
+		top: 50%
+		left: 50%
+		@include vendor-prefix(transform, translate(-50%, -50%))
+
+		.overlay-title
+			background: url(../images/logo.png) no-repeat
+			background-size: cover
+			width: 60px
+			height: 48px
+			text-indent: -9999px
+			display: block
+			margin: 0 auto
+
+		p.ind
+			font-size: 20px
+			color: #777
+			text-align: center
+
+		.overlay-actions
+			width: 100%
+			margin-bottom: 20px
+			display: block
+			overflow: hidden
+
+			.signin-form
+				width: 50%
+				padding: 30px
+				border-right: 1px solid #aaa
+				display: block
+				float: left
+
+				form
+					input
+						background: transparent
+						margin: 0 0 10px
+						padding: 10px
+						font-size: 20px
+						font-weight: 300
+						border: none
+						border-bottom: 1px solid #ccc
+
+						&:focus
+							border-bottom: 2px solid $main-color
+							margin-bottom: 9px
+
+					input[type="text"], input[type="password"], input[type="mail"]
+						width: 100%
+
+					.remember
+						width: 100%
+						display: inline-block
+						margin: 0
+
+					.button
+						border-color: $main-color
+						color: $main-color
+						margin: 20px 10px 0 0
+
+						&:hover
+							background: $main-color
+							color: white
+
+			.signup-form
+				width: 50%
+				padding: 30px
+				display: block
+				float: left
+
+				.message
+					font-size: 30px
+					color: #777
+					font-weight: 300
+
+				.button
+					border-color: #777
+					color: #777
+
+					&:hover
+						background: #777
+						color: white
+					margin: 20px 10px 0 0
+
+		.terms
+			text-align: center
+			font-size: 12px
+			color: #aaa
+
+section.overlay-messages
+	position: fixed
+	overflow: auto
+	top: 0
+	left: 0
+	bottom: 0
+	right: 0
+	display: block
+	z-index: 900
+	background-color: rgba(0,0,0,.5)
+	width: 100%
+	padding: 0
+	margin: 0
+	border: 0
+
+	.messages
+		background: white
+		width: 900px
+		height: 100%
+		max-height: 600px
+		position: absolute
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+		border-radius: 3px
+		border: 1px solid #ccc
+		overflow: hidden
+
+		.container
+			position: relative
+			display: -webkit-flex
+			display: -moz-box
+			display: -ms-flexbox
+			display: flex
+			flex-direction: column
+			width: 100%
+			height: 100%
+
+			.message-top
+				width: 100%
+				height: 50px
+				background: white
+				display: -webkit-flex
+				display: -moz-box
+				display: -ms-flexbox
+				display: flex
+				flex-direction: row
+				font-size: 20px
+				color: #444
+				border-bottom: 1px solid #ccc
+				
+				.inbox-top
+					width: 300px
+					padding: 10px 15px
+					border-right: 1px solid #ccc
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					position: relative
+
+					a.new-message
+						position: absolute
+						top: 8px
+						right: 8px
+
+						&:before
+							display: block
+							width: 18px
+							height: 18px
+							padding: 5px
+							text-align: center
+							font-family: "icomoon"
+							speak: none
+							font-size: 18px
+							font-style: normal
+							font-weight: normal
+							font-variant: normal
+							text-transform: none
+							line-height: 1
+							-webkit-font-smoothing: antialiased
+							-moz-osx-font-smoothing: grayscale
+							content: "\e902"
+
+				.chat-top
+					width: 600px
+					padding: 10px 15px
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					
+					.button-close
+						float: right
+						position: absolute
+						border: none
+						background: transparent
+						padding: 2px 15px
+						margin: 0
+						top: 0
+						right: 0
+						color: #ccc
+						font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif
+						letter-spacing: 0
+						font-weight: 300
+						font-style: normal
+						font-size: 32px
+						
+						&:hover
+							color: $main-color
+
+			.message-bottom
+				background: white
+				width: 100%
+				height: 100%
+				display: -webkit-flex
+				display: -moz-box
+				display: -ms-flexbox
+				display: flex
+				flex-direction: row
+				align-items: stretch
+				overflow: hidden
+
+				.inbox
+					background: #fafafa
+					width: 300px
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					border-right: 1px solid #ccc
+					overflow-x: hidden
+					overflow-y: auto
+					
+					ul.list-mess
+						margin: 0
+						padding: 0
+						
+						li.message
+							list-style: none
+							border-bottom: 1px solid #ccc
+							
+							a
+								display: block
+								width: 300px
+								height: 78px
+								padding: 15px
+								
+								&:hover, &.open
+									background: #efefef
+								
+								.avatar
+									width: 48px
+									height: 48px
+									border-radius: 50%
+									overflow: hidden
+									float: left
+									margin-right: 15px
+									
+									img
+										width: 48px
+										height: 48px
+								
+								.desc
+									display: block
+									float: left
+									
+									.name
+										font-size: 17px
+										color: #444
+										
+									.last-message
+										font-size: 15px
+										color: #777
+
+				.chat-container
+					background: white
+					width: 600px
+					height: auto
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					flex-direction: column
+
+					.chat-conversation
+						display: -webkit-flex
+						display: -moz-box
+						display: -ms-flexbox
+						display: flex
+						flex: 1 auto
+						padding: 15px
+						position: relative
+						overflow: auto
+						display: block
+
+						.chat-scroller
+							display: -webkit-flex
+							display: -moz-box
+							display: -ms-flexbox
+							display: flex
+							flex: 1 auto
+							flex-direction: column
+							align-self: flex-end
+
+							.message
+								height: auto
+								display: -webkit-flex
+								display: -moz-box
+								display: -ms-flexbox
+								display: flex
+								margin: 5px 0
+
+								.message-content
+									max-width: 360px
+									min-height: 40px
+									padding: 11px 15px
+									float: left
+									background: #ededed
+									color: #444
+									border-radius: 3px
+									font-size: 15px
+									position: relative
+									margin-left: 5px
+									justify-content: flex-start
+									
+									&:before
+										top: auto
+										bottom: 6px
+
+										border-style: solid
+										border-width: 5px
+										content: ""
+										display: block
+										position: absolute
+										height: 0
+										width: 0
+										border-color: #ededed
+									
+										border-left-width: 0!important
+										//border-left-width: 5px!important
+										border-bottom-color: transparent!important
+										border-left-color: transparent!important
+										border-top-color: transparent!important
+										left: -10px
+										top: auto
+										-webkit-transform: translateX(100%) translateY(-50%)
+										-ms-transform: translateX(100%) translateY(-50%)
+										transform: translateX(100%) translateY(-50%)
+
+								&.me
+									float: right
+									justify-content: flex-end
+		
+									.message-content
+										float: right
+										background: $main-color
+										color: white
+										margin-left: 0
+										margin-right: 5px
+										
+										&:before
+											border-color: $main-color
+											right: 0
+											left: initial
+											border-left-width: 5px!important
+											border-left-color: $main-color!important
+											border-right-width: 0!important
+											border-right-color: transparent!important
+									
+									.avatar
+										float: right
+										margin: 0 0 0 10px
+										order: 0
+										
+								.avatar
+									width: 40px
+									height: 40px
+									overflow: hidden
+									border-radius: 50%
+									float: right
+									margin-right: 10px
+									align-self: flex-end
+									order: -1
+
+									img
+										width: 40px
+										height: 40px
+						
+						.message-state
+							font-size: 15px
+							color: #ccc
+							text-align: right
+							padding-right: 65px
+						
+						.message-date
+							font-size: 16px
+							color: #777
+							text-align: center
+							padding: 15px 0 5px
+							display: block
+
+					.chat-composer
+						background: rgba(0,0,0,.5)
+						width: 100%
+						height: auto
+						min-height: 50px
+						float: right
+						display: -webkit-flex
+						display: -moz-box
+						display: -ms-flexbox
+						display: flex
+						align-self: flex-end
+						border-top: 1px solid #ccc
+						position: relative
+
+						form
+							width: 100%
+
+							input
+								width: 100%
+								height: 100%
+								padding: 15px
+								border: none
+
+							button
+								background: #ccc
+								border: none
+								color: #777
+								width: 30px
+								height: 30px
+								overflow: hidden
+								border-radius: 50%
+								speak: none
+								font-style: normal
+								font-weight: normal
+								font-variant: normal
+								text-transform: none
+								line-height: 1
+								-webkit-font-smoothing: antialiased
+								-moz-osx-font-smoothing: grayscale
+								font-family: "icomoon"
+								content: "\e904"
+								text-indent: -9999px
+								position: absolute
+								top: 10px
+								right: 10px
+								bottom: 10px
+								
+								&:hover
+									background: #ccc
+									color: #777
+								
+								&:active
+									background: #777
+									color: white
+								outline: none
+
+.fixed
+	section.page
+		margin-top: 60px
+		
+	section.alert-banner
+		top: 0
+		position: fixed
+
+// Loading content
+.load-content
+	display: block
+	width: 54px
+	margin: 0 auto
+	padding: 40px 0 80px
+
+	.bubble, &:before, &:after
+		content: ""
+		display: inline-block
+		width: 15px
+		height: 15px
+		border-radius: 15px
+		background-color: rgba(0, 0, 0, 0.25)
+
+	&:before
+		animation: pop-wave 1.2s .2s linear infinite
+
+	.bubble
+		animation: pop-wave 1.2s .4s linear infinite
+
+	&:after
+		animation: pop-wave 1.2s .6s linear infinite
+
+@keyframes pop-wave
+	0%
+		transform: scale(1)
+	50%
+		transform: scale(0)
+	75%
+		transform: scale(0.75)
+	100%
+		transform: scale(1)
