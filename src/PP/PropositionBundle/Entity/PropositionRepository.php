@@ -11,6 +11,29 @@ use PP\RequestBundle\Constant\Constants;
  */
 class PropositionRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getPropositionByUser($userId, $limit, $page){
+        
+        $qb = $this
+                ->createQueryBuilder('p')
+                ->leftJoin('p.author', 'pA')
+                ->addSelect('pA')
+                ->leftJoin('p.image', 'pI')
+                ->addSelect('pI')                    
+                ->where('pA.id = :userId')
+                ->setParameter('userId', $userId)
+        ;                        
+            
+        $qb = $qb
+          ->setFirstResult(($page-1) * $limit)
+          ->setMaxResults($limit)
+        ;      
+
+        return $qb
+              ->getQuery()
+              ->getResult()
+        ;                                                    
+    }
+    
     public function countPropositions($id){
         
             $qb = $this

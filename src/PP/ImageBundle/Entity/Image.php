@@ -268,7 +268,8 @@ class Image
     }
     
     public function resize($foldername, $cropWidth, $cropHeight){
-        ini_set('memory_limit', '600M');
+        ini_set('memory_limit', '-1');
+       
         $resizeRatio = $cropWidth;
         if($cropHeight > $resizeRatio)$resizeRatio =$cropHeight;
         //$resizeRatio *= 3;

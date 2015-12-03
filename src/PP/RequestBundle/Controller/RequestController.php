@@ -5,6 +5,7 @@ namespace PP\RequestBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use PP\RequestBundle\Form\Type\ImageRequestType;
 use PP\RequestBundle\Entity\ImageRequest;
@@ -93,6 +94,77 @@ class RequestController extends Controller
             'upvotePropositionForm' => $upvotePropositionForm->createView()
         ));
         
+    }
+    
+    public function editRequestAction(Request $request){
+        
+        /* init repositories */
+        $em = $this->getDoctrine()->getManager();
+        $tagRepository = $em->getRepository('PPRequestBundle:Tag');   
+        $requestRepository = $em->getRepository("PPRequestBundle:ImageRequest");
+        
+        $currentUser = $this->getUser();        
+        
+        $imageRequest = new ImageRequest();
+        $form = $this->get('form.factory')->create(new ImageRequestType, $imageRequest);
+        
+        if ($request->isMethod('POST')) {
+            if ($this->get('security.context')->isGranted('ROLE_USER')) {    
+                $form->handleRequest($request);
+                if ($form->isValid()) {
+                    
+                    $oldRequest = $requestRepository->find($imageRequest->getId());
+                    if($currentUser->getId() == $oldRequest->getAuthor()->getId()){
+                        $oldRequest->setTitle($imageRequest->getTitle());
+                        $oldRequest->setRequest($imageRequest->getRequest());
+                        $oldRequest->setCategory($imageRequest->getCategory());                        
+                        
+                        foreach ($oldRequest->getTags() as $tag){
+                            $oldRequest->removeTag($tag);
+                        }
+                        
+                        $tagString = strtolower($imageRequest->getTagsStr().',');
+                        $tagString = str_replace(' ', '', $tagString);
+                        $tagList = array();	
+                        $actualTag = "";
+                        $tagCharArray = str_split($tagString);
+                        foreach($tagCharArray as $char){
+                            if($char != ","){
+                                    $actualTag.=$char;
+                            }
+                            else {
+                                if(!empty($actualTag)){
+                                    array_push($tagList, $actualTag);                                            
+                                }
+                                $actualTag = "";
+                            }
+                        }                                
+                        $tagList = array_unique($tagList);
+                        foreach ($tagList as $tag){
+                            $existedTag = $tagRepository->geTagByName($tag);
+                            if($existedTag == null){
+                                $tempTag = new \PP\RequestBundle\Entity\Tag();
+                                $tempTag->setName($tag);
+                                $em->persist($tempTag);
+                                $oldRequest->addTag($tempTag);
+                            }else{
+                                $oldRequest->addTag($existedTag);
+                            }
+                        }
+                        $em->persist($oldRequest);
+                        $em->flush();
+                        
+                        /* redirect */
+                        return $this->redirect($this->generateUrl('pp_request_view', array(
+                            'slug' => $oldRequest->getSlug()
+                        )));
+                    }
+                    
+                }
+            }
+        }
+        return $this->redirect($this->generateUrl('pp_request_homepage', array(                            
+         )));                
     }
     
     public function addRequestAction(Request $request){
@@ -209,11 +281,23 @@ class RequestController extends Controller
             
         }
         
-        
+        $isAuthor = false;
+        if($currentUser!=null && $currentUser->getId() == $imageRequest->getAuthor()->getId()){
+            $isAuthor = true;
+        }
         
         /* create new proposition form */       
         $proposition = new Proposition();
         $propositionForm = $this->get('form.factory')->create(new PropositionType, $proposition);        
+        
+        /* create upote request form */
+        $getEditForm = null;
+        if($isAuthor){
+            $getEditForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_get_edit_request_form', 'form', array(), array())         
+                ->setAction($this->generateUrl('pp_request_api_get_edit_request', array(), true))
+                ->getForm()
+                ->createView();
+        }
         
         /* create upote request form */
         $upvoteRequestForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_patch_request_vote', 'form', array(), array())         
@@ -338,7 +422,9 @@ class RequestController extends Controller
             'reportTicketForm' => $reportTicketForm,
             'disableTicketForm' => $disableTicketForm,
             'reportReasonList' => $reportReasonList,
-            'currentUser' => $currentUser
+            'currentUser' => $currentUser,
+            'getEditForm' => $getEditForm,
+            'isAuthor' =>$isAuthor
         ));
     }
     
@@ -350,9 +436,11 @@ class RequestController extends Controller
         $tagRepository = $em->getRepository('PPRequestBundle:Tag');
         
         $popularTags = $tagRepository->getPopularTags(5);
-        $activeUsers = $userRepository->getActiveUsers(3);
-        $imageRequests = $imageRequestRepository->getPopularImageRequests(3);
-                              
+        //$activeUsers = $userRepository->getActiveUsers(3);
+        $activeUsers = array();
+        //$imageRequests = $imageRequestRepository->getPopularImageRequests(3);
+        $imageRequests = array();
+        
         return $this->render('PPRequestBundle:Request:sideInfo.html.twig', array(
             'popularTags' => $popularTags,
             'activeUsers' => $activeUsers,

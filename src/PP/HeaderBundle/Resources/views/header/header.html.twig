@@ -49,7 +49,9 @@
                             </div>                           
                             <ul class="notifs">
                                 <li id="noNotification" style="display:none;">No notification yet</li>
-                                <li id="loadingNotif" style="height: 50px" class="notif"><div class="loading"></div></li>
+                                <li id="loadingNotif" style="height: 50px" class="notif load-content">                                    
+                                    <span class="bubble"></span>                                    
+                                </li>
                                 <li ng-repeat="notification in notifications" ng-cloak class="notif">
                                    
                                     <a  ng-click="header.patchNotificationClicked($index)"  >

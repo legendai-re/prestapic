@@ -13,8 +13,8 @@
         <a href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" class="avatar">
             <img src="{{ asset(imageRequest.author.profilImage.webPath("70x70")) }}" alt="{{ imageRequest.author.profilImage.alt }}">                    
         </a>                                       
-
-        <div class="infos">          
+        
+        <div id="requestContent" class="infos">          
             <h1>
                 <a href="">{{ imageRequest.title }}</a>                
                 <a id="imageRequestUpvoteButton"  href="" title="Up vote"
@@ -29,7 +29,7 @@
                 </a>
                 {% if canUpvoteImageRequest == true %}
                     {{ form_start(upvoteRequestForm) }}            
-                    {{ form_end(upvoteRequestForm) }}           
+                    {{ form_end(upvoteRequestForm) }}
                 {% endif %}
             </h1>
             <div class="author single">
@@ -48,8 +48,20 @@
                 {% for tag in imageRequest.tags %}
                     <a class="tag" href="{{ path('pp_request_homepage', {'tags':tag.name}) }}" title="">{{ tag.name }}</a>
                 {% endfor %}
-            </div>            
+            </div>
+            
+            {# edit request form #}
+            {% if isAuthor == true %}
+                    {{ form_start(getEditForm)}}
+                        
+                    {{ form_end(getEditForm)}}
+                    <input type="submit" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" />
+            {% endif %}    
+            
         </div>
+        <div id="editRequestContent">
+        </div>
+        
         
         {# report and delete image request form #}
         {% if is_granted("ROLE_USER") %}

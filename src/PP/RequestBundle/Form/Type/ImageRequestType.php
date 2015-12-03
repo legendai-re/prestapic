@@ -51,8 +51,8 @@ class ImageRequestType extends AbstractType
                 'label'=> 'Envoyer',
                 'attr' => array(                                                                                
                     'class' => 'button'
-                )                
-                ))                                    
+                )))
+            ->add('id',		'hidden')                                                    
         ;               
 		
     }

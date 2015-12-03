@@ -14,6 +14,7 @@ class Constants {
     const REQUEST_PER_PAGE =  10;
     const PROPOSITION_PER_PAGE =  6;
     const PROPOSITION_PER_HOME_PAGE =  10;
+    const PROPOSITION_PER_GALLERY_PAGE =  10;
     const ORDER_BY_DATE =  1;
     const ORDER_BY_UPVOTE =  2;
     const ORDER_BY_INTEREST =  3;

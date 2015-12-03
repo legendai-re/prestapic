@@ -83,6 +83,19 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
                 );
             }
         };
+        
+        this.getEditForm = function(id){
+            var formAction = document.forms["pp_request_api_get_edit_request_form"].action;
+                $http.get(formAction+".html?id="+id).
+                    then(function(response){                                               
+                        $("#requestContent").css("display", "none");
+                        $("#editRequestContent").append(response.data);
+                        $("#editRequestContent").css("display", "block");
+                    },function(response) {
+                        console.log("Request failed : "+response.statusText );                        
+                    }
+                );
+        };
 }]);
 
 containerApp.controller('propositionsController', ['$scope', '$http', '$compile', '$window', function ($scope, $http, $compile, $window) {                                                                                                 

@@ -97,7 +97,7 @@
     {# display galery #}
     <section class="galery">        
         <div class="content">
-            <h1>Gallery ({{ galleryImagesNb }} pictures)</h1>
+            <a target="_self" href="{{ path('pp_user_gallery', {'slug':pageProfile.slug})}}"><h1>Gallery ({{ galleryImagesNb }} pictures)</h1></a>
             {% set break = false %}
             <ul>
             {% for proposition in galleryImages if not break %}
@@ -110,7 +110,7 @@
 
             {% if galleryImagesNb > 4  %}
                 <li>
-                    <a href="" class="more">                    
+                    <a target="_self" href="{{ path('pp_user_gallery', {'slug':pageProfile.slug})}}" class="more">                    
                         +{{ galleryImagesNb-3 }}             
                     </a>
                 </li>

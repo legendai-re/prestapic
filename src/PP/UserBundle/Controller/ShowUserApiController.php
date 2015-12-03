@@ -96,6 +96,51 @@ class ShowUserApiController extends Controller
         
     }
     
+    public function getGalleryAction(Request $request){
+        
+        $page = $request->get("page");
+        $userId = $request->get("userId");
+        
+        /* init repositories */
+        $em = $this->getDoctrine()->getManager();
+        $propositionRepository = $em->getRepository('PPPropositionBundle:Proposition');
+        $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
+        $userRepository = $em->getRepository('PPUserBundle:User');        
+        
+        /* get current user */
+        $currentUser = $this->getUser();
+        $pageProfile = $userRepository->find($userId);
+        
+        $propositionList = $propositionRepository->getPropositionByUser($userId, Constants::PROPOSITION_PER_GALLERY_PAGE, $page);
+        
+        foreach ($propositionList as $proposition){
+            $canUpvoteProposition[$proposition->getId()] = false;
+            $canSelectProposition[$proposition->getId()] = false;            
+            if($this->get('security.context')->isGranted('ROLE_USER') && $currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
+                $canUpvoteProposition[$proposition->getId()] = true;
+            }
+        }
+        
+        $haveNextPage = true;
+        if(sizeof($propositionList) < Constants::PROPOSITION_PER_GALLERY_PAGE)$haveNextPage = false;
+        
+        $nextPage = $page+1;                                
+                        
+        $view = View::create()
+            ->setData(array(                      
+                'haveNextPage'=>$haveNextPage,
+                'page'=>$page,
+                'nextPage' => $nextPage,             
+                'propositionList' => $propositionList,
+                'canUpvoteProposition' => $canUpvoteProposition,
+                'canSelectProposition' => $canSelectProposition                
+        ))
+        ->setTemplate(new TemplateReference('PPUserBundle', 'Gallery', 'propositionList'));
+
+        return $this->getViewHandler()->handle($view);
+        
+    }
+    
     public function patchUserFollowAction(Request $request, $userId){
         
         $response = new JsonResponse();

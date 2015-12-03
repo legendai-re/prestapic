@@ -17,11 +17,11 @@
 
     // souscription au channel "/messages"
     
-    containerApp.run(function ($rootScope, FayeClient) {
+    containerApp.run(['$rootScope','FayeClient', function ($rootScope, FayeClient) {
         FayeClient.subscribe('/messages', function (message) {
             $rootScope.$broadcast('notification', message);            
         });
-    })
+    }])
 
     containerApp.controller('profileController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
 

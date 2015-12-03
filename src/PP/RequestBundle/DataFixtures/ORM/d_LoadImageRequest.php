@@ -39,7 +39,7 @@ class d_LoadImageRequest implements FixtureInterface{
     
     $y = 1;
     $reuseUpvote = 0;
-    for($i=0; $i<500; $i++){
+    for($i=0; $i<10000; $i++){
         
         $nameLenght = rand(3, 8);
         $name = "";

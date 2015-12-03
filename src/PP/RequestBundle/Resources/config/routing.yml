@@ -12,3 +12,7 @@ pp_request_add_request:
     path:     /add/request
     defaults: { _controller: PPRequestBundle:Request:addRequest }
     
+pp_request_edit_request:
+    path:     /edit/request
+    defaults: { _controller: PPRequestBundle:Request:editRequest }
+    

@@ -15,9 +15,12 @@ use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use PP\RequestBundle\Constant\Constants;
+use PP\RequestBundle\Form\Type\ImageRequestType;
 
 class RequestApiController extends Controller
 {
@@ -272,10 +275,15 @@ class RequestApiController extends Controller
                ->getForm()
                ->createView();
             }
-        }                
+        }
+        $haveNextPage = true;
+        if(sizeof($propositionList) < Constants::PROPOSITION_PER_PAGE){
+                $haveNextPage = false;
+        }
+        
         $view = View::create()
             ->setData(array(                      
-                'nbPages'=>$nbPages,
+                'haveNextPage'=>$haveNextPage,
                 'page'=>$page,
                 'nextPage' => $nextPage,             
                 'propositionList' => $propositionList,
@@ -288,6 +296,53 @@ class RequestApiController extends Controller
 
         return $this->getViewHandler()->handle($view);
     }
+    
+    /**
+    * @Security("has_role('ROLE_USER')")
+    */
+    public function getEditRequestAction(Request $request){
+        
+        $response = new Response();
+        
+        $currentUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        
+        $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
+        
+        $id = $request->get("id");
+        
+        if($id != null){
+            $imageRequest = $imageRequestRepository->find($id);
+            if($currentUser->getId() == $imageRequest->getAuthor()->getId()){
+                $tags = $imageRequest->getTags();
+                $tagsStr = '';
+                $i=0;
+                foreach($tags as $tag){
+                    if($i > 0)$tagsStr .= ", ";
+                    $tagsStr .= $tag->getName();
+                    $i++;
+                }
+                $editRequestForm = $this->get('form.factory')->create(new ImageRequestType, $imageRequest, array(            
+                    'action' => $this->generateUrl('pp_request_edit_request'),
+                    'method' => 'POST',
+                ));
+                
+                $editRequestForm->get('tagsStr')->setData($tagsStr);
+                
+                $view = View::create()
+                    ->setData(array(                      
+                        "editRequestForm" => $editRequestForm->createView()
+                ))
+                ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'editRequestForm'));
+
+                return $this->getViewHandler()->handle($view);
+            }else{$response->setStatusCode(Response::HTTP_FORBIDDEN);}
+        }else{$response->setStatusCode(Response::HTTP_NO_CONTENT);}
+        
+        return $response;
+
+    }
+
 
     private function getViewHandler()
     {

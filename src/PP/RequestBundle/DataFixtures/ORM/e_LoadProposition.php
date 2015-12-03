@@ -33,7 +33,8 @@ class e_LoadProposition implements FixtureInterface{
     $reuseTime = 0;
     $y = 1;
     
-    for($i=1; $i<4000; $i++){
+    ini_set('memory_limit', '-1');
+    for($i=1; $i<40000; $i++){
         
         if ($y > $reuseTime){
             $irId = rand(1, $maxIR);

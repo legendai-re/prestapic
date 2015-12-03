@@ -155,6 +155,32 @@ class ShowUserController extends Controller
         ));
     }
     
+    public function galleryAction($slug){
+        
+        /* get session and currentUser*/       
+        $currentUser = $this->getUser();
+        
+        /* init repositories */
+        $em = $this->getDoctrine()->getManager();	
+        $userRepository = $em->getRepository('PPUserBundle:User');        
+        
+        $pageProfile = $userRepository->getUserBySlug($slug);
+        if($pageProfile == null){
+            throw new NotFoundHttpException("L'utilisateur \"".$slug."\" n'existe pas.");			
+        }
+        
+        /* create loadPage form */
+        $loadPropositionForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_get_gallery_form', 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_user_api_get_gallery',array(), true))
+            ->getForm();
+        
+        return $this->render('PPUserBundle:Gallery:gallery.html.twig', array(
+           "pageProfile" => $pageProfile,
+           "loadPropositionForm" => $loadPropositionForm->createView()
+       ));
+        
+    }
+    
     public function editAction(Request $request)
     {
         /* init repositories */

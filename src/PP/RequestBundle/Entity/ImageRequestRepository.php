@@ -56,16 +56,14 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
              $qb = $this->createQueryBuilder('ir')
                         ->select('ir.id')
                         ->distinct(true)
-                        ->leftJoin('ir.tags', 't')
-                        ->leftJoin('ir.category', 'c')
-                        ->leftJoin('ir.author', 'irA')
-                        ->leftJoin('ir.propositions', 'p')
-                        ->leftJoin('p.author', 'pA')
+                        ->leftJoin('ir.author', 'irA')                        
                         ->where('ir.enabled = true AND irA.enabled = true')
             ;
              
             if($searchParam != null){
                 $qb = $qb
+                        ->leftJoin('ir.tags', 't')
+                        ->leftJoin('ir.category', 'c')
                         ->where($qb->expr()->like('ir.title', ':title'))
                         ->setParameter('title', '%'.$searchParam.'%')
                         ->orWhere($qb->expr()->like('t.name', ':name'))
@@ -76,6 +74,7 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
             }
             
             if($tagsParam != null){
+                $qb = $qb->leftJoin('ir.tags', 't');
                 $i = 0;
                 $request = '';
                 foreach ($tagsParam as $tagName){
@@ -90,6 +89,7 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
             }
             
             if($categoriesParam != null){
+                $qb = $qb->leftJoin('ir.category', 'c');
                 $i = 0;
                 $request = '';
                 foreach ($categoriesParam as $cat){
@@ -105,6 +105,8 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
             
             if($concerningMeParam){
                 $qb = $qb
+                        ->leftJoin('ir.propositions', 'p')
+                        ->leftJoin('p.author', 'pA')
                         ->andWhere("irA.id = :userId2 OR pA.id = :userId2")
                         ->setParameter('userId2', $userId);
             }
