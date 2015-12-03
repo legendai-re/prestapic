@@ -1,1 +1,124 @@
-var IMAGE_REQUEST=1;var PROPOSITION=2;var USER=3;angular.element(document).ready(function(){var a=document.getElementById("containerApp");angular.bootstrap(a,["containerApp"])});var containerApp=angular.module("containerApp",["ngRoute"]);containerApp.config(["$locationProvider",function(a){a.html5Mode(true)}]);containerApp.run(["$rootScope","$http",function(a,c){var b=document.forms.pp_dashboard_content_api_get_content_form.action;c.get(b).then(function(d){a.content=d.data},function(d){console.log(d);console.log("Request failed : "+d.statusText)})}]);containerApp.controller("categoriesController",["$scope","$rootScope","$http","$compile","$location",function(b,a,e,c,d){b.newCategory={name:null};this.postCategory=function(){b.postCategoryError=null;if(b.newCategory.name){if(confirm("Do you realy want to add category : "+b.newCategory.name+" ?")){e({method:"POST",url:a.content.postCategoryUrl,data:JSON.stringify(b.newCategory)}).then(function(f){a.content.categories[f.data.id]={id:f.data.id,name:b.newCategory.name};b.newCategory.name=null;showBannerAlert("success","Well done !","Category added")},function(f){b.newCategory.name=null;if(f.status==409){showBannerAlert("danger","Error 409 ! ","Category already exist")}else{showBannerAlert("danger","Error "+f.status+" !","")}})}}else{showBannerAlert("warning","Warning","You must enter some value")}};this.patchCategory=function(g){var f=prompt("Enter a new name",a.content.categories[g].name);if(f!=null){e({method:"PATCH",url:a.content.patchCategoryUrl,data:JSON.stringify({id:g,name:f})}).then(function(h){a.content.categories[g].name=f;showBannerAlert("success","Well done !","Category Modified")},function(h){if(h.status==409){showBannerAlert("danger","Error 409 ! ","Category already exist")}else{showBannerAlert("danger","Error "+h.status+" !","")}})}};this.deleteCategory=function(g){var f=prompt("Enter the category's name to delete it : ");if(f==a.content.categories[g].name){e({method:"POST",url:a.content.deleteCategoryUrl,data:JSON.stringify({catId:g})}).then(function(h){a.content.categories[g]=null;showBannerAlert("success","Well done !","Category deleted ")},function(h){showBannerAlert("danger","Error "+h.status+" !","")})}else{showBannerAlert("warning","Warning","Text entered not match with category's name")}}}]);containerApp.controller("tagsController",["$scope","$rootScope","$http","$compile","$location",function(b,a,e,c,d){this.deleteTag=function(g){var f=prompt("Enter the tag's name to delete it : ");if(f==a.content.tags[g].name){e({method:"POST",url:a.content.deleteTagUrl,data:JSON.stringify({id:g})}).then(function(h){a.content.tags[g]=null;showBannerAlert("success","Well done !","Tag deleted ")},function(h){showBannerAlert("danger","Error "+h.status+" !","")})}else{showBannerAlert("warning","Warning","Text entered not match with tag's name")}}}]);
+    
+    var IMAGE_REQUEST = 1;
+    var PROPOSITION = 2;
+    var USER = 3;
+    angular.element(document).ready(function() {
+        var myDiv2 = document.getElementById("containerApp");
+        angular.bootstrap(myDiv2, ["containerApp"]);
+    });
+
+    var containerApp = angular.module('containerApp',  ['ngRoute']);
+    
+    containerApp.config(['$locationProvider', function ($locationProvider) {
+        $locationProvider.html5Mode(true);
+    }]);          
+    
+    containerApp.run(['$rootScope', '$http',function ($rootScope, $http) {            
+        
+        var formAction = document.forms["pp_dashboard_content_api_get_content_form"].action;                                
+        $http.get(formAction).
+            then(function(response){
+                $rootScope.content = response.data;
+            },function(response) {
+                console.log(response);
+                console.log("Request failed : "+response.statusText );                            
+            }
+        );
+
+    }]);
+    
+    containerApp.controller('categoriesController', ['$scope', '$rootScope', '$http', '$compile', '$location', function ($scope, $rootScope, $http, $compile, $location) {
+        
+        $scope.newCategory = {
+            name: null
+        };
+        
+        this.postCategory = function(){            
+            $scope.postCategoryError = null;
+            if($scope.newCategory.name){
+                if (confirm('Do you realy want to add category : '+$scope.newCategory.name+" ?")) {
+                    $http({
+                            method: 'POST',
+                            url: $rootScope.content.postCategoryUrl,                    
+                            data: JSON.stringify($scope.newCategory)
+                             }).
+                            then(function(response){
+                                $rootScope.content.categories[response.data.id] = {id: response.data.id, name: $scope.newCategory.name};
+                                $scope.newCategory.name = null;
+                                showBannerAlert("success", "Well done !", "Category added");
+                            },function(response) {                            
+                                $scope.newCategory.name = null;                                
+                                if(response.status == 409){
+                                    showBannerAlert("danger", "Error 409 ! ", "Category already exist");                               
+                                }else {
+                                    showBannerAlert("danger", "Error "+response.status+" !", "");
+                                }                            
+                            }
+                    );
+                }
+            }else showBannerAlert("warning", "Warning", "You must enter some value");;
+        };                
+        
+        this.patchCategory = function(id){
+            var newName = prompt("Enter a new name", $rootScope.content.categories[id].name);
+            if (newName != null) {
+                $http({
+                    method: 'PATCH',
+                    url: $rootScope.content.patchCategoryUrl,                    
+                    data: JSON.stringify({id: id, name: newName})
+                     }).
+                    then(function(response){
+                        $rootScope.content.categories[id].name = newName;                        
+                        showBannerAlert("success", "Well done !", "Category Modified");
+                    },function(response) {                            
+                        if(response.status == 409){
+                            showBannerAlert("danger", "Error 409 ! ", "Category already exist");  
+                        }else showBannerAlert("danger", "Error "+response.status+" !", "");
+                    }
+                );
+            }           
+        }
+        
+        this.deleteCategory = function(id){
+            var deleteName = prompt("Enter the category's name to delete it : ");
+            if (deleteName == $rootScope.content.categories[id].name) {
+                $http({
+                    method: 'POST',
+                    url: $rootScope.content.deleteCategoryUrl,                    
+                    data: JSON.stringify({catId: id})
+                     }).
+                    then(function(response){
+                        $rootScope.content.categories[id] = null;
+                        showBannerAlert("success", "Well done !", "Category deleted ");                        
+                    },function(response) {
+                        showBannerAlert("danger", "Error "+response.status+" !", "");
+                    }
+                );
+           }else showBannerAlert("warning", "Warning", "Text entered not match with category's name");          
+       }
+        
+    }]);
+    
+    containerApp.controller('tagsController', ['$scope', '$rootScope', '$http', '$compile', '$location', function ($scope, $rootScope, $http, $compile, $location) {
+        
+        this.deleteTag = function(id){
+            var deleteName = prompt("Enter the tag's name to delete it : ");
+            if (deleteName == $rootScope.content.tags[id].name) {
+                $http({
+                    method: 'POST',
+                    url: $rootScope.content.deleteTagUrl,                    
+                    data: JSON.stringify({id: id})
+                     }).
+                    then(function(response){
+                        $rootScope.content.tags[id] = null;                        
+                        showBannerAlert("success", "Well done !", "Tag deleted ");
+                    },function(response) {
+                        showBannerAlert("danger", "Error "+response.status+" !", "");
+                    }
+                );
+           }else showBannerAlert("warning", "Warning", "Text entered not match with tag's name");          
+       }
+        
+    }]);
+    
+    

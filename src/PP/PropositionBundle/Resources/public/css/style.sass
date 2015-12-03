@@ -1,0 +1,221 @@
+section.slideshow
+	background: rgba(0,0,0,.97)
+	width: 100%
+	height: 100%
+	position: fixed
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	
+	img.single-photo
+		max-width: 100%
+		max-height: 100%
+		position: absolute
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+	
+	div.overlay
+		background: -webkit-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		background: -o-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		background: -ms-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		background: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		position: absolute
+		width: 100%
+		height: 100%
+		top: 0
+		left: 0
+	
+	.content-slideshow
+		width: 100%
+		height: 100%
+		color: white
+		position: absolute
+		bottom: 0
+		left: 0
+		max-width: 100%
+		
+		.action-top
+			width: 100%
+			height: 50px
+			position: absolute
+			left: 0
+			top: 0
+			
+			.action-group
+				width: 33%
+				display: block
+				position: absolute
+				top: 0
+				
+				&.left
+					left: 0
+					padding-left: 15px
+				
+				&.center
+					left: 50%
+					transform: translateX(-50%)
+					text-align: center
+					
+				&.right
+					right: 0
+					text-align: right
+					
+				a.selecting-prop
+					color: rgba(255,255,255,0)
+					display: inline-block
+					margin-top: 15px
+					padding: 5px 5px 5px 10px
+					font-size: 15px
+					line-height: 20px
+					text-transform: uppercase
+					
+					&:hover, &.selected
+						color: rgba(0,0,0,0.5)
+						background: rgba(255,255,255,0.5)
+						border-radius: 3px
+						border: 1px solid rgba(0,0,0,0.1)
+						
+						&:after
+							color: #EB154C
+					
+					&:after
+						margin-left: 5px
+						display: block
+						text-align: center
+						font-family: "icomoon"
+						speak: none
+						font-size: 20px
+						font-style: normal
+						font-weight: normal
+						font-variant: normal
+						text-transform: none
+						text-align: center
+						line-height: 1
+						-webkit-font-smoothing: antialiased
+						-moz-osx-font-smoothing: grayscale
+						content: "\e906"
+						float: right
+						color: rgba(255,255,255,.75)
+						
+				a.icon
+					background: rgba(255,255,255,.5)
+					width: 32px
+					height: 32px
+					margin: 15px 5px
+					display: inline-block
+					text-align: center
+					font-family: "icomoon"
+					speak: none
+					font-size: 25px
+					font-style: normal
+					font-weight: normal
+					font-variant: normal
+					text-transform: none
+					line-height: 1
+					-webkit-font-smoothing: antialiased
+					-moz-osx-font-smoothing: grayscale
+					
+					&.share
+						background: red
+						content: "S"
+						
+					&.download
+						background: green
+						content: "D"
+					
+					&.report
+						background: blue
+						content: "R"
+					
+					&.delete
+						background: blue
+						content: "D"
+					
+				button.button-close
+					background: transparent
+					border: 0
+					font-size: 32px
+					padding: 5px 20px 5px 10px
+					font-family: -apple-system,".SFNSText-Regular","Helvetica Neue","Roboto","Segoe UI",sans-serif
+					letter-spacing: 0
+					font-weight: 300
+					font-style: normal
+					color: #777
+		
+		.img-title
+			position: absolute
+			width: auto
+			max-width: 100%
+			height: auto
+			left: 0
+			bottom: 0
+			padding: 0 20px 20px
+			
+			a.avatar
+				background: rgba(255, 255, 255, 0.25)
+				width: 60px
+				height: 60px
+				overflow: hidden
+				border-radius: 50%
+				display: block
+				float: left
+				border: 1px solid rgba(255,255,255,.5)
+				
+				img
+					width: 60px
+					height: 60px
+					
+			.infos
+				float: left
+				margin-left: 10px
+				
+				.name
+					font-size: 28px
+					display: inline
+					font-weight: 300
+				
+				.author
+					font-size: 18px
+					
+					a
+						color: rgba(255, 255, 255, 0.75)
+						font-weight: bold
+		.action-bottom
+			position: absolute
+			bottom: 0
+			right: 0
+			padding: 0 20px 20px
+			
+			a.count-vote
+				font-size: 35px
+				font-weight: 300
+				color: rgba(255,255,255,.75)
+				display: block
+
+				&:hover
+					color: #00D084
+
+				&.voted
+					color: #00D084
+					text-shadow: 0 0 10px rgba(0,0,0,.25)
+
+				&:after
+					display: block
+					width: 25px
+					height: 25px
+					padding: 10px
+					text-align: center
+					font-family: "icomoon"
+					speak: none
+					font-size: 25px
+					font-style: normal
+					font-weight: normal
+					font-variant: normal
+					text-transform: none
+					line-height: 1
+					-webkit-font-smoothing: antialiased
+					-moz-osx-font-smoothing: grayscale
+					content: "\e905"
+					float: right

@@ -1144,7 +1144,10 @@ section.main
 						height: 260px
 
 				a.overlay
-					background: url(../images/img-title-mini.png) repeat-x bottom
+					background: -webkit-linear-gradient(transparent 60%, rgba(0,0,0,0.7) 100%)
+					background: -o-linear-gradient(transparent 60%, rgba(0,0,0,0.7) 100%)
+					background: -ms-linear-gradient(transparent 60%, rgba(0,0,0,0.7) 100%)
+					background: linear-gradient(transparent 60%, rgba(0,0,0,0.7) 100%)
 					width: 380px
 					height: 260px
 					display: block
@@ -1436,7 +1439,7 @@ section.main
 					display: inline
 
 					&:after
-						content: "·"
+						content: "-"
 						margin: 0 5px
 
 				li:last-child:after

@@ -1,1 +1,135 @@
-angular.element(document).ready(function(){var a=document.getElementById("containerApp");angular.bootstrap(a,["containerApp"])});var containerApp=angular.module("containerApp",["ngRoute"]);containerApp.config(["$locationProvider",function(a){a.html5Mode(true)}]);containerApp.controller("requestsController",["$scope","$http","$compile","$location",function(m,j,c,d){this.contentToDisplay=$("#contentToDisplaySelect").val();this.displayMode=$("#displayModeSelect").val();var l="?";var b="search_query=";var h="tags=";var n="categories=";var a="me=false";this.init=function(){if(d.search().search_query!=null){b+=d.search().search_query}if(d.search().tags!=null){h+=d.search().tags}if(d.search().categories!=null){n+=d.search().categories}if(d.search().me!=null){a="me=true"}l+=b+"&"+h+"&"+n+"&"+a;this.update()};var g="#loadPageTrigger2";var i=2;var e=function(p){var o=document.forms["pp_request_api_get_request_form_"+p].action;document.getElementById("loadingGif").style.display="block";j.get(o+".html"+l).then(function(q){var r=angular.element(q.data);c(r)(m);angular.element(document.querySelector("#loadPage"+p)).append(r);document.getElementById("loadingGif").style.display="none"},function(q){console.log("Request failed : "+q.statusText)})};this.update=function(){console.log(this.contentToDisplay);$("#loadPage1").html("");g="#loadPageTrigger2";i=2;l="?"+b+"&"+h+"&"+n+"&"+a+"&display_mode="+this.displayMode+"&content_to_display="+this.contentToDisplay;e(1)};var k=true;this.postRequestVote=function(q){if(k){k=false;$("#imageRequestUpvoteButton_"+q).addClass("voted");document.getElementById("imageRequestUpvoteButton_"+q).innerHTML=parseInt($("#imageRequestUpvoteButton_"+q).html())+1;var p={id:q};var o=document.forms.pp_request_api_patch_request_vote.action;j({method:"PATCH",url:o,data:JSON.stringify(p)}).then(function(r){k=true},function(r){console.log("Request failed : "+r.statusText);k=true})}};var f=true;this.postPropositionVote=function(o){if(f){f=false;$("#propositionUpvoteButton_"+o).addClass("voted");document.getElementById("propositionUpvoteButton_"+o).innerHTML=parseInt($("#propositionUpvoteButton_"+o).html())+1;var q={id:o};var p=document.forms.pp_proposition_api_patch_proposition_vote_form.action;j({method:"PATCH",url:p,data:JSON.stringify(q)}).then(function(r){f=true},function(r){console.log("Request failed : "+r.statusText);f=true})}};$(window).scroll(function(){if($(g).offset()!=null){var q=$(g).offset().top,r=$(g).outerHeight(),p=$(window).height(),o=$(this).scrollTop()}if(o>(q+r-p)){e(i);i++;g="#loadPageTrigger"+i}})}]);
+    
+    angular.element(document).ready(function() {
+        var myDiv2 = document.getElementById("containerApp");
+        angular.bootstrap(myDiv2, ["containerApp"]);
+    });
+
+    var containerApp = angular.module('containerApp',  ['ngRoute']);
+    
+    containerApp.config(['$locationProvider', function ($locationProvider) {
+        $locationProvider.html5Mode(true);
+    }]);          
+        
+                        
+    containerApp.controller('requestsController', ['$scope', '$http', '$compile', '$location', function ($scope, $http, $compile, $location) {                                                                                                 
+            
+            this.contentToDisplay = $('#contentToDisplaySelect').val();
+            this.displayMode = $('#displayModeSelect').val();
+            
+            var getParams = "?";
+            var searchQueryParam = 'search_query=';
+            var tagListParam = 'tags='; 
+            var catListParam = 'categories=';
+            var concerningMeParam = 'me=false';
+            this.init = function(){
+                if($location.search().search_query != null){
+                    searchQueryParam += $location.search().search_query;  
+                }
+                if($location.search().tags != null){
+                    tagListParam += $location.search().tags;  
+                }
+                if($location.search().categories != null){
+                    catListParam += $location.search().categories;  
+                }
+                 if($location.search().me != null){
+                    concerningMeParam = "me=true";  
+                }
+                getParams += searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam;
+                this.update();                                
+            };
+            
+            var nextLoadTrigger = '#loadPageTrigger2';            
+            var nextPage = 2;                                  
+            
+            var getRequests = function(page){
+                var formAction = document.forms["pp_request_api_get_request_form_"+page].action;
+                document.getElementById('loadingGif').style.display = 'block';                    
+                $http.get(formAction+".html"+getParams).
+                    then(function(response) {
+                        
+                        var newPage = angular.element(response.data);                        
+                        $compile(newPage)($scope);                             
+                        angular.element( document.querySelector('#loadPage'+page)).append(newPage);  
+                        document.getElementById('loadingGif').style.display = 'none';
+
+                    }, function(response) {
+                     console.log("Request failed : "+response.statusText );                        
+                    }
+                );                                            
+            };                       
+            
+            this.update = function(){
+                console.log(this.contentToDisplay);
+                $("#loadPage1").html("");
+                nextLoadTrigger = '#loadPageTrigger2';            
+                nextPage = 2;
+                 getParams = "?"+searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam+"&display_mode="+this.displayMode+"&content_to_display="+this.contentToDisplay;
+                getRequests(1);
+            };
+            
+            var readyForRequestVote = true;
+            this.postRequestVote = function(id){
+                if(readyForRequestVote){
+                    readyForRequestVote=false;
+                    $("#imageRequestUpvoteButton_"+id).addClass("voted");
+                    document.getElementById('imageRequestUpvoteButton_'+id).innerHTML = parseInt($('#imageRequestUpvoteButton_'+id).html())+1;                            
+                    var myData = {
+                        id: id
+                    }
+                    var formAction = document.forms["pp_request_api_patch_request_vote"].action;
+                    $http({
+                        method: 'PATCH',
+                        url: formAction,                    
+                        data: JSON.stringify(myData)
+                         }).               
+                        then(function(response) {
+                            readyForRequestVote = true;                            
+                        }, function(response) {
+                            console.log("Request failed : "+response.statusText );
+                            readyForRequestVote = true;
+                        }                                 
+                    );
+                }
+            }
+            
+            var readyForPropositionVote = true;
+            this.postPropositionVote = function(propositionId){
+                if(readyForPropositionVote){
+                    readyForPropositionVote = false;
+                    $("#propositionUpvoteButton_"+propositionId).addClass("voted");
+                    document.getElementById('propositionUpvoteButton_'+propositionId).innerHTML = parseInt($('#propositionUpvoteButton_'+propositionId).html())+1; 
+                    var myData = {
+                        id: propositionId
+                    }
+                    var formAction = document.forms["pp_proposition_api_patch_proposition_vote_form"].action;
+                    $http({
+                        method: 'PATCH',
+                        url: formAction,                    
+                        data: JSON.stringify(myData)
+                         }).
+                        then(function(response){
+                            readyForPropositionVote = true;
+                        },function(response) {
+                            console.log("Request failed : "+response.statusText );
+                            readyForPropositionVote = true;
+                        }
+                    );
+                }
+            }
+            
+            $(window).scroll(function() {
+                if($(nextLoadTrigger).offset() != null){
+                var hT = $(nextLoadTrigger).offset().top,
+                    hH = $(nextLoadTrigger).outerHeight(),
+                    wH = $(window).height(),
+                    wS = $(this).scrollTop();
+                }
+                if (wS > (hT+hH-wH)){
+                   getRequests(nextPage);
+                   nextPage++;
+                   nextLoadTrigger = '#loadPageTrigger'+nextPage;                                
+                }
+            });
+                       
+    }]);
+       
