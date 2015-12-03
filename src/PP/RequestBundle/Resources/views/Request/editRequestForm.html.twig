@@ -1,0 +1,19 @@
+
+
+{% if  is_granted("ROLE_USER") %}
+    {% if  editRequestForm is defined %}                      
+        <div class="new-demand">            
+            <div class="comp-area">
+                {{ form_start(editRequestForm, {'attr': {'class': 'addRequestForm'}})  }}                                            
+                    {{ form_row(editRequestForm.title) }}
+                    
+                    {{ form_row(editRequestForm.request) }} 
+                    {{ form_row(editRequestForm.category) }} 
+                    {{ form_row(editRequestForm.tagsStr) }} 
+                    {{ form_row(editRequestForm.save) }} 
+                   
+                {{ form_end(editRequestForm) }}
+            </div>
+         </div>
+    {% endif %}
+{% endif %}
