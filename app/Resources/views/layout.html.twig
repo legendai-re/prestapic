@@ -8,11 +8,13 @@
 
     <title>{% block title %} Prestapic{% endblock %}</title>
 
-    {% stylesheets filter='sass, cssrewrite, ?yui_css'
-        '@PPRequestBundle/Resources/public/css/style.sass'        
-    %}
+
+    {% stylesheets filter='cssrewrite, sass, ?yui_css'
+        '@PPRequestBundle/Resources/public/css/style.sass'
+        '@PPPropositionBundle/Resources/public/css/style.sass' %}
         <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
     {% endstylesheets %}        
+
 </head>
 
 <body id="body">
@@ -59,7 +61,11 @@
                                 {% endblock %}
                         </div>
                 </section>
-        </div>                                                        
+        </div>
+
+        {% block propositionPopup %}
+            {{ include ("PPPropositionBundle:proposition:propositionPopup.html.twig") }}
+        {% endblock %}                                                        
         <section class="overlay sign" id="signInUpOver" style="display:none;" >
 
             <button class="button-close"    id="signInUpOverClose" >×</button>
