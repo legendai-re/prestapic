@@ -230,7 +230,7 @@ class RequestController extends Controller
         return $this->redirect($this->generateUrl('pp_request_homepage', array()));
     }
     
-    public function viewAction($slug,$page, Request $request)
+    public function viewAction($slug, Request $request)
     {   
        
        /* init repositories */

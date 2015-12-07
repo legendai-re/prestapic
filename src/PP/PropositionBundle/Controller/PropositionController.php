@@ -53,4 +53,23 @@ class PropositionController extends Controller
             'propositionsList' => $propositionsList
         ));
     }
+    
+    public function propositionPopupAction(){
+        
+         $getPropositionForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_get_proposition_form', 'form', array(), array())         
+               ->setAction($this->generateUrl('pp_proposition_api_get_proposition', array(), true))
+               ->getForm()
+               ->createView();
+        
+         $upvotePropositionForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_patch_proposition_vote_form', 'form', array(), array())         
+               ->setAction($this->generateUrl('pp_proposition_api_patch_proposition_vote', array(), true))
+               ->getForm()
+               ->createView();
+        
+        return $this->render('PPPropositionBundle:proposition:propositionPopup.html.twig', array(
+            'getPropositionForm' => $getPropositionForm,
+            'upvotePropositionForm' => $upvotePropositionForm            
+        ));
+        
+    }
 }

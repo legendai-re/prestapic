@@ -10,8 +10,11 @@
         $locationProvider.html5Mode(true);
     }]);          
         
-                        
-    containerApp.controller('requestsController', ['$scope', '$http', '$compile', '$location', function ($scope, $http, $compile, $location) {                                                                                                 
+    containerApp.run(['$rootScope', '$http',function ($rootScope, $http) {   
+            $rootScope.hello = "hello";
+    }]);
+
+    containerApp.controller('requestsController', ['$scope', '$rootScope', '$http', '$compile', '$location', function ($scope, $rootScope, $http, $compile, $location) {                                                                                                 
             
             this.contentToDisplay = $('#contentToDisplaySelect').val();
             this.displayMode = $('#displayModeSelect').val();
@@ -115,8 +118,16 @@
                         }
                     );
                 }
-            }
+            };            
             
+            this.showPopup = function(id){
+                var message = {
+                    id: id
+                }
+                angular.element(document.getElementById('popupPropApp')).scope().$emit('showPopup', message);                                                
+            };
+            
+                       
             $(window).scroll(function() {
                 if($(nextLoadTrigger).offset() != null){
                 var hT = $(nextLoadTrigger).offset().top,
@@ -129,7 +140,6 @@
                    nextPage++;
                    nextLoadTrigger = '#loadPageTrigger'+nextPage;                                
                 }
-            });
-                       
+            });                       
     }]);
-       
+   

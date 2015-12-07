@@ -3,8 +3,8 @@ pp_request_homepage:
     defaults: { _controller: PPRequestBundle:Request:index}
 
 pp_request_view:
-    path:     /request/{slug}/{page}
-    defaults: { _controller: PPRequestBundle:Request:view, page:1 }
+    path:     /request/{slug}
+    defaults: { _controller: PPRequestBundle:Request:view}
     requirements:
         page: \d+
 

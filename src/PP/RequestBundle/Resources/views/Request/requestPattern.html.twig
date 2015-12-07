@@ -39,7 +39,7 @@
     {% set break = false %}
     <div class="replies" >
         {% for proposition in propositionsList['imageRequest_'~imageRequest.id] if not break %}                
-            <a target="_self" class="reply" href="{{ asset(proposition.image.webPath("original"))}}"> 
+            <a target="_self" class="reply" href="" ng-click="requests.showPopup({{ proposition.id }})">
                 <img 
                 bn-lazy-src="{{ asset(proposition.image.webPath("380x260")) }}"
                 alt="{{ proposition.image.alt }}"

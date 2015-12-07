@@ -1475,4 +1475,500 @@ section.overlay
 		font-family: -apple-system,".SFNSText-Regular","Helvetica Neue","Roboto","Segoe UI",sans-serif
 		letter-spacing: 0
 		font-weight: 300
+		font-style: normal
+		color: #777
 
+		&:hover
+			color: $main-color
+
+	.overlay-content
+		width: 100%
+		max-width: 750px
+		height: auto
+		position: absolute
+		top: 50%
+		left: 50%
+		@include vendor-prefix(transform, translate(-50%, -50%))
+
+		.overlay-title
+			background: url(../images/logo.png) no-repeat
+			background-size: cover
+			width: 60px
+			height: 48px
+			text-indent: -9999px
+			display: block
+			margin: 0 auto
+
+		p.ind
+			font-size: 20px
+			color: #777
+			text-align: center
+
+		.overlay-actions
+			width: 100%
+			margin-bottom: 20px
+			display: block
+			overflow: hidden
+
+			.signin-form
+				width: 50%
+				padding: 30px
+				border-right: 1px solid #aaa
+				display: block
+				float: left
+
+				form
+					input
+						background: transparent
+						margin: 0 0 10px
+						padding: 10px
+						font-size: 20px
+						font-weight: 300
+						border: none
+						border-bottom: 1px solid #ccc
+
+						&:focus
+							border-bottom: 2px solid $main-color
+							margin-bottom: 9px
+
+					input[type="text"], input[type="password"], input[type="mail"]
+						width: 100%
+
+					.remember
+						width: 100%
+						display: inline-block
+						margin: 0
+
+					.button
+						border-color: $main-color
+						color: $main-color
+						margin: 20px 10px 0 0
+
+						&:hover
+							background: $main-color
+							color: white
+
+			.signup-form
+				width: 50%
+				padding: 30px
+				display: block
+				float: left
+
+				.message
+					font-size: 30px
+					color: #777
+					font-weight: 300
+
+				.button
+					border-color: #777
+					color: #777
+
+					&:hover
+						background: #777
+						color: white
+					margin: 20px 10px 0 0
+
+		.terms
+			text-align: center
+			font-size: 12px
+			color: #aaa
+
+section.overlay-messages
+	position: fixed
+	overflow: auto
+	top: 0
+	left: 0
+	bottom: 0
+	right: 0
+	display: block
+	z-index: 900
+	background-color: rgba(0,0,0,.5)
+	width: 100%
+	padding: 0
+	margin: 0
+	border: 0
+
+	.messages
+		background: white
+		width: 900px
+		height: 100%
+		max-height: 600px
+		position: absolute
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+		border-radius: 3px
+		border: 1px solid #ccc
+		overflow: hidden
+
+		.container
+			position: relative
+			display: -webkit-flex
+			display: -moz-box
+			display: -ms-flexbox
+			display: flex
+			flex-direction: column
+			width: 100%
+			height: 100%
+
+			.message-top
+				width: 100%
+				height: 50px
+				background: white
+				display: -webkit-flex
+				display: -moz-box
+				display: -ms-flexbox
+				display: flex
+				flex-direction: row
+				font-size: 20px
+				color: #444
+				border-bottom: 1px solid #ccc
+				
+				.inbox-top
+					width: 300px
+					padding: 10px 15px
+					border-right: 1px solid #ccc
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					position: relative
+
+					a.new-message
+						position: absolute
+						top: 8px
+						right: 8px
+
+						&:before
+							display: block
+							width: 18px
+							height: 18px
+							padding: 5px
+							text-align: center
+							font-family: "icomoon"
+							speak: none
+							font-size: 18px
+							font-style: normal
+							font-weight: normal
+							font-variant: normal
+							text-transform: none
+							line-height: 1
+							-webkit-font-smoothing: antialiased
+							-moz-osx-font-smoothing: grayscale
+							content: "\e902"
+
+				.chat-top
+					width: 600px
+					padding: 10px 15px
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					
+					.button-close
+						float: right
+						position: absolute
+						border: none
+						background: transparent
+						padding: 2px 15px
+						margin: 0
+						top: 0
+						right: 0
+						color: #ccc
+						font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif
+						letter-spacing: 0
+						font-weight: 300
+						font-style: normal
+						font-size: 32px
+						
+						&:hover
+							color: $main-color
+
+			.message-bottom
+				background: white
+				width: 100%
+				height: 100%
+				display: -webkit-flex
+				display: -moz-box
+				display: -ms-flexbox
+				display: flex
+				flex-direction: row
+				align-items: stretch
+				overflow: hidden
+
+				.inbox
+					background: #fafafa
+					width: 300px
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					border-right: 1px solid #ccc
+					overflow-x: hidden
+					overflow-y: auto
+					
+					ul.list-mess
+						margin: 0
+						padding: 0
+						
+						li.message
+							list-style: none
+							border-bottom: 1px solid #ccc
+							
+							a
+								display: block
+								width: 300px
+								height: 78px
+								padding: 15px
+								
+								&:hover, &.open
+									background: #efefef
+								
+								.avatar
+									width: 48px
+									height: 48px
+									border-radius: 50%
+									overflow: hidden
+									float: left
+									margin-right: 15px
+									
+									img
+										width: 48px
+										height: 48px
+								
+								.desc
+									display: block
+									float: left
+									
+									.name
+										font-size: 17px
+										color: #444
+										
+									.last-message
+										font-size: 15px
+										color: #777
+
+				.chat-container
+					background: white
+					width: 600px
+					height: auto
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					flex-direction: column
+
+					.chat-conversation
+						display: -webkit-flex
+						display: -moz-box
+						display: -ms-flexbox
+						display: flex
+						flex: 1 auto
+						padding: 15px
+						position: relative
+						overflow: auto
+						display: block
+
+						.chat-scroller
+							display: -webkit-flex
+							display: -moz-box
+							display: -ms-flexbox
+							display: flex
+							flex: 1 auto
+							flex-direction: column
+							align-self: flex-end
+
+							.message
+								height: auto
+								display: -webkit-flex
+								display: -moz-box
+								display: -ms-flexbox
+								display: flex
+								margin: 5px 0
+
+								.message-content
+									max-width: 360px
+									min-height: 40px
+									padding: 11px 15px
+									float: left
+									background: #ededed
+									color: #444
+									border-radius: 3px
+									font-size: 15px
+									position: relative
+									margin-left: 5px
+									justify-content: flex-start
+									
+									&:before
+										top: auto
+										bottom: 6px
+
+										border-style: solid
+										border-width: 5px
+										content: ""
+										display: block
+										position: absolute
+										height: 0
+										width: 0
+										border-color: #ededed
+									
+										border-left-width: 0!important
+										//border-left-width: 5px!important
+										border-bottom-color: transparent!important
+										border-left-color: transparent!important
+										border-top-color: transparent!important
+										left: -10px
+										top: auto
+										-webkit-transform: translateX(100%) translateY(-50%)
+										-ms-transform: translateX(100%) translateY(-50%)
+										transform: translateX(100%) translateY(-50%)
+
+								&.me
+									float: right
+									justify-content: flex-end
+		
+									.message-content
+										float: right
+										background: $main-color
+										color: white
+										margin-left: 0
+										margin-right: 5px
+										
+										&:before
+											border-color: $main-color
+											right: 0
+											left: initial
+											border-left-width: 5px!important
+											border-left-color: $main-color!important
+											border-right-width: 0!important
+											border-right-color: transparent!important
+									
+									.avatar
+										float: right
+										margin: 0 0 0 10px
+										order: 0
+										
+								.avatar
+									width: 40px
+									height: 40px
+									overflow: hidden
+									border-radius: 50%
+									float: right
+									margin-right: 10px
+									align-self: flex-end
+									order: -1
+
+									img
+										width: 40px
+										height: 40px
+						
+						.message-state
+							font-size: 15px
+							color: #ccc
+							text-align: right
+							padding-right: 65px
+						
+						.message-date
+							font-size: 16px
+							color: #777
+							text-align: center
+							padding: 15px 0 5px
+							display: block
+
+					.chat-composer
+						background: rgba(0,0,0,.5)
+						width: 100%
+						height: auto
+						min-height: 50px
+						float: right
+						display: -webkit-flex
+						display: -moz-box
+						display: -ms-flexbox
+						display: flex
+						align-self: flex-end
+						border-top: 1px solid #ccc
+						position: relative
+
+						form
+							width: 100%
+
+							input
+								width: 100%
+								height: 100%
+								padding: 15px
+								border: none
+
+							button
+								background: #ccc
+								border: none
+								color: #777
+								width: 30px
+								height: 30px
+								overflow: hidden
+								border-radius: 50%
+								speak: none
+								font-style: normal
+								font-weight: normal
+								font-variant: normal
+								text-transform: none
+								line-height: 1
+								-webkit-font-smoothing: antialiased
+								-moz-osx-font-smoothing: grayscale
+								font-family: "icomoon"
+								content: "\e904"
+								text-indent: -9999px
+								position: absolute
+								top: 10px
+								right: 10px
+								bottom: 10px
+								
+								&:hover
+									background: #ccc
+									color: #777
+								
+								&:active
+									background: #777
+									color: white
+								outline: none
+
+.fixed
+	section.page
+		margin-top: 60px
+		
+	section.alert-banner
+		top: 0
+		position: fixed
+
+// Loading content
+.load-content
+	display: block
+	width: 54px
+	margin: 0 auto
+	padding: 40px 0 80px
+
+	.bubble, &:before, &:after
+		content: ""
+		display: inline-block
+		width: 15px
+		height: 15px
+		border-radius: 15px
+		background-color: rgba(0, 0, 0, 0.25)
+
+	&:before
+		animation: pop-wave 1.2s .2s linear infinite
+
+	.bubble
+		animation: pop-wave 1.2s .4s linear infinite
+
+	&:after
+		animation: pop-wave 1.2s .6s linear infinite
+
+@keyframes pop-wave
+	0%
+		transform: scale(1)
+	50%
+		transform: scale(0)
+	75%
+		transform: scale(0.75)
+	100%
+		transform: scale(1)

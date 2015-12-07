@@ -4,14 +4,90 @@ namespace PP\PropositionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use PP\NotificationBundle\JsonNotificationModel\JsonNotification;
 use PP\NotificationBundle\Entity\NotificationSelected;
 use PP\NotificationBundle\Entity\Notification;
 use PP\NotificationBundle\Constant\NotificationType;
 
+use PP\PropositionBundle\JsonModel\JsonPropositionPopupModel;
+use PP\PropositionBundle\JsonModel\JsonUserModel;
+use PP\PropositionBundle\JsonModel\JsonIRPopupModel;
+
 class PropositionApiController extends Controller
 {
+    
+    
+    public function getPropositionAction(Request $request){
+        $propositionId = $request->get("id");
+        
+        $response = new Response();
+               
+        /* init repositories */
+        $em = $this->getDoctrine()->getManager();
+        $propositionRepository = $em->getRepository('PPPropositionBundle:Proposition');                        
+        $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
+        $userRepository = $em->getRepository('PPUserBundle:User');
+                
+        $proposition = $propositionRepository->find($propositionId);
+        $imageRequest = $proposition->getImageRequest();        
+        
+        $irAuthor = $imageRequest->getAuthor();
+        $propAuthor = $proposition->getAuthor();
+        $isProAuthor = false;
+        $isIrAuthor = false;
+        
+        if ($this->get('security.context')->isGranted('ROLE_USER')) {            
+            $currentUser = $this->getUser();
+            if($currentUser != null && $currentUser->getId() == $propAuthor->getId()){
+                $isProAuthor = true;
+            }
+            if($currentUser != null && $currentUser->getId() == $irAuthor->getId()){
+                $isIrAuthor = true;
+            }
+        }
+        
+        $canUpvoteProposition = false;
+            
+        if($currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
+            $canUpvoteProposition = true;
+        }
+        
+        $jsonProposition = new JsonPropositionPopupModel(
+                                        $proposition->getId(),
+                                        $proposition->getTitle(),
+                                        $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$proposition->getImage()->getWebPath('original'),
+                                        new JsonUserModel(
+                                                $propAuthor->getID(), 
+                                                $propAuthor->getName(),
+                                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$propAuthor->getProfilImage()->getWebPath('70x70'),
+                                                $this->generateUrl("pp_user_profile", array("slug"=>$propAuthor->getSlug()), true),
+                                                $isProAuthor
+                                        ),
+                                        $proposition->getUpvote(),
+                                        $proposition->getAccepted(),
+                                        new JsonIRPopupModel(
+                                                $imageRequest->getId(),
+                                                $imageRequest->getTitle(),
+                                                new JsonUserModel(
+                                                    $irAuthor->getID(), 
+                                                    $irAuthor->getName(),
+                                                    $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$irAuthor->getProfilImage()->getWebPath('70x70'),
+                                                    $this->generateUrl("pp_user_profile", array("slug"=>$irAuthor->getSlug()), true),
+                                                    $isIrAuthor
+                                                ),
+                                                $this->generateUrl("pp_request_view", array("slug"=>$imageRequest->getSlug()), true),
+                                                $imageRequest->getCreatedDate()
+                                        ),
+                                        $canUpvoteProposition,
+                                        $proposition->getCreatedDate()
+        );
+        
+        echo json_encode($jsonProposition);
+        
+        return $response;    
+    }
     
     /**
      * Upvote a proposition
