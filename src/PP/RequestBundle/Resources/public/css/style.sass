@@ -29,6 +29,7 @@ $icon-search: "\e906"
 
 * 
 	@include vendor-prefix(box-sizing, border-box)
+	outline: none
 
 html, body
 	width: 100%
@@ -160,7 +161,7 @@ img
 		position: absolute
 		left: 0
 		top: 0
-		z-index: 1
+		z-index: 0
 		width: 100%
 		height: 100%
 		border: none
@@ -255,7 +256,7 @@ a.count-vote
 		background: white
 		color: #222
 
-a.avatar
+a.avatar, .avatar
 	background: rgba(0,0,0,.1)
 	display: inline-block
 	border-radius: 50%
@@ -315,7 +316,6 @@ header
 					width: 100%
 					height: 80px
 					font-size: 20px
-					font-weight: 300
 					color: #444
 					padding: 25px 30px
 					border: none
@@ -567,6 +567,7 @@ header
 			ul
 
 				&.notifs
+					width: 100%
 					max-height: 400px
 					overflow: auto
 					margin-bottom: 34px
@@ -698,6 +699,14 @@ header
 									background: white
 									border-color: rgba(0, 0, 0, .1)
 
+						&.load-content
+							text-align: center
+
+						&.no-notification
+							display: block
+							padding: 40px 0 6px
+							text-align: center
+							color: #777
 
 					&.more-notif
 						position: absolute
@@ -885,7 +894,6 @@ section.jumbotron
 	padding: 90px 0 70px
 	text-align: center
 	font-size: 30px
-	font-weight: 300
 
 	.line
 		margin: 0
@@ -1026,7 +1034,7 @@ section.profile-galery
 						text-align: center
 						padding: 65px 0
 						font-size: 60px
-						font-weight: 300
+						
 
 					img
 						width: 285px
@@ -1615,20 +1623,24 @@ section.main
 			h1
 				margin: 0 0 15px
 				padding: 0
-				font-size: 24px
+				font-size: 22px
 				display: inline-block
+				font-weight: 600
+				text-transform: uppercase
 
 			a.see-more
-				font-size: 18px
-				margin-left: 10px
+				font-size: 13px
+				margin: 0 0 15px 10px
 				padding: 3px 8px
 				color: #777
-				font-weight: 300
+				text-transform: uppercase
+				background: rgba(0,0,0,.05)
+				border-radius: 3px
+				display: inline-block
 
 				&:hover
 					background: #ddd
 					color: #555
-					border-radius: 3px
 
 			ul.tags, ul.users, ul.subjects
 				margin: 0
@@ -1726,7 +1738,7 @@ section.main
 					display: inline
 
 					&:after
-						content: "Â·"
+						content: "-"
 						margin: 0 5px
 
 				li:last-child:after
@@ -1810,7 +1822,6 @@ section.overlay
 						margin: 0 0 10px
 						padding: 10px
 						font-size: 20px
-						font-weight: 300
 						border: none
 						border-bottom: 1px solid #ccc
 
@@ -1844,7 +1855,6 @@ section.overlay
 				.message
 					font-size: 30px
 					color: #777
-					font-weight: 300
 
 				.button
 					border-color: #777
@@ -1869,7 +1879,7 @@ section.overlay-messages
 	right: 0
 	display: block
 	z-index: 900
-	background-color: rgba(0,0,0,.5)
+	background-color: rgba(0,0,0,.85)
 	width: 100%
 	padding: 0
 	margin: 0
@@ -1885,7 +1895,7 @@ section.overlay-messages
 		left: 50%
 		transform: translate(-50%, -50%)
 		border-radius: 3px
-		border: 1px solid #ccc
+		border: 1px solid rgba(0,0,0,.1)
 		overflow: hidden
 
 		.container
@@ -1909,17 +1919,20 @@ section.overlay-messages
 				flex-direction: row
 				font-size: 20px
 				color: #444
-				border-bottom: 1px solid #ccc
+				border-bottom: 1px solid rgba(0,0,0,.1)
 				
 				.inbox-top
 					width: 300px
 					padding: 10px 15px
-					border-right: 1px solid #ccc
+					border-right: 1px solid rgba(0,0,0,.1)
 					display: -webkit-flex
 					display: -moz-box
 					display: -ms-flexbox
 					display: flex
 					position: relative
+					text-transform: uppercase
+					font-weight: 600
+					font-size: 18px
 
 					a.new-message
 						position: absolute
@@ -1990,7 +2003,7 @@ section.overlay-messages
 					display: -moz-box
 					display: -ms-flexbox
 					display: flex
-					border-right: 1px solid #ccc
+					border-right: 1px solid rgba(0,0,0,.1)
 					overflow-x: hidden
 					overflow-y: auto
 					
@@ -2000,7 +2013,7 @@ section.overlay-messages
 						
 						li.message
 							list-style: none
-							border-bottom: 1px solid #ccc
+							border-bottom: 1px solid rgba(0,0,0,.1)
 							
 							a
 								display: block
@@ -2009,19 +2022,14 @@ section.overlay-messages
 								padding: 15px
 								
 								&:hover, &.open
-									background: #efefef
+									background: rgba(0,0,0,.05)
 								
 								.avatar
 									width: 48px
 									height: 48px
-									border-radius: 50%
-									overflow: hidden
 									float: left
 									margin-right: 15px
-									
-									img
-										width: 48px
-										height: 48px
+									border: 1px solid white
 								
 								.desc
 									display: block
@@ -2064,6 +2072,18 @@ section.overlay-messages
 							flex: 1 auto
 							flex-direction: column
 							align-self: flex-end
+
+							a.chat-more
+								text-align: center
+								text-transform: uppercase
+								font-weight: 600
+								font-size: 14px
+								color: #777
+								margin-bottom: 15px
+
+								&:hover
+									color: #444
+
 
 							.message
 								height: auto
@@ -2138,8 +2158,6 @@ section.overlay-messages
 								.avatar
 									width: 40px
 									height: 40px
-									overflow: hidden
-									border-radius: 50%
 									float: right
 									margin-right: 10px
 									align-self: flex-end
@@ -2163,7 +2181,7 @@ section.overlay-messages
 							display: block
 
 					.chat-composer
-						background: rgba(0,0,0,.5)
+						background: white
 						width: 100%
 						height: auto
 						min-height: 50px
@@ -2173,275 +2191,36 @@ section.overlay-messages
 						display: -ms-flexbox
 						display: flex
 						align-self: flex-end
-						border-top: 1px solid #ccc
+						border-top: 1px solid rgba(0,0,0,.1)
 						position: relative
+						padding: 15px
 
 						form
 							width: 100%
+							display: -webkit-box
+							display: -moz-box
+							display: -webkit-flex
+							display: -ms-flexbox
 
-							input
+							input, textarea
 								width: 100%
 								height: 100%
-								padding: 15px
 								border: none
+								resize: none
 
 							button
-								background: #ccc
 								border: none
+								text-transform: uppercase
+								background: transparent
+								font-weight: 600
 								color: #777
-								width: 30px
-								height: 30px
-								overflow: hidden
-								border-radius: 50%
-								speak: none
-								font-style: normal
-								font-weight: normal
-								font-variant: normal
-								text-transform: none
-								line-height: 1
-								-webkit-font-smoothing: antialiased
-								-moz-osx-font-smoothing: grayscale
-								font-family: "pp-font"
-								content: ""
-								text-indent: -9999px
-								position: absolute
-								top: 10px
-								right: 10px
-								bottom: 10px
-								
+								padding: 8px
+								border-radius: 3px
+								max-height: 35px
+
 								&:hover
-									background: #ccc
-									color: #777
-								
-								&:active
-									background: #777
-									color: white
-								outline: none
-
-section.galery
-	background: rgba(0,0,0,.97)
-	width: 100%
-	height: 100%
-	position: fixed
-	top: 0
-	left: 0
-	right: 0
-	bottom: 0
-	
-	img.single-photo
-		max-width: 100%
-		max-height: 100%
-		position: absolute
-		top: 50%
-		left: 50%
-		transform: translate(-50%, -50%)
-	
-	div.overlay
-		background: -webkit-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
-		background: -o-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
-		background: -ms-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
-		background: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
-		position: absolute
-		width: 100%
-		height: 100%
-		top: 0
-		left: 0
-	
-	.content-galery
-		width: 100%
-		height: 100%
-		color: white
-		position: absolute
-		bottom: 0
-		left: 0
-		max-width: 100%
-		
-		.action-top
-			width: 100%
-			height: 50px
-			position: absolute
-			left: 0
-			top: 0
-			
-			.action-group
-				width: 33%
-				display: block
-				position: absolute
-				top: 0
-				
-				&.left
-					left: 0
-					padding-left: 15px
-				
-				&.center
-					left: 50%
-					transform: translateX(-50%)
-					text-align: center
-					
-				&.right
-					right: 0
-					text-align: right
-
-				a.galery-logo
-					background: url("../images/galery-logo.svg") no-repeat
-					background-size: contain
-					width: 40px
-					height: 32px
-					text-indent: -9999px
-					color: transparent
-					display: block
-					margin-top: 15px
-					
-				a.selecting-prop
-					color: rgba(255,255,255,0)
-					display: inline-block
-					margin-top: 15px
-					padding: 5px 5px 5px 10px
-					font-size: 15px
-					line-height: 20px
-					text-transform: uppercase
-
-					&:hover
-						&:after
-							animation: beat 1.25s cubic-bezier(.165,.84,.44,1) infinite
-					
-					&:hover, &.selected
-						color: rgba(0,0,0,0.5)
-						background: rgba(255,255,255,0.5)
-						border-radius: 3px
-						border: 1px solid rgba(0,0,0,0.1)
-						
-						&:after
-							color: #EB154C
-					
-					&:after
-						width: 24px
-						height: 20px
-						margin-left: 5px
-						display: block
-						text-align: center
-						font-family: "pp-font"
-						speak: none
-						font-size: 20px
-						font-style: normal
-						font-weight: normal
-						font-variant: normal
-						text-transform: none
-						text-align: center
-						line-height: 1
-						-webkit-font-smoothing: antialiased
-						-moz-osx-font-smoothing: grayscale
-						content: $icon-hearth
-						float: right
-						color: rgba(255,255,255,.75)
-						
-				a.icon
-					background: transparent
-					width: 32px
-					height: 32px
-					margin: 15px 5px
-					display: inline-block
-					text-align: center
-					font-family: "pp-font"
-					color: rgba(255,255,255,.75)
-					speak: none
-					font-size: 20px
-					font-style: normal
-					font-weight: normal
-					font-variant: normal
-					text-transform: none
-					line-height: 1
-					-webkit-font-smoothing: antialiased
-					-moz-osx-font-smoothing: grayscale
-					padding: 6px 0
-
-					&:hover
-						color: white
-
-					&:after
-						text-align: center
-					
-					&.infos
-						&:after
-							content: $icon-infos
-
-					&.share
-						&:after
-							content: $icon-share
-						
-					&.download
-						&:after
-							content: $icon-download
-					
-					&.report
-						&:after
-							content: $icon-report
-					
-					&.delete
-						&:after
-							content: $icon-delete
-					
-				button.button-close
-					background: transparent
-					border: 0
-					font-size: 32px
-					padding: 5px 20px 5px 10px
-					font-family: -apple-system,".SFNSText-Regular","Helvetica Neue","Roboto","Segoe UI",sans-serif
-					letter-spacing: 0
-					font-weight: 300
-					font-style: normal
-					color: #777
-		
-		.img-title
-			position: absolute
-			width: auto
-			max-width: 100%
-			height: auto
-			left: 0
-			bottom: 0
-			padding: 0 20px 20px
-			
-			a.avatar
-				background: rgba(255, 255, 255, 0.25)
-				width: 60px
-				height: 60px
-				overflow: hidden
-				border-radius: 50%
-				display: block
-				float: left
-				border: 1px solid rgba(255,255,255,.5)
-				
-				img
-					width: 60px
-					height: 60px
-					
-			.infos
-				float: left
-				margin-left: 10px
-				
-				.name
-					font-size: 28px
-					display: inline
-					font-weight: 300
-				
-				.author
-					font-size: 18px
-					
-					a
-						color: rgba(255, 255, 255, 0.75)
-						font-weight: bold
-		.action-bottom
-			position: absolute
-			bottom: 0
-			right: 0
-			padding: 0 20px 20px
-
-			a.count-vote
-				color: rgba(255,255,255,.75)
-
-				&:hover, &.voted
-					color: #00D084
-					text-shadow: 0 0 10px rgba(0,0,0,.25)
+									background: #F3F3F3
+									color: $main-color
 
 .fixed
 	section.page

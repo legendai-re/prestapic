@@ -1,3 +1,26 @@
+// VARS
+$main-color: #C24C4A
+$content: #444
+$background: #EEEEEE
+
+// ICONS
+
+$icon-checked: "\e908"
+$icon-edit: "\e903"
+$icon-new: "\e90b"
+$icon-share: "\e907"
+$icon-delete: "\e902"
+$icon-filters: "\e90a"
+$icon-notification: "\e90c"
+$icon-upload: "\e90d"
+$icon-download: "\e901"
+$icon-hearth: "\e904"
+$icon-report: "\e900"
+$icon-upvote: "\e90e"
+$icon-dropdown: "\e909"
+$icon-infos: "\e905"
+$icon-search: "\e906"
+
 section.slideshow
 	background: rgba(0,0,0,.97)
 	width: 100%
@@ -61,6 +84,16 @@ section.slideshow
 				&.right
 					right: 0
 					text-align: right
+
+				a.galery-logo
+					background: url("../images/galery-logo.svg") no-repeat
+					background-size: contain
+					width: 40px
+					height: 32px
+					text-indent: -9999px
+					color: transparent
+					display: block
+					margin-top: 15px
 					
 				a.selecting-prop
 					color: rgba(255,255,255,0)
@@ -70,11 +103,11 @@ section.slideshow
 					font-size: 15px
 					line-height: 20px
 					text-transform: uppercase
-                                        
+
 					&:hover
 						&:after
 							animation: beat 1.25s cubic-bezier(.165,.84,.44,1) infinite
-
+					
 					&:hover, &.selected
 						color: rgba(0,0,0,0.5)
 						background: rgba(255,255,255,0.5)
@@ -85,10 +118,12 @@ section.slideshow
 							color: #EB154C
 					
 					&:after
+						width: 24px
+						height: 20px
 						margin-left: 5px
 						display: block
 						text-align: center
-						font-family: "icomoon"
+						font-family: "pp-font"
 						speak: none
 						font-size: 20px
 						font-style: normal
@@ -99,20 +134,21 @@ section.slideshow
 						line-height: 1
 						-webkit-font-smoothing: antialiased
 						-moz-osx-font-smoothing: grayscale
-						content: "\e906"
+						content: $icon-hearth
 						float: right
 						color: rgba(255,255,255,.75)
 						
 				a.icon
-					background: rgba(255,255,255,.5)
+					background: transparent
 					width: 32px
 					height: 32px
 					margin: 15px 5px
 					display: inline-block
 					text-align: center
-					font-family: "icomoon"
+					font-family: "pp-font"
+					color: rgba(255,255,255,.75)
 					speak: none
-					font-size: 25px
+					font-size: 20px
 					font-style: normal
 					font-weight: normal
 					font-variant: normal
@@ -120,22 +156,33 @@ section.slideshow
 					line-height: 1
 					-webkit-font-smoothing: antialiased
 					-moz-osx-font-smoothing: grayscale
+					padding: 6px 0
+
+					&:hover
+						color: white
+
+					&:after
+						text-align: center
 					
+					&.infos
+						&:after
+							content: $icon-infos
+
 					&.share
-						background: red
-						content: "S"
+						&:after
+							content: $icon-share
 						
 					&.download
-						background: green
-						content: "D"
+						&:after
+							content: $icon-download
 					
 					&.report
-						background: blue
-						content: "R"
+						&:after
+							content: $icon-report
 					
 					&.delete
-						background: blue
-						content: "D"
+						&:after
+							content: $icon-delete
 					
 				button.button-close
 					background: transparent
@@ -146,7 +193,13 @@ section.slideshow
 					letter-spacing: 0
 					font-weight: 300
 					font-style: normal
-					color: #777
+					color: rgba(255,255,255,.5)
+
+					&:hover
+						color: rgba(255,255,255,.75)
+
+					&:active
+						color: rgba(255,255,255,1)
 		
 		.img-title
 			position: absolute
@@ -178,7 +231,6 @@ section.slideshow
 				.name
 					font-size: 28px
 					display: inline
-					font-weight: 300
 				
 				.author
 					font-size: 18px
@@ -191,46 +243,10 @@ section.slideshow
 			bottom: 0
 			right: 0
 			padding: 0 20px 20px
-			
+
 			a.count-vote
-				font-size: 35px
-				font-weight: 300
 				color: rgba(255,255,255,.75)
-				display: block
 
-				&:hover
-					color: #00D084
-
-				&.voted
+				&:hover, &.voted
 					color: #00D084
 					text-shadow: 0 0 10px rgba(0,0,0,.25)
-
-				&:after
-					display: block
-					width: 25px
-					height: 25px
-					padding: 10px
-					text-align: center
-					font-family: "icomoon"
-					speak: none
-					font-size: 25px
-					font-style: normal
-					font-weight: normal
-					font-variant: normal
-					text-transform: none
-					line-height: 1
-					-webkit-font-smoothing: antialiased
-					-moz-osx-font-smoothing: grayscale
-					content: "\e905"
-					float: right
-@keyframes beat
-	0%
-		transform: scale(1)
-	20%
-		transform: scale(1.2)
-	30%
-		transform: scale(1.05)
-	45%
-		transform: scale(1.2)
-	100%
-		transform: scale(1)
