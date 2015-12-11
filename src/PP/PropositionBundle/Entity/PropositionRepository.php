@@ -19,7 +19,7 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
                 ->addSelect('pA')
                 ->leftJoin('p.image', 'pI')
                 ->addSelect('pI')                    
-                ->where('pA.id = :userId')
+                ->where('pA.id = :userId AND p.enabled = true')
                 ->setParameter('userId', $userId)
         ;                        
             
@@ -39,7 +39,7 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
             $qb = $this
                     ->createQueryBuilder('p')
                     ->select('COUNT(p.id)')
-                    ->where('p.imageRequest = :id')
+                    ->where('p.imageRequest = :id AND p.enabled = true')
                     ->setParameter('id', $id)
             ;                        
             
@@ -61,7 +61,7 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
               ->leftJoin('ir.category', 'c')
               ->where('ir.enabled = true AND pA.enabled = true')
               ->distinct(true)
-              ->andWhere('ir.enabled = true')
+              ->andWhere('ir.enabled = true AND p.enabled = true')
         ;
         
         if($searchParam != null){
@@ -151,7 +151,7 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
                 ->select('COUNT(p.id)')
                 ->where('p.author = :userId')
                 ->setParameter('userId', $userId)
-                ->andWhere('ir.enabled = true');
+                ->andWhere('ir.enabled = true AND p.enabled = true');
         
          return  $qb
                     ->getQuery()
@@ -167,7 +167,7 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
                 ->leftJoin('p.imageRequest', 'ir')
                 ->addSelect('ir')
                 ->orderBy('p.createdDate', 'DESC')
-                ->andWhere('ir.enabled = true')
+                ->andWhere('ir.enabled = true AND p.enabled = true')
                 ->setMaxResults($limit);
         
         return $qb

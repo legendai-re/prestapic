@@ -20,9 +20,12 @@ class PropositionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title',		'text')
-            ->add('image',		new ImageType())
-            ->add('save', 		'submit')
+            ->add('title',               "hidden",array(
+                'data'=>"Proposition"
+            ))
+            ->add('image',		new ImageType(),array(                  
+                'label'=> false)
+            )           
         ;
         
          $builder->addEventListener(

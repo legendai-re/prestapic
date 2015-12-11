@@ -7,112 +7,125 @@
 {% block requestBody %}
 <div id="viewApp" >
 <base href=" " />
-    {% if imageRequest.enabled == true %}
-    <article class="demand" ng-controller="requestController as request">
-        
-        <a href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" class="avatar">
-            <img src="{{ asset(imageRequest.author.profilImage.webPath("70x70")) }}" alt="{{ imageRequest.author.profilImage.alt }}">                    
-        </a>                                       
-        
-        <div id="requestContent" class="infos">          
-            <h1>
-                <a href="">{{ imageRequest.title }}</a>                
-                <a id="imageRequestUpvoteButton"  href="" title="Up vote"
-                    {% if canUpvoteImageRequest == true %}
-                        ng-click="request.postRequestVote({{ imageRequest.id }})"
-                        class="upvote-demand"
-                    {% else %}
-                        class="upvote-demand voted"
-                    {% endif %}
-                   >
-                        {{ imageRequest.upvote }}
-                </a>
-                {% if canUpvoteImageRequest == true %}
-                    {{ form_start(upvoteRequestForm) }}            
-                    {{ form_end(upvoteRequestForm) }}
-                {% endif %}
-            </h1>
-            <div class="author single">
-                Publié par
-                <a href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" title="">{{ imageRequest.author.name }}</a>
-                dans
-                <a href="{{ path('pp_request_homepage', { 'search_query':imageRequest.category.name}) }}" title="">{{ imageRequest.category.name }}</a>
-            </div>
-
-            <div class="content-single">
-                <p> {{ imageRequest.request }} </p>    
-            </div>
-
-            <div class="tag-list">
-                <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'categories': imageRequest.category.name }) }}" >{{ imageRequest.category.name }}</a>
-                {% for tag in imageRequest.tags %}
-                    <a class="tag" href="{{ path('pp_request_homepage', {'tags':tag.name}) }}" title="">{{ tag.name }}</a>
-                {% endfor %}
-            </div>
+    {% if imageRequest.enabled == true %}    
+    <article class="request-single" ng-controller="requestController as request">
+        <div class="request-container">
             
-            {# edit request form #}
-            {% if isAuthor == true %}
-                    {{ form_start(getEditForm)}}
-                        
-                    {{ form_end(getEditForm)}}
-                    <input type="submit" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" />
-            {% endif %}    
+            <h1>{{ imageRequest.title }}</h1>
             
-        </div>
-        <div id="editRequestContent">
-        </div>
-        
-        
-        {# report and delete image request form #}
-        {% if is_granted("ROLE_USER") %}
-            {% if imageRequest.author.id == currentUser.id %}
-                <input type="submit" value="Delete request" ng-click="request.postDisableRequest({{ imageRequest.id }})" />
-                {{ form(disableTicketForm) }}
-            {% elseif is_granted("ROLE_MODERATOR") %}                
-                <form ng-model="request.reportData" ng-submit="request.postDisableRequest({{ imageRequest.id }})" >
-                    <select ng-model="request.reportData.reasonId">
-                    {% for reason in reportReasonList %}
-                        <option value="{{ reason.id }}">{{ reason.name }}</option>
-                    {% endfor %}
-                    </select>
-                    <textarea ng-model="request.reportData.details">More details...</textarea>
-                    <input type="submit" value="Delete"/>
-                </form>
-                {{ form(disableTicketForm) }}                                                
-            {% else %}
-                <form ng-model="request.reportData" ng-submit="request.postReport({{ imageRequest.id }})" >
-                    <select ng-model="request.reportData.reasonId">
-                    {% for reason in reportReasonList %}
-                        <option value="{{ reason.id }}">{{ reason.name }}</option>
-                    {% endfor %}
-                    </select>
-                    <textarea ng-model="request.reportData.details">More details...</textarea>
-                    <input type="submit" value="send report"/>
-                </form>
-                {{ form(reportTicketForm) }}            
+            {# upvote #}
+            {% if canUpvoteImageRequest == true %}
+                {{ form_start(upvoteRequestForm) }}            
+                {{ form_end(upvoteRequestForm) }}
             {% endif %}
-        {% endif %}                
+            <a id="imageRequestUpvoteButton_{{ imageRequest.id }}" href="" title="Up vote"
+                {% if  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    {% if app.user.id == imageRequest.author.id %}
+                        class="count-vote blocked"
+                    {% elseif canUpvoteImageRequest == true %}                
+                        ng-click="request.postRequestVote({{ imageRequest.id }})"
+                        class="count-vote"
+                    {% else %}
+                        class="count-vote voted"
+                    {% endif %}
+                {% else %}
+                    class="count-vote blocked"
+                {% endif %}
+            >
+                {{ imageRequest.upvote }}
+            </a>
+            
+            <div class="request-content">
+                <p>{{ imageRequest.request }}</p>
+            </div>
+            
+            <div class="author-container">
+            {# image request author avatar #}
+                <a target="_self" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" class="avatar">
+                    <img bn-lazy-src="{{ asset(imageRequest.author.profilImage.webPath("70x70")) }}" alt="{{ imageRequest.author.profilImage.alt }}">
+                </a>
+                <span class="author-infos">
+                    <span title="{{ imageRequest.createdDate|date('Y-m-d H:i:s') }}">{{ imageRequest.dateAgo }}</span> in                 
+                    <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'categories': imageRequest.category.name }) }}" >{{ imageRequest.category.name }}</a> by                 
+                </span>
+                <a class="author-username" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}">{{ imageRequest.author.name }}</a>  
+            </div>
+                                                             
+            {% set break = false %}
+            <div class="tag-list">                
+                {% for tag in imageRequest.tags if not break%}
+                    <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'tags':tag.name }) }}">{{ tag.name }}</a>
+                    {% if loop.index == 3  %}{% set break = true %}{% endif %}
+                {% endfor %}
+            </div>                                                                           
+        </div>
+        <div id="editRequestContent"></div>
+        <div class="actions-container">
+            <div class="actions-left">
+                <a href="" class="action share">share</a>
+            </div>
+            <div class="actions-right">
+                <a href="" class="action">ask clarification</a>
+                <a href="" class="action more">more</a>
+            </div>            
+        </div>
     </article> 
+     {# edit request form #}
+    {% if isAuthor == true %}
+            {{ form_start(getEditForm)}}
 
-    <div class="replies" ng-controller="propositionsController as propositions" ng-init="propositions.init({{imageRequest.id}})">
+            {{ form_end(getEditForm)}}
+            <input type="submit" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" />
+    {% endif %}              
+
+
+
+    {# report and delete image request form #}
+    {% if is_granted("ROLE_USER") %}
+        {% if imageRequest.author.id == currentUser.id %}
+            <input type="submit" value="Delete request" ng-click="request.postDisableRequest({{ imageRequest.id }})" />
+            {{ form(disableTicketForm) }}
+        {% elseif is_granted("ROLE_MODERATOR") %}                
+            <form ng-model="request.reportData" ng-submit="request.postDisableRequest({{ imageRequest.id }})" >
+                <select ng-model="request.reportData.reasonId">
+                {% for reason in reportReasonList %}
+                    <option value="{{ reason.id }}">{{ reason.name }}</option>
+                {% endfor %}
+                </select>
+                <textarea ng-model="request.reportData.details">More details...</textarea>
+                <input type="submit" value="Delete"/>
+            </form>
+            {{ form(disableTicketForm) }}                                                
+        {% else %}
+            <form ng-model="request.reportData" ng-submit="request.postReport({{ imageRequest.id }})" >
+                <select ng-model="request.reportData.reasonId">
+                {% for reason in reportReasonList %}
+                    <option value="{{ reason.id }}">{{ reason.name }}</option>
+                {% endfor %}
+                </select>
+                <textarea ng-model="request.reportData.details">More details...</textarea>
+                <input type="submit" value="send report"/>
+            </form>
+            {{ form(reportTicketForm) }}            
+        {% endif %}
+    {% endif %} 
+        
+    <article class="replies" ng-controller="propositionsController as propositions" ng-init="propositions.init({{imageRequest.id}})">
 
         {% if imageRequest.closed %}
         <div class="reply selected">
             <div class="prop">
-              <img src="{{ asset(acceptedProposition.image.webPath("original")) }}" alt="{{ acceptedProposition.image.alt }}">
+              <img src="{{ asset(acceptedProposition.image.webPath("original")) }}" alt="{{ acceptedProposition.title }}">
             </div>
-            <a class="overlay" href="{{ asset(acceptedProposition.image.webPath("original"))}}"" title=""></a>
+            <a title="{{ acceptedProposition.title }}" class="overlay" href="{{ asset(acceptedProposition.image.webPath("selected"))}}" title=""></a>
             <a class="selecting-prop selected" href="#" title="Select this picture">Selected picture</a>
             <div class="img-title">
                 <a href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" class="avatar">
                     <img src="{{ asset(acceptedProposition.author.profilImage.webPath("70x70")) }}" alt="{{ acceptedProposition.author.profilImage.alt }}">                    
                 </a>
                 <div class="infos">
-                <div class="name">{{ acceptedProposition.title }}</div>                   
-                    <div class="author">
-                        by
-                        <a href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" title="">{{  acceptedProposition.author.name }}</a>
-                    </div>
+                    {{ acceptedProposition.createdDate|date('Y-m-d') }} by 
+                    <a class="author" href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" title="{{ acceptedProposition.author.name }}">{{  acceptedProposition.author.name }}</a>                
                 </div>
             </div>
             <div class="actions">               
@@ -127,28 +140,36 @@
                 </a>
             </div>
         </div>
-        {% endif %}
-
-        <div id="propositionForm"  >
-           {% if is_granted("ROLE_USER") %}
-               {% if not imageRequest.closed and imageRequest.author.id != app.user.id %}
-                   {{ form(propositionForm) }}
-               {% endif %}
-           {% endif %}
-        </div>  
-
-        {#<h2 class="more-replies">Il y a {{ imageRequest.propositionsNb }} autres propositions</h2>#}
+        {% endif %}           
 
         <div id="propositions" >
             {{ form(loadPropositionForm) }}
             {{ form(upvotePropositionForm) }}
-            <div id="loadPage1"></div>                  
+            <div id="loadPage1"></div>           
         </div>
         
+        {% if imageRequest.propositionsNb > 6 %}
+            <a style="display: none;" id="showMoreButton" class="more-replies" href="" ng-click="propositions.showMore()">load more</a>
+        {% endif %}
         <div class="load-content"  id="loadingGif" >
                 <span class="bubble"></span>
-        </div>      
-    </div>
+        </div>                
+    </article>
+    {% if is_granted("ROLE_USER") %}
+        {% if not imageRequest.closed and imageRequest.author.id != app.user.id %}
+            <article class="add-prop">  
+                <div class="title-boxe">Add your proposition</div>
+                <div class="dragzone">
+                     {{ form_start(propositionForm) }}                                           
+                         {{ form_row(propositionForm.image) }}
+                         <p><strong class="choose">Choose an image</strong> or drag it here</p>
+                         <button class="button" type="submit">Upload image</button>
+                     {{ form_end(propositionForm) }}
+                </div>
+                <span>By clicking « upload photo » you accept our <a href="">terms</a> again.</span>
+            </article>
+        {% endif %}
+    {% endif %}
             
     {% else %}
         {# if image request disabled #}
@@ -156,6 +177,56 @@
         <p>reason : {{ imageRequest.disableTicket.reason.name }}</p>
         <p>Details : {{  imageRequest.disableTicket.details }}</p>
     {% endif %}
+    
+    <article class="comments">
+    <div class="title-section">3 comments</div>
+    <ul class="list-comments">
+      <li class="comment">
+        <a class="avatar" href="#" title="">
+          <img src="https://s3.amazonaws.com/uifaces/faces/twitter/allisongrayce/128.jpg">
+        </a>
+        <div class="comment-container">
+          <a class="username" href="#" title="">AlexandreJolly</a>
+          <div class="comment-content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam ornare odio, eget dignissim neque ornare nec. Mauris sollicitudin dignissim lacus. Fusce ut urna rutrum, vehicula mi.
+          </div>
+        </div>
+      </li>
+      <li class="comment">
+        <a class="avatar" href="#" title="">
+          <img src="https://s3.amazonaws.com/uifaces/faces/twitter/allisongrayce/128.jpg">
+        </a>
+        <div class="comment-container">
+          <a class="username" href="#" title="">AlexandreJolly</a>
+          <div class="comment-content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam ornare odio, eget dignissim neque ornare nec. Mauris sollicitudin dignissim lacus. Fusce ut urna rutrum, vehicula mi.
+          </div>
+        </div>
+      </li>
+      <li class="comment">
+        <a class="avatar" href="#" title="">
+          <img src="https://s3.amazonaws.com/uifaces/faces/twitter/allisongrayce/128.jpg">
+        </a>
+        <div class="comment-container">
+          <a class="username" href="#" title="">AlexandreJolly</a>
+          <div class="comment-content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam ornare odio, eget dignissim neque ornare nec. Mauris sollicitudin dignissim lacus. Fusce ut urna rutrum, vehicula mi.
+          </div>
+        </div>
+      </li>
+      <li class="comment">
+        <form>
+          <a class="avatar" href="#" title="">
+            <img src="https://s3.amazonaws.com/uifaces/faces/twitter/allisongrayce/128.jpg">
+          </a>
+          <div class="composer-container">
+            <textarea class="comment-composer" placeholder="Type your comment here..." row="1" type="text"></textarea>
+            <button class="button-comment" type="submit">Send</button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </article>
     
 </div>
     

@@ -83,6 +83,19 @@ class Proposition
     private $createdDate;
     
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean")
+     */
+    private $enabled;
+    
+    /**    
+     * @ORM\OneToOne(targetEntity="PP\ReportBundle\Entity\DisableTicket", cascade={"persist", "remove"})     
+     * @Assert\Valid()          
+     */
+    private $disableTicket;
+    
+    /**
      * Get id
      *
      * @return integer
@@ -210,7 +223,7 @@ class Proposition
     public function setImage(\PP\ImageBundle\Entity\Image $image = null)
     {
         $this->image = $image;
-        $this->image->addSizeList("220x150");
+        $this->image->addSizeList("380x260");
         return $this;
     }
 
@@ -251,11 +264,11 @@ class Proposition
     /////////////////////////////////
     //////// create thumbnail ///////
     
-     /**
+    /**
     * @ORM\PostPersist()    
     */
     public function createThumbnail(){               
-        $this->image->resize("220x150",220, 150);        
+        $this->image->resize("380x260",380, 260);        
     }
 
     /**
@@ -280,5 +293,39 @@ class Proposition
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * Add upvotedBy
+     *
+     * @param \PP\UserBundle\Entity\User $upvotedBy
+     *
+     * @return Proposition
+     */
+    public function addUpvotedBy(\PP\UserBundle\Entity\User $upvotedBy)
+    {
+        $this->upvotedBy[] = $upvotedBy;
+
+        return $this;
+    }
+
+    /**
+     * Remove upvotedBy
+     *
+     * @param \PP\UserBundle\Entity\User $upvotedBy
+     */
+    public function removeUpvotedBy(\PP\UserBundle\Entity\User $upvotedBy)
+    {
+        $this->upvotedBy->removeElement($upvotedBy);
+    }
+
+    /**
+     * Get upvotedBy
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUpvotedBy()
+    {
+        return $this->upvotedBy;
     }
 }

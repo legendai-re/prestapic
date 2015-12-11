@@ -4,34 +4,35 @@
 {% block requestBody %}            
     
         <base href=" " />
-        <div ng-controller="requestsController as requests" ng-init="requests.init()">            
+        <div ng-controller="requestsController as requests" ng-init="requests.init({{ displayMode }})">            
             
             
             {# display choose displayMode form #}
-            <div class="demand-selector">
-
-                <select id="contentToDisplaySelect" ng-change="requests.update()" ng-model="requests.contentToDisplay">
-                    <option {% if contentToDisplay == 1 %}selected{% endif %} value="1">Request</option>
-                    <option {% if contentToDisplay == 2 %}selected{% endif %} value="2">Proposition</option>
-                </select>
-
-                <select id="displayModeSelect" ng-change="requests.update()" ng-model="requests.displayMode" >
-                    <option {% if displayMode == 1 %}selected{% endif %} value="1">Recent</option>
-                    <option {% if displayMode == 2 %}selected{% endif %} value="2">Popular</option>
-                    {% if  is_granted('ROLE_USER') %}
-                        <option {% if displayMode == 3 %}selected{% endif %} value="3">Follows</option>
-                    {% endif %}
-                </select>               
+            <div class="main-top">
+                <a ng-click="requests.updateMode(2)" id="mode_2" class="section {% if displayMode == 2 %}selected{% endif %}" selected href="" title="Most Popular">Most Popular</a>
+                <a ng-click="requests.updateMode(1)" id="mode_1" class="section {% if displayMode == 1 %}selected{% endif %}" href="" title="Recent">Recent</a>
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    <a ng-click="requests.updateMode(3)" id="mode_3" class="section {% if displayMode == 3 %}selected{% endif %}" href="" title="Follows">Follows</a>
+                {% endif %}
+                
+                <div class="select-style">                      
+                    <select dir="rtl" id="contentToDisplaySelect" ng-change="requests.update()" ng-model="requests.contentToDisplay">
+                        <option {% if contentToDisplay == 1 %}selected{% endif %} value="1">Request</option>
+                        <option {% if contentToDisplay == 2 %}selected{% endif %} value="2">Proposition</option>
+                    </select>
+                </div>
+               
             </div>
             {% if haveSearchParam == false %}
-                {{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}
+                {#{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}#}
             {% endif %}
             
             {{ form(loadRequestForm) }}
             {{ form(upvoteRequestForm) }}
             {{ form(upvotePropositionForm) }}
+            
             <div id="loadPage1"></div>
-                     
+
             <div class="load-content"  id="loadingGif" >
                 <span class="bubble"></span>
             </div>

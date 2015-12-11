@@ -3,18 +3,36 @@ $main-color: #C24C4A
 $content: #444
 $background: #EEEEEE
 
+// ICONS
+
+$icon-checked: "\e908"
+$icon-edit: "\e903"
+$icon-new: "\e90b"
+$icon-share: "\e907"
+$icon-delete: "\e902"
+$icon-filters: "\e90a"
+$icon-notification: "\e90c"
+$icon-upload: "\e90d"
+$icon-download: "\e901"
+$icon-hearth: "\e904"
+$icon-report: "\e900"
+$icon-upvote: "\e90e"
+$icon-dropdown: "\e909"
+$icon-infos: "\e905"
+$icon-search: "\e906"
+
 @import mixin
 @import normalize
 @include google-font("Source+Sans+Pro", "200,300,400,600,700&subset=latin,latin")
 
-@include icomoon()
+@include pp-font()
 
 * 
 	@include vendor-prefix(box-sizing, border-box)
 
 html, body
 	width: 100%
-	height: 100%	
+	height: 100%
 
 a
 	color: $main-color
@@ -51,10 +69,13 @@ b, strong
 	font-weight: 600
 
 h1, h2, h3, h4, h5, h6
-	font-weight: 300
+	font-weight: 400
+	margin: 0
 
 img
 	border: none
+
+// CHECKBOX
 
 [type="checkbox"]:not(:checked), [type="checkbox"]:checked
 	position: absolute
@@ -82,7 +103,7 @@ img
 	background: $main-color
 
 [type="checkbox"]:not(:checked) + label:after, [type="checkbox"]:checked + label:after
-	content: "\e900"
+	content: $icon-checked
 	speak: none
 	font-style: normal
 	font-weight: normal
@@ -91,7 +112,7 @@ img
 	line-height: 1
 	-webkit-font-smoothing: antialiased
 	-moz-osx-font-smoothing: grayscale
-	font-family: "icomoon"
+	font-family: "pp-font"
 	position: absolute
 	top: 4px
 	left: 0
@@ -109,6 +130,116 @@ img
 	opacity: 1
 	transform: scale(1)
 
+// CUSTOM SELECT
+
+.select-style
+	position: relative
+	padding: 0
+	margin: 0
+	border: none
+	width: 240px
+	height: 28px
+	border-radius: 3px
+	background-color: transparent
+	float: right
+
+	&:after
+		position: absolute
+		top: 0
+		right: 0
+		z-index: 0
+		font-family: "pp-font"
+		font-size: 24px
+		content: $icon-dropdown
+		float: left
+		width: 24px
+		height: 28px
+		padding: 2px 0
+
+	select
+		position: absolute
+		left: 0
+		top: 0
+		z-index: 1
+		width: 100%
+		height: 100%
+		border: none
+		box-shadow: none
+		background-color: transparent
+		background-image: none
+		-webkit-appearance: none
+		-moz-appearance: none
+		appearance: none
+		font-size: 22px
+		text-transform: uppercase
+		font-weight: 600
+		padding-right: 34px
+
+		option
+			text-transform: initial
+		
+		&:focus
+			outline: none
+
+// UPVOTE
+a.count-vote
+	font-size: 30px
+	font-weight: normal
+	color: rgba(0,0,0,.25)
+	display: block
+	position: relative
+	text-align: right
+
+	&:hover
+		color: #00D084
+
+	&.voted
+		color: #00D084
+
+	&.blocked
+		color: rgba(0,0,0,.1)
+
+	&:after
+		display: block
+		width: 25px
+		height: 25px
+		padding: 10px 0 10px 10px
+		text-align: center
+		font-family: "pp-font"
+		speak: none
+		font-size: 20px
+		font-style: normal
+		font-weight: normal
+		font-variant: normal
+		text-transform: none
+		line-height: 1
+		-webkit-font-smoothing: antialiased
+		-moz-osx-font-smoothing: grayscale
+		content: $icon-upvote
+		float: right
+
+	&:before
+		content: $icon-upvote
+		font-family: "pp-font"
+		font-size: 30px
+		color: #0ABC4B
+		opacity: 0.5
+		width: 30px
+		height: 30px
+		top: 0
+		right: -2.5px
+		transform: scale(1.5)
+		position: absolute
+		display: none
+
+	&.animate
+		&:before
+			animation-iteration-count: 1
+			animation: vote-arrow 1s cubic-bezier(.165,.84,.44,1) forwards
+			display: block
+
+// BUTTON
+
 .button
 	background: transparent
 	display: inline-block
@@ -124,10 +255,24 @@ img
 		background: white
 		color: #222
 
+a.avatar
+	background: rgba(0,0,0,.1)
+	display: inline-block
+	border-radius: 50%
+	overflow: hidden
+
+	&:hover
+		background: rgba(0,0,0,.15)
+
+	img
+		width: 100%
+		color: rgba(255,255,255,.5)
+
 div.content
 	width: 1260px
 	margin: 0 auto
 	padding: 0 30px
+	display: block
 
 header
 	background: white
@@ -222,7 +367,7 @@ header
 								width: 18px
 								height: 16px
 								padding: 15px 14px
-								font-family: 'icomoon'
+								font-family: 'pp-font'
 								speak: none
 								font-style: normal
 								font-weight: normal
@@ -232,7 +377,7 @@ header
 								/* Better Font Rendering =========== */
 								-webkit-font-smoothing: antialiased
 								-moz-osx-font-smoothing: grayscale
-								content: "\e901"
+								content: $icon-filters
 
 						button.go-search
 							margin-right: 5px
@@ -242,7 +387,7 @@ header
 								width: 18px
 								height: 18px
 								padding: 15px
-								font-family: 'icomoon'
+								font-family: 'pp-font'
 								speak: none
 								font-style: normal
 								font-weight: normal
@@ -252,7 +397,7 @@ header
 								/* Better Font Rendering =========== */
 								-webkit-font-smoothing: antialiased
 								-moz-osx-font-smoothing: grayscale
-								content: "\e904"
+								content: $icon-search
 
 		nav.menu
 			width: 400px
@@ -330,7 +475,7 @@ header
 							height: 20px
 							padding: 14px
 							text-align: center
-							font-family: 'icomoon'
+							font-family: 'pp-font'
 							speak: none
 							font-style: normal
 							font-weight: normal
@@ -340,7 +485,7 @@ header
 							/* Better Font Rendering =========== */
 							-webkit-font-smoothing: antialiased
 							-moz-osx-font-smoothing: grayscale
-							content: "\e903"
+							content: $icon-notification
 
 						&.notification.alert
 							border-color: $main-color
@@ -846,7 +991,7 @@ section.profile
 			background: $main-color
 			border: 1px solid $main-color
 
-section.galery
+section.profile-galery
 	width: 100%
 	height: auto
 	padding: 45px 0 0
@@ -890,178 +1035,212 @@ section.galery
 section.main
 	width: 100%
 	padding: 45px 0
+	display: inline-block
 
-	.demand-list
+	.main-left
 		width: 770px
 		height: auto
 		display: inline-block
 		float: left
-		margin: 0 10px
-		overflow: hidden
+		margin: 0 15px
 
-		.demand-selector
+		.main-top
 			width: 100%
 			height: auto
-			margin: 0 5px
+			margin: 0 0 25px
 
-			p
-				margin: 0 10px 30px 0
-				padding: 0
-				font-size: 30px
-				font-weight: 300
-				display: inline-block
-
-			.noselect
-				font-size: 20px
-				font-weight: 300
-				margin-left: 5px
-				display: inline-block
-
-				button
-					border: none
-					background: none
-					color: #777
-					padding: 3px 8px
-
-					&:hover
-						background: #ddd
-						color: #444
-						border-radius: 3px
-
-		article.demand, .new-demand
-			width: 760px
-			height: auto
-			border-bottom: 1px solid #ddd
-			display: block
-			margin: 0 5px 20px
-			padding-bottom: 10px
-			overflow: hidden
-
-			&:last-child
-				border-bottom: none
-
-			a.avatar
-				background: rgba(0,0,0,.1)
-				width: 70px
-				height: 70px
-				display: inline-block
-				float: left
-				border-radius: 50%
-				overflow: hidden
-				margin: 0 15px 15px 0
+			a.section
+				font-size: 22px
+				color: #777
+				text-transform: uppercase
+				font-weight: 600
+				margin: 0 45px 0 0
 
 				&:hover
-					background: rgba(0,0,0,.15)
+					color: #444
 
-				img
-					width: 100%
-					color: rgba(255,255,255,.5)
+				&.selected
+					color: $main-color
 
-			.infos
-				width: 665px
+			.select-style
+				color: #777
+
+				&:hover
+					color: #444
+
+		article.request
+			&:hover
+				background-color: #F3F3F3
+				box-shadow: 0 0 25px rgba(0,0,0,.1)
+
+		article.request, article.request-single
+			background: white
+			width: 770px
+			height: auto
+			display: block
+			margin: 0 0 15px
+			display: inline-block
+			border-bottom: 1px solid rgba(0,0,0,.1)
+
+			.count-vote
+				width: 100px
+				float: right
+
+			.request-container
+				width: 770px
 				height: auto
-				display: inline-block
-				float: left
+				padding: 15px 20px
+				display: block
+				overflow: hidden
+				position: relative
 
 				h1
+					width: 630px
+					height: auto
 					padding: 0
 					margin: 0 0 10px
 					font-size: 30px
-
-					a.upvote-demand
-						float: right
-						font-size: 30px
-						color: rgba(0,0,0,0.25)
-
-						&:hover, &.voted
-							color: #0ABC4B
-
-						&:after
-							display: block
-							width: 20px
-							height: 20px
-							padding: 10px
-							text-align: center
-							font-family: "icomoon"
-							speak: none
-							font-size: 20px
-							font-style: normal
-							font-weight: normal
-							font-variant: normal
-							text-transform: none
-							line-height: 1
-							-webkit-font-smoothing: antialiased
-							-moz-osx-font-smoothing: grayscale
-							content: "\e905"
-							float: right
-
-				.content-single
-					font-size: 18px
 					float: left
-					display: block
+
+				.request-content
 					width: 100%
+					color: #444
+					font-size: 17px
+					display: block
+					float: left
+
+				.author-container
+					width: 285px
+					height: 48px
+					display: inline-block
+					float: left
+					font-size: 15px
+
+					a.avatar
+						width: 48px
+						height: 48px
+						float: left
+						margin: 0 10px 0 0
+						border: 1px solid white
+
+					span.author-infos
+						display: block
+						color: #777
+						font-size: 15px
+						font-weight: 400
+						padding-top: 3px
+
+					a.author-username
+						display: inline-block
+						font-size: 19px
 
 				.tag-list
-					float: left
+					width: 445px
+					height: auto
+					float: right
 					display: inline-block
-					margin-bottom: 20px
+					text-align: right
 
 					a.tag
 						background: white
 						color: rgba(0, 0, 0, 0.5)
 						padding: 4px 10px
-						margin-right: 5px
+						margin: 5px 0 0 5px
+						display: inline-block
 						font-size: 15px
 						border-radius: 3px
 						border: 1px solid rgba(0, 0, 0, 0.1)
+
+						&:last-child
+							margin-right: 0
 
 						&:hover
 							background: #C24C4A
 							color: rgba(255, 255, 255, 0.75)
 
-						&.cat
-							color: rgba(0, 0, 0, 0.75)
-
-							&:hover
-								color: white
-
-				.author
-					display: inline-block
-					float: right
-					font-size: 15px
-
-					&.single
-						float: left
-
-
-			.replies
-				width: 675px
+			.propositions-container, .actions-container
+				background-color: rgba(0,0,0,.03)
+				width: 770px
 				height: auto
 				display: block
 				float: left
-				margin: 0 0 10px 85px
 
-				a.reply, a.more-replies
+			.actions-container
+				padding: 10px 15px
+
+				a.action
+					text-transform: uppercase
+					color: #777
+					font-weight: 600
+					display: inline-block
+
+					&:after
+						font-weight: normal
+
+					&:hover
+						color: #444
+
+					&.active
+						color: $main-color
+
+					&.share, &.more
+						&:after
+							font-family: "pp-font"
+							font-size: 16px
+							content: $icon-dropdown
+							float: right
+							display: inline-block
+							width: 16px
+							height: 16px
+							margin: 2px 0 0 5px
+
+				.actions-left
+					float: left
+
+					a.action
+						margin: 0 15px 0 0
+
+				.actions-right
+					float: right
+
+					a.action
+						margin: 0 0 0 15px
+
+			.propositions-container
+				padding: 10px 20px 20px
+
+				span.prop-num
+					display: block
+					width: 100%
+					height: auto
+					margin-bottom: 10px
+					text-transform: uppercase
+					font-weight: 600
+					color: #777
+
+				a.prop-img, a.prop-more
 					background: rgba(0,0,0,.1)
-					width: 220px
-					max-width: 220px
+					width: 240px
 					height: 150px
 					display: inline-block
 					float: left
-					margin: 0 0 0 5px
+					margin: 0 5px 0 0
 					overflow: hidden
+
+					&:last-child
+						margin: 0
 
 					&:hover
 						background: rgba(0,0,0,.15)
 
 					img
-						width: 220px
+						width: 240px
 						height: 150px
 
 					&:first-child
 						margin: 0
 
-				a.more-replies
+				a.prop-more
 					text-align: center
 					font-size: 50px
 					padding: 45px 0
@@ -1070,64 +1249,35 @@ section.main
 					&:hover
 						color: rgba(0,0,0,.5)
 
-		.new-demand
-			background: rgba(255,255,255,0.25)
-			border-radius: 3px
-			border: 1px solid rgba(0,0,0,.075)
-			padding: 10px
+		// PROPOSITION SINGLE
 
-			a.avatar
-				margin: 0 15px 0 0
-
-			.comp-area
-				width: 653px
-				display: block
-				float: left
-				overflow: hidden
-
-				input, textarea, select
-					background: transparent
-					border: none
-					width: 100%
-					font-size: 20px
-					font-weight: normal
-					padding: 0
-
-					&.init
-						height: 70px
-						font-size: 28px
-						font-weight: 300
-						background: none
-						border: none
-
-				.title
-					font-size: 24px
-
-				.content
-					//
-
-				.categories
-					//
-
-				.add-tag
-					//
-
-		.replies
-			width: 100%
+		article.replies
+			width: 780px
 			height: auto
-			margin: 0
+			margin: 0 -5px
+			display: inline-block
+
+			.reply, .more-replies
+				&:hover
+					box-shadow: 0 0 25px rgba(0,0,0,.1)
 
 			.more-replies
-				width: 760px
-				font-size: 28px
-				font-weight: 300
+				background: white
+				width: 770px
+				font-size: 17px
+				font-weight: 600
+				color: #444
 				display: inline-block
-				margin: 15px 5px
+				margin: 0 5px
+				padding: 10px 0
+				border-bottom: 1px solid rgba(0,0,0,.1)
+				text-align: center
+				text-transform: uppercase
 
 			.reply
 				background: rgba(0,0,0,0.1)
-				width: 375px
-				height: 260px
+				width: 380px
+				height: 237px
 				display: inline-block
 				overflow: hidden
 				margin: 0 5px 10px
@@ -1141,13 +1291,10 @@ section.main
 
 					img
 						width: 380px
-						height: 260px
+						height: 237px
 
 				a.overlay
-					background: -webkit-linear-gradient(transparent 60%, rgba(0,0,0,0.7) 100%)
-					background: -o-linear-gradient(transparent 60%, rgba(0,0,0,0.7) 100%)
-					background: -ms-linear-gradient(transparent 60%, rgba(0,0,0,0.7) 100%)
-					background: linear-gradient(transparent 60%, rgba(0,0,0,0.7) 100%)
+					@include vendor-prefix(background, linear-gradient(transparent 60%, rgba(0,0,0,0.7) 100%))
 					width: 380px
 					height: 260px
 					display: block
@@ -1162,29 +1309,30 @@ section.main
 					padding: 0 20px 20px
 
 					.infos
-						.name
-							font-size: 24px
+						font-size: 15px
+						color: rgba(255,255,255,.75)
+						float: left
+
+						a.author
+							width: auto
+							display: block
+							font-size: 19px
 							color: white
-							font-weight: 300
-
-						.author
-							font-size: 14px
-							color: rgba(255,255,255,.75)
-
-							a
-								color: rgba(255,255,255,.75)
-								font-weight: bold
 
 				a.selecting-prop
 					color: rgba(255,255,255,0)
 					display: block
 					position: absolute
-					top: 15px
+					top: 20px
 					right: 20px
 					padding: 5px 5px 5px 10px
 					font-size: 15px
 					line-height: 20px
 					text-transform: uppercase
+
+					&:hover
+						&:after
+							animation: beat 1.25s cubic-bezier(.165,.84,.44,1) infinite
 
 					&:hover, &.selected
 						color: rgba(0,0,0,0.5)
@@ -1197,10 +1345,12 @@ section.main
 
 
 					&:after
+						width: 24px
+						height: 20px
 						margin-left: 5px
 						display: block
 						text-align: center
-						font-family: "icomoon"
+						font-family: "pp-font"
 						speak: none
 						font-size: 20px
 						font-style: normal
@@ -1211,7 +1361,7 @@ section.main
 						line-height: 1
 						-webkit-font-smoothing: antialiased
 						-moz-osx-font-smoothing: grayscale
-						content: "\e906"
+						content: $icon-hearth
 						float: right
 						color: rgba(255,255,255,.75)
 
@@ -1222,88 +1372,225 @@ section.main
 					padding: 0 20px 20px
 
 					a.count-vote
-						font-size: 30px
-						font-weight: 300
 						color: rgba(255,255,255,.75)
-						display: block
 
-						&:hover
+						&:hover, &.voted
 							color: #00D084
 
-						&.voted
-							color: #00D084
-							text-shadow: 0 0 10px rgba(0,0,0,.25)
-
-						&:after
-							display: block
-							width: 20px
-							height: 20px
-							padding: 10px
-							text-align: center
-							font-family: "icomoon"
-							speak: none
-							font-size: 20px
-							font-style: normal
-							font-weight: normal
-							font-variant: normal
-							text-transform: none
-							line-height: 1
-							-webkit-font-smoothing: antialiased
-							-moz-osx-font-smoothing: grayscale
-							content: "\e905"
-							float: right
+						&.blocked
+							color: rgba(255,255,255,.5)
 
 				&.selected
-					width: 760px
-					height: 525px
+					width: 770px
+					height: 480px
 
 					.prop
-						width: 760px
-						height: 525px
+						width: 770px
+						height: 480px
 						display: block
 
 						img
-							width: 760px
-							height: 525px
+							width: 770px
+							height: 480px
 
 					a.overlay
 						background: url(../images/img-title.png) repeat-x bottom
-						width: 760px
-						height: 525px
+						width: 770px
+						height: 480px
 
 					.img-title
 
 						a.avatar
-							background: rgba(255,255,255,0.25)
-							width: 60px
-							height: 60px
-							overflow: hidden
-							border-radius: 50%
-							display: block
+							width: 48px
+							height: 48px
 							float: left
-
-							img
-								width: 100%
+							border: 1px solid rgba(255,255,255,0.75)
 
 						.infos
-							float: left
-							margin-left: 10px
+							padding-left: 10px
 
-							.name
-								font-size: 28px
-								display: inline
+		article.add-prop
+			background: white
+			width: 770px
+			height: auto
+			border-bottom: 1px solid rgba(0,0,0,.1)
+			padding: 15px 20px 25px
+			margin: 25px 0
+			display: inline-block
 
-							.author
-								font-size: 18px
+			.title-boxe
+				font-size: 17px
+				font-weight: 600
+				color: $main-color
+				text-transform: uppercase
+				margin-bottom: 10px
 
-					.actions
-						a.count-vote
-							font-size: 35px
+			.dragzone
+				width: 730px
+				min-height: 500px
+				border: 2px dashed rgba(0,0,0,.1)
+				margin-bottom: 10px
+				position: relative
+				z-index: 0
 
-							&:after
-								width: 25px
-								height: 25px
-								font-size: 25px
+				&.drag
+					border-color: rgba(0,0,0,.25)
+
+					&.success
+						border-color: #0ABC4B
+
+					&.danger
+						border-color: #F23F2D
+
+					&.warning
+						border-color: #F7CA18
+
+					&.info
+						border-color: #02AAE9
+
+				form
+					width: 100%
+					min-height: 500px
+					position: relative
+					padding: 150px 0
+					z-index: 1
+
+					p
+						width: 100%
+						text-align: center
+						color: #777
+
+						&:before
+							display: block
+							font-family: "pp-font"
+							color: rgba(0,0,0,.1)
+							content: $icon-upload
+							font-size: 120px
+
+						.choose
+							color: $main-color
+
+							&:hover
+								color: #5E1C1B
+
+					input
+						position: absolute
+						margin: 0
+						padding: 0
+						width: 100%
+						height: 100%
+						outline: none
+						top: 0
+						left: 0
+						opacity: 0
+
+					button
+						display: block
+						margin: 15px auto
+						padding: 8px 15px
+						background: transparent
+						border: 2px solid $main-color
+						color: $main-color
+						font-weight: 600
+						font-size: 15px
+						width: auto
+						height: auto
+						border-radius: 3px
+						outline: none
+						z-index: 2
+						position: relative
+
+						&:hover
+							background: $main-color
+							color: white
+
+						&:active
+							border: 0
+
+			span
+				color: #777
+				font-size: 15px
+
+		article.comments
+			margin: 0 0 25px
+			display: inline-block
+
+			.title-section
+				font-size: 22px
+				color: #444
+				text-transform: uppercase
+				font-weight: 600
+				margin-bottom: 15px
+
+			ul.list-comments
+				background: white
+				border-bottom: 1px solid rgba(0,0,0,.1)
+				padding: 0
+				margin: 0
+
+				li.comment
+					padding: 15px 20px
+					list-style: none
+					overflow: hidden
+					border-bottom: 1px solid rgba(0,0,0,.1)
+
+					&:last-child
+						border: none
+
+					a.avatar
+						width: 32px
+						height: 32px
+						float: left
+
+					.comment-container, .composer-container
+						width: 683px
+						height: auto
+						font-size: 15px
+						display: inline-block
+						float: left
+						margin-left: 15px
+						position: relative
+
+						a.username
+							color: #444
+							font-weight: 600
+							display: block
+
+							&:hover
+								color: #5E1C1B
+
+						.comment-content
+							display: block
+
+					.composer-container
+						display: -webkit-box
+						display: -moz-box
+						display: -webkit-flex
+						display: -ms-flexbox
+						display: flex
+
+						.comment-composer
+							width: 100%
+							height: 32px
+							display: block
+							min-height: 32px
+							border: none
+							background: transparent
+							resize: none
+
+						.button-comment
+							border: none
+							text-transform: uppercase
+							background: transparent
+							font-weight: 600
+							color: #777
+							padding: 8px
+							border-radius: 3px
+							max-height: 35px
+
+							&:hover
+								background: #F3F3F3
+								color: $main-color
 
 	.sidebar
 		width: 370px
@@ -1439,7 +1726,7 @@ section.main
 					display: inline
 
 					&:after
-						content: "-"
+						content: "Â·"
 						margin: 0 5px
 
 				li:last-child:after
@@ -1645,7 +1932,7 @@ section.overlay-messages
 							height: 18px
 							padding: 5px
 							text-align: center
-							font-family: "icomoon"
+							font-family: "pp-font"
 							speak: none
 							font-size: 18px
 							font-style: normal
@@ -1655,7 +1942,7 @@ section.overlay-messages
 							line-height: 1
 							-webkit-font-smoothing: antialiased
 							-moz-osx-font-smoothing: grayscale
-							content: "\e902"
+							content: $icon-new
 
 				.chat-top
 					width: 600px
@@ -1914,8 +2201,8 @@ section.overlay-messages
 								line-height: 1
 								-webkit-font-smoothing: antialiased
 								-moz-osx-font-smoothing: grayscale
-								font-family: "icomoon"
-								content: "\e904"
+								font-family: "pp-font"
+								content: ""
 								text-indent: -9999px
 								position: absolute
 								top: 10px
@@ -1930,6 +2217,231 @@ section.overlay-messages
 									background: #777
 									color: white
 								outline: none
+
+section.galery
+	background: rgba(0,0,0,.97)
+	width: 100%
+	height: 100%
+	position: fixed
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	
+	img.single-photo
+		max-width: 100%
+		max-height: 100%
+		position: absolute
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+	
+	div.overlay
+		background: -webkit-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		background: -o-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		background: -ms-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		background: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		position: absolute
+		width: 100%
+		height: 100%
+		top: 0
+		left: 0
+	
+	.content-galery
+		width: 100%
+		height: 100%
+		color: white
+		position: absolute
+		bottom: 0
+		left: 0
+		max-width: 100%
+		
+		.action-top
+			width: 100%
+			height: 50px
+			position: absolute
+			left: 0
+			top: 0
+			
+			.action-group
+				width: 33%
+				display: block
+				position: absolute
+				top: 0
+				
+				&.left
+					left: 0
+					padding-left: 15px
+				
+				&.center
+					left: 50%
+					transform: translateX(-50%)
+					text-align: center
+					
+				&.right
+					right: 0
+					text-align: right
+
+				a.galery-logo
+					background: url("../images/galery-logo.svg") no-repeat
+					background-size: contain
+					width: 40px
+					height: 32px
+					text-indent: -9999px
+					color: transparent
+					display: block
+					margin-top: 15px
+					
+				a.selecting-prop
+					color: rgba(255,255,255,0)
+					display: inline-block
+					margin-top: 15px
+					padding: 5px 5px 5px 10px
+					font-size: 15px
+					line-height: 20px
+					text-transform: uppercase
+
+					&:hover
+						&:after
+							animation: beat 1.25s cubic-bezier(.165,.84,.44,1) infinite
+					
+					&:hover, &.selected
+						color: rgba(0,0,0,0.5)
+						background: rgba(255,255,255,0.5)
+						border-radius: 3px
+						border: 1px solid rgba(0,0,0,0.1)
+						
+						&:after
+							color: #EB154C
+					
+					&:after
+						width: 24px
+						height: 20px
+						margin-left: 5px
+						display: block
+						text-align: center
+						font-family: "pp-font"
+						speak: none
+						font-size: 20px
+						font-style: normal
+						font-weight: normal
+						font-variant: normal
+						text-transform: none
+						text-align: center
+						line-height: 1
+						-webkit-font-smoothing: antialiased
+						-moz-osx-font-smoothing: grayscale
+						content: $icon-hearth
+						float: right
+						color: rgba(255,255,255,.75)
+						
+				a.icon
+					background: transparent
+					width: 32px
+					height: 32px
+					margin: 15px 5px
+					display: inline-block
+					text-align: center
+					font-family: "pp-font"
+					color: rgba(255,255,255,.75)
+					speak: none
+					font-size: 20px
+					font-style: normal
+					font-weight: normal
+					font-variant: normal
+					text-transform: none
+					line-height: 1
+					-webkit-font-smoothing: antialiased
+					-moz-osx-font-smoothing: grayscale
+					padding: 6px 0
+
+					&:hover
+						color: white
+
+					&:after
+						text-align: center
+					
+					&.infos
+						&:after
+							content: $icon-infos
+
+					&.share
+						&:after
+							content: $icon-share
+						
+					&.download
+						&:after
+							content: $icon-download
+					
+					&.report
+						&:after
+							content: $icon-report
+					
+					&.delete
+						&:after
+							content: $icon-delete
+					
+				button.button-close
+					background: transparent
+					border: 0
+					font-size: 32px
+					padding: 5px 20px 5px 10px
+					font-family: -apple-system,".SFNSText-Regular","Helvetica Neue","Roboto","Segoe UI",sans-serif
+					letter-spacing: 0
+					font-weight: 300
+					font-style: normal
+					color: #777
+		
+		.img-title
+			position: absolute
+			width: auto
+			max-width: 100%
+			height: auto
+			left: 0
+			bottom: 0
+			padding: 0 20px 20px
+			
+			a.avatar
+				background: rgba(255, 255, 255, 0.25)
+				width: 60px
+				height: 60px
+				overflow: hidden
+				border-radius: 50%
+				display: block
+				float: left
+				border: 1px solid rgba(255,255,255,.5)
+				
+				img
+					width: 60px
+					height: 60px
+					
+			.infos
+				float: left
+				margin-left: 10px
+				
+				.name
+					font-size: 28px
+					display: inline
+					font-weight: 300
+				
+				.author
+					font-size: 18px
+					
+					a
+						color: rgba(255, 255, 255, 0.75)
+						font-weight: bold
+		.action-bottom
+			position: absolute
+			bottom: 0
+			right: 0
+			padding: 0 20px 20px
+
+			a.count-vote
+				color: rgba(255,255,255,.75)
+
+				&:hover, &.voted
+					color: #00D084
+					text-shadow: 0 0 10px rgba(0,0,0,.25)
 
 .fixed
 	section.page
@@ -1972,3 +2484,27 @@ section.overlay-messages
 		transform: scale(0.75)
 	100%
 		transform: scale(1)
+
+@keyframes beat
+	0%
+		transform: scale(1)
+	20%
+		transform: scale(1.2)
+	30%
+		transform: scale(1.05)
+	45%
+		transform: scale(1.2)
+	100%
+		transform: scale(1)
+    
+@keyframes vote-arrow
+	0%
+		opacity: 0.25
+		transform: translateY(25%)
+	33%
+		opacity: 0.5
+	99%
+		transform: translateY(-150%)
+	100%
+		opacity: 0
+		display: none

@@ -16,6 +16,7 @@ class Proposition
 {
     public function __construct()
     {
+        $this->enabled = true;
         $this->accepted = false;
         $this->createdDate = new \Datetime();
         $this->upvote = 0;        
@@ -81,6 +82,19 @@ class Proposition
      * @ORM\Column(name="createdDate", type="datetime")
      */
     private $createdDate;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean")
+     */
+    private $enabled;
+    
+    /**    
+     * @ORM\OneToOne(targetEntity="PP\ReportBundle\Entity\DisableTicket", cascade={"persist", "remove"})     
+     * @Assert\Valid()          
+     */
+    private $disableTicket;
     
     /**
      * Get id
@@ -210,7 +224,9 @@ class Proposition
     public function setImage(\PP\ImageBundle\Entity\Image $image = null)
     {
         $this->image = $image;
-        $this->image->addSizeList("380x260");
+        $this->image->addSizeList("home");
+        $this->image->addSizeList("single");
+        $this->image->addSizeList("selected");
         return $this;
     }
 
@@ -255,7 +271,9 @@ class Proposition
     * @ORM\PostPersist()    
     */
     public function createThumbnail(){               
-        $this->image->resize("380x260",380, 260);        
+        $this->image->resize("home",240, 150);
+        $this->image->resize("single",380, 237);
+        $this->image->resize("selected",770, 480);
     }
 
     /**
@@ -314,5 +332,58 @@ class Proposition
     public function getUpvotedBy()
     {
         return $this->upvotedBy;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     *
+     * @return Proposition
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+    
+    public function disable(){
+        $this->enabled = false;
+        $this->imageRequest->setPropositionsNb($this->imageRequest->getPropositionsNb()-1);
+    }
+    
+    /**
+     * Set disableTicket
+     *
+     * @param \PP\ReportBundle\Entity\DisableTicket $disableTicket
+     *
+     * @return Proposition
+     */
+    public function setDisableTicket(\PP\ReportBundle\Entity\DisableTicket $disableTicket = null)
+    {
+        $this->disableTicket = $disableTicket;
+
+        return $this;
+    }
+
+    /**
+     * Get disableTicket
+     *
+     * @return \PP\ReportBundle\Entity\DisableTicket
+     */
+    public function getDisableTicket()
+    {
+        return $this->disableTicket;
     }
 }

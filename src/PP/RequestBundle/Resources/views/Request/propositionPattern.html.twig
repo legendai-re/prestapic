@@ -1,33 +1,35 @@
 {% if (proposition.image is not null) %}                    
     <div class="reply">
-        <div class="prop">
+       <div class="prop">
             <img 
-            bn-lazy-src="{{ asset(proposition.image.webPath("380x260")) }}"
+            bn-lazy-src="{{ asset(proposition.image.webPath("single")) }}"
             alt="{{ proposition.image.alt }}"
             />                
         </div>
-        <a class="overlay" href="{{ asset(proposition.image.webPath("original"))}}" title=""></a>        
+        <a class="overlay" href="{{ asset(proposition.image.webPath("original"))}}" title="{{ proposition.title }}"></a>        
         <div class="img-title">                                
             <div class="infos">
-              <div class="name">{{ proposition.title }}</div>
-              <div class="author">
-                by
-                <a href="{{ path('pp_user_profile', {'slug': proposition.author.slug}) }}" title="{{ proposition.author.slug }}">{{ proposition.author.name }}</a>
-              </div>
+                    {{ proposition.createdDate|date('Y-m-d') }} by 
+                    <a target="_self" class="author" href="{{ path('pp_user_profile', {'slug': proposition.author.slug}) }}" title="{{ proposition.author.name }}">{{  proposition.author.name }}</a>
             </div>
         </div>
-        <div class="actions">
-          
-        <a id="propositionUpvoteButton_{{ proposition.id }}"  href="" title="Up vote"         
-                    {% if canUpvoteProposition[proposition.id] == true %}
-                        ng-click="requests.postPropositionVote({{ proposition.id }})"
-                        class="count-vote"
+        <div class="actions">          
+            <a id="propositionUpvoteButton_{{ proposition.id }}"  href="" title="Up vote"
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}                        
+                        {% if app.user.id == proposition.author.id %}
+                             class="count-vote blocked"
+                        {% elseif canUpvoteProposition[proposition.id] == true %}
+                            ng-click="requests.postPropositionVote({{ proposition.id }})"
+                            class="count-vote"
+                        {% else %}
+                            class="count-vote voted"
+                        {% endif %}
                     {% else %}
-                        class="count-vote voted"
+                        class="count-vote blocked"
                     {% endif %}
-        >                 
-            {{ proposition.upvote }}
-        </a>
-      </div> 
+            >                 
+                {{ proposition.upvote }}
+            </a>
+        </div> 
     </div>                        
 {% endif %}

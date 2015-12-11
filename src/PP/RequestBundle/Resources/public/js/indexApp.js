@@ -17,14 +17,15 @@
     containerApp.controller('requestsController', ['$scope', '$rootScope', '$http', '$compile', '$location', function ($scope, $rootScope, $http, $compile, $location) {                                                                                                 
             
             this.contentToDisplay = $('#contentToDisplaySelect').val();
-            this.displayMode = $('#displayModeSelect').val();
+            this.displayMode = null;
             
             var getParams = "?";
             var searchQueryParam = 'search_query=';
             var tagListParam = 'tags='; 
             var catListParam = 'categories=';
             var concerningMeParam = 'me=false';
-            this.init = function(){
+            this.init = function(mode){
+                this.displayMode = mode;
                 if($location.search().search_query != null){
                     searchQueryParam += $location.search().search_query;  
                 }
@@ -52,7 +53,7 @@
                         
                         var newPage = angular.element(response.data);                        
                         $compile(newPage)($scope);                             
-                        angular.element( document.querySelector('#loadPage'+page)).append(newPage);  
+                        angular.element( document.querySelector('#loadPage1')).append(newPage);                        
                         document.getElementById('loadingGif').style.display = 'none';
 
                     }, function(response) {
@@ -60,20 +61,29 @@
                     }
                 );                                            
             };                       
-            
-            this.update = function(){
+                        
+            this.update = function(){                                
                 console.log(this.contentToDisplay);
                 $("#loadPage1").html("");
                 nextLoadTrigger = '#loadPageTrigger2';            
                 nextPage = 2;
                  getParams = "?"+searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam+"&display_mode="+this.displayMode+"&content_to_display="+this.contentToDisplay;
                 getRequests(1);
-            };
+            };                        
+            
+            this.updateMode = function(mode){
+                this.displayMode = mode;
+                $('.section').removeClass("selected");
+                $('#mode_'+mode).addClass("selected");
+                this.update();
+            }
             
             var readyForRequestVote = true;
+            var upvotedRequest = [];
             this.postRequestVote = function(id){
-                if(readyForRequestVote){
+                if(readyForRequestVote && upvotedRequest[id] == null){
                     readyForRequestVote=false;
+                    upvotedRequest[id] = true;
                     $("#imageRequestUpvoteButton_"+id).addClass("voted");
                     document.getElementById('imageRequestUpvoteButton_'+id).innerHTML = parseInt($('#imageRequestUpvoteButton_'+id).html())+1;                            
                     var myData = {

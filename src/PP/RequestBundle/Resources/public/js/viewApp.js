@@ -10,8 +10,8 @@ containerApp.config(['$locationProvider', function ($locationProvider) {
     $locationProvider.html5Mode(true);        
 }]);                 
 
-containerApp.controller('requestController',['$scope', '$http', '$location', '$window', function ($scope, $http, $location, $window) {                                                                                                                                                                                                                                          
-
+containerApp.controller('requestController',['$scope', '$http', '$location', '$window', function ($scope, $http, $location, $window) {                                                                                                                                                                                                                                                  
+        
         var readyForRequestVote = true;
         this.postRequestVote = function(id){
             if(readyForRequestVote){
@@ -27,11 +27,9 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
                     url: formAction,                    
                     data: JSON.stringify(myData)
                      }).               
-                    then(function(response) {
-                        readyForRequestVote = true;                            
+                    then(function(response) {                                                    
                     }, function(response) {
-                        console.log("Request failed : "+response.statusText );
-                        readyForRequestVote = true;
+                        console.log("Request failed : "+response.statusText );                        
                     }                                 
                 );
             }
@@ -99,7 +97,8 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
 }]);
 
 containerApp.controller('propositionsController', ['$scope', '$http', '$compile', '$window', function ($scope, $http, $compile, $window) {                                                                                                 
-
+        
+        
         var imageRequestId = null;
 
         this.init = function(id){
@@ -107,30 +106,41 @@ containerApp.controller('propositionsController', ['$scope', '$http', '$compile'
             imageRequestId = id;
         }
 
-        var nextLoadTrigger = '#loadPageTrigger2';            
-        var nextPage = 2;
+        var nextLoadTrigger = '#loadPageTrigger3';            
+        var nextPage = 3;
 
-
+        
         var getPropositions = function(imageRequestId, page){                    
                 document.getElementById('loadingGif').style.display = 'block';                    
                 var formAction = document.forms["pp_request_api_get_request_proposition_form_"+page].action;
                 $http.get(formAction+".html").
-                    then(function(response){                                               
+                    then(function(response){
                         var newPage = angular.element(response.data);                        
                         $compile(newPage)($scope);                             
                         angular.element( document.querySelector('#loadPage'+page)).append(newPage);                        
                         document.getElementById('loadingGif').style.display = 'none';
+                        if($('#showMoreButton') != null && page == 1){
+                            $('#showMoreButton').css("display", "inline-block");
+                        }
                     },function(response) {
                         console.log("Request failed : "+response.statusText );                        
                     }
                 );
         }
-
+        
+        this.showMore = function(){
+            getPropositions(imageRequestId, 2);
+            $('#showMoreButton').css("display", "none");
+        };
+        
         var readyForPropositionVote = true;
+        var votedProposition = [];
         this.postPropositionVote = function(propositionId){
-            if(readyForPropositionVote){
+            if(readyForPropositionVote && votedProposition[propositionId] == null ){
+                votedProposition[propositionId] = true;
                 readyForPropositionVote = false;
                 $("#propositionUpvoteButton_"+propositionId).addClass("voted");
+                $("#propositionUpvoteButton_"+propositionId).addClass("animate");
                 document.getElementById('propositionUpvoteButton_'+propositionId).innerHTML = parseInt($('#propositionUpvoteButton_'+propositionId).html())+1; 
                 var myData = {
                     id: propositionId
@@ -142,7 +152,7 @@ containerApp.controller('propositionsController', ['$scope', '$http', '$compile'
                     data: JSON.stringify(myData)
                      }).
                     then(function(response){
-                        readyForPropositionVote = true;
+                        readyForPropositionVote = true;                       
                     },function(response) {
                         console.log("Request failed : "+response.statusText );
                         readyForPropositionVote = true;

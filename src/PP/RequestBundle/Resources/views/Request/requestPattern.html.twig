@@ -1,63 +1,76 @@
 
-<article class="demand">
-    {# image request author avatar #}
-    <a target="_self" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" class="avatar">
-        <img bn-lazy-src="{{ asset(imageRequest.author.profilImage.webPath("70x70")) }}" alt="{{ imageRequest.author.profilImage.alt }}">
-    </a>                         
-
-    <div class="infos">
+<article class="request">
+    <div class="request-container">
+        
         {# display image request title  #}
         <h1>
-            <a  target="_self" href="{{ path('pp_request_view', {'slug': imageRequest.slug}) }}">{{ imageRequest.title }}</a>
-            <a id="imageRequestUpvoteButton_{{ imageRequest.id }}" href="#" title="Up vote"
-                {% if canUpvoteImageRequest[imageRequest.id] == true%}
+            <a target="_self" target="_self" href="{{ path('pp_request_view', {'slug': imageRequest.slug}) }}">{{ imageRequest.title }}</a>                              
+        </h1>
+        
+        {# upvote #}
+        <a id="imageRequestUpvoteButton_{{ imageRequest.id }}" href="#" title="Up vote"
+            {% if  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {% if app.user.id == imageRequest.author.id %}
+                    class="count-vote blocked"
+                {% elseif canUpvoteImageRequest[imageRequest.id] == true %}                
                     ng-click="requests.postRequestVote({{ imageRequest.id }})"
-                    class="upvote-demand"
+                    class="count-vote"
                 {% else %}
-                    class="upvote-demand voted"
+                    class="count-vote voted"
                 {% endif %}
-            >
-                {{ imageRequest.upvote }}
-            </a>                  
-        </h1>       
-
+            {% else %}
+                class="count-vote blocked"
+            {% endif %}
+        >
+            {{ imageRequest.upvote }}
+        </a>
+        
+        <div class="author-container">
+            {# image request author avatar #}
+            <a target="_self" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" class="avatar">
+                <img bn-lazy-src="{{ asset(imageRequest.author.profilImage.webPath("70x70")) }}" alt="{{ imageRequest.author.profilImage.alt }}">
+            </a>
+            <span class="author-infos">
+                <span title="{{ imageRequest.createdDate|date('Y-m-d H:i:s') }}">{{ imageRequest.dateAgo }}</span> in                 
+                <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'categories': imageRequest.category.name }) }}" >{{ imageRequest.category.name }}</a> by                 
+            </span>
+            <a target="_self" class="author-username" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}">{{ imageRequest.author.name }}</a>  
+        </div>
+                                       
         {% set break = false %}
-        <div class="tag-list">
-            <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'categories': imageRequest.category.name }) }}" >{{ imageRequest.category.name }}</a>
+        <div class="tag-list">                
             {% for tag in imageRequest.tags if not break%}
                 <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'tags':tag.name }) }}">{{ tag.name }}</a>
                 {% if loop.index == 3  %}{% set break = true %}{% endif %}
             {% endfor %}
-        </div>
-        <div class="author">
-            <span title="{{ imageRequest.createdDate|date('Y-m-d H:i:s') }}">{{ imageRequest.dateAgo }}</span>   
-            by <a target="_self"  href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}">{{ imageRequest.author.name }}</a>                    
-        </div>     
-    </div>                                                                                                                                       
-
-    {# display 3 or 2 proposition + x ( #}
-    {% set break = false %}
-    <div class="replies" >
-        {% for proposition in propositionsList['imageRequest_'~imageRequest.id] if not break %}                
-            <a target="_self" class="reply" href="" ng-click="requests.showPopup({{ proposition.id }})">
-                <img 
-                bn-lazy-src="{{ asset(proposition.image.webPath("380x260")) }}"
-                alt="{{ proposition.image.alt }}"
-                />                
-                {% if loop.index == 3  %}{% set break = true %}{% endif %}
-                {% if loop.index == 2 and imageRequest.propositionsNb > 3 %}{% set break = true %}{% endif %}
-            </a> 
-        {% endfor %}
-
-        {# display proposition's number #}
-        {% if imageRequest.propositionsNb > 3  %}
-            <a target="_self" href="{{ path('pp_request_view', {'slug': imageRequest.slug}) }}" title="+ {{ imageRequest.propositionsNb-2 }}" class="more-replies">                    
-                +{{ imageRequest.propositionsNb-2 }}             
-            </a>                
-        {% endif %}
-        
+        </div>              
+                                                                                                                                  
     </div>
+            
+    {# display 3 or 2 proposition + x ( #}
+    {% if imageRequest.propositionsNb > 0 %}
+        {% set break = false %}    
+        <div class="propositions-container" >
+            <span class="prop-num">{{ imageRequest.propositionsNb }} propositions</span>
+            {% for proposition in propositionsList['imageRequest_'~imageRequest.id] if not break %}                
+                <a target="_self" class="prop-img" href="" ng-click="requests.showPopup({{ proposition.id }})">
+                    <img 
+                    bn-lazy-src="{{ asset(proposition.image.webPath("home")) }}"
+                    alt="{{ proposition.image.alt }}"
+                    />                
+                    {% if loop.index == 3  %}{% set break = true %}{% endif %}
+                    {% if loop.index == 2 and imageRequest.propositionsNb > 3 %}{% set break = true %}{% endif %}
+                </a> 
+            {% endfor %}
 
+            {# display proposition's number #}
+            {% if imageRequest.propositionsNb > 3  %}
+                <a target="_self" href="{{ path('pp_request_view', {'slug': imageRequest.slug}) }}" title="+ {{ imageRequest.propositionsNb-2 }}" class="prop-more">                    
+                    +{{ imageRequest.propositionsNb-2 }}             
+                </a>                
+            {% endif %}
+        </div>
+    {% endif %}
 </article>
    
     

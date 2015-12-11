@@ -95,14 +95,14 @@
     </section>
     
     {# display galery #}
-    <section class="galery">        
+    <section class="profile-galery">        
         <div class="content">
             <a target="_self" href="{{ path('pp_user_gallery', {'slug':pageProfile.slug})}}"><h1>Gallery ({{ galleryImagesNb }} pictures)</h1></a>
             {% set break = false %}
             <ul>
             {% for proposition in galleryImages if not break %}
                 <li>
-                    <a href="{{ path('pp_request_view', {'slug':proposition.imageRequest.slug, 'page': 1 }) }}"><img src="{{ asset(proposition.image.webPath("380x260")) }}" alt="{{ proposition.image.alt }}"></a>                    
+                    <a href="{{ path('pp_request_view', {'slug':proposition.imageRequest.slug, 'page': 1 }) }}"><img src="{{ asset(proposition.image.webPath("single")) }}" alt="{{ proposition.image.alt }}"></a>                    
                 </li>
                {% if loop.index >= 4  %}{% set break = true %}{% endif %}
                {% if loop.index >= 3 and galleryImagesNb > 4 %}{% set break = true %}{% endif %}
@@ -122,7 +122,7 @@
 {% endblock %}
 
 {% block body %}   
-    <div class="demand-list" > 
+    <div class="main-left" > 
         {% if pageProfile.enabled == true %}
             
             {% if isHownProfile == true %}{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}{% endif %}

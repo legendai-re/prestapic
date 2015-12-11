@@ -201,6 +201,26 @@ class PropositionApiController extends Controller
         return $response;
     }
     
+    public function patchDisableAction(){
+        
+        $response = new Response();
+        
+        $propositionId = $request->get("id");
+        /* init repositories */
+        $em = $this->getDoctrine()->getManager();
+        $propositionRepository = $em->getRepository('PPPropositionBundle:Proposition');        
+        $currentUser = $this->getUser();
+        $proposition = $propositionRepository->find($propositionId);
+            
+        if (($this->get('security.context')->isGranted('ROLE_USER') && $proposition->getAuthor()->getId() == $currentUser->getId()) || $this->get('security.context')->isGranted('ROLE_MODERATOR')) {
+            
+           $proposition->disable();                                    
+        
+        }else{ $response->setStatusCode(Response::HTTP_FORBIDDEN);}
+        
+        return $response;
+    }
+    
     private function getViewHandler()
     {
         return $this->container->get('fos_rest.view_handler');

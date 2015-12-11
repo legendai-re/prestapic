@@ -1,4 +1,4 @@
-<div class="replies">
+<article class="replies">
     {% for proposition in propositionList %}
         {{ include("PPRequestBundle:Request:propositionPattern.html.twig") }}
         {% if loop.index == 3 %}
@@ -10,5 +10,5 @@
     {% else %}        
     {% endfor %} 
     {% if haveNextPage == true %}<div  id="{{ "loadPage"~nextPage }}"></div>{% endif %}
-</div>
+</article>
 <!--//!->

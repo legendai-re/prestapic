@@ -1,8 +1,8 @@
-{% if (proposition.image is not null) and proposition.accepted == false %}                    
+{% if (proposition.image is not null) %}                    
         <div class="reply">
             <div class="prop">
                 <img 
-                bn-lazy-src="{{ asset(proposition.image.webPath("380x260")) }}"
+                bn-lazy-src="{{ asset(proposition.image.webPath("single")) }}"
                 alt="{{ proposition.image.alt }}"
                 />                
             </div>
@@ -13,11 +13,8 @@
             {% endif %}
             <div class="img-title">                                
                 <div class="infos">
-                  <div class="name">{{ proposition.title }}</div>
-                  <div class="author">
-                    by
-                    <a href="{{ path('pp_user_profile', {'slug': proposition.author.slug}) }}" title="{{ proposition.author.slug }}">{{ proposition.author.name }}</a>
-                  </div>
+                    {{ proposition.createdDate|date('Y-m-d') }} by 
+                    <a target="_self" class="author" href="{{ path('pp_user_profile', {'slug': proposition.author.slug}) }}" title="{{ proposition.author.name }}">{{  proposition.author.name }}</a>
                 </div>
             </div>                             
             <div class="actions">               
