@@ -66,9 +66,15 @@ class PropositionController extends Controller
                ->getForm()
                ->createView();
         
+         $disablePropositionForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_patch_disable_form', 'form', array(), array())         
+               ->setAction($this->generateUrl('pp_proposition_api_patch_disable', array(), true))
+               ->getForm()
+               ->createView();
+         
         return $this->render('PPPropositionBundle:proposition:propositionPopup.html.twig', array(
             'getPropositionForm' => $getPropositionForm,
-            'upvotePropositionForm' => $upvotePropositionForm            
+            'upvotePropositionForm' => $upvotePropositionForm,
+            'disablePropositionForm' => $disablePropositionForm
         ));
         
     }

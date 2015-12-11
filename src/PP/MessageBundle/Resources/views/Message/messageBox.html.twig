@@ -52,7 +52,7 @@
             <div ng-controller="chatController as chat" class="chat-container" >
                 <div id="conversation" class="chat-conversation">
                     <div class="chat-scroller">
-                        <a href="" ng-click="chat.loadMore()">load more</a>
+                        <a href="" class="chat-more" ng-click="chat.loadMore()">load more</a>
                         <div  ng-repeat="message in currentUser.threadList[currentThread.id].messageList" >
                             <div ng-if="message.messageFromUs" class="message me">
                                 <div class="message-content" ng-bind-html="message.content | linky ">

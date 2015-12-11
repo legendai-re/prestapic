@@ -1,12 +1,12 @@
 {% if (proposition.image is not null) %}                    
-    <div class="reply">
+    <div class="reply" >
        <div class="prop">
             <img 
             bn-lazy-src="{{ asset(proposition.image.webPath("single")) }}"
             alt="{{ proposition.image.alt }}"
             />                
         </div>
-        <a class="overlay" href="{{ asset(proposition.image.webPath("original"))}}" title="{{ proposition.title }}"></a>        
+        <a ng-click="requests.showPopup({{ proposition.id }})" class="overlay" href="{{ asset(proposition.image.webPath("original"))}}" title="{{ proposition.title }}"></a>        
         <div class="img-title">                                
             <div class="infos">
                     {{ proposition.createdDate|date('Y-m-d') }} by 

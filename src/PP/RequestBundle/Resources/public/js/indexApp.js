@@ -84,6 +84,7 @@
                 if(readyForRequestVote && upvotedRequest[id] == null){
                     readyForRequestVote=false;
                     upvotedRequest[id] = true;
+                    $("#imageRequestUpvoteButton_"+id).addClass("animate");
                     $("#imageRequestUpvoteButton_"+id).addClass("voted");
                     document.getElementById('imageRequestUpvoteButton_'+id).innerHTML = parseInt($('#imageRequestUpvoteButton_'+id).html())+1;                            
                     var myData = {
@@ -106,9 +107,12 @@
             }
             
             var readyForPropositionVote = true;
+            var upvotedPropositions = [];
             this.postPropositionVote = function(propositionId){
-                if(readyForPropositionVote){
+                if(readyForPropositionVote && upvotedPropositions[propositionId] == null){
+                    upvotedPropositions[propositionId] = true;
                     readyForPropositionVote = false;
+                    $("#propositionUpvoteButton_"+propositionId).addClass("animate");
                     $("#propositionUpvoteButton_"+propositionId).addClass("voted");
                     document.getElementById('propositionUpvoteButton_'+propositionId).innerHTML = parseInt($('#propositionUpvoteButton_'+propositionId).html())+1; 
                     var myData = {

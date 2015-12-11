@@ -102,7 +102,7 @@
             <ul>
             {% for proposition in galleryImages if not break %}
                 <li>
-                    <a href="{{ path('pp_request_view', {'slug':proposition.imageRequest.slug, 'page': 1 }) }}"><img src="{{ asset(proposition.image.webPath("single")) }}" alt="{{ proposition.image.alt }}"></a>                    
+                    <a target="_self" href="{{ path('pp_request_view', {'slug':proposition.imageRequest.slug}) }}"><img src="{{ asset(proposition.image.webPath("single")) }}" alt="{{ proposition.image.alt }}"></a>                    
                 </li>
                {% if loop.index >= 4  %}{% set break = true %}{% endif %}
                {% if loop.index >= 3 and galleryImagesNb > 4 %}{% set break = true %}{% endif %}

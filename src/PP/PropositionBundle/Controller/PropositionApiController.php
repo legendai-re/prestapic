@@ -50,7 +50,7 @@ class PropositionApiController extends Controller
         
         $canUpvoteProposition = false;
             
-        if($currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
+        if($this->get('security.context')->isGranted('ROLE_USER') && $currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
             $canUpvoteProposition = true;
         }
         
@@ -201,7 +201,7 @@ class PropositionApiController extends Controller
         return $response;
     }
     
-    public function patchDisableAction(){
+    public function patchDisableAction(Request $request){
         
         $response = new Response();
         
@@ -214,7 +214,9 @@ class PropositionApiController extends Controller
             
         if (($this->get('security.context')->isGranted('ROLE_USER') && $proposition->getAuthor()->getId() == $currentUser->getId()) || $this->get('security.context')->isGranted('ROLE_MODERATOR')) {
             
-           $proposition->disable();                                    
+           $proposition->disable();
+           $em->persist($proposition);
+           $em->flush();
         
         }else{ $response->setStatusCode(Response::HTTP_FORBIDDEN);}
         

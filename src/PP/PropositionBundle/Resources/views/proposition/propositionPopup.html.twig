@@ -2,11 +2,12 @@
     
     {{ form(getPropositionForm) }}
     {{ form(upvotePropositionForm) }}
+    {{ form(disablePropositionForm) }}
     {% verbatim %}
     <div ng-controller="popupController as popup" >
         <base href=" " />
 	<img ng-if="proposition.image" alt="image" class="single-photo" ng-src="{{ proposition.image }}">
-	<div id="propOverlay" class="overlay"></div>
+	<div  id="propOverlay" class="overlay"></div>
 	<div class="content-slideshow">
 		<div id="propActionTop" class="action-top">
 			<div class="action-group left">
@@ -17,8 +18,8 @@
 				<a class="icon share" href="#"></a>
 				<a target="_self" class="icon download" href="{{ proposition.image }}" download="{{ proposition.title }}"></a>
                                 {% endverbatim %}
-				<a ng-if="!proposition.author.isAuthor" class="icon report" href="#"></a>                                
-				<a ng-if="proposition.author.isAuthor" class="icon delete" href="#"></a>
+				<a ng-if="!proposition.author.isAuthor" class="icon report" href=""></a>                                
+				<a ng-if="proposition.author.isAuthor" class="icon delete" href="" ng-click="popup.patchDisable()"></a>
                                 {% verbatim %}
 			</div>
 			<div class="action-group right">

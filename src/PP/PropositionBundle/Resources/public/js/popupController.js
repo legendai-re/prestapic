@@ -13,13 +13,13 @@
     
     popupPropApp.config(['$locationProvider', function ($locationProvider) {
         $locationProvider.html5Mode(true);
-    }]);          
+    }]);
         
     popupPropApp.run(['$rootScope', '$http',function ($rootScope, $http) {   
             $rootScope.hello = "hello";
     }]);
 
-    popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$compile', '$location', function ($scope, $rootScope, $http, $compile, $location) {
+    popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$compile', '$location', '$window', function ($scope, $rootScope, $http, $compile, $location, $window) {
         $scope.propositionLoaded = [];
         
         $rootScope.$on('showPopup', function(event, message){            
@@ -50,7 +50,8 @@
         };
         
         var updateUpvote = function(){
-            if(!$scope.proposition.canUpvote){
+            $("#propositionUpvoteButton").removeClass("animate");
+            if(!$scope.proposition.canUpvote){                
                 $("#propositionUpvoteButton").addClass("voted");
             }
         };
@@ -59,8 +60,11 @@
         this.postPropositionVote = function(propositionId){
             if(canPropositionVote && $scope.proposition.canUpvote){
                 canPropositionVote = false;
+                $("#propositionUpvoteButton").addClass("animate");
                 $("#propositionUpvoteButton").addClass("voted");
-                document.getElementById('propositionUpvoteButton').innerHTML = parseInt($('#propositionUpvoteButton').html())+1; 
+                document.getElementById('propositionUpvoteButton').innerHTML = parseInt($('#propositionUpvoteButton').html())+1;
+                $scope.propositionLoaded[propositionId].upvoteNb++;
+                $scope.propositionLoaded[propositionId].canUpvote = false;
                 var myData = {
                     id: propositionId
                 }
@@ -79,6 +83,24 @@
                 );
             }
         }                
+        
+        this.patchDisable = function(){
+            var myData = {
+                id: $scope.proposition.id
+            }
+            var formAction = document.forms["pp_proposition_api_patch_disable_form"].action;
+            $http({
+                method: 'PATCH',
+                url: formAction,                    
+                data: JSON.stringify(myData)
+                 }).
+                then(function(response){
+                    $window.location.href = $location.$$absUrl;
+                },function(response) {
+                    console.log("Request failed : "+response.statusText );                   
+                }
+            );
+        };
         
         this.close = function(){
             $("#popupPropApp").css("display", "none");

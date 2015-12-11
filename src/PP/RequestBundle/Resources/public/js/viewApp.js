@@ -186,7 +186,14 @@ containerApp.controller('propositionsController', ['$scope', '$http', '$compile'
                 );
             }
         }
-
+        
+        this.showPopup = function(id){
+            var message = {
+                id: id
+            }
+            angular.element(document.getElementById('popupPropApp')).scope().$emit('showPopup', message);                                                
+        };
+        
         $(window).scroll(function() {
             if($(nextLoadTrigger).offset() != null){
             var hT = $(nextLoadTrigger).offset().top,
