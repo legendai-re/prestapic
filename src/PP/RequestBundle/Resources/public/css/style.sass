@@ -148,14 +148,14 @@ img
 		position: absolute
 		top: 0
 		right: 0
-		z-index: 0
+		z-index: -1
 		font-family: "pp-font"
-		font-size: 24px
+		font-size: 20px
 		content: $icon-dropdown
 		float: left
-		width: 24px
-		height: 28px
-		padding: 2px 0
+		width: 20px
+		height: 20px
+		padding: 5px 0
 
 	select
 		position: absolute
@@ -171,7 +171,7 @@ img
 		-webkit-appearance: none
 		-moz-appearance: none
 		appearance: none
-		font-size: 22px
+		font-size: 20px
 		text-transform: uppercase
 		font-weight: 600
 		padding-right: 34px
@@ -645,6 +645,11 @@ header
 								background: $main-color
 								box-shadow: 0 0 0 1px white
 
+					&.no-notification
+						padding: 40px 0 6px
+						text-align: center
+						color: #777
+
 					&.notif 
 						a
 							color: #444
@@ -701,12 +706,6 @@ header
 
 						&.load-content
 							text-align: center
-
-						&.no-notification
-							display: block
-							padding: 40px 0 6px
-							text-align: center
-							color: #777
 
 					&.more-notif
 						position: absolute
@@ -1058,7 +1057,7 @@ section.main
 			margin: 0 0 25px
 
 			a.section
-				font-size: 22px
+				font-size: 20px
 				color: #777
 				text-transform: uppercase
 				font-weight: 600
