@@ -42,17 +42,23 @@
                 then(function(response){
                     switch(type){
                         case IMAGE_REQUEST:
-                           $scope.reportObjects.imageRequestList[targetId].reportTicketList = response.data;
-                           $scope.currentObject =  $scope.reportObjects.imageRequestList[targetId];
-                           $scope.currentObject.type = IMAGE_REQUEST;
-                           $rootScope.$emit('changeCurrentObject', $scope.currentObject);
-                           break;
+                            $scope.reportObjects.imageRequestList[targetId].reportTicketList = response.data;
+                            $scope.currentObject =  $scope.reportObjects.imageRequestList[targetId];
+                            $scope.currentObject.type = IMAGE_REQUEST;
+                            $rootScope.$emit('changeCurrentObject', $scope.currentObject);
+                            break;
+                        case PROPOSITION:
+                            $scope.reportObjects.propositionList[targetId].reportTicketList = response.data;
+                            $scope.currentObject =  $scope.reportObjects.propositionList[targetId];
+                            $scope.currentObject.type = PROPOSITION;
+                            $rootScope.$emit('changeCurrentObject', $scope.currentObject);
+                            break;
                         case USER:
-                          $scope.reportObjects.userList[targetId].reportTicketList = response.data;
-                          $scope.currentObject =  $scope.reportObjects.userList[targetId];
-                          $scope.currentObject.type = USER;                          
-                          $rootScope.$emit('changeCurrentObject', $scope.currentObject);
-                          break;
+                            $scope.reportObjects.userList[targetId].reportTicketList = response.data;
+                            $scope.currentObject =  $scope.reportObjects.userList[targetId];
+                            $scope.currentObject.type = USER;                          
+                            $rootScope.$emit('changeCurrentObject', $scope.currentObject);
+                            break;
                     }              
                 },function(response) {                    
                     console.log("Request failed : "+response.statusText );                    
@@ -88,12 +94,15 @@
                 case IMAGE_REQUEST:
                     var promptValue = prompt("Enter \"YES\" to comfirm");
                     break;
+                case PROPOSITION:
+                    var promptValue = prompt("Enter \"YES\" to comfirm");
+                    break;
                 case USER:
                     var promptValue = prompt("Enter user name to comfirm");
                     break;
             }
             
-            if((type == IMAGE_REQUEST && promptValue == "YES") || (type == USER && promptValue == $scope.currentObject.name)){
+            if((type == IMAGE_REQUEST && promptValue == "YES") || (type == USER && promptValue == $scope.currentObject.name) || (type == PROPOSITION && promptValue == "YES")){
                 var formAction = document.forms["pp_report_api_post_disable_ticket_form"].action;
                 if($scope.disableData.targetId != null){
                     console.log($scope.disableData);
@@ -109,6 +118,11 @@
                                     $scope.currentObject = null;
                                     $scope.reportObjects.userList[$scope.disableData.targetId] = null;
                                     showBannerAlert("success", "Image request deleted !", "");
+                                    break;
+                                case PROPOSITION:
+                                    $scope.currentObject = null;
+                                    $scope.reportObjects.propositionList[$scope.disableData.targetId] = null;
+                                    showBannerAlert("success", "Proposition deleted !", "");
                                     break;
                                 case USER:
                                     $scope.currentObject = null;
@@ -139,6 +153,11 @@
                                     $scope.currentObject = null;
                                     $scope.reportObjects.imageRequestList[$scope.disableData.targetId] = null;
                                     showBannerAlert("success", "Image request's reports ignored !", "");
+                                    break;
+                                case PROPOSITION:
+                                    $scope.currentObject = null;
+                                    $scope.reportObjects.propositionList[$scope.disableData.targetId] = null;
+                                    showBannerAlert("success", "Proposition reports ignored !", "");
                                     break;
                                 case USER:
                                     $scope.currentObject = null;

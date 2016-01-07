@@ -56,25 +56,41 @@ class PropositionController extends Controller
     
     public function propositionPopupAction(){
         
-         $getPropositionForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_get_proposition_form', 'form', array(), array())         
-               ->setAction($this->generateUrl('pp_proposition_api_get_proposition', array(), true))
-               ->getForm()
-               ->createView();
+        $em = $this->getDoctrine()->getManager();
+        $currentUser = $this->getUser();
         
-         $upvotePropositionForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_patch_proposition_vote_form', 'form', array(), array())         
-               ->setAction($this->generateUrl('pp_proposition_api_patch_proposition_vote', array(), true))
-               ->getForm()
-               ->createView();
+        /* create report ticket form */
+        $reportTicketForm = null;        
+        $reportReasonList = array();
+        if($this->get('security.context')->isGranted('ROLE_USER')) {
+            $reportReasonList = $em->getRepository("PPReportBundle:ReportReason")->findAll();
+            $reportTicketForm = $this->get('form.factory')->createNamedBuilder('pp_report_api_post_report_ticket_form', 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_report_api_post_report_ticket', array(), true))
+            ->getForm()
+            ->createView();                                    
+        }
         
-         $disablePropositionForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_patch_disable_form', 'form', array(), array())         
-               ->setAction($this->generateUrl('pp_proposition_api_patch_disable', array(), true))
-               ->getForm()
-               ->createView();
+        $getPropositionForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_get_proposition_form', 'form', array(), array())         
+              ->setAction($this->generateUrl('pp_proposition_api_get_proposition', array(), true))
+              ->getForm()
+              ->createView();
+
+        $upvotePropositionForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_patch_proposition_vote_form', 'form', array(), array())         
+              ->setAction($this->generateUrl('pp_proposition_api_patch_proposition_vote', array(), true))
+              ->getForm()
+              ->createView();
+
+        $disablePropositionForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_patch_disable_form', 'form', array(), array())         
+              ->setAction($this->generateUrl('pp_proposition_api_patch_disable', array(), true))
+              ->getForm()
+              ->createView();
          
         return $this->render('PPPropositionBundle:proposition:propositionPopup.html.twig', array(
             'getPropositionForm' => $getPropositionForm,
             'upvotePropositionForm' => $upvotePropositionForm,
-            'disablePropositionForm' => $disablePropositionForm
+            'disablePropositionForm' => $disablePropositionForm,
+            'reportTicketForm' => $reportTicketForm,            
+            'reportReasonList' => $reportReasonList,
         ));
         
     }

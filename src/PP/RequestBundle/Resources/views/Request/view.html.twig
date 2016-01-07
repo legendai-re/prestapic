@@ -69,46 +69,49 @@
                 <a href="" class="action more">more</a>
             </div>            
         </div>
+        
+             {# edit request form #}
+        {% if isAuthor == true %}
+                {{ form_start(getEditForm)}}
+
+                {{ form_end(getEditForm)}}
+                <input type="submit" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" />
+        {% endif %}         
+
+
+        {# report and delete image request form #}
+        {% if is_granted("ROLE_USER") %}
+            {% if imageRequest.author.id == currentUser.id %}
+                <input type="submit" value="Delete request" ng-click="request.postDisableRequest({{ imageRequest.id }})" />
+                {{ form(disableTicketForm) }}
+            {% elseif is_granted("ROLE_MODERATOR") %}                
+                <form ng-model="request.reportData" ng-submit="request.postDisableRequest({{ imageRequest.id }})" >
+                    <select ng-model="request.reportData.reasonId">
+                    {% for reason in reportReasonList %}
+                        <option value="{{ reason.id }}">{{ reason.name }}</option>
+                    {% endfor %}
+                    </select>
+                    <textarea ng-model="request.reportData.details">More details...</textarea>
+                    <input type="submit" value="Delete"/>
+                </form>
+                {{ form(disableTicketForm) }}                                                
+            {% else %}
+                <form ng-model="request.reportData" ng-submit="request.postReport({{ imageRequest.id }})" >
+                    <select ng-model="request.reportData.reasonId">
+                    {% for reason in reportReasonList %}
+                        <option value="{{ reason.id }}">{{ reason.name }}</option>
+                    {% endfor %}
+                    </select>
+                    <textarea ng-model="request.reportData.details">More details...</textarea>
+                    <input type="submit" value="send report"/>
+                </form>
+                {{ form(reportTicketForm) }}            
+            {% endif %}
+        {% endif %} 
+        
     </article> 
-     {# edit request form #}
-    {% if isAuthor == true %}
-            {{ form_start(getEditForm)}}
+                 
 
-            {{ form_end(getEditForm)}}
-            <input type="submit" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" />
-    {% endif %}              
-
-
-
-    {# report and delete image request form #}
-    {% if is_granted("ROLE_USER") %}
-        {% if imageRequest.author.id == currentUser.id %}
-            <input type="submit" value="Delete request" ng-click="request.postDisableRequest({{ imageRequest.id }})" />
-            {{ form(disableTicketForm) }}
-        {% elseif is_granted("ROLE_MODERATOR") %}                
-            <form ng-model="request.reportData" ng-submit="request.postDisableRequest({{ imageRequest.id }})" >
-                <select ng-model="request.reportData.reasonId">
-                {% for reason in reportReasonList %}
-                    <option value="{{ reason.id }}">{{ reason.name }}</option>
-                {% endfor %}
-                </select>
-                <textarea ng-model="request.reportData.details">More details...</textarea>
-                <input type="submit" value="Delete"/>
-            </form>
-            {{ form(disableTicketForm) }}                                                
-        {% else %}
-            <form ng-model="request.reportData" ng-submit="request.postReport({{ imageRequest.id }})" >
-                <select ng-model="request.reportData.reasonId">
-                {% for reason in reportReasonList %}
-                    <option value="{{ reason.id }}">{{ reason.name }}</option>
-                {% endfor %}
-                </select>
-                <textarea ng-model="request.reportData.details">More details...</textarea>
-                <input type="submit" value="send report"/>
-            </form>
-            {{ form(reportTicketForm) }}            
-        {% endif %}
-    {% endif %} 
         
     <article class="replies" ng-controller="propositionsController as propositions" ng-init="propositions.init({{imageRequest.id}})">
 

@@ -29,6 +29,10 @@ $("#signInUpOverClose").click(function () {
    $('#signInUpOver').fadeOut();  
 });
 
+$("#sendRequestOverClose").click(function () {
+   $('#sendRequestOver').fadeOut();  
+});
+
 var showBannerAlert = function(type, strongMessage, lightMessage){    
     $("#alert-banner").slideDown("slow");
     $("#alert-banner").addClass(type);

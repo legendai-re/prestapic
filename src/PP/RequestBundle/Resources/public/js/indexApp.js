@@ -136,7 +136,8 @@
             
             this.showPopup = function(id){
                 var message = {
-                    id: id
+                    id: id,
+                    url: $location.$$absUrl
                 }
                 angular.element(document.getElementById('popupPropApp')).scope().$emit('showPopup', message);                                                
             };

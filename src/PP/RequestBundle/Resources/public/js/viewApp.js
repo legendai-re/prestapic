@@ -16,11 +16,12 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
         this.postRequestVote = function(id){
             if(readyForRequestVote){
                 readyForRequestVote=false;
-                $("#imageRequestUpvoteButton").addClass("voted");
-                document.getElementById("imageRequestUpvoteButton").innerHTML = parseInt($('#imageRequestUpvoteButton').html())+1;                            
+                $("#imageRequestUpvoteButton_"+id).addClass("animate");
+                $("#imageRequestUpvoteButton_"+id).addClass("voted");
+                document.getElementById("imageRequestUpvoteButton_"+id).innerHTML = parseInt($('#imageRequestUpvoteButton_'+id).html())+1;                            
                 var myData = {
                     id: id
-                }
+                };
                 var formAction = document.forms["pp_request_api_patch_request_vote"].action;
                 $http({
                     method: 'PATCH',
@@ -33,12 +34,13 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
                     }                                 
                 );
             }
-        }
+        };
+        
         this.reportData = {
             ticketType: 1,
             targetId: null,
             reasonId: 1,
-            details: null
+            details: " "
         };
         var haveAlreadyReport = false;
         
@@ -61,7 +63,7 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
                 );
             }
         };
-        console.log($location);
+       
         this.postDisableRequest = function(id){
             if(!haveAlreadyReport){
                 haveAlreadyReport = true;
@@ -83,6 +85,7 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
         };
         
         this.getEditForm = function(id){
+            console.log("hello");
             var formAction = document.forms["pp_request_api_get_edit_request_form"].action;
                 $http.get(formAction+".html?id="+id).
                     then(function(response){                                               
@@ -96,7 +99,7 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
         };
 }]);
 
-containerApp.controller('propositionsController', ['$scope', '$http', '$compile', '$window', function ($scope, $http, $compile, $window) {                                                                                                 
+containerApp.controller('propositionsController', ['$scope', '$http', '$compile', '$window', '$location', function ($scope, $http, $compile, $window, $location) {                                                                                                 
         
         
         var imageRequestId = null;
@@ -104,7 +107,7 @@ containerApp.controller('propositionsController', ['$scope', '$http', '$compile'
         this.init = function(id){
             getPropositions(id, 1);
             imageRequestId = id;
-        }
+        };
 
         var nextLoadTrigger = '#loadPageTrigger3';            
         var nextPage = 3;
@@ -189,7 +192,8 @@ containerApp.controller('propositionsController', ['$scope', '$http', '$compile'
         
         this.showPopup = function(id){
             var message = {
-                id: id
+                id: id,
+                url: $location.$$absUrl
             }
             angular.element(document.getElementById('popupPropApp')).scope().$emit('showPopup', message);                                                
         };

@@ -7,11 +7,11 @@
         <div class="search">                                                        
             {{ render(controller('PPHeaderBundle:header:showFilters')) }}
         </div>
-        <nav class="menu">
+        <nav class="menu">            
             <ul>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 {# new request button #}
-                <li ><a class="red" href="" title="Send your request">Send your request</a></li>                                
+                <li ><a class="red" href="" title="Send your request" ng-click="header.showNewRequestForm()">Send your request</a></li>                                                
                 
                 {# notification #}
                 <li class="stopPropagation" >
@@ -122,7 +122,7 @@
                             </li>                            
                             <li class="divider"></li>
                             <li class="settings">
-                                <a href="">Settings</a>
+                                <a target="_self" href="{{ path('pp_user_setting', {'slug': app.user.slug}) }}">Settings</a>
                             </li>
                             <li class="logout">
                                 <a target="_self" href="{{ path('fos_user_security_logout') }}">Log out</a>
@@ -143,7 +143,8 @@
             {{ form(notificationForm) }}
             {{ form(threadForm) }} 
             {{ form(setNotificationViewedForm) }}
-            {{ form(patchInMessageForm) }}            
+            {{ form(patchInMessageForm) }}
+            {{ form(getRequestForm) }}
         {% endif %}
     </div>   
 </div>

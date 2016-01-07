@@ -12,8 +12,9 @@
             <div style="height: 50px; background-color: #BBB; padding-top: 10px; padding-bottom: 15px;">
                 <ul style="list-style-type: none;" >
                     <a style="float:left; margin-right: 20px;" href="" ng-click="objectReported.changeCurrentType(1)"><li>Image Requests</li></a>
+                    <a style="float:left; margin-right: 20px;" href="" ng-click="objectReported.changeCurrentType(2)"><li>Proposition</li></a>
                     <a style="float:left;" href="" ng-click="objectReported.changeCurrentType(3)"><li>Users</li></a>
-                </ul> 
+                </ul>
             </div>
             <ul ng-switch on="objectReported.currentType" style="list-style-type: none;">
                 <!-- IMAGE REQUEST PATTERN -->
@@ -22,6 +23,15 @@
                             <strong>{{ request.title}}</strong>
                             <p>by {{ request.author.name }}</p>
                             <p>{{ request.reportNb }} report(s)</p>                   
+                        <div style=" width: 500px; margin-left: -40px; border-bottom: 1px solid #EEE"></div>
+                    </li>
+                </a>
+                <!-- PROPOSITION PATTERN -->
+                <a ng-switch-when="2" ng-repeat="proposition in reportObjects.propositionList" ng-if="proposition.title" href="" ng-click="objectReported.getReportTicket(2, proposition.id)">
+                    <li>                    
+                            <strong>{{ proposition.title}}</strong>
+                            <p>by {{ proposition.author.name }}</p>
+                            <p>{{ proposition.reportNb }} report(s)</p>                   
                         <div style=" width: 500px; margin-left: -40px; border-bottom: 1px solid #EEE"></div>
                     </li>
                 </a>
@@ -45,6 +55,13 @@
                     <div ng-switch-when="1">
                         <h2>{{ currentObject.title }}</h2>
                         <p>{{ currentObject.request }}</p>
+                        <p>by {{ currentObject.author.name }} the {{ currentObject.createdDate.date }}<p>                    
+                    </div>
+                    
+                    <!-- PROPOSITION PATTERN -->
+                    <div ng-switch-when="2">
+                        <h2>{{ currentObject.title }}</h2>
+                        <img ng-src="{{ currentObject.image }}" alt="{{ currentObject.title }}" />
                         <p>by {{ currentObject.author.name }} the {{ currentObject.createdDate.date }}<p>                    
                     </div>
 

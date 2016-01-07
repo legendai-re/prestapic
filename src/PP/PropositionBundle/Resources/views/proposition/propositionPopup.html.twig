@@ -3,15 +3,30 @@
     {{ form(getPropositionForm) }}
     {{ form(upvotePropositionForm) }}
     {{ form(disablePropositionForm) }}
-    {% verbatim %}
+    {% verbatim %}                
     <div ng-controller="popupController as popup" >
-        <base href=" " />
+        <base href=" " />                        
 	<img ng-if="proposition.image" alt="image" class="single-photo" ng-src="{{ proposition.image }}">
 	<div  id="propOverlay" class="overlay"></div>
 	<div class="content-slideshow">
 		<div id="propActionTop" class="action-top">
 			<div class="action-group left">
-				<a class="icon infos" href="#"></a>
+                            <a class="icon infos" href="#"></a>
+                            {% endverbatim %}
+                            {# report and delete image request form #}
+                            {% if is_granted("ROLE_USER") %}        
+                                <form style="color: black" ng-model="popup.reportData" ng-submit="popup.postReport(proposition.id)" >
+                                    <select ng-model="popup.reportData.reasonId">
+                                    {% for reason in reportReasonList %}
+                                        <option value="{{ reason.id }}">{{ reason.name }}</option>
+                                    {% endfor %}
+                                    </select>
+                                    <textarea ng-model="popup.reportData.details">More details...</textarea>
+                                    <input type="submit" value="send report"/>
+                                </form>
+                                {{ form(reportTicketForm) }}                   
+                            {% endif %}
+                            {% verbatim %}
 			</div>                   
 
 			<div class="action-group center">
@@ -21,7 +36,7 @@
 				<a ng-if="!proposition.author.isAuthor" class="icon report" href=""></a>                                
 				<a ng-if="proposition.author.isAuthor" class="icon delete" href="" ng-click="popup.patchDisable()"></a>
                                 {% verbatim %}
-			</div>
+			</div>                        
 			<div class="action-group right">
 				<a ng-if="proposition.selected"class="selecting-prop selected" href="#">Selected picture</a>
 				<button ng-click="popup.close()" class="button-close">×</button>

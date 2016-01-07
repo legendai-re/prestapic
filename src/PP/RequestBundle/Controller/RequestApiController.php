@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+use PP\RequestBundle\Entity\ImageRequest;
 use PP\RequestBundle\Constant\Constants;
 use PP\RequestBundle\Form\Type\ImageRequestType;
 
@@ -181,6 +182,25 @@ class RequestApiController extends Controller
         }
 
         return $this->getViewHandler()->handle($view);
+        
+    }
+    
+    public function getRequestFormAction(){
+        
+        if ($this->get('security.context')->isGranted('ROLE_USER')){
+            $imageRequest = new ImageRequest();
+            $form = $this->get('form.factory')->create(new ImageRequestType, $imageRequest, array(            
+                'action' => $this->generateUrl('pp_request_add_request'),
+                'method' => 'POST',
+            ));
+            
+            $view = View::create()
+                ->setData(array(                                      
+                    'form' => $form->createView()
+            ))
+            ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'addRequestForm'));
+            return $this->getViewHandler()->handle($view);
+        }else return new Response();
         
     }
     

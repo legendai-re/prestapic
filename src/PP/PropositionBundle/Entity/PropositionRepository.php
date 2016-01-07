@@ -11,6 +11,21 @@ use PP\RequestBundle\Constant\Constants;
  */
 class PropositionRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getReportedProposition(){
+        $qb = $this->createQueryBuilder('p')                        
+                        ->distinct(true)
+                        ->leftJoin('p.author', 'pA')
+                        ->addSelect('pA')
+                        ->where('p.enabled = true')
+                        ->andWhere('p.reportNb > 0')
+        ;
+        
+        return $qb
+               ->getQuery()
+               ->getResult()
+            ;  
+    }
+    
     public function getPropositionByUser($userId, $limit, $page){
         
         $qb = $this

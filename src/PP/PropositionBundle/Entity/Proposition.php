@@ -97,6 +97,13 @@ class Proposition
     private $disableTicket;
     
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="reportNb", type="integer", nullable=true)
+     */
+    private $reportNb;    
+    
+    /**
      * Get id
      *
      * @return integer
@@ -385,5 +392,34 @@ class Proposition
     public function getDisableTicket()
     {
         return $this->disableTicket;
+    }
+
+    /**
+     * Set reportNb
+     *
+     * @param integer $reportNb
+     *
+     * @return Proposition
+     */
+    public function setReportNb($reportNb)
+    {
+        $this->reportNb = $reportNb;
+
+        return $this;
+    }
+
+    /**
+     * Get reportNb
+     *
+     * @return integer
+     */
+    public function getReportNb()
+    {
+        return $this->reportNb;
+    }
+    
+     public function addReportNb(){
+        $this->reportNb++;
+        return $this;
     }
 }
