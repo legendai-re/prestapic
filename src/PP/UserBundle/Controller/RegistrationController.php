@@ -22,6 +22,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+use PP\UserBundle\Form\Type\RegistrationFormType;
 /**
  * Controller managing the registration
  *
@@ -48,8 +50,13 @@ class RegistrationController extends Controller
         if (null !== $event->getResponse()) {
             return $event->getResponse();
         }
-
-        $form = $formFactory->createForm();
+        
+        
+        $form = $this->get('form.factory')->create(new  \PP\UserBundle\Form\Type\RegistrationFormType(\PP\UserBundle\Entity\User::class), $user, array(            
+            'action' => $this->generateUrl('pp_user_register'),
+            'method' => 'POST',
+        ));
+        //$form = $formFactory->createForm();
         $form->setData($user);
 
         $form->handleRequest($request);

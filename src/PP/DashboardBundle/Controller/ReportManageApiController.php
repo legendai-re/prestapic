@@ -19,6 +19,7 @@ use PP\DashboardBundle\JsonModel\JsonUserReportedModel;
 use PP\ReportBundle\JsonModel\JsonReportReasonModel;
 use PP\ReportBundle\JsonModel\JsonReportTicketModel;
 use PP\MessageBundle\JsonModel\JsonUserModel;
+use PP\DashboardBundle\JsonModel\JsonPropositionReportedModel;
 
 class ReportManageApiController extends Controller
 {
@@ -35,8 +36,10 @@ class ReportManageApiController extends Controller
             $em = $this->getDoctrine()->getManager();
             $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
             $userRepository = $em->getRepository('PPUserBundle:User');
+            $propositionRepository = $em->getRepository('PPPropositionBundle:Proposition');
             $reportTicketRepository = $em->getRepository('PPReportBundle:ReportTicket');                        
             
+            $reportedProposition = $propositionRepository->getReportedProposition();
             $reportImageRequest = $imageRequestRepository->getReportedImageRequest();
             $reportedUser = $userRepository->getReportedUser();
             $jsonReportedImageRequests = array();
@@ -66,7 +69,20 @@ class ReportManageApiController extends Controller
                                     $user->getReportNb()                                    
                 );
             }
-            $reportObjects = new JsonAllReportsModel($jsonReportedImageRequests, array(), $jsonReportUser);
+            
+            $jsonReportedProposition = array();
+            foreach ($reportedProposition as $proposition){
+                
+                $jsonReportedProposition[$proposition->getId()] = new JsonPropositionReportedModel(
+                                    $proposition->getId(),
+                                    $proposition->getTitle(),
+                                    $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$proposition->getImage()->getWebPath('selected'),                                    
+                                    new JsonUserModel($proposition->getAuthor()->getId(), $proposition->getAuthor()->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$proposition->getAuthor()->getProfilImage()->getWebPath('70x70')),
+                                    $proposition->getReportNb()                                    
+                );
+            }
+            
+            $reportObjects = new JsonAllReportsModel($jsonReportedImageRequests, $jsonReportedProposition, $jsonReportUser);
             echo json_encode($reportObjects);
             
         }else $response->setStatusCode(Response::HTTP_FORBIDDEN);

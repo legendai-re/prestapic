@@ -31,6 +31,7 @@ class ReportApiController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $imageRequestRepository = $em->getRepository("PPRequestBundle:ImageRequest");
                 $userRepository = $em->getRepository("PPUserBundle:User");
+                $propositionRepository = $em->getRepository("PPPropositionBundle:Proposition");
                 $reason = $em->getRepository("PPReportBundle:ReportReason")->find($request->get("reasonId")); 
                 if($reason != null){
                     $reportTicket = new ReportTicket();                    
@@ -63,6 +64,16 @@ class ReportApiController extends Controller
                                 $em->flush();
                             }
                             break;
+                        case ReportTicketType::PROPOSITION:
+                            $proposition = $propositionRepository->find($targetId);
+                            if($proposition!=null){
+                                $proposition->addReportNb();
+                                $reportTicket->setReportTicketType(ReportTicketType::PROPOSITION);
+                                $reportTicket->setTargetId($proposition->getId());
+                                $em->persist($reportTicket);
+                                $em->persist($proposition);
+                                $em->flush();
+                            }
                     }
                 }
             }else{$response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);}                        
@@ -83,6 +94,7 @@ class ReportApiController extends Controller
                 $imageRequestRepository = $em->getRepository("PPRequestBundle:ImageRequest");
                 $reportTicketRepository = $em->getRepository("PPReportBundle:ReportTicket");
                 $userRepository = $em->getRepository("PPUserBundle:User");
+                $propositionRepository = $em->getRepository("PPPropositionBundle:Proposition");
                 $reason = $em->getRepository("PPReportBundle:ReportReason")->find($request->get("reasonId")); 
                 if($reason != null){
                     $disableTicket = new DisableTicket();                    
@@ -116,6 +128,19 @@ class ReportApiController extends Controller
                                 $em->flush();
                             }
                             break;
+                        case ReportTicketType::PROPOSITION:
+                            $proposition = $propositionRepository->find($targetId);
+                            if($proposition != null && ($this->get('security.context')->isGranted('ROLE_MODERATOR') || $proposition->getAuthor()->getId() == $user->getId())){
+                                $proposition->addReportNb();
+                                $disableTicket->setDisableTicketType(ReportTicketType::PROPOSITION);
+                                $disableTicket->setTargetId($proposition->getId());
+                                $proposition->setEnabled(false);
+                                $proposition->setDisableTicket($disableTicket);
+                                $em->persist($disableTicket);
+                                $em->persist($proposition);
+                                $em->flush();
+                            }
+                            break;
                     }
                     
                     $ticketToFinish = $reportTicketRepository->getTicketByType($request->get("ticketType"), $targetId);
@@ -145,6 +170,7 @@ class ReportApiController extends Controller
             $reportTicketRepository = $em->getRepository('PPReportBundle:ReportTicket');
             $imageRequestRepository = $em->getRepository("PPRequestBundle:ImageRequest");
             $userRepository = $em->getRepository("PPUserBundle:User");
+            $propositionRepository = $em->getRepository("PPPropositionBundle:Proposition");
             
             $ticketList = $reportTicketRepository->getTicketByType($type, $targetId);
             
@@ -158,6 +184,11 @@ class ReportApiController extends Controller
                    $user = $userRepository->find($targetId);
                    $user->setReportNb(0);
                    $em->persist($user);
+                   break;
+                case ReportTicketType::PROPOSITION:
+                   $proposition = $propositionRepository->find($targetId);
+                   $proposition->setReportNb(0);
+                   $em->persist($proposition);
                    break;
              }
             

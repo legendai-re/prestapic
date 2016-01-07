@@ -9,7 +9,12 @@ class HeaderController extends Controller
     public function showHeaderAction()
     {   
         $currentUser = $this->getUser();
-         
+        
+        /* create get new request form form */
+        $getRequestForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_get_request_form', 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_request_api_get_request_form', array(), true))
+            ->getForm();
+        
         $threadForm = $this->get('form.factory')->createNamedBuilder('pp_notification_api_get_thread_form', 'form', array(), array())         
             ->setAction($this->generateUrl('pp_notification_api_get_thread', array(), true))
             ->getForm();
@@ -27,6 +32,7 @@ class HeaderController extends Controller
             ->getForm();
         
         return $this->render('PPHeaderBundle:header:header.html.twig', array(
+            'getRequestForm' => $getRequestForm->createView(),
             'notificationForm' => $notificationForm->createView(),
             'threadForm' => $threadForm->createView(),
             'setNotificationViewedForm' => $setNotificationViewedForm->createView(),

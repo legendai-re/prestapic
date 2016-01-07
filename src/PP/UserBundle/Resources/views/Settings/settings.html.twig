@@ -1,0 +1,34 @@
+{# src/OC/UserBundle/Resources/views/layout.html.twig #}
+
+{# On �tend notre layout #}
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    Settings
+{% endblock %}
+
+{% block body %}
+   
+    {% if user.enabled == true %}
+       
+        <div class="main-left" > 
+            <base href=" " />
+            <h1>Settings</h1>            
+            {{ form_start(changePasswordForm, { 'action': path('pp_user_setting', {'slug': user.slug}), 'attr': { 'class': 'fos_user_change_password' } }) }}
+                {{ form_widget(changePasswordForm) }}
+                <div>
+                    <input type="submit" value="Save" />
+                </div>
+            {{ form_end(changePasswordForm) }}
+           
+        </div>
+
+    {% endif %}
+{% endblock %}
+
+
+{% block js %}
+    {#{% javascripts filter='?yui_js' '@PPUserBundle/Resources/public/js/galleryApp.js' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}    #}
+{% endblock %}

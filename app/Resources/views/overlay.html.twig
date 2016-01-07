@@ -1,0 +1,32 @@
+<section class="overlay send-request" id="sendRequestOver" style="display: none;">
+    <button class="button-close"    id="sendRequestOverClose" >×</button>
+    <div class="overlay-content" id="sendRequestContent">
+    </div>
+</section>
+<section class="overlay sign" id="signInUpOver" style="display:none;" >
+
+    <button class="button-close"    id="signInUpOverClose" >×</button>
+    <div class="overlay-content">
+        <h3 class="overlay-title">Prestapic</h3>
+        <p class="ind">Sign in to Prestapic or create an account</p>
+        <div class="overlay-actions">                                                                
+            <div class="signin-form">
+                {{ render(controller("FOSUserBundle:Security:login"))}}
+            </div>
+            <div class="signup-form">
+                <div class="message">If you want to post applications you need to register</div>
+                <a class="button signup" href="{{ path('pp_user_register') }}">Sign up</a>
+            </div>
+        </div>
+        <div class="terms">
+            <p>
+                By clicking Sign Up, you agree to our
+                <a href="#">Terms</a>
+                and that you have read our
+                <a href="#">Data Policy</a>
+                , including our
+                <a href="#">Cookie Use</a>.
+            </p>
+        </div>
+    </div>
+</section>          

@@ -71,13 +71,13 @@
 				
 				// Updates the width of the twin. (solution for textareas with widths in percent)
 				function setTwinWidth(){
-					curatedWidth = Math.floor(parseInt($textarea.width(),10));
+					/*curatedWidth = Math.floor(parseInt($textarea.width(),10));
 					if($twin.width() !== curatedWidth){
 						$twin.css({'width': curatedWidth + 'px'});
 						
 						// Update height of textarea
 						update(true);
-					}
+					}*/
 				}
 				
 				// Sets a given height and overflow state on the textarea

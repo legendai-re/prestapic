@@ -57,10 +57,26 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
         $(".fixeBodyHover").mouseover(function() { $("#body").css("position", "fixed");});
         $(".fixeBodyHover").mouseout(function() { $("#body").css("position", "absolute");});
         
+        var haveLoadNewRequestForm = false;
         var haveAllreadyOpen = false;            
         var showMoreNotificationUrl = null;
         $scope.showMoreNotification = true;
-
+        
+        this.showNewRequestForm = function(){
+            var getRequestForm = document.forms["pp_request_api_get_request_form"];
+            if(!haveLoadNewRequestForm){
+                haveLoadNewRequestForm = true;
+                $http.get(getRequestForm.action+".html").
+                    then(function(response) {
+                        $("#sendRequestContent").html(response.data);                           
+                    }, function(response) {
+                     console.log("Request failed : "+response.statusText );                        
+                    }
+                );
+            }
+            $('#sendRequestOver').fadeIn();           
+        }
+        
         var closeAll = function(){
             if(messageIsOpen)closeMessage();
             if(notificationListIsOpen)closeNotification();
@@ -70,15 +86,13 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
         };
 
         this.showMessage = function(){
-            closeAll();
+            closeAll();            
             var messageAppContainer = document.getElementById("messageApp");
             document.getElementById("body").style.position = "fixed";   
-            if(messageAppContainer != null ){
+            if(messageAppContainer != null ){                
                 patchIsInMessage(true);
-                if(!haveOpenMessage){
-                    angular.element(document).ready(function() {       
-                            angular.bootstrap(messageAppContainer, ["messageApp"]);
-                    });
+                if(!haveOpenMessage){                         
+                    angular.bootstrap(messageAppContainer, ["messageApp"]);                    
                     haveOpenMessage = true;
                 }                                                           
                 messageAppContainer.style.display = 'block';                    

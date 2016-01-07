@@ -122,16 +122,18 @@
 {% endblock %}
 
 {% block body %}   
-    <div class="main-left" > 
+    <div class="main-left" >
+       
         {% if pageProfile.enabled == true %}
             
-            {% if isHownProfile == true %}{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}{% endif %}
+            {#{% if isHownProfile == true %}{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}{% endif %}#}
 
             <div ng-controller="requestsController as requests" ng-init="requests.init({{ pageProfile.id }})" >
 
                 {{ form(loadRequestForm) }}
                 {{ form(upvoteRequestForm) }}
-                <div id="loadPage1"> </div>
+                <div id="loadPage1"></div>
+                <article class="request"></article>
 
                 <div class="load-content"  id="loadingGif" >
                     <span class="bubble"></span>

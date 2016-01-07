@@ -64,14 +64,7 @@ class RequestController extends Controller
         /* create loadPage form */        
         $loadRequestForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_get_request_form_1', 'form', array(), array())         
             ->setAction($this->generateUrl('pp_request_api_get_request', array("page"=>1), true))
-            ->getForm();
-        
-        /* create new image request form */
-        $imageRequest = new ImageRequest();
-        $form = $this->get('form.factory')->create(new ImageRequestType, $imageRequest, array(            
-            'action' => $this->generateUrl('pp_request_add_request'),
-            'method' => 'POST',
-        ));
+            ->getForm();                
         
         /* create upote request form */
         $upvoteRequestForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_patch_request_vote', 'form', array(), array())         
@@ -84,12 +77,11 @@ class RequestController extends Controller
             ->getForm();            
         
         /* render page */
-        return $this->render('PPRequestBundle:Request:index.html.twig', array(            
-            'form' => $form->createView(),                                    
+        return $this->render('PPRequestBundle:Request:index.html.twig', array(                                                         
             'displayMode' => $displayMode,
             'contentToDisplay' => $contentToDisplay,
             'loadRequestForm' => $loadRequestForm->createView(),
-            'haveSearchParam' => $haveSearchParam,
+            'haveSearchParam' => $haveSearchParam,            
             'upvoteRequestForm' => $upvoteRequestForm->createView(),
             'upvotePropositionForm' => $upvotePropositionForm->createView()
         ));
