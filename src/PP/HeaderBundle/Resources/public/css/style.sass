@@ -1,0 +1,567 @@
+@import ../../../../../AppBundle/Resources/public/css/init.sass
+
+header
+	background: white
+	width: 100%
+	height: 76px
+	padding: 0 30px
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+
+	div.content
+		max-width: 1230px
+
+		h1.logo
+			background: url("../images/logo.png") no-repeat
+			background-size: contain
+			width: 50px
+			height: 40px
+			text-indent: -99999px
+			font-size: 0px
+			color: transparent
+			padding: 0
+			margin: 18px 20px 18px 0
+			display: inline-block
+			float: left
+
+			a
+				display: block
+				width: 50px
+				height: 40px
+
+		.search
+			width: calc(100% - 80px - 400px)
+			height: 80px
+			display: inline-block
+			float: left
+
+			form
+				position: relative
+
+				input.main-search
+					width: 100%
+					height: 76px
+					font-size: 20px
+					color: 1px solid rgba(0, 0, 0, 0.1)
+					padding: 25px 30px
+					border: none
+					border-left: 1px solid rgba(0, 0, 0, 0.1)
+					border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+
+					&:active, &:focus
+						border-bottom: 2px solid $main-color
+						border-right: 1px solid #eee
+
+				ul.search-options
+					margin: 0
+					padding: 0
+					width: 106px
+					height: 80px
+					position: absolute
+					top: 0
+					right: 10px
+
+					li.option
+						list-style: none
+						display: inline-block
+						float: left
+
+						a.filters, button.go-search
+							display: block
+							background: white
+							width: 36px
+							height: 36px
+							margin: 20px 0
+							padding: 0
+							overflow: hidden
+							border-radius: 50%
+							color: #ccc
+							border: 1px solid transparent
+
+							&:hover, &.open
+								border: 1px solid $main-color
+								color: $main-color
+
+							&.open
+								box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
+
+						a.filters
+							margin-right: 5px
+
+							&:before
+								display: block
+								width: 18px
+								height: 16px
+								padding: 15px 14px
+								font-family: 'pp-font'
+								speak: none
+								font-style: normal
+								font-weight: normal
+								font-variant: normal
+								text-transform: none
+								line-height: 1
+								/* Better Font Rendering =========== */
+								-webkit-font-smoothing: antialiased
+								-moz-osx-font-smoothing: grayscale
+								content: $icon-filters
+
+						button.go-search
+							margin-right: 5px
+
+							&:before
+								display: block
+								width: 18px
+								height: 18px
+								padding: 15px
+								font-family: 'pp-font'
+								speak: none
+								font-style: normal
+								font-weight: normal
+								font-variant: normal
+								text-transform: none
+								line-height: 1
+								/* Better Font Rendering =========== */
+								-webkit-font-smoothing: antialiased
+								-moz-osx-font-smoothing: grayscale
+								content: $icon-search
+
+		nav.menu
+			width: 400px
+			height: 76px
+			display: inline-block
+			float: right
+
+			ul
+				margin: 0
+				padding: 0
+				float: right
+
+				li
+					list-style: none
+					display: inline-block
+					float: left
+					margin-left: 15px
+
+					a
+						display: block
+
+						// &:hover
+						// 	color: #999
+
+						// &.active
+						// 	color: #999
+						// 	border-bottom: 2px solid #999
+
+						&.button
+							margin: 20px 0
+
+						&.notification, &.account
+							display: block
+							background: #ccc
+							width: 36px
+							height: 36px
+							margin: 20px 0
+							padding: 0
+							overflow: hidden
+							border-radius: 50%
+
+						&.notification
+							background: transparent
+							color: #ccc
+							border: 1px solid #ccc
+
+							&:hover
+								border: 1px solid $main-color
+								color: $main-color
+
+						&.notification:before
+							display: block
+							width: 20px
+							height: 20px
+							padding: 9px 7px
+							text-align: center
+							font-family: 'pp-font'
+							speak: none
+							font-style: normal
+							font-weight: normal
+							font-variant: normal
+							text-transform: none
+							line-height: 1
+							/* Better Font Rendering =========== */
+							-webkit-font-smoothing: antialiased
+							-moz-osx-font-smoothing: grayscale
+							content: $icon-notification
+
+						&.notification.alert
+							border-color: $main-color
+							background: $main-color
+
+							&:before
+								display: none
+
+							.number
+								display: block
+								font-size: 25px
+								padding: 6px 16px
+								text-align: center
+								color: white
+
+						&.notification.open
+							border-color: $main-color
+							color: $main-color
+							box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
+
+						&.account
+							img
+								width: 36px
+								height: 36px
+
+		.dropdown, & nav.menu .dropdown
+			position: absolute
+			z-index: 999
+			display: none
+			float: left
+			padding: 5px 0
+			margin: 2px 0 0 -252px
+			background: #fff
+			border: 1px solid #ccc
+			border-radius: 3px
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
+			background-clip: padding-box
+
+			&.menu, &.notif
+				width: 300px
+
+			&.filters
+				background: #fafafa
+				width: 600px
+				margin-left: -552px
+
+				.dropdown-caret .caret-inner
+					border-bottom: 9px solid #fafafa
+
+			.dropdown-caret
+				position: absolute
+				top: -10px
+				width: 18px
+				height: 10px
+				float: left
+				overflow: hidden
+				right: 14px
+
+				.caret-outer
+					border-bottom: 10px solid #eee
+					border-left: 10px solid transparent
+					border-right: 10px solid transparent
+					height: auto
+					left: 0
+					top: 0
+					width: auto
+					position: absolute
+					display: inline-block
+					margin-left: -1px
+
+				.caret-inner
+					position: absolute
+					display: inline-block
+					top: 2px
+					border-left: 9px solid transparent
+					border-right: 9px solid transparent
+					border-bottom: 9px solid #fff
+
+			ul
+
+				&.notifs
+					width: 100%
+					max-height: 400px
+					overflow: auto
+					margin-bottom: 34px
+					float: left
+
+				&::-webkit-scrollbar
+					width: 2px
+
+				&::-webkit-scrollbar-track
+					background-color: transparent
+					border: none
+				
+				&::-webkit-scrollbar-thumb
+					background-color: transparent
+					border-radius: 1px
+
+				&::-webkit-scrollbar-thumb:hover
+					background-color: rgba(0,0,0,.5)
+
+				&:hover
+					&::-webkit-scrollbar
+						width: 2px
+
+					&::-webkit-scrollbar-thumb
+						background-color: rgba(0,0,0,.25)
+
+				li
+					display: block
+					width: 100%
+					margin: 0
+
+					a
+						display: block
+						width: 100%
+						height: auto
+						padding: 10px 25px
+						color: #777
+						overflow: hidden
+
+						&:hover
+							background: $main-color
+							color: white
+
+					&.divider
+						height: 1px
+						margin: 5px 0
+						background: #eee
+
+					&.username
+						a
+							color: #444
+
+							small
+								display: block
+								color: #777
+
+							&:hover
+								color: white
+
+								small
+									color: white
+
+					&.pm
+						span.dot-count
+							float: right
+
+							&:after
+								display: block
+								content: ''
+								float: right
+								width: 10px
+								height: 10px
+								border-radius: 50%
+								margin: 7px 0 0 5px
+								background: $main-color
+								box-shadow: 0 0 0 1px white
+
+					&.no-notification
+						padding: 40px 0 6px
+						text-align: center
+						color: #777
+
+					&.notif 
+						a
+							color: #444
+							font-size: 14px
+							padding: 15px 15px
+							border-bottom: 1px solid #eee
+							position: relative
+
+							&:hover
+								background: rgba(0, 0, 0, .05)
+
+							.avatar
+								width: 48px
+								height: 48px
+								overflow: hidden
+								border-radius: 50%
+								float: left
+								margin-right: 15px
+								border: 1px solid white
+
+								img
+									width: 48px
+									height: 48px
+
+							.desc
+								width: 203px
+								overflow: hidden
+
+								small
+									display: block
+									color: #777
+									font-size: 14px
+
+							span.dot
+								display: block
+								width: 10px
+								height: 10px
+								margin: 19px 0 19px 5px
+								float: right
+								border: 1px solid $main-color
+								background: $main-color
+								border-radius: 50%
+								position: absolute
+								right: 15px
+								top: 20px
+								box-shadow: 0 0 0 1px white
+
+								&.seen
+									background: white
+
+								&.visited
+									background: white
+									border-color: rgba(0, 0, 0, .1)
+
+						&.load-content
+							text-align: center
+
+					&.more-notif
+						position: absolute
+						bottom: 2px
+						height: 38px
+						background: white
+						border-top: 1px solid #eee
+
+						&:before
+							content: ''
+							display: block
+							width: 100%
+							height: auto
+
+						a
+							font-size: 14px
+							color: #777
+							text-align: center
+							padding: 10px 0 5px
+
+							&:hover
+								text-decoration: underline
+								background: transparent
+
+			.filters-type
+				background: white
+				border-right: 1px solid #ccc
+
+			.filters-type, .filter-cat, .filter-tags
+				width: 50%
+				height: 290px
+				padding: 20px 25px
+				margin: -5px 0
+				float: left
+				display: block
+				overflow: auto
+
+				.dropdown-title
+					color: #444
+					font-size: 16px
+					display: block
+					margin-bottom: 10px
+
+				ul.list-filters
+					margin: 0
+					padding: 0
+					display: block
+					width: 100%
+					height: auto
+
+					li.filter, li.filter-group
+						padding-top: 15px
+						color: #777
+						font-size: 18px
+
+					li.filter-group
+						padding: 0
+						margin-left: -25px
+
+						a
+							width: 298px
+							display: block
+							padding: 7px 25px
+
+							&:hover
+								color: #444
+								background: #efefef
+
+							&.open
+								border-bottom: 1px solid #ccc
+								border-top: 1px solid #ccc
+								background: #fafafa
+
+								&:hover
+									background: #efefef
+
+			.filter-cat, .filter-tags
+				&::-webkit-scrollbar
+					width: 2px
+
+				&::-webkit-scrollbar-track
+					background-color: transparent
+					border: none
+				
+				&::-webkit-scrollbar-thumb
+					background-color: transparent
+					border-radius: 1px
+
+				&::-webkit-scrollbar-thumb:hover
+					background-color: rgba(0,0,0,.5)
+
+				&:hover
+					&::-webkit-scrollbar
+						width: 2px
+
+					&::-webkit-scrollbar-thumb
+						background-color: rgba(0,0,0,.25)
+
+				.dropdown-title
+					position: absolute
+					background: #fafafa
+					padding: 0 0 5px
+					display: block
+					z-index: 1
+					width: 250px
+					box-shadow: 0 0 10px 10px #fafafa
+
+					&.no-shadow
+						box-shadow: none
+
+				ul.list-filters
+					padding-top: 21px
+
+			.filter-tags
+				display: none
+
+				input.list-tags
+					width: 100%
+					position: relative
+					margin-top: 30px
+					padding: 7px
+
+				small.comment
+					display: block
+					margin-bottom: 15px
+
+				.sugg-title
+					margin-bottom: 10px
+
+				ul.sugg-tags
+					margin: 0
+					padding: 0
+
+					li.sugg
+						list-style: none
+						display: inline-block
+						width: auto
+
+						a
+							background: white
+							display: inline-block
+							padding: 4px 10px
+							color: rgba(0, 0, 0, 0.5)
+							font-size: 15px
+							border-radius: 3px
+							border: 1px solid rgba(0, 0, 0, 0.1)
+							width: auto
+							height: auto
+
+							&:hover
+								background: #dedede
+
+							&.choosen
+								background: #C24C4A
+								color: rgba(255, 255, 255, 0.75)

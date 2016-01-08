@@ -1,0 +1,342 @@
+@import ../../../../../AppBundle/Resources/public/css/init.sass
+
+section.overlay-messages
+	position: fixed
+	overflow: auto
+	top: 0
+	left: 0
+	bottom: 0
+	right: 0
+	display: block
+	z-index: 900
+	background-color: rgba(0,0,0,.85)
+	width: 100%
+	padding: 0
+	margin: 0
+	border: 0
+
+	.messages
+		background: white
+		width: 900px
+		height: 100%
+		max-height: 600px
+		position: absolute
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+		border-radius: 3px
+		border: 1px solid rgba(0,0,0,.1)
+		overflow: hidden
+
+		.container
+			position: relative
+			display: -webkit-flex
+			display: -moz-box
+			display: -ms-flexbox
+			display: flex
+			flex-direction: column
+			width: 100%
+			height: 100%
+
+			.message-top
+				width: 100%
+				height: 50px
+				background: white
+				display: -webkit-flex
+				display: -moz-box
+				display: -ms-flexbox
+				display: flex
+				flex-direction: row
+				font-size: 20px
+				color: #444
+				border-bottom: 1px solid rgba(0,0,0,.1)
+				
+				.inbox-top
+					width: 300px
+					padding: 10px 15px
+					border-right: 1px solid rgba(0,0,0,.1)
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					position: relative
+					text-transform: uppercase
+					font-weight: 600
+					font-size: 18px
+
+					a.new-message
+						position: absolute
+						top: 8px
+						right: 8px
+
+						&:before
+							display: block
+							width: 18px
+							height: 18px
+							padding: 5px
+							text-align: center
+							font-family: "pp-font"
+							speak: none
+							font-size: 18px
+							font-style: normal
+							font-weight: normal
+							font-variant: normal
+							text-transform: none
+							line-height: 1
+							-webkit-font-smoothing: antialiased
+							-moz-osx-font-smoothing: grayscale
+							content: $icon-new
+
+				.chat-top
+					width: 600px
+					padding: 10px 15px
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					
+					.button-close
+						float: right
+						position: absolute
+						border: none
+						background: transparent
+						padding: 2px 15px
+						margin: 0
+						top: 0
+						right: 0
+						color: #ccc
+						font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif
+						letter-spacing: 0
+						font-weight: 300
+						font-style: normal
+						font-size: 32px
+						
+						&:hover
+							color: $main-color
+
+			.message-bottom
+				background: white
+				width: 100%
+				height: 100%
+				display: -webkit-flex
+				display: -moz-box
+				display: -ms-flexbox
+				display: flex
+				flex-direction: row
+				align-items: stretch
+				overflow: hidden
+
+				.inbox
+					background: #fafafa
+					width: 300px
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					border-right: 1px solid rgba(0,0,0,.1)
+					overflow-x: hidden
+					overflow-y: auto
+					
+					ul.list-mess
+						margin: 0
+						padding: 0
+						
+						li.message
+							list-style: none
+							border-bottom: 1px solid rgba(0,0,0,.1)
+							
+							a
+								display: block
+								width: 300px
+								height: 78px
+								padding: 15px
+								
+								&:hover, &.open
+									background: rgba(0,0,0,.05)
+								
+								.avatar
+									width: 48px
+									height: 48px
+									float: left
+									margin-right: 15px
+									border: 1px solid white
+								
+								.desc
+									display: block
+									float: left
+									
+									.name
+										font-size: 17px
+										color: #444
+										
+									.last-message
+										font-size: 15px
+										color: #777
+
+				.chat-container
+					background: white
+					width: 600px
+					height: auto
+					display: -webkit-flex
+					display: -moz-box
+					display: -ms-flexbox
+					display: flex
+					flex-direction: column
+
+					.chat-conversation
+						display: -webkit-flex
+						display: -moz-box
+						display: -ms-flexbox
+						display: flex
+						flex: 1 auto
+						padding: 15px
+						position: relative
+						overflow: auto
+						display: block
+
+						.chat-scroller
+							display: -webkit-flex
+							display: -moz-box
+							display: -ms-flexbox
+							display: flex
+							flex: 1 auto
+							flex-direction: column
+							align-self: flex-end
+
+							a.chat-more
+								text-align: center
+								text-transform: uppercase
+								font-weight: 600
+								font-size: 14px
+								color: #777
+								margin-bottom: 15px
+
+								&:hover
+									color: #444
+
+
+							.message
+								height: auto
+								display: -webkit-flex
+								display: -moz-box
+								display: -ms-flexbox
+								display: flex
+								margin: 5px 0
+
+								.message-content
+									max-width: 360px
+									min-height: 40px
+									padding: 11px 15px
+									float: left
+									background: #ededed
+									color: #444
+									border-radius: 3px
+									font-size: 15px
+									position: relative
+									margin-left: 5px
+									justify-content: flex-start
+									
+									&:before
+										top: auto
+										bottom: 6px
+
+										border-style: solid
+										border-width: 5px
+										content: ""
+										display: block
+										position: absolute
+										height: 0
+										width: 0
+										border-color: #ededed
+									
+										border-left-width: 0!important
+										//border-left-width: 5px!important
+										border-bottom-color: transparent!important
+										border-left-color: transparent!important
+										border-top-color: transparent!important
+										left: -10px
+										top: auto
+										-webkit-transform: translateX(100%) translateY(-50%)
+										-ms-transform: translateX(100%) translateY(-50%)
+										transform: translateX(100%) translateY(-50%)
+
+								&.me
+									float: right
+									justify-content: flex-end
+		
+									.message-content
+										float: right
+										background: $main-color
+										color: white
+										margin-left: 0
+										margin-right: 5px
+										
+										&:before
+											border-color: $main-color
+											right: 0
+											left: initial
+											border-left-width: 5px!important
+											border-left-color: $main-color!important
+											border-right-width: 0!important
+											border-right-color: transparent!important
+									
+									.avatar
+										float: right
+										margin: 0 0 0 10px
+										order: 0
+										
+								.avatar
+									width: 40px
+									height: 40px
+									float: right
+									margin-right: 10px
+									align-self: flex-end
+									order: -1
+
+									img
+										width: 40px
+										height: 40px
+						
+						.message-state
+							font-size: 15px
+							color: #ccc
+							text-align: right
+							padding-right: 65px
+						
+						.message-date
+							font-size: 16px
+							color: #777
+							text-align: center
+							padding: 15px 0 5px
+							display: block
+
+					.chat-composer
+						background: white
+						width: 100%
+						height: auto
+						min-height: 50px
+						float: right
+						display: -webkit-flex
+						display: -moz-box
+						display: -ms-flexbox
+						display: flex
+						align-self: flex-end
+						border-top: 1px solid rgba(0,0,0,.1)
+						position: relative
+						padding: 15px
+
+						form
+							width: 100%
+							display: -webkit-box
+							display: -moz-box
+							display: -webkit-flex
+							display: -ms-flexbox
+
+							input, textarea
+								width: 100%
+								height: 100%
+								border: none
+								resize: none
+
+							button
+								max-height: 36px

@@ -1,0 +1,185 @@
+section.overlay
+	position: fixed
+	overflow: auto
+	top: 0
+	left: 0
+	bottom: 0
+	right: 0
+	display: block
+	z-index: 900
+	width: 100%
+	padding: 0
+	margin: 0
+	border: 0
+
+	&.sign
+		background-color: rgba(255,255,255,0.97)
+
+	&.send-report
+		background-color: rgba(0,0,0,.85)
+
+	button.button-close
+		background: transparent
+		border: 0
+		font-size: 32px
+		padding: 10px 20px
+		position: absolute
+		top: 0
+		right: 0
+		font-family: -apple-system,".SFNSText-Regular","Helvetica Neue","Roboto","Segoe UI",sans-serif
+		letter-spacing: 0
+		font-weight: 300
+		font-style: normal
+		color: #777
+
+		&:hover
+			color: $main-color
+
+	.overlay-content
+		width: 100%
+		max-width: 750px
+		height: auto
+		position: absolute
+		top: 50%
+		left: 50%
+		@include vendor-prefix(transform, translate(-50%, -50%))
+
+		.overlay-title
+			background: url(../images/logo.png) no-repeat
+			background-size: cover
+			width: 60px
+			height: 48px
+			text-indent: -9999px
+			display: block
+			margin: 0 auto
+
+		p.ind
+			font-size: 20px
+			color: #777
+			text-align: center
+
+		.overlay-actions
+			width: 100%
+			margin-bottom: 20px
+			display: block
+			overflow: hidden
+
+			.signin-form
+				width: 50%
+				padding: 30px
+				border-right: 1px solid #aaa
+				display: block
+				float: left
+
+				form
+					input
+						background: transparent
+						margin: 0 0 10px
+						padding: 10px
+						font-size: 20px
+						border: none
+						border-bottom: 1px solid #ccc
+
+						&:focus
+							border-bottom: 2px solid $main-color
+							margin-bottom: 9px
+
+					input[type="text"], input[type="password"], input[type="mail"]
+						width: 100%
+
+					.remember
+						width: 100%
+						display: inline-block
+						margin: 0
+
+					.button
+						margin: 20px 10px 0 0
+
+			.signup-form
+				width: 50%
+				padding: 30px
+				display: block
+				float: left
+
+				.message
+					font-size: 30px
+					color: #777
+
+				.button
+					margin: 20px 10px 0 0
+
+		.terms
+			text-align: center
+			font-size: 12px
+			color: #aaa
+
+	// REPORT
+
+	.report-container
+		background: white
+		width: 445px
+		height: auto
+		position: absolute
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+		border-radius: 3px
+		border: 1px solid #ccc
+		overflow: hidden
+
+		.report-top
+			padding: 10px 15px
+			color: #444
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+			text-transform: uppercase
+			font-weight: 600
+			font-size: 18px
+
+			.button-close
+				float: right
+				position: absolute
+				border: none
+				background: transparent
+				padding: 2px 15px
+				margin: 0
+				top: 0
+				right: 0
+				color: #ccc
+				font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif
+				letter-spacing: 0
+				font-weight: 300
+				font-style: normal
+				font-size: 32px
+
+				&:hover
+					color: $main-color
+		
+		.report-text
+			padding: 10px 15px
+			color: #777
+	
+		.report-choice
+			
+			select, textarea
+				width: 100%
+				background: none
+				border: none
+				border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+				border-radius: 0
+				margin: 0
+				padding: 10px 15px
+				-webkit-appearance: none
+				-moz-appearance: none
+				appearance: none
+				color: #444
+				
+				&:first-child
+					border-top: 1px solid rgba(0, 0, 0, 0.1)
+	
+		.report-bottom
+			padding: 5px 15px 10px
+			display: block
+			overflow: hidden
+
+			.button
+				float: right
