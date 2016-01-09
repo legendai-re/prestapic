@@ -1,0 +1,138 @@
+@import ../../../../../AppBundle/Resources/public/css/init.sass
+
+section.profile
+	position: relative
+	width: 100%
+	height: 470px
+
+	.banner
+		position: absolute
+		background: #999
+		width: 100%
+		height: 470px
+		overflow: hidden
+
+		img
+			width: 100%
+			position: absolute
+			left: 0
+			right: 0
+			top: -9999px
+			bottom: -9999px
+			margin: auto 0
+
+		.overlay
+			width: 100%
+			height: 470px
+			background: rgba(0,0,0,.5)
+			position: absolute
+			top: 0
+			z-index: 1
+
+	.profile-details
+		width: 750px
+		height: auto
+		margin: 0 auto
+		padding: 70px 0
+		position: relative
+		z-index: 1
+		color: white
+		text-align: center
+
+		a.avatar
+			width: 100px
+			height: 100px
+			border-radius: 50%
+			overflow: hidden
+			display: block
+			margin: 0 auto
+
+			img
+				width: 100%
+
+		h1.username
+			font-size: 40px
+			font-weight: 600
+			margin: 7px 0 0
+
+		p.bio
+			font-size: 20px
+			margin: 0
+
+		ul.details
+			margin: 15px auto 0
+			padding: 0
+
+			li
+				list-style: none
+				margin: 0
+				padding: 0 10px
+				display: inline
+				border-right: 1px solid white
+
+				&:nth-last-child(2), &:nth-last-child(1)
+					border-right: none
+
+			li.link
+				display: block
+				margin: 10px 0 0
+
+				a
+					color: rgba(255,255,255,.75)
+					font-size: 18px
+
+		.follow, .pm
+			background: white
+			color: #222
+			font-size: 14px
+			margin: 20px 0 0
+
+			&:hover
+				background: #4AC25E
+				border: 1px solid #4AC25E
+				color: white
+
+		.unfollow:hover
+			background: $main-color
+			border: 1px solid $main-color
+
+section.profile-galery
+	width: 100%
+	height: auto
+	padding: 45px 0 0
+
+	div.content
+		padding: 0 45px
+
+		ul
+			margin: 0
+			padding: 0
+			overflow: hidden
+			display: block
+
+			li
+				list-style: none
+				display: block
+				float: left
+				margin-right: 10px
+
+				&:last-child
+					margin: 0
+
+				a
+					display: block
+					width: 285px
+					height: 195px
+					overflow: hidden
+
+					&.more
+						background: #d8d8d8
+						color: rgba(0,0,0,.25)
+						text-align: center
+						padding: 65px 0
+						font-size: 60px
+						
+
+					img
+						width: 285px
+						height: 195px

@@ -11,7 +11,7 @@
             <ul>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 {# new request button #}
-                <li ><a class="red" href="" title="Send your request" ng-click="header.showNewRequestForm()">Send your request</a></li>                                                
+                <li ><a class="button red" href="" title="Send your request" ng-click="header.showNewRequestForm()">Send your request</a></li>                                                
                 
                 {# notification #}
                 <li class="stopPropagation" >
@@ -133,8 +133,8 @@
                 
             {% else %}
                 {# if not connected #}
-                <li><a target="_self" class="grey signInUp" href="" >Send your request</a></li>                                                                       
-                <li><a target="_self" class="red signInUp" href=""  title="Sign in / Sign up">Sign in / Sign up</a></li>
+                <li><a target="_self" class="button signInUp" href="" >Send your request</a></li>                                                                       
+                <li><a target="_self" class="button red signInUp" href=""  title="Sign in / Sign up">Sign in / Sign up</a></li>
             {% endif %}
             </ul>
         </nav>

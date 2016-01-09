@@ -1,0 +1,74 @@
+section.overlay
+
+	&.send-report
+		background: transparent
+
+	// REPORT
+	.report-container
+		background: white
+		width: 445px
+		height: auto
+		position: absolute
+		top: 50%
+		left: 50%
+		@include vendor-prefix(transform, translate(-50%, -50%))
+		border-radius: 3px
+		border: 1px solid #ccc
+		overflow: hidden
+
+		.report-top
+			padding: 10px 15px
+			color: #444
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+			text-transform: uppercase
+			font-weight: 600
+			font-size: 18px
+
+			.button-close
+				float: right
+				position: absolute
+				border: none
+				background: transparent
+				padding: 2px 15px
+				margin: 0
+				top: 0
+				right: 0
+				color: #ccc
+				font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif
+				letter-spacing: 0
+				font-weight: 300
+				font-style: normal
+				font-size: 32px
+
+				&:hover
+					color: $main-color
+		
+		.report-text
+			padding: 10px 15px
+			color: #777
+	
+		.report-choice
+			
+			select, textarea
+				width: 100%
+				background: none
+				border: none
+				border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+				border-radius: none
+				margin: 0
+				padding: 10px 15px
+				-webkit-appearance: none
+				-moz-appearance: none
+				appearance: none
+				color: #444
+				
+				&:first-child
+					border-top: 1px solid rgba(0, 0, 0, 0.1)
+	
+		.report-bottom
+			padding: 5px 15px 10px
+			display: block
+			overflow: hidden
+
+			.button
+				float: right
