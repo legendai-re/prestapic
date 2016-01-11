@@ -47,37 +47,16 @@
                             {% endif %}
                         </a>                        
                         
-                        <a id="blockButton" class="button follow" ng-click="profile.patchBlock({{ pageProfile.id }})" >{% if isBlocked == true %}unblock{% else %}block{% endif %}</a>
+                        <a id="blockButton" class="button red" ng-click="profile.patchBlock({{ pageProfile.id }})" >{% if isBlocked == true %}unblock{% else %}block{% endif %}</a>
                        
-                    {% endif %} 
-                    {# report and delete image request form #}                            
-                    {% if is_granted("ROLE_MODERATOR") and isHownProfile == false %}                
-                        <form ng-model="profile.reportData" ng-submit="profile.postDisableRequest({{ pageProfile.id }})" >
-                            <select ng-model="profile.reportData.reasonId">
-                            {% for reason in reportReasonList %}
-                                <option value="{{ reason.id }}">{{ reason.name }}</option>
-                            {% endfor %}
-                            </select>
-                            <textarea ng-model="profile.reportData.details">More details...</textarea>
-                            <input type="submit" value="Delete"/>
-                        </form>
-                        {{ form(disableTicketForm) }}                                                
-                    {% elseif isHownProfile == false %}
-                        <form ng-model="profile.reportData" ng-submit="profile.postReport({{ pageProfile.id }})" >
-                            <select ng-model="profile.reportData.reasonId">
-                            {% for reason in reportReasonList %}
-                                <option value="{{ reason.id }}">{{ reason.name }}</option>
-                            {% endfor %}
-                            </select>
-                            <textarea ng-model="profile.reportData.details">More details...</textarea>
-                            <input type="submit" value="send report"/>
-                        </form>
-                        {{ form(reportTicketForm) }}            
+                    {% endif %}                                                                                                                
+                    {% if isHownProfile == false %}
+                        <a href=""  class="button red" ng-click="profile.showReportPopup({{ pageProfile.id }}, 3)" >Report</a>          
                     {% endif %}
        
                 {% endif %}
                 {% if is_granted("ROLE_ADMIN") and isHownProfile == false %}                    
-                        <a id="setModeratorButton" class="button follow" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}unset moderator{% else %}Set moderator{% endif %}</a>
+                        <a id="setModeratorButton" class="button green" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}unset moderator{% else %}Set moderator{% endif %}</a>
                 {% endif %}   
 
                 <ul class="details">

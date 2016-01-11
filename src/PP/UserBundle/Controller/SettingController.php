@@ -21,6 +21,12 @@ use PP\UserBundle\Entity\User;
 use PP\RequestBundle\Form\Type\ImageRequestType;
 use PP\UserBundle\Form\Type\EditProfileFormType;
 
+use PP\ReportBundle\Constant\ReportTicketType;
+
+use PP\ReportBundle\Entity\DisableTicket;
+use PP\ReportBundle\Entity\ReportTicket;
+use PP\ReportBundle\Entity\ReportReason;
+
 class SettingController extends Controller 
 {
     public function indexAction(Request $request, $slug)
@@ -73,9 +79,9 @@ class SettingController extends Controller
             $url = $this->generateUrl('pp_user_setting', array('slug'=>$currentUser->getSlug()));
             $response = new RedirectResponse($url);
         }        
-        /////////////////////
-                
+        /////////////////////               
         /* enable notification */
+        
         $formNotifEnable = $this->get('form.factory')->createNamedBuilder('pp_user_api_settings_patch_notification_mode_form', 'form', array(), array())
                 ->setAction($this->generateUrl('pp_user_api_settings_patch_notification_mode', array(), true))
                 ->getForm();                        
@@ -85,6 +91,47 @@ class SettingController extends Controller
             "changePasswordForm" => $changePasswordForm->createView(),
             "formNotifEnable" => $formNotifEnable->createView()
         ));
+    }
+    
+    public function disableAccountAction(Request $request){
+        
+        $password = $request->get("password");
+        
+        $currentUser = $this->getUser();
+        
+        if($this->get('security.context')->isGranted('ROLE_USER') && $currentUser != null && $password != null) {
+            
+            
+            $user_manager = $this->get('fos_user.user_manager');
+            $factory = $this->get('security.encoder_factory');          
+
+            $encoder = $factory->getEncoder($currentUser);
+
+            $passwordCheck = ($encoder->isPasswordValid($currentUser->getPassword(),$password,$currentUser->getSalt())) ? true: false;         
+            
+            if($passwordCheck){
+                $em = $this->getDoctrine()->getManager();                
+                $reason = $em->getRepository("PPReportBundle:ReportReason")->find(1); 
+                $disableTicket = new DisableTicket();                    
+                $disableTicket->setAuthor($currentUser);
+                $disableTicket->setReason($reason);
+                $disableTicket->setDisableTicketType(ReportTicketType::USER);
+                $disableTicket->setTargetId($currentUser->getId());
+                $currentUser->setEnabled(false);
+                $currentUser->setDisableTicket($disableTicket);
+                $em->persist($disableTicket);
+                $em->persist($currentUser);
+                $em->flush();
+                return $this->redirect($this->generateUrl('fos_user_security_logout', array(                                           
+                )));
+            }
+            return $this->redirect($this->generateUrl('pp_user_setting', array(  
+                "slug"=>$currentUser->getSlug()                                         
+            )));
+        }
+        return $this->redirect($this->generateUrl('pp_request_homepage', array(                                           
+        )));
+                
     }
     
   

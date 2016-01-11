@@ -28,6 +28,13 @@ class ReportReason
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="type", type="integer")
+     */
+    private $type;
 
     /**
      * @var string
@@ -46,7 +53,9 @@ class ReportReason
     * @ORM\OneToMany(targetEntity="PP\ReportBundle\Entity\DisableTicket", mappedBy="reason")
     * @Assert\Valid()
     */
-    private $disableTickets;
+    private $disabledTickets;
+    
+    
     
     /**
      * Get id
@@ -145,5 +154,39 @@ class ReportReason
     public function getReportTickets()
     {
         return $this->reportTickets;
+    }
+
+    /**
+     * Add disableTicket
+     *
+     * @param \PP\ReportBundle\Entity\DisableTicket $disableTicket
+     *
+     * @return ReportReason
+     */
+    public function addDisableTicket(\PP\ReportBundle\Entity\DisableTicket $disableTicket)
+    {
+        $this->disableTickets[] = $disableTicket;
+
+        return $this;
+    }
+
+    /**
+     * Remove disableTicket
+     *
+     * @param \PP\ReportBundle\Entity\DisableTicket $disableTicket
+     */
+    public function removeDisableTicket(\PP\ReportBundle\Entity\DisableTicket $disableTicket)
+    {
+        $this->disableTickets->removeElement($disableTicket);
+    }
+
+    /**
+     * Get disableTickets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDisableTickets()
+    {
+        return $this->disableTickets;
     }
 }

@@ -30,6 +30,7 @@ class a_LoadReportReason implements FixtureInterface{
      
       $reportResaon = new ReportReason();
       $reportResaon->setName($name);
+      $reportResaon->setType(rand(1, 3));
       $reportResaon->setDetails($lorem);
       // On la persiste
       $manager->persist($reportResaon);

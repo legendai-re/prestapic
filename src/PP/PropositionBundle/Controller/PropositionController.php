@@ -57,18 +57,7 @@ class PropositionController extends Controller
     public function propositionPopupAction(){
         
         $em = $this->getDoctrine()->getManager();
-        $currentUser = $this->getUser();
-        
-        /* create report ticket form */
-        $reportTicketForm = null;        
-        $reportReasonList = array();
-        if($this->get('security.context')->isGranted('ROLE_USER')) {
-            $reportReasonList = $em->getRepository("PPReportBundle:ReportReason")->findAll();
-            $reportTicketForm = $this->get('form.factory')->createNamedBuilder('pp_report_api_post_report_ticket_form', 'form', array(), array())         
-            ->setAction($this->generateUrl('pp_report_api_post_report_ticket', array(), true))
-            ->getForm()
-            ->createView();                                    
-        }
+        $currentUser = $this->getUser();       
         
         $getPropositionForm = $this->get('form.factory')->createNamedBuilder('pp_proposition_api_get_proposition_form', 'form', array(), array())         
               ->setAction($this->generateUrl('pp_proposition_api_get_proposition', array(), true))
@@ -88,9 +77,7 @@ class PropositionController extends Controller
         return $this->render('PPPropositionBundle:proposition:propositionPopup.html.twig', array(
             'getPropositionForm' => $getPropositionForm,
             'upvotePropositionForm' => $upvotePropositionForm,
-            'disablePropositionForm' => $disablePropositionForm,
-            'reportTicketForm' => $reportTicketForm,            
-            'reportReasonList' => $reportReasonList,
+            'disablePropositionForm' => $disablePropositionForm
         ));
         
     }

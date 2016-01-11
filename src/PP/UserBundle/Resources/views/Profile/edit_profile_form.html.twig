@@ -13,8 +13,10 @@
     </div>
 
     <div class="profile-details">
-        <div class="avatar" id="profileImageContainer">
-            <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.profilImage.alt }}">
+        <div class="avatar">
+            <div id="profileImageContainer">
+                <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.profilImage.alt }}">
+            </div>            
             <div class="profile-avatar-editing">
                 {{ form_widget(editUserForm.profilImage) }}
             </div>

@@ -83,29 +83,9 @@
         {% if is_granted("ROLE_USER") %}
             {% if imageRequest.author.id == currentUser.id %}
                 <input type="submit" value="Delete request" ng-click="request.postDisableRequest({{ imageRequest.id }})" />
-                {{ form(disableTicketForm) }}
-            {% elseif is_granted("ROLE_MODERATOR") %}                
-                <form ng-model="request.reportData" ng-submit="request.postDisableRequest({{ imageRequest.id }})" >
-                    <select ng-model="request.reportData.reasonId">
-                    {% for reason in reportReasonList %}
-                        <option value="{{ reason.id }}">{{ reason.name }}</option>
-                    {% endfor %}
-                    </select>
-                    <textarea ng-model="request.reportData.details">More details...</textarea>
-                    <input type="submit" value="Delete"/>
-                </form>
-                {{ form(disableTicketForm) }}                                                
+                {{ form(disableTicketForm) }}                                                          
             {% else %}
-                <form ng-model="request.reportData" ng-submit="request.postReport({{ imageRequest.id }})" >
-                    <select ng-model="request.reportData.reasonId">
-                    {% for reason in reportReasonList %}
-                        <option value="{{ reason.id }}">{{ reason.name }}</option>
-                    {% endfor %}
-                    </select>
-                    <textarea ng-model="request.reportData.details">More details...</textarea>
-                    <input type="submit" value="send report"/>
-                </form>
-                {{ form(reportTicketForm) }}            
+                <a ng-click="request.showReportPopup({{ imageRequest.id }},1)" href="">Report</a>                      
             {% endif %}
         {% endif %} 
         
@@ -162,7 +142,9 @@
         {% if not imageRequest.closed and imageRequest.author.id != app.user.id and canProposeImage == true %}
             <article class="add-prop">  
                 <div class="title-boxe">Add your proposition</div>
-                <div class="dragzone">
+                <div class="dragzone" id="dragzone_proposition">
+                    <div id="uploaded_proposition">
+                    </div>
                      {{ form_start(propositionForm) }}                                           
                          {{ form_row(propositionForm.image) }}
                          <p><strong class="choose">Choose an image</strong> or drag it here</p>

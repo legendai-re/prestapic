@@ -1,9 +1,5 @@
 {% if  is_granted("ROLE_USER") %}
-    {% if  form is defined %}                      
-        <div class="box-top">
-            Send new request
-            <button class="button-close" id="sendRequestOverClose">×</button>
-        </div>
+    {% if  form is defined %}                             
         {{ form_start(form, {'attr': {'class': 'addRequestForm'}})  }}   
         <div class="box-comp">                                         
             {{form_row(form.title)}}

@@ -26,6 +26,12 @@
                 <h3>Notifications : </h3>               
                 <input id="notif_mode" type="checkbox" ng-model="setting.notificationMode" {% if user.notificationEnabled == true %}checked{% endif %} ng-change="setting.patchNotificationMode()" name="notif_mode" value="notif_mode" />
                 <label for="notif_mode">Notifications : </label>
+                
+                
+                <form action="{{ path('pp_user_disable_account') }}" method="POST">
+                    <input type="password" name="password" required value="" placeholder="password"/>
+                    <input type="submit" value="delete account" />
+                </form>                    
             </div>
         </div>
 

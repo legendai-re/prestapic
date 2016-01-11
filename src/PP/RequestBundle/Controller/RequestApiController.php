@@ -171,7 +171,7 @@ class RequestApiController extends Controller
                 ->setData(array(                                      
                     'page'=>$page,
                     'nextPage' => $nextPage,
-                    'haveNextPage' => $haveNextPage,                    
+                    'haveNextPage' => $haveNextPage,
                     'propositionList' => $propositionsList,
                     'loadRequestForm' => $loadRequestForm->createView(),
                     'canUpvoteProposition' => $canUpvoteProposition

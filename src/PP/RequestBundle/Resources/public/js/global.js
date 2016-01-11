@@ -16,6 +16,10 @@ jQuery.fn.preventDoubleSubmission = function() {
 
 $(".addRequestForm").preventDoubleSubmission();
 
+$("#sendRequestOverClose").click(function () {
+   $('#sendRequestOver').fadeOut();  
+});
+
 $("#pp_requestbundle_image_request_title").one('focus', function () {
    $('#requestFormRest').slideToggle();
    $('.content').removeClass("init");
@@ -26,11 +30,7 @@ $(".signInUp").click(function () {
 });
 
 $("#signInUpOverClose").click(function () {
-   $('#signInUpOver').fadeOut();  
-});
-
-$("#sendRequestOverClose").click(function () {
-   $('#sendRequestOver').fadeOut();  
+   $('#signInUpOver').fadeOut();
 });
 
 var showBannerAlert = function(type, strongMessage, lightMessage){    

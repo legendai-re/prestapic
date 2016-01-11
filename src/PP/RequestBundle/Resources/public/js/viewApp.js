@@ -36,33 +36,20 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
             }
         };
         
+        this.showReportPopup = function(id, type){
+            var message = {
+                id: id,
+                type: type
+            }
+            angular.element(document.getElementById('reportPopupApp')).scope().$emit('showPopup', message);                                                
+        };
+        
         this.reportData = {
             ticketType: 1,
             targetId: null,
             reasonId: 1,
             details: " "
-        };
-        var haveAlreadyReport = false;
-        
-        // send report //
-        this.postReport = function(id){
-            if(!haveAlreadyReport){
-                haveAlreadyReport = true;
-                this.reportData.targetId = id;
-                console.log(this.reportData);
-                var formAction = document.forms["pp_report_api_post_report_ticket_form"].action;
-                $http({
-                    method: 'POST',
-                    url: formAction,                    
-                    data: JSON.stringify(this.reportData)
-                     }).
-                    then(function(response){                        
-                    },function(response) {
-                        console.log("Request failed : "+response.statusText );                        
-                    }
-                );
-            }
-        };
+        };       
        
         this.postDisableRequest = function(id){
             if(!haveAlreadyReport){
@@ -136,6 +123,29 @@ containerApp.controller('propositionsController', ['$scope', '$http', '$compile'
             $('#showMoreButton').css("display", "none");
         };
         
+        if(document.getElementById('pp_propositionbundle_proposition_image_file')!=null)document.getElementById('pp_propositionbundle_proposition_image_file').addEventListener('change', handlePropositionFileSelect, false);
+        function handlePropositionFileSelect(evt) {
+                   console.log(evt.target);
+                   var files = evt.target.files; // FileList object
+
+                   for (var i = 0, f; f = files[i]; i++) {                                          
+                     if (!f.type.match('image.*')) {
+                       continue;
+                     }
+
+                     var reader = new FileReader();                                            
+                     reader.onload = (function(theFile) {
+                       return function(e) {
+                         var div = document.getElementById('uploaded_proposition');
+                         div.innerHTML = ['<img src="', e.target.result,
+                                           '" title="', escape(theFile.name), '"/>'].join('');                          
+
+                       };
+                     })(f);
+                     reader.readAsDataURL(f);                    
+               }
+           }
+        
         var readyForPropositionVote = true;
         var votedProposition = [];
         this.postPropositionVote = function(propositionId){
@@ -162,7 +172,7 @@ containerApp.controller('propositionsController', ['$scope', '$http', '$compile'
                     }
                 );
             }
-        }
+        }                
         
         var haveSelectImage = false;
         this.postRequestSelect = function(propositionId){

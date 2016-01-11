@@ -58,6 +58,7 @@ class CommentThread
     public function __construct($id)
     {
         $this->id = $id;
+        $this->commentNb = 0;
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->createdDate = new \DateTime();
     }

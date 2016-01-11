@@ -1,49 +1,22 @@
-<section class="overlay send-report"  style="display: none;">
-    <div class="box-container report">
+<section class="overlay send-request" id="sendRequestOver" style="display: none;">    
+    <div class="box-container new-request">
         <div class="box-content">
             <div class="box-top">
-                Report a Policy violation
-                <button class="button-close">×</button>
-            </div>
-            <div class="box-text">
-                Please select the Type of Violation you feel best represents the submission.
-            </div>
-            <div class="box-choice">
-                <select>
-                    <option value="1">Problem Content</option>
-                    <option value="2">Misplaced Deviation</option>
-                    <option value="3">Permission Issues</option>
-                    <option value="4">My Intellectual Property</option>
-                    <option value="5">Explicit Pornography</option>
-                    <option value="6">Sexualized Minor</option>
-                    <option value="7">Malware</option>
-                    <option value="8">"Warez"</option>
-                </select>
-                <textarea placeholder="More details..."></textarea>
-            </div>
-            <div class="box-bottom">
-                <input class="button" type="submit" value="Send Report">
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="overlay send-request" id="sendRequestOver" style="display: none;">
-    <div class="box-container new-request">
-        <div class="box-content" id="sendRequestContent">
-            <div class="box-top">
                 Send new request
-                <button class="button-close" id="sendRequestOverClose">×</button>
+                <button class="button-close" id="sendRequestOverClose" >×</button>
             </div>
-            <div class="load-content"  id="loadingGif" >
+            <div id="sendRequestContent">
+                <div class="load-content"  id="loadingGif" >
                 <span class="bubble"></span>
+                </div>
             </div>
+            
         </div>
     </div>
 </section>
 
 <section class="overlay sign" id="signInUpOver" style="display:none;" >
-    <button class="button-close"    id="signInUpOverClose" >×</button>
+    <button class="button-close" id="signInUpOverClose" >×</button>
     <div class="overlay-content">
         <h3 class="overlay-title">Prestapic</h3>
         <p class="ind">Sign in to Prestapic or create an account</p>

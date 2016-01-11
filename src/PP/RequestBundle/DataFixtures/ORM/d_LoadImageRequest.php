@@ -5,7 +5,7 @@ namespace PP\RequestBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use PP\RequestBundle\Entity\ImageRequest;
-
+use PP\CommentBundle\Entity\CommentThread;
 
 use Symfony\Component\Validator\Constraints\DateTime;
 /**
@@ -17,9 +17,7 @@ class d_LoadImageRequest implements FixtureInterface{
     
   public function load(ObjectManager $manager)
   {                   
-    
-      
-      
+                
     $loremArray = ["Nam","imperdiet","ipsum","in","venenatis","convallis","leo","ante","malesuada","nisi","vel","elementum","eros","metus","vel","leo","Nullam","accumsan","interdum","arcu,","eu","porta","felis","elementum","sed","Nam","pulvinar","imperdiet","augue","luctus","lacinia","eros","Aliquam","placerat","ut","nibh","in","bibendum","Nam","eget","sem","vitae","ex","tempus","lacinia","eget","non","augue","Curabitur","odio","eros","scelerisque","in","feugiat","at","dictum","nec","nulla","Nulla","molestie","velit","eu","sapien","blandit,","non","auctor","nisl","pellentesque","Cras","id","pulvinar","orci","Mauris","nisl","lorem,","semper","sed","venenatis","ut","mollis","quis","orci","In","erat","arcu","cursus","sed","molestie","vitae,","finibus","a","quam","Praesent","ut","aliquet","tellus","Integer","interdum","dui","vitae","blandit","euismod,","quam","ex","dictum","tellus","et","eleifend","arcu","purus","eget","felis","Donec","euismod","dui","sodales","pretium","metus","vitae","porta","nulla","Donec","ullamcorper","tortor","vitae","quam","semper","semper"];
     $categoryRepository = $manager->getRepository('PPRequestBundle:Category');
     $userRepository = $manager->getRepository('PPUserBundle:User');
@@ -39,7 +37,7 @@ class d_LoadImageRequest implements FixtureInterface{
     
     $y = 1;
     $reuseUpvote = 0;
-    for($i=0; $i<500; $i++){
+    for($i=0; $i<250; $i++){
         
         $nameLenght = rand(3, 8);
         $name = "";
@@ -87,10 +85,16 @@ Aliquam finibus fringilla erat, et bibendum tortor iaculis et. Praesent id arcu 
             array_push($currentTags, $tempTagId);
         }
         
-        $manager->persist($imageRequest);                   
+        $manager->persist($imageRequest); 
+        $manager->flush();
+        
+        $commentThread = new CommentThread($imageRequest->getId());
+        $imageRequest->setCommentThread($commentThread);
+        $manager->persist($commentThread);
+        $manager->flush();
     }  
     
-    $manager->flush();
+   
   }
   
 }

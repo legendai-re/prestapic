@@ -28,6 +28,13 @@ class ReportReason
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="type", type="integer")
+     */
+    private $type;
 
     /**
      * @var string
@@ -47,6 +54,8 @@ class ReportReason
     * @Assert\Valid()
     */
     private $disabledTickets;
+    
+    
     
     /**
      * Get id
@@ -179,5 +188,63 @@ class ReportReason
     public function getDisableTickets()
     {
         return $this->disableTickets;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     *
+     * @return ReportReason
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Add disabledTicket
+     *
+     * @param \PP\ReportBundle\Entity\DisableTicket $disabledTicket
+     *
+     * @return ReportReason
+     */
+    public function addDisabledTicket(\PP\ReportBundle\Entity\DisableTicket $disabledTicket)
+    {
+        $this->disabledTickets[] = $disabledTicket;
+
+        return $this;
+    }
+
+    /**
+     * Remove disabledTicket
+     *
+     * @param \PP\ReportBundle\Entity\DisableTicket $disabledTicket
+     */
+    public function removeDisabledTicket(\PP\ReportBundle\Entity\DisableTicket $disabledTicket)
+    {
+        $this->disabledTickets->removeElement($disabledTicket);
+    }
+
+    /**
+     * Get disabledTickets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDisabledTickets()
+    {
+        return $this->disabledTickets;
     }
 }

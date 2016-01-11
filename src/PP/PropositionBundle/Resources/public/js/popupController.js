@@ -1,12 +1,11 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 angular.element(document).ready(function() {
-    var myDiv2 = document.getElementById("popupPropApp");
+    try {
+        var myDiv2 = document.getElementById("popupPropApp");
     angular.bootstrap(myDiv2, ["popupPropApp"]);
+    }catch(e){
+        console.log("allready bootstraped");
+    }    
 });
 
 var popupPropApp = angular.module('popupPropApp',  ['ngRoute']);
@@ -28,8 +27,8 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
         $scope.currentLocation = message.url;
     });
 
-    $scope.proposition = null;
-
+    $scope.proposition = null;        
+    
     var showPopup = function(id){
         $("#popupPropApp").css("display", "block");
         $("#propositionUpvoteButton").removeClass("animate");
@@ -101,34 +100,14 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
                 console.log("Request failed : "+response.statusText );                   
             }
         );
-    };
+    };       
     
-    this.reportData = {
-        ticketType: 2,
-        targetId: null,
-        reasonId: 1,
-        details: null
-    };
-    var haveAlreadyReport = false;
-
-    // send report //
-    this.postReport = function(id){
-        if(!haveAlreadyReport){            
-            haveAlreadyReport = true;
-            this.reportData.targetId = id;
-            console.log(this.reportData);
-            var formAction = document.forms["pp_report_api_post_report_ticket_form"].action;
-            $http({
-                method: 'POST',
-                url: formAction,                    
-                data: JSON.stringify(this.reportData)
-                 }).
-                then(function(response){                        
-                },function(response) {
-                    console.log("Request failed : "+response.statusText );                        
-                }
-            );
+    this.showReportPopup = function(id, type){
+        var message = {
+            id: id,
+            type: type
         }
+        angular.element(document.getElementById('reportPopupApp')).scope().$emit('showPopup', message);                                                
     };
     
     this.close = function(){

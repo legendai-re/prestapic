@@ -60,27 +60,8 @@ class ShowUserController extends Controller
         }               
         
         /////////////////////////////////
-        ////////////// FORM /////////////
+        ////////////// FORM /////////////       
         
-        /* create report ticket form */
-        $reportTicketForm = null;
-        $disableTicketForm = null;
-        $reportReasonList = array();
-        if($this->get('security.context')->isGranted('ROLE_USER')) {
-            $reportReasonList = $em->getRepository("PPReportBundle:ReportReason")->findAll();
-            $reportTicketForm = $this->get('form.factory')->createNamedBuilder('pp_report_api_post_report_ticket_form', 'form', array(), array())         
-            ->setAction($this->generateUrl('pp_report_api_post_report_ticket', array(), true))
-            ->getForm()
-            ->createView();
-            
-            if($this->get('security.context')->isGranted('ROLE_MODERATOR')) {              
-            $disableTicketForm = $this->get('form.factory')->createNamedBuilder('pp_report_api_post_disable_ticket_form', 'form', array(), array())         
-                ->setAction($this->generateUrl('pp_report_api_post_disable_ticket', array(), true))
-                ->getForm()
-                ->createView();
-            }
-            
-        }
         
         /* create loadPage form */        
         $loadRequestForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_get_user_request_form_1', 'form', array(), array())         
@@ -158,10 +139,7 @@ class ShowUserController extends Controller
             'isBlocked' => $isBlocked,
             'upvoteRequestForm' => $upvoteRequestForm->createView(),
             'setModeratorForm' => $setModeratorForm,
-            'isModerator' => $isModerator,
-            "reportTicketForm" => $reportTicketForm,
-            "disableTicketForm" => $disableTicketForm,
-            "reportReasonList" => $reportReasonList
+            'isModerator' => $isModerator
         ));
     }
     

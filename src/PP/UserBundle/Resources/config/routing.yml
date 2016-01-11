@@ -23,4 +23,8 @@ pp_user_gallery:
 pp_user_setting:
     path:     /{slug}/settings
     defaults: { _controller: PPUserBundle:Setting:index}
+ 
+pp_user_disable_account:
+    path:     /settings/disable
+    defaults: { _controller: PPUserBundle:Setting:disableAccount}
     

@@ -20,6 +20,37 @@ use PP\ReportBundle\Entity\ReportReason;
 
 class ReportApiController extends Controller
 {
+    
+    public function getReportFormAction(Request $request){
+        $response = new Response();
+        $currentUser = $this->getUser();
+        
+        $type = $request->get("type");
+        
+        if ($this->get('security.context')->isGranted('ROLE_USER') && $currentUser != null && $type!=null) {
+            
+            $em = $this->getDoctrine()->getManager();
+            $reportReasonRepository = $em->getRepository("PPReportBundle:ReportReason");
+            
+            $reportReasons = $reportReasonRepository->findByType($type);
+            $reportTicketForm = $this->get('form.factory')->createNamedBuilder('pp_report_api_post_report_ticket_form', 'form', array(), array())         
+                ->setAction($this->generateUrl('pp_report_api_post_report_ticket', array(), true))
+                ->getForm()
+                ->createView();
+            
+            $view = View::create()
+                ->setData(array(
+                    "reportReasons" => $reportReasons,
+                    "reportTicketForm" => $reportTicketForm
+                ))
+                ->setTemplate(new TemplateReference('PPReportBundle', 'Popup', 'reportForm'));   
+             
+            return $this->getViewHandler()->handle($view);
+        }else return new Response();
+        
+    }
+    
+    
     public function postReportTicketAction(Request $request){
         $response = new Response();
         $currentUser = $this->getUser();
