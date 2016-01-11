@@ -156,42 +156,43 @@ class PropositionApiController extends Controller
                 $proposition->setAccepted(true);                    
                 $imageRequest->setClosed(true);
                 $imageRequest->setAcceptedProposition($proposition); 
-                
-                /* create notification */  
-                $propositionAuthorThread = $proposition->getAuthor()->getNotificationThread();
-                $notification = new Notification(NotificationType::PROPOSITION_SELECTED);
-                $propositionAuthorThread->addNotification($notification);
-                $proposition->getAuthor()->incrementNotificationsNb();
-                $em->persist($propositionAuthorThread);
-                $em->persist($currentUser);
                 $em->flush();
+                if($proposition->getAuthor()->getNotificationEnabled()){
+                    /* create notification */  
+                    $propositionAuthorThread = $proposition->getAuthor()->getNotificationThread();
+                    $notification = new Notification(NotificationType::PROPOSITION_SELECTED);
+                    $propositionAuthorThread->addNotification($notification);
+                    $proposition->getAuthor()->incrementNotificationsNb();
+                    $em->persist($propositionAuthorThread);
+                    $em->persist($currentUser);
+                    $em->flush();
 
-                $notificationSelected = new NotificationSelected($notification->getId());
-                $notificationSelected->setImageRequest($imageRequest);                   
-                $notificationSelected->setNotificationBase($notification);
-                $em->persist($notificationSelected);
-                $em->flush();
-                
-                 /* send notification */
-                $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
-                $faye = $this->container->get('pp_notification.faye.client');                    
-                $channel = '/notification/'.$propositionAuthorThread->getSlug();                
-                $jsonNotication = new JsonNotification(
-                            NotificationType::PROPOSITION_SELECTED,
-                            false,
-                            false,
-                            $notification->getCreateDate(),
-                            $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
-                            $this->generateUrl('pp_request_view', array('slug' => $notificationSelected->getImageRequest()->getSlug())),
-                            $setClickedUrl,
-                            $notificationSelected->getImageRequest()->getAuthor()->getName(),
-                            $notificationSelected->getImageRequest()->getAuthor()->getId(),
-                            $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $notificationSelected->getImageRequest()->getAuthor()->getProfilImage()->getWebPath("70x70"),
-                            $notificationSelected->getImageRequest()->getTitle()  
-                );
-                $data = array('notification' => $jsonNotication);                    
-                $faye->send($channel, $data);
-                
+                    $notificationSelected = new NotificationSelected($notification->getId());
+                    $notificationSelected->setImageRequest($imageRequest);                   
+                    $notificationSelected->setNotificationBase($notification);
+                    $em->persist($notificationSelected);
+                    $em->flush();
+
+                     /* send notification */
+                    $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
+                    $faye = $this->container->get('pp_notification.faye.client');                    
+                    $channel = '/notification/'.$propositionAuthorThread->getSlug();                
+                    $jsonNotication = new JsonNotification(
+                                NotificationType::PROPOSITION_SELECTED,
+                                false,
+                                false,
+                                $notification->getCreateDate(),
+                                $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
+                                $this->generateUrl('pp_request_view', array('slug' => $notificationSelected->getImageRequest()->getSlug())),
+                                $setClickedUrl,
+                                $notificationSelected->getImageRequest()->getAuthor()->getName(),
+                                $notificationSelected->getImageRequest()->getAuthor()->getId(),
+                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $notificationSelected->getImageRequest()->getAuthor()->getProfilImage()->getWebPath("70x70"),
+                                $notificationSelected->getImageRequest()->getTitle()  
+                    );
+                    $data = array('notification' => $jsonNotication);                    
+                    $faye->send($channel, $data);
+                }
                 
                 $response->setData(json_encode(array('succes'=>true, 'redirect'=>$this->generateUrl('pp_request_view', array('slug' => $imageRequest->getSlug())))));
             }else $response->setData(json_encode(array('succes'=>false)));

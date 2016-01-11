@@ -7,11 +7,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\Common\Collections\ArrayCollection;
 use PP\RequestBundle\Constant\Constants;
 use PP\RequestBundle\Entity\ImageRequest;
@@ -52,36 +54,36 @@ class SettingController extends Controller
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->get('fos_user.change_password.form.factory');
 
-        $changePasswordForm = $formFactory->createForm();
-        $changePasswordForm->setData($currentUser);
+        $changePasswordForm = $formFactory->createForm();                
         
         $changePasswordForm->handleRequest($request);
-       
+               
         if ($changePasswordForm->isValid()) {
-            echo "hello";
+           
             /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
             $userManager = $this->get('fos_user.user_manager');
             
             $event = new FormEvent($changePasswordForm, $request);
             $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_SUCCESS, $event);
-            
-            $userManager->updateUser($currentUser);
-            
-            if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('pp_user_profile', array('slug'=>$currentUser->getSlug()));
-                $response = new RedirectResponse($url);
-            }
+                        
+            $currentUser->setPlainPassword($changePasswordForm->getData()->getPlainPassword());
+            $userManager->updatePassword($currentUser);
+            $userManager->updateUser($currentUser);                                                                
 
-            $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED, new FilterUserResponseEvent($currentUser, $request, $response));
-
-            return $response;
-        }
-        
+            $url = $this->generateUrl('pp_user_setting', array('slug'=>$currentUser->getSlug()));
+            $response = new RedirectResponse($url);
+        }        
         /////////////////////
+                
+        /* enable notification */
+        $formNotifEnable = $this->get('form.factory')->createNamedBuilder('pp_user_api_settings_patch_notification_mode_form', 'form', array(), array())
+                ->setAction($this->generateUrl('pp_user_api_settings_patch_notification_mode', array(), true))
+                ->getForm();                        
         
         return $this->render('PPUserBundle:Settings:settings.html.twig', array(
-           "user" => $currentUser,
-            "changePasswordForm" => $changePasswordForm->createView()
+            "user" => $currentUser,
+            "changePasswordForm" => $changePasswordForm->createView(),
+            "formNotifEnable" => $formNotifEnable->createView()
         ));
     }
     

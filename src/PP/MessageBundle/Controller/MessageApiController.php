@@ -129,7 +129,8 @@ class MessageApiController extends Controller
             $messageThreadRepository = $em->getRepository('PPMessageBundle:MessageThread');
             $userRepositoy = $em->getRepository('PPUserBundle:User');
             $action = 'newMessage';
-            
+            $haveBlockedSender = false;
+           
             if($currentUser!=null){
                                                 
                 $postData = $request->getContent();
@@ -143,121 +144,122 @@ class MessageApiController extends Controller
                 }
                 
                 $targetUser = $userRepositoy->find($targetId);
-                
-                if($threadId == null){
-                    $threadId = $messageRepository->getCommonMessageThread($currentUser->getId(), $targetId);
+                /* if not blocked by target */
+                if(!in_array($currentUser, $targetUser->getBlockedUsers()->toArray())){
                     if($threadId == null){
-                        /* don't have common thread so create one */                    
-                        $messageThread = new MessageThread();
-                        $messageThread->addUser($currentUser);
-                        $messageThread->addUser($targetUser);
-                        $currentUser->addMessageThread($messageThread);
-                        $targetUser->addMessageThread($messageThread);
-                        $em->persist($currentUser);
+                        $threadId = $messageRepository->getCommonMessageThread($currentUser->getId(), $targetId);
+                        if($threadId == null){
+                            /* don't have common thread so create one */                    
+                            $messageThread = new MessageThread();
+                            $messageThread->addUser($currentUser);
+                            $messageThread->addUser($targetUser);
+                            $currentUser->addMessageThread($messageThread);
+                            $targetUser->addMessageThread($messageThread);
+                            $em->persist($currentUser);
+                            $em->persist($targetUser);
+                            $em->persist($messageThread);
+                            $em->flush();
+                            $action = 'newThread';
+
+                            $jsonMessage = new JsonMessageModel(
+                                                $messageThread->getId(),
+                                                999,
+                                                $postData->messageContent,
+                                                new JsonUserModel($currentUser->getId(), $currentUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70')),                            
+                                                true,
+                                                new \DateTime(),
+                                                $this->container->get('pp_notification.ago')->ago(new \DateTime())
+                            );
+
+                            $newThread = new JsonMessageThreadModel(
+                                                $messageThread->getId(),
+                                                new JsonUserModel($targetUser->getId(), $targetUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$targetUser->getProfilImage()->getWebPath('70x70')),                            
+                                                $jsonMessage,
+                                                array($jsonMessage),
+                                                true,
+                                                1,
+                                                new \DateTime()                                            
+                            );
+                            $newThreadTosend = $newThread;
+                            $data['newThread'] = $newThread;
+                        }else {$messageThread = $messageThreadRepository->find($threadId);}
+                    }else if($threadId != null){
+                        $messageThread = $messageThreadRepository->find($threadId);
+                    }
+
+                    echo json_encode($data);
+
+                    $message = new Message();
+                    $message->setAuthor($currentUser);
+                    $message->setTarget($targetUser);
+                    $message->setContent($postData->messageContent);
+                    $message->setMessageThread($messageThread);
+
+                    $messageThread->addMessage($message);
+                    $em->persist($messageThread);
+                    $em->flush();                
+
+                    $faye = $this->container->get('pp_notification.faye.client');
+
+                    /* if the target user is in message send message */                
+                    $jsonMessage = new JsonMessageModel(
+                            $messageThread->getId(),
+                            $message->getId(),
+                            $message->getContent(),
+                            new JsonUserModel($currentUser->getId(), $currentUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70')),                            
+                            false,
+                            $message->getCreatedDate(),
+                            $this->container->get('pp_notification.ago')->ago($message->getCreatedDate())
+                    );                
+                    if(isset($newThreadTosend)){
+                        $newThreadTosend->lastMessage->messageFromUs = false;
+                        $newThreadTosend->target = new JsonUserModel($currentUser->getId(), $currentUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70'));
+                    }
+                    else {
+                        $newThreadTosend = array();
+                    }
+                    $channel = '/messages/'.$targetUser->getId();               
+                    $jsonMessageData = array('message' => $jsonMessage, 'action'=>$action, 'newThread'=>$newThreadTosend);
+                    $faye->send($channel, $jsonMessageData);
+
+                    /* else if target user not in message send notification */
+                    if($targetUser->getNotificationEnabled() && !$targetUser->getIsInMessage()){
+                        $targetUserNotifThread = $targetUser->getNotificationThread();
+                        $notification = new Notification(NotificationType::MESSAGE);
+                        $targetUserNotifThread->addNotification($notification);
+                        $targetUser->incrementNotificationsNb();
+                        $em->persist($targetUserNotifThread);
                         $em->persist($targetUser);
-                        $em->persist($messageThread);
                         $em->flush();
-                        $action = 'newThread';
 
-                        $jsonMessage = new JsonMessageModel(
-                                            $messageThread->getId(),
-                                            999,
-                                            $postData->messageContent,
-                                            new JsonUserModel($currentUser->getId(), $currentUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70')),                            
-                                            true,
-                                            new \DateTime(),
-                                            $this->container->get('pp_notification.ago')->ago(new \DateTime())
+                        $notificationMessage = new NotificationMessage($notification->getId());
+                        $notificationMessage->setAuthor($currentUser);
+                        $notificationMessage->setMessage($message);
+                        $notificationMessage->setNotificationBase($notification);
+                        $em->persist($notificationMessage);
+                        $em->flush();
+
+                        $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
+                        $channel = '/notification/'.$targetUser->getSlug();                    
+                        $jsonNotication = new JsonNotification(
+                                NotificationType::MESSAGE,
+                                false,
+                                false,
+                                $notification->getCreateDate(),
+                                $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
+                                $this->generateUrl('pp_user_profile', array('slug' => $currentUser->getSlug())),
+                                $setClickedUrl,
+                                $currentUser->getId(),
+                                $currentUser->getName(),                            
+                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $currentUser->getProfilImage()->getWebPath("70x70"),
+                                null,
+                                $messageThread->getId()
                         );
 
-                        $newThread = new JsonMessageThreadModel(
-                                            $messageThread->getId(),
-                                            new JsonUserModel($targetUser->getId(), $targetUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$targetUser->getProfilImage()->getWebPath('70x70')),                            
-                                            $jsonMessage,
-                                            array($jsonMessage),
-                                            true,
-                                            1,
-                                            new \DateTime()                                            
-                        );
-                        $newThreadTosend = $newThread;
-                        $data['newThread'] = $newThread;
-                    }else {$messageThread = $messageThreadRepository->find($threadId);}
-                }else if($threadId != null){
-                    $messageThread = $messageThreadRepository->find($threadId);
-                }
-                
-                echo json_encode($data);
-                
-                $message = new Message();
-                $message->setAuthor($currentUser);
-                $message->setTarget($targetUser);
-                $message->setContent($postData->messageContent);
-                $message->setMessageThread($messageThread);
-                
-                $messageThread->addMessage($message);
-                $em->persist($messageThread);
-                $em->flush();                
-                
-                $faye = $this->container->get('pp_notification.faye.client');
-                
-                /* if the target user is in message send message */                
-                $jsonMessage = new JsonMessageModel(
-                        $messageThread->getId(),
-                        $message->getId(),
-                        $message->getContent(),
-                        new JsonUserModel($currentUser->getId(), $currentUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70')),                            
-                        false,
-                        $message->getCreatedDate(),
-                        $this->container->get('pp_notification.ago')->ago($message->getCreatedDate())
-                );                
-                if(isset($newThreadTosend)){
-                    $newThreadTosend->lastMessage->messageFromUs = false;
-                    $newThreadTosend->target = new JsonUserModel($currentUser->getId(), $currentUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70'));
-                }
-                else {
-                    $newThreadTosend = array();
-                }
-                $channel = '/messages/'.$targetUser->getId();               
-                $jsonMessageData = array('message' => $jsonMessage, 'action'=>$action, 'newThread'=>$newThreadTosend);
-                $faye->send($channel, $jsonMessageData);
-                
-                /* else if target user not in message send notification */
-                if(!$targetUser->getIsInMessage()){
-                    $targetUserNotifThread = $targetUser->getNotificationThread();
-                    $notification = new Notification(NotificationType::MESSAGE);
-                    $targetUserNotifThread->addNotification($notification);
-                    $targetUser->incrementNotificationsNb();
-                    $em->persist($targetUserNotifThread);
-                    $em->persist($targetUser);
-                    $em->flush();
-                                        
-                    $notificationMessage = new NotificationMessage($notification->getId());
-                    $notificationMessage->setAuthor($currentUser);
-                    $notificationMessage->setMessage($message);
-                    $notificationMessage->setNotificationBase($notification);
-                    $em->persist($notificationMessage);
-                    $em->flush();
-                    
-                    $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
-                    $channel = '/notification/'.$targetUser->getSlug();                    
-                    $jsonNotication = new JsonNotification(
-                            NotificationType::MESSAGE,
-                            false,
-                            false,
-                            $notification->getCreateDate(),
-                            $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
-                            $this->generateUrl('pp_user_profile', array('slug' => $currentUser->getSlug())),
-                            $setClickedUrl,
-                            $currentUser->getId(),
-                            $currentUser->getName(),                            
-                            $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $currentUser->getProfilImage()->getWebPath("70x70"),
-                            null,
-                            $messageThread->getId()
-                    );
-                                        
-                    $notifData = array('notification' => $jsonNotication);                    
-                    $faye->send($channel, $notifData);
-                }
-                                                                
+                        $notifData = array('notification' => $jsonNotication);                    
+                        $faye->send($channel, $notifData);
+                    }
+                }else {$response->setStatusCode(Response::HTTP_FORBIDDEN);}                                              
             }else {$response->setStatusCode(Response::HTTP_FORBIDDEN);}
         }else {$response->setStatusCode(Response::HTTP_FORBIDDEN);}
         return $response;

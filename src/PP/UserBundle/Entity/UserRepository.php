@@ -130,9 +130,8 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
             
         } catch (\Doctrine\ORM\NoResultException $ex) {            
             return false;
-        }
-       
-    }
+        }       
+    }       
     
     public function getUserBySlug($slug){
         $qb = $this->createQueryBuilder('u')

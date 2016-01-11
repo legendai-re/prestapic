@@ -89,6 +89,33 @@
                 );   
             }
             
+            var canBlock = true;
+            this.patchBlock = function(id){                
+                if(canBlock){                   
+                    if($("#blockButton").html() == "block")$("#blockButton").html("unblock")
+                    else $("#blockButton").html("block")
+                    
+                    canBlock = false;
+                    var formAction = document.forms["pp_user_api_patch_blocked_form"].action;
+                    var myData = {
+                        idToBlock: id
+                    };
+
+                    $http({
+                        method: 'PATCH',
+                        url: formAction,                    
+                        data: JSON.stringify(myData)
+                     }). 
+                        then(function(response) {
+                            canBlock = true;
+                        }, function(response) {
+                            canBlock = true;
+                            console.log("Request failed : "+response.statusText );                        
+                        }
+                    );
+                }
+            }
+            
             var canPatchModerator = true;
             this.patchModerator = function(id){
                 canPatchModerator = false;

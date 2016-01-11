@@ -1,0 +1,4 @@
+services:
+#    pp_comment.example:
+#        class: PP\CommentBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

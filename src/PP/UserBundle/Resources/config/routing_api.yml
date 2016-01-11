@@ -3,5 +3,10 @@ pp_user_api_home:
     type: rest
     resource: PP\UserBundle\Controller\ShowUserApiController
     name_prefix: pp_user_api_
+
+pp_user_api_settings:
+    type: rest
+    resource: PP\UserBundle\Controller\SettingApiController
+    name_prefix: pp_user_api_settings_
     
  

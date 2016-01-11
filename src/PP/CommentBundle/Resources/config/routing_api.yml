@@ -1,0 +1,4 @@
+pp_comment_api_home:
+    type: rest
+    resource: PP\CommentBundle\Controller\CommentApiController
+    name_prefix: pp_request_api_

@@ -214,3 +214,63 @@ containerApp.controller('propositionsController', ['$scope', '$http', '$compile'
 
 }]);  
 
+containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$window', '$location', function ($scope, $http, $compile, $window, $location) {
+        
+        var requestId = null;
+        $scope.commentList = [];
+        
+        this.init = function(requestId){            
+            getComments(1, requestId);
+        };
+        
+        var getComments = function(page, requestId){
+            var formAction = document.forms["pp_request_api_get_comments_form"].action;
+            
+            $http.get(formAction+".html?page="+page+"&requestId="+requestId).
+                then(function(response){                    
+                    $scope.commentThread = response.data;
+                    for(var i=0; i<response.data.comments.length; i++){
+                        $scope.commentList.push(response.data.comments[i]);
+                    }
+                    $scope.currentUser = response.data.currentUser;
+                },function(response) {
+                    console.log("Request failed : "+response.statusText );                        
+                }
+            );
+        };
+        
+        $scope.comment = {};
+        var canPostComment = true;
+        
+        this.postComment = function(requestId){
+            console.log("hello");
+            if(canPostComment){                
+                var newComment = {
+                    content: $scope.comment.content,
+                    author: {
+                        id: $scope.currentUser.id,
+                        image: $scope.currentUser.image,
+                        name: $scope.currentUser.name,
+                        url: $scope.currentUser.url
+                    }
+                };
+                $scope.commentList.push(newComment);
+                
+                canPostComment = false;
+                $scope.comment.requestId = requestId;
+                console.log($scope.comment);
+                var formAction = document.forms["pp_request_api_post_comment_form"].action;
+                $http({
+                    method: 'POST',
+                    url: formAction,                    
+                    data: JSON.stringify($scope.comment)
+                     }).                
+                    then(function(response){                        
+
+                    },function(response) {
+                        console.log("Request failed : "+response.statusText );                        
+                    }
+                );
+            }
+        };
+}]);

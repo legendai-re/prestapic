@@ -15,7 +15,7 @@ section.overlay
 	&.sign
 		background-color: rgba(255,255,255,0.97)
 
-	&.send-report
+	&.send-report, &.send-request
 		background-color: rgba(0,0,0,.85)
 
 	button.button-close
@@ -115,9 +115,8 @@ section.overlay
 
 	// REPORT
 
-	.report-container
+	.box-container
 		background: white
-		width: 445px
 		height: auto
 		position: absolute
 		top: 50%
@@ -127,7 +126,13 @@ section.overlay
 		border: 1px solid #ccc
 		overflow: hidden
 
-		.report-top
+		&.report
+			width: 445px
+
+		&.new-request
+			width: 770px
+
+		.box-top
 			padding: 10px 15px
 			color: #444
 			border-bottom: 1px solid rgba(0, 0, 0, 0.1)
@@ -154,13 +159,13 @@ section.overlay
 				&:hover
 					color: $main-color
 		
-		.report-text
+		.box-text
 			padding: 10px 15px
 			color: #777
 	
-		.report-choice
+		.box-choice, .box-comp
 			
-			select, textarea
+			input, select, textarea
 				width: 100%
 				background: none
 				border: none
@@ -172,12 +177,28 @@ section.overlay
 				-moz-appearance: none
 				appearance: none
 				color: #444
-				
-				&:first-child
-					border-top: 1px solid rgba(0, 0, 0, 0.1)
+
+		.box-choice
+			&:first-child
+				border-top: 1px solid rgba(0, 0, 0, 0.1)
+
+		.box-comp
+
+			.title
+				font-size: 25px
+
+			div:nth-child(2)
+				max-height: 325px
+
+			.content
+				resize: none
+				min-height: 325px
+
+			.add-tags
+				border-left: 1px solid rgba(0,0,0,.1)
 	
-		.report-bottom
-			padding: 5px 15px 10px
+		.box-bottom
+			padding: 10px 15px
 			display: block
 			overflow: hidden
 

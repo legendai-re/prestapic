@@ -155,6 +155,12 @@ class ImageRequest
      */
     private $reportNb;
     
+    /**    
+    * @ORM\OneToOne(targetEntity="PP\CommentBundle\Entity\CommentThread")
+    * @Assert\Valid()          
+    */
+    private $commentThread;
+    
     public function setDateAgo($dateAgo){
         $this->dateAgo = $dateAgo;
         return $this;
@@ -708,5 +714,29 @@ class ImageRequest
     public function addReportNb(){
         $this->reportNb++;
         return $this;
+    }
+
+    /**
+     * Set commentThread
+     *
+     * @param \PP\CommentBundle\Entity\CommentThread $commentThread
+     *
+     * @return ImageRequest
+     */
+    public function setCommentThread(\PP\CommentBundle\Entity\CommentThread $commentThread = null)
+    {
+        $this->commentThread = $commentThread;
+
+        return $this;
+    }
+
+    /**
+     * Get commentThread
+     *
+     * @return \PP\CommentBundle\Entity\CommentThread
+     */
+    public function getCommentThread()
+    {
+        return $this->commentThread;
     }
 }

@@ -159,7 +159,7 @@
         </div>                
     </article>
     {% if is_granted("ROLE_USER") %}
-        {% if not imageRequest.closed and imageRequest.author.id != app.user.id %}
+        {% if not imageRequest.closed and imageRequest.author.id != app.user.id and canProposeImage == true %}
             <article class="add-prop">  
                 <div class="title-boxe">Add your proposition</div>
                 <div class="dragzone">
@@ -181,59 +181,43 @@
         <p>Details : {{  imageRequest.disableTicket.details }}</p>
     {% endif %}
     
-    <article class="comments">
-    <div class="title-section">3 comments</div>
-    <ul class="list-comments">
-      <li class="comment">
-        <a class="avatar" href="#" title="">
-          <img src="https://s3.amazonaws.com/uifaces/faces/twitter/allisongrayce/128.jpg">
-        </a>
-        <div class="comment-container">
-          <a class="username" href="#" title="">AlexandreJolly</a>
-          <div class="comment-content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam ornare odio, eget dignissim neque ornare nec. Mauris sollicitudin dignissim lacus. Fusce ut urna rutrum, vehicula mi.
-          </div>
-        </div>
-      </li>
-      <li class="comment">
-        <a class="avatar" href="#" title="">
-          <img src="https://s3.amazonaws.com/uifaces/faces/twitter/allisongrayce/128.jpg">
-        </a>
-        <div class="comment-container">
-          <a class="username" href="#" title="">AlexandreJolly</a>
-          <div class="comment-content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam ornare odio, eget dignissim neque ornare nec. Mauris sollicitudin dignissim lacus. Fusce ut urna rutrum, vehicula mi.
-          </div>
-        </div>
-      </li>
-      <li class="comment">
-        <a class="avatar" href="#" title="">
-          <img src="https://s3.amazonaws.com/uifaces/faces/twitter/allisongrayce/128.jpg">
-        </a>
-        <div class="comment-container">
-          <a class="username" href="#" title="">AlexandreJolly</a>
-          <div class="comment-content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam ornare odio, eget dignissim neque ornare nec. Mauris sollicitudin dignissim lacus. Fusce ut urna rutrum, vehicula mi.
-          </div>
-        </div>
-      </li>
-      <li class="comment">
-        <form>
-          <a class="avatar" href="#" title="">
-            <img src="https://s3.amazonaws.com/uifaces/faces/twitter/allisongrayce/128.jpg">
-          </a>
-          <div class="composer-container">
-            <textarea class="comment-composer" placeholder="Type your comment here..." row="1" type="text"></textarea>
-            <button class="button-comment" type="submit">Send</button>
-          </div>
-        </form>
-      </li>
-    </ul>
-  </article>
-    
+    <article class="comments" ng-controller="commentsController as comments" ng-init="comments.init({{ imageRequest.id }})">
+        {{ form(getCommentForm) }}
+        {% verbatim %}
+        <div class="title-section">{{ commentThread.commentNb }} comments</div>
+        {% endverbatim %}
+        <ul class="list-comments">
+            {% verbatim %}
+            <li class="comment" ng-repeat="comment in commentList">
+                 <a target="_self" class="avatar" href="{{ comment.author.url }}" title="">
+                     <img ng-src="{{ comment.author.image }}" alt="{{ comment.author.name }}">                    
+                 </a>
+                 <div class="comment-container">
+                     <a target="_self" class="username" href="{{ comment.author.url }}" title="">{{ comment.author.name }}</a>
+                     <div class="comment-content">
+                         {{ comment.content }}
+                     </div>
+                 </div>
+            </li>
+            {% endverbatim %}
+            {% if is_granted("ROLE_USER") %}
+            <li class="comment">
+              {{ form(postCommentForm) }}
+              <form  ng-submit="comments.postComment({{ imageRequest.id }})">
+                <a target="_self" class="avatar" href="{{ path('pp_user_profile', {'slug': currentUser.slug}) }}" title="">
+                  <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.name }}">
+                </a>
+                <div class="composer-container">
+                  <textarea ng-model="comment.content" class="comment-composer" placeholder="Type your comment here..." row="1" type="text"></textarea>
+                  <button class="button-comment" type="submit">Send</button>
+                </div>
+              </form>
+            </li>
+            {% endif %}
+        </ul>
+    </article>   
 </div>
-    
-          
+              
 {% endblock %}
 
 

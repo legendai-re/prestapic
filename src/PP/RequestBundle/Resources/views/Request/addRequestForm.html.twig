@@ -1,22 +1,23 @@
-
-
 {% if  is_granted("ROLE_USER") %}
     {% if  form is defined %}                      
-        <div class="new-demand">
-            <a class="avatar" href="#" title="">
-              <img src="{{ asset(app.user.profilImage.webPath("70x70")) }}">
-            </a>
-            <div class="comp-area">
-              {{ form_start(form, {'attr': {'class': 'addRequestForm'}})  }}                                            
-                {{ form_row(form.title) }}
-                <div id="requestFormRest" >
-                    {{ form_row(form.request) }} 
-                    {{ form_row(form.category) }} 
-                    {{ form_row(form.tagsStr) }} 
-                    {{ form_row(form.save) }} 
-                </div>
-            {{ form_end(form) }}
+        <div class="box-top">
+            Send new request
+            <button class="button-close" id="sendRequestOverClose">×</button>
+        </div>
+        {{ form_start(form, {'attr': {'class': 'addRequestForm'}})  }}   
+        <div class="box-comp">                                         
+            {{form_row(form.title)}}
+            {{form_row(form.request, {'attr': {'rows': '15'}})}}
+            <div class="col-6">
+                {{form_row(form.category)}}
             </div>
-         </div>
+            <div class="col-6">
+                {{form_row(form.tagsStr)}} 
+            </div>
+        </div>
+        <div class="box-bottom">
+            {{form_row(form.save)}}
+        </div>
+        {{ form_end(form) }}
     {% endif %}
 {% endif %}

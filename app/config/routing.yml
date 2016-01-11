@@ -1,3 +1,12 @@
+pp_comment:
+    resource: "@PPCommentBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+pp_comment_api:
+    type: rest
+    resource: "@PPCommentBundle/Resources/config/routing_api.yml"
+    prefix:   /api/comment/
+
 pp_dashboard:
     resource: "@PPDashboardBundle/Resources/config/routing.yml"
     prefix:   /dashboard/

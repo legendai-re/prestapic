@@ -158,43 +158,46 @@ class ShowUserApiController extends Controller
                 if(!in_array($pageProfile, $currentUser->getFollowing()->toArray())){
                     /* create follow */
                     $currentUser->addFollowing($pageProfile);
-                    
-                    /* create notification */
-                    $pageProfileNotifThread = $pageProfile->getNotificationThread();
-                    $notification = new Notification(NotificationType::FOLLOW);
-                    $pageProfileNotifThread->addNotification($notification);
-                    $pageProfile->incrementNotificationsNb();
-                    $em->persist($pageProfileNotifThread);
                     $em->persist($currentUser);
                     $em->flush();
-                    
-                    
-                    $notificationFollow = new NotificationFollow($notification->getId());
-                    $notificationFollow->setFollowYou($currentUser);
-                    $notificationFollow->setNotificationBase($notification);
-                    $em->persist($notificationFollow);
-                    $em->flush();
-                    
-                    /* send notification */
-                    $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
-                    
-                    $faye = $this->container->get('pp_notification.faye.client');                    
-                    $channel = '/notification/'.$pageProfileNotifThread->getSlug();                    
-                    $jsonNotication = new JsonNotification(
-                            NotificationType::FOLLOW,
-                            false,
-                            false,
-                            $notification->getCreateDate(),
-                            $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
-                            $this->generateUrl('pp_user_profile', array('slug' => $currentUser->getSlug())),
-                            $setClickedUrl,
-                            $currentUser->getName(),
-                            $currentUser->getId(),
-                            $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $currentUser->getProfilImage()->getWebPath("70x70"),
-                            null  
-                    );
-                    $data = array('notification' => $jsonNotication);                    
-                    $faye->send($channel, $data);                    
+                    if($pageProfile->getNotificationEnabled()){
+                        /* create notification */
+                        $pageProfileNotifThread = $pageProfile->getNotificationThread();
+                        $notification = new Notification(NotificationType::FOLLOW);
+                        $pageProfileNotifThread->addNotification($notification);
+                        $pageProfile->incrementNotificationsNb();
+                        $em->persist($pageProfileNotifThread);
+                        $em->persist($currentUser);
+                        $em->flush();
+
+
+                        $notificationFollow = new NotificationFollow($notification->getId());
+                        $notificationFollow->setFollowYou($currentUser);
+                        $notificationFollow->setNotificationBase($notification);
+                        $em->persist($notificationFollow);
+                        $em->flush();
+
+                        /* send notification */
+                        $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
+
+                        $faye = $this->container->get('pp_notification.faye.client');                    
+                        $channel = '/notification/'.$pageProfileNotifThread->getSlug();                    
+                        $jsonNotication = new JsonNotification(
+                                NotificationType::FOLLOW,
+                                false,
+                                false,
+                                $notification->getCreateDate(),
+                                $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
+                                $this->generateUrl('pp_user_profile', array('slug' => $currentUser->getSlug())),
+                                $setClickedUrl,
+                                $currentUser->getName(),
+                                $currentUser->getId(),
+                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $currentUser->getProfilImage()->getWebPath("70x70"),
+                                null  
+                        );
+                        $data = array('notification' => $jsonNotication);                    
+                        $faye->send($channel, $data);
+                    }
 
                     $response->setData(json_encode(array('succes'=>true, 'newValue'=>'unfollow')));
                 }else{
@@ -227,6 +230,30 @@ class ShowUserApiController extends Controller
                 $em->flush();
                 $response->setStatusCode(Response::HTTP_OK);
             }else $response->setStatusCode(Response::HTTP_FORBIDDEN);            
+        }else $response->setStatusCode(Response::HTTP_FORBIDDEN);        
+        return $response;;        
+    }
+    
+     public function patchBlockedAction(Request $request){
+        
+        $response = new Response();        
+        
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository('PPUserBundle:User');        
+        $currentUser= $this->getUser();
+        $userToBlock = $userRepository->find($request->get('idToBlock'));
+        
+        if ($this->get('security.context')->isGranted('ROLE_USER') && $currentUser!=null && $userToBlock!=null) {            
+            if($currentUser != $userToBlock ){
+                if(!in_array($userToBlock, $currentUser->getBlockedUsers()->toArray())){
+                    $currentUser->addBlockedUser($userToBlock);                
+                }else{
+                    $currentUser->removeBlockedUser($userToBlock);
+                }
+                $em->persist($currentUser);
+                $em->flush();
+                $response->setStatusCode(Response::HTTP_OK);
+            }     
         }else $response->setStatusCode(Response::HTTP_FORBIDDEN);        
         return $response;;        
     }

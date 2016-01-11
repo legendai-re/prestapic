@@ -22,6 +22,8 @@ use PP\NotificationBundle\Constant\NotificationType;
 use PP\ReportBundle\Entity\ReportTicket;
 use PP\ReportBundle\Constant\ReportTicketType;
 
+use PP\CommentBundle\Entity\CommentThread;
+
 class RequestController extends Controller
 {
     
@@ -203,8 +205,14 @@ class RequestController extends Controller
                             $imageRequest->addTag($existedTag);
                         }
                     }
-                    /* end of checking tags, persist the new image request */
+                    /* end of checking tags, persist the new image request */                    
                     $imageRequest->setAuthor($currentUser);
+                    $em->persist($imageRequest);
+                    $em->flush();
+                    
+                    $commentThread = new CommentThread($imageRequest->getId());
+                    $imageRequest->setCommentThread($commentThread);
+                    $em->persist($commentThread);
                     $em->persist($imageRequest);
                     $em->flush();
                     
@@ -229,7 +237,7 @@ class RequestController extends Controller
         $em = $this->getDoctrine()->getManager();
         $propositionRepository = $em->getRepository('PPPropositionBundle:Proposition');
         $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
-        $userRepository = $em->getRepository('PPUserBundle:User');        
+        $userRepository = $em->getRepository('PPUserBundle:User');               
                          
         /* get current user */
         $currentUser = $this->getUser();
@@ -238,8 +246,8 @@ class RequestController extends Controller
         $id = $imageRequestRepository->getIdBySlug($slug);
         
         /* get image request by id */	       
-	$imageRequest = $imageRequestRepository->getOneImageRequest($id);
-                             
+	$imageRequest = $imageRequestRepository->getOneImageRequest($id);       
+        
         /* get selected propositon if exist */
         $accepetedProposition = new Proposition();
         $canUpvotePropositionSelected = null;       
@@ -307,9 +315,22 @@ class RequestController extends Controller
             ->getForm()
             ->createView();
         
+        /* create postcomment form */
+        $postCommentForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_post_comment_form', 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_request_api_post_comment', array(), true))
+            ->getForm()
+            ->createView();
         
+        /* create get comments form */
+        $getCommentForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_get_comments_form', 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_request_api_get_comments', array(), true))
+            ->getForm()
+            ->createView();
+        
+        $canProposeImage = false;
         $canUpvoteImageRequest = false;
         if($this->get('security.context')->isGranted('ROLE_USER')) {
+            if(!in_array($currentUser, $imageRequest->getAuthor()->getBlockedUsers()->toArray()))$canProposeImage = true;
             if($currentUser->getId() != $imageRequest->getAuthor()->getId() && !$userRepository->haveLikedRequest($currentUser->getId(), $imageRequest->getId())){
                 $canUpvoteImageRequest = true;
             }
@@ -320,50 +341,52 @@ class RequestController extends Controller
             /* add proposition */
             $propositionForm->handleRequest($request);                
             if ($propositionForm->isValid()) {
-                if($imageRequest->getAuthor()->getId() != $this->getUser()->getId()){
+                if($imageRequest->getAuthor()->getId() != $this->getUser()->getId() && !in_array($currentUser, $imageRequest->getAuthor()->getBlockedUsers()->toArray())){
                     
                     $imageRequest->addProposition($proposition)  ;
                     $proposition->setAuthor($currentUser);
                     $em->persist($proposition);
-                    
-                    /* create notification */  
-                    $imageRequestAuthorThread = $imageRequest->getAuthor()->getNotificationThread();
-                    $notification = new Notification(NotificationType::NEW_PROPOSITION);
-                    $imageRequestAuthorThread->addNotification($notification);
-                    $imageRequest->getAuthor()->incrementNotificationsNb();
-                    $em->persist($imageRequestAuthorThread);
-                    $em->persist($currentUser);
                     $em->flush();
                     
-                    $notificationNewProposition = new NotificationNewProposition($notification->getId());
-                    $notificationNewProposition->setProposition($proposition);                   
-                    $notificationNewProposition->setNotificationBase($notification);
-                    $em->persist($notificationNewProposition);
-                    $em->flush();
-                    
-                    $request->getSession()->getFlashBag()->add('propositon', 'Proposition bien enregistrée.');
-                    
-                    /* send notification */
-                    $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
-                    
-                    $faye = $this->container->get('pp_notification.faye.client');                    
-                    $channel = '/notification/'.$imageRequestAuthorThread->getSlug();
-                    $jsonNotication = new JsonNotification(
-                            NotificationType::NEW_PROPOSITION,
-                            false,
-                            false,
-                            $notification->getCreateDate(),
-                            $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
-                            $this->generateUrl('pp_request_view', array('slug' => $imageRequest->getSlug())), 
-                            $setClickedUrl,
-                            $currentUser->getName(),
-                            $currentUser->getId(),
-                            $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $currentUser->getProfilImage()->getWebPath("70x70"),
-                            $imageRequest->getTitle()  
-                    );
-                    $data = array('notification' => $jsonNotication);                    
-                    $faye->send($channel, $data); 
-                    
+                    if($imageRequest->getAuthor()->getNotificationEnabled()){
+                        /* create notification */  
+                        $imageRequestAuthorThread = $imageRequest->getAuthor()->getNotificationThread();
+                        $notification = new Notification(NotificationType::NEW_PROPOSITION);
+                        $imageRequestAuthorThread->addNotification($notification);
+                        $imageRequest->getAuthor()->incrementNotificationsNb();
+                        $em->persist($imageRequestAuthorThread);
+                        $em->persist($currentUser);
+                        $em->flush();
+
+                        $notificationNewProposition = new NotificationNewProposition($notification->getId());
+                        $notificationNewProposition->setProposition($proposition);                   
+                        $notificationNewProposition->setNotificationBase($notification);
+                        $em->persist($notificationNewProposition);
+                        $em->flush();
+
+                        $request->getSession()->getFlashBag()->add('propositon', 'Proposition bien enregistrée.');
+
+                        /* send notification */
+                        $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
+
+                        $faye = $this->container->get('pp_notification.faye.client');                    
+                        $channel = '/notification/'.$imageRequestAuthorThread->getSlug();
+                        $jsonNotication = new JsonNotification(
+                                NotificationType::NEW_PROPOSITION,
+                                false,
+                                false,
+                                $notification->getCreateDate(),
+                                $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
+                                $this->generateUrl('pp_request_view', array('slug' => $imageRequest->getSlug())), 
+                                $setClickedUrl,
+                                $currentUser->getName(),
+                                $currentUser->getId(),
+                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $currentUser->getProfilImage()->getWebPath("70x70"),
+                                $imageRequest->getTitle()  
+                        );
+                        $data = array('notification' => $jsonNotication);                    
+                        $faye->send($channel, $data); 
+                    }
                 }
                 /* redirect */
                 return $this->redirect($this->generateUrl('pp_request_view', array(
@@ -407,7 +430,8 @@ class RequestController extends Controller
             'propositionForm' => $propositionForm->createView(),            
             'acceptedProposition' => $accepetedProposition,
             'canUpvotePropositionSelected' => $canUpvotePropositionSelected,            
-            'canUpvoteImageRequest' => $canUpvoteImageRequest,            
+            'canUpvoteImageRequest' => $canUpvoteImageRequest,
+            'canProposeImage' => $canProposeImage,
             'loadPropositionForm' => $loadPropositionForm->createView(),
             'upvoteRequestForm' => $upvoteRequestForm->createView(),
             'upvotePropositionForm' => $upvotePropositionForm,
@@ -416,7 +440,9 @@ class RequestController extends Controller
             'reportReasonList' => $reportReasonList,
             'currentUser' => $currentUser,
             'getEditForm' => $getEditForm,
-            'isAuthor' =>$isAuthor
+            'isAuthor' =>$isAuthor,
+            'getCommentForm' =>$getCommentForm,
+            'postCommentForm' => $postCommentForm
         ));
     }
     
