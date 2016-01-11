@@ -151,9 +151,15 @@ class ImageRequest
      /**
      * @var integer
      *
-     * @ORM\Column(name="reportNb", type="integer")
+     * @ORM\Column(name="reportNb", type="integer", nullable=true)
      */
     private $reportNb;
+    
+    /**    
+    * @ORM\OneToOne(targetEntity="PP\CommentBundle\Entity\CommentThread")
+    * @Assert\Valid()          
+    */
+    private $commentThread;
     
     public function setDateAgo($dateAgo){
         $this->dateAgo = $dateAgo;
@@ -172,6 +178,17 @@ class ImageRequest
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function setId($id)
+    {
+         $this->id = $id;
+         return $this;
     }
 
     /**
@@ -668,5 +685,34 @@ class ImageRequest
     public function getDisableTicket()
     {
         return $this->disableTicket;
+    }
+
+    /**
+     * Set reportNb
+     *
+     * @param integer $reportNb
+     *
+     * @return ImageRequest
+     */
+    public function setReportNb($reportNb)
+    {
+        $this->reportNb = $reportNb;
+
+        return $this;
+    }
+
+    /**
+     * Get reportNb
+     *
+     * @return integer
+     */
+    public function getReportNb()
+    {
+        return $this->reportNb;
+    }
+    
+    public function addReportNb(){
+        $this->reportNb++;
+        return $this;
     }
 }

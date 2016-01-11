@@ -19,8 +19,14 @@
                 <div>
                     <input type="submit" value="Save" />
                 </div>
-            {{ form_end(changePasswordForm) }}
-           
+            {{ form_end(changePasswordForm) }}                  
+                        
+            {{ form(formNotifEnable) }}
+            <div ng-controller="settingController as setting" >
+                <h3>Notifications : </h3>               
+                <input id="notif_mode" type="checkbox" ng-model="setting.notificationMode" {% if user.notificationEnabled == true %}checked{% endif %} ng-change="setting.patchNotificationMode()" name="notif_mode" value="notif_mode" />
+                <label for="notif_mode">Notifications : </label>
+            </div>
         </div>
 
     {% endif %}
@@ -28,7 +34,7 @@
 
 
 {% block js %}
-    {#{% javascripts filter='?yui_js' '@PPUserBundle/Resources/public/js/galleryApp.js' %}
+    {% javascripts filter='?yui_js' '@PPUserBundle/Resources/public/js/settingApp.js' %}
       <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}    #}
+    {% endjavascripts %} 
 {% endblock %}

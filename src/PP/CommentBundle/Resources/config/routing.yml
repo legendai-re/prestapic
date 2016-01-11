@@ -1,0 +1,3 @@
+pp_comment_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: PPCommentBundle:Default:index }

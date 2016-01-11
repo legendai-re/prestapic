@@ -36,11 +36,14 @@ class ShowUserController extends Controller
         
         $isHownProfile = false;
         $isFollowing = false;
+        $isBlocked = false;
         if($currentUser!=null){
             if(in_array($pageProfile, $currentUser->getFollowing()->toArray())){
                 $isFollowing = true;
             }else $isFollowing = false;
-            
+            if(in_array($pageProfile, $currentUser->getBlockedUsers()->toArray())){
+                $isBlocked = true;
+            }else $isBlocked = false;
             if($pageProfile->getId() == $currentUser->getId())$isHownProfile = true;
         }
         
@@ -87,6 +90,11 @@ class ShowUserController extends Controller
         /*create following form */
         $followForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_patch_user_follow_form', 'form', array(), array())         
             ->setAction($this->generateUrl('pp_user_api_patch_user_follow', array("userId"=>$pageProfile->getId()), true))
+            ->getForm();
+        
+        /*create following form */
+        $blockForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_patch_blocked_form', 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_user_api_patch_blocked', array(), true))
             ->getForm();
         
         /* create upote request form */
@@ -142,10 +150,12 @@ class ShowUserController extends Controller
             'galleryImages' => $galleryImgages,
             'galleryImagesNb' => $galleryImgagesNb,
             'followForm' => $followForm->createView(),
+            'blockForm' => $blockForm->createView(),
             'form' => $form->createView(),
             'loadRequestForm' => $loadRequestForm->createView(),
             'editProfileForm' => $editProfileForm,
             'isFollowing' => $isFollowing,
+            'isBlocked' => $isBlocked,
             'upvoteRequestForm' => $upvoteRequestForm->createView(),
             'setModeratorForm' => $setModeratorForm,
             'isModerator' => $isModerator,

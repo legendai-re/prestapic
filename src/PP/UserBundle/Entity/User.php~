@@ -90,6 +90,12 @@ class User extends BaseUser
     private $imageRequests;
     
     /**    
+    * @ORM\OneToMany(targetEntity="PP\CommentBundle\Entity\Comment", mappedBy="author")
+    * @Assert\Valid()          
+    */
+    private $comments;
+    
+    /**    
     * @ORM\OneToOne(targetEntity="PP\NotificationBundle\Entity\NotificationThread", cascade={"persist"} )
     * @Assert\Valid()          
     */
@@ -128,6 +134,13 @@ class User extends BaseUser
     * @ORM\JoinTable(name="user_following") 
     */
     private $following;
+    
+    /**    
+    * @ORM\ManyToMany(targetEntity="PP\UserBundle\Entity\User", cascade={"persist", "remove"})
+    * @Assert\Valid()      
+    * @ORM\JoinTable(name="blocked_users") 
+    */
+    private $blockedUsers;
 
     /**
     * @var integer
@@ -154,7 +167,7 @@ class User extends BaseUser
     */
     private $propositionsUpvoted;
     
-     /**
+    /**
     * @var boolean $isInMessage
     *
     * @ORM\Column(name="isInMessage", type="boolean", nullable=true)
@@ -178,6 +191,13 @@ class User extends BaseUser
      * @Assert\Valid()          
      */
     private $disableTicket;
+    
+    /**
+    * @var boolean $notificationEnabled
+    *
+    * @ORM\Column(name="notificationEnabled", type="boolean", nullable=true)
+    */
+    private $notificationEnabled = true;
     
     /**
      * @var integer $reportNb
@@ -822,5 +842,87 @@ class User extends BaseUser
     public function getReportNb()
     {
         return $this->reportNb;
+    }
+
+    /**
+     * Set disableTicket
+     *
+     * @param \PP\ReportBundle\Entity\DisableTicket $disableTicket
+     *
+     * @return User
+     */
+    public function setDisableTicket(\PP\ReportBundle\Entity\DisableTicket $disableTicket = null)
+    {
+        $this->disableTicket = $disableTicket;
+
+        return $this;
+    }
+
+    /**
+     * Get disableTicket
+     *
+     * @return \PP\ReportBundle\Entity\DisableTicket
+     */
+    public function getDisableTicket()
+    {
+        return $this->disableTicket;
+    }
+
+    /**
+     * Set notificationEnabled
+     *
+     * @param boolean $notificationEnabled
+     *
+     * @return User
+     */
+    public function setNotificationEnabled($notificationEnabled)
+    {
+        $this->notificationEnabled = $notificationEnabled;
+
+        return $this;
+    }
+
+    /**
+     * Get notificationEnabled
+     *
+     * @return boolean
+     */
+    public function getNotificationEnabled()
+    {
+        return $this->notificationEnabled;
+    }
+
+    /**
+     * Add blockedUser
+     *
+     * @param \PP\UserBundle\Entity\User $blockedUser
+     *
+     * @return User
+     */
+    public function addBlockedUser(\PP\UserBundle\Entity\User $blockedUser)
+    {
+        $this->blockedUsers[] = $blockedUser;
+
+        return $this;
+    }
+
+    /**
+     * Remove blockedUser
+     *
+     * @param \PP\UserBundle\Entity\User $blockedUser
+     */
+    public function removeBlockedUser(\PP\UserBundle\Entity\User $blockedUser)
+    {
+        $this->blockedUsers->removeElement($blockedUser);
+    }
+
+    /**
+     * Get blockedUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBlockedUsers()
+    {
+        return $this->blockedUsers;
     }
 }

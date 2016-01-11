@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new PP\MessageBundle\PPMessageBundle(),
             new PP\ReportBundle\PPReportBundle(),
             new PP\DashboardBundle\PPDashboardBundle(),
+            new PP\CommentBundle\PPCommentBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
