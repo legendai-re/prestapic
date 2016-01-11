@@ -1,0 +1,47 @@
+// BUTTON
+
+button, .button
+	background: #F3F3F3
+	border: none
+	text-transform: uppercase
+	font-weight: 600
+	color: #777
+	padding: 8px 16px
+	border-radius: 3px
+	display: inline-block
+	font-size: 16px
+
+	&:hover
+		background: #777
+		color: white
+
+	&:active
+		background: #444
+		color: white
+
+	&.red
+		background: $main-color
+		color: white
+
+		&:hover
+			background: $main-color
+
+		&:active
+			background: #444
+
+	&.grey
+		background: #DEDEDE
+
+		&:hover
+			background: #777
+
+		&:active
+			background: #444
+
+	&.green
+		&:hover
+			background: #0ABC4B
+			color: white
+
+		&:active
+			background: #444

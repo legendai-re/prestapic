@@ -1,0 +1,94 @@
+* 
+	@include vendor-prefix(box-sizing, border-box)
+	outline: none
+
+html, body
+	width: 100%
+	height: 100%
+
+a
+	color: $main-color
+	text-decoration: none
+	transition-duration: none
+
+	&:hover
+		color: #444
+
+a[ng-click]
+	cursor: pointer
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
+	display: none !important
+
+::selection
+	background: $main-color
+	color: white
+
+body
+	margin: 0px
+	padding: 0px
+	font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif
+	background-color: $background
+	color: $content
+	-webkit-font-smoothing: antialiased
+	-moz-osx-font-smoothing: grayscale
+	text-rendering: optimizeLegibility
+
+input, textarea
+	outline: none
+
+b, strong
+	font-weight: 600
+
+h1, h2, h3, h4, h5, h6
+	font-weight: 400
+	margin: 0
+
+img
+	border: none
+
+div.content
+	width: 1260px
+	margin: 0 auto
+	padding: 0 30px
+	display: block
+
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12
+	float: left
+	position: relative
+
+.col-1
+	width: 8.333333%
+
+.col-2
+	width: 16.66666667%
+
+.col-3
+	width: 25%
+
+.col-4
+	width: 33.33333333%
+
+.col-5
+	width: 41.66666667%
+
+.col-6
+	width: 50%
+
+.col-7
+	width: 58.33333333%
+
+.col-8
+	width: 66.66666667%
+
+.col-9
+	width: 75%
+
+.col-10
+	width: 83.33333333%
+
+.col-11
+	width: 91.66666667%
+
+.col-12
+	width: 100%

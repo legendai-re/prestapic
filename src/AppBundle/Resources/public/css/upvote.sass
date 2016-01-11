@@ -1,0 +1,56 @@
+// UPVOTE
+a.count-vote
+	font-size: 30px
+	font-weight: normal
+	color: rgba(0,0,0,.25)
+	display: block
+	position: relative
+	text-align: right
+
+	&:hover
+		color: #00D084
+
+	&.voted
+		color: #00D084
+
+	&.blocked
+		color: rgba(0,0,0,.1)
+
+	&:after
+		display: block
+		width: 25px
+		height: 25px
+		padding: 10px 0 10px 10px
+		text-align: center
+		font-family: "pp-font"
+		speak: none
+		font-size: 20px
+		font-style: normal
+		font-weight: normal
+		font-variant: normal
+		text-transform: none
+		line-height: 1
+		-webkit-font-smoothing: antialiased
+		-moz-osx-font-smoothing: grayscale
+		content: $icon-upvote
+		float: right
+
+	&:before
+		content: $icon-upvote
+		font-family: "pp-font"
+		font-size: 30px
+		color: #0ABC4B
+		opacity: 0.5
+		width: 30px
+		height: 30px
+		top: 0
+		right: -2.5px
+		transform: scale(1.5)
+		position: absolute
+		display: none
+
+	&.animate
+		&:before
+			animation-iteration-count: 1
+			animation: vote-arrow 1s cubic-bezier(.165,.84,.44,1) forwards
+			display: block

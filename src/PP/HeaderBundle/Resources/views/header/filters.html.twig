@@ -3,7 +3,7 @@
     
     <input ng-focus="header.showSearchOptions()" name="name" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find a picture on Prestapic..." />
        
-    <div style="display:none;" id="searchUser" class="stopPropagation">search users : <a href="{{ path('pp_user_search') }}?name={% verbatim %}{{ filters.searchQuery }} {% endverbatim %}" >{% verbatim %}{{ filters.searchQuery }}{% endverbatim %}</a></div>
+    <div class="search-options" style="display:none;" id="searchUser" class="stopPropagation">search users : <a href="{{ path('pp_user_search') }}?name={% verbatim %}{{ filters.searchQuery }} {% endverbatim %}" >{% verbatim %}{{ filters.searchQuery }}{% endverbatim %}</a></div>
 
     <ul style="display: none;" id="searchOptions" class="search-options stopPropagation" >
         <li class="option">

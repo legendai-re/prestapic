@@ -30,7 +30,7 @@
                 {% if is_granted('ROLE_USER') %}
                     {% if isHownProfile == true %}
                         {{ form(editProfileForm) }}
-                        <a id="editButton" class="button follow" ng-click="profile.getEditProfileForm()" >
+                        <a id="editButton" class="button green" ng-click="profile.getEditProfileForm()" >
                             Edit profile
                         </a>
                     {% else %}
@@ -39,7 +39,7 @@
                         {% if is_granted("ROLE_ADMIN") %}
                             {{ form(setModeratorForm) }}
                         {% endif %}
-                        <a id="followButton" class="button follow" ng-click="profile.patchFollow()" >
+                        <a id="followButton" class="button green " ng-click="profile.patchFollow()" >
                             {% if isFollowing == true %}
                                 unfollow
                             {% else %}
@@ -101,7 +101,7 @@
     {# display galery #}
     <section class="profile-galery">        
         <div class="content">
-            <a target="_self" href="{{ path('pp_user_gallery', {'slug':pageProfile.slug})}}"><h1>Gallery ({{ galleryImagesNb }} pictures)</h1></a>
+            <a target="_self" href="{{ path('pp_user_gallery', {'slug':pageProfile.slug})}}"><h1>Gallery ({{ galleryImagesNb }} picture{% if galleryImagesNb > 0 %}s{% endif %})</h1></a>
             {% set break = false %}
             <ul>
             {% for proposition in galleryImages if not break %}

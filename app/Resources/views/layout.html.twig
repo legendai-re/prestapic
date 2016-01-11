@@ -10,8 +10,12 @@
 
 
     {% stylesheets filter='cssrewrite, sass, ?yui_css'
+        '@AppBundle/Resources/public/css/style.sass'
+        '@PPHeaderBundle/Resources/public/css/style.sass'
+        '@PPUserBundle/Resources/public/css/style.sass'
         '@PPRequestBundle/Resources/public/css/style.sass'
-        '@PPPropositionBundle/Resources/public/css/style.sass' %}
+        '@PPPropositionBundle/Resources/public/css/style.sass'
+        '@PPMessageBundle/Resources/public/css/style.sass' %}
         <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
     {% endstylesheets %}        
 
