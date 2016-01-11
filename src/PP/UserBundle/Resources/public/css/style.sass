@@ -39,28 +39,73 @@ section.profile
 		color: white
 		text-align: center
 
-		a.avatar
+		input[type="text"]
+			background: transparent
+			width: 100%
+			border: none
+			text-align: center
+
+		.avatar
 			width: 100px
 			height: 100px
 			border-radius: 50%
 			overflow: hidden
 			display: block
 			margin: 0 auto
+			border: 1px solid white
+			position: relative
 
 			img
 				width: 100%
+
+			.profile-avatar-editing
+				position: absolute
+				z-index: 1
+				background: rgba(0,0,0,.5)
+				width: 100%
+				height: 100%
+				top: 0
+				left: 0
+				border-radius: 50%
+
+				&:before
+					position: absolute
+					top: 50%
+					left: 50%
+					@include vendor-prefix(transform, translate(-50%,-50%))
+					font-family: "pp-font"
+					content: $icon-upload
+					color: white
+					font-size: 35px
+
+				&:hover
+					background: rgba(0,0,0,.75)
+					border: 2px solid white
+
+				input
+					position: absolute
+					z-index: 2
+					margin: 0
+					padding: 0
+					width: 100%
+					height: 100%
+					outline: none
+					top: 0
+					left: 0
+					opacity: 0
+					cursor: pointer
 
 		h1.username
 			font-size: 40px
 			font-weight: 600
 			margin: 7px 0 0
 
-		p.bio
+		p.bio, .bio
 			font-size: 20px
-			margin: 0
+			margin: 0 auto 10px
 
 		ul.details
-			margin: 15px auto 0
+			margin: 10px auto 0
 			padding: 0
 
 			li

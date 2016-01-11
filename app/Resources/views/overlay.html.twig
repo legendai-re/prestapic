@@ -1,14 +1,14 @@
 <section class="overlay send-report"  style="display: none;">
-    <div class="report-container">
-        <div class="report-content">
-            <div class="report-top">
+    <div class="box-container report">
+        <div class="box-content">
+            <div class="box-top">
                 Report a Policy violation
                 <button class="button-close">×</button>
             </div>
-            <div class="report-text">
+            <div class="box-text">
                 Please select the Type of Violation you feel best represents the submission.
             </div>
-            <div class="report-choice">
+            <div class="box-choice">
                 <select>
                     <option value="1">Problem Content</option>
                     <option value="2">Misplaced Deviation</option>
@@ -21,7 +21,7 @@
                 </select>
                 <textarea placeholder="More details..."></textarea>
             </div>
-            <div class="report-bottom">
+            <div class="box-bottom">
                 <input class="button" type="submit" value="Send Report">
             </div>
         </div>
@@ -29,8 +29,16 @@
 </section>
 
 <section class="overlay send-request" id="sendRequestOver" style="display: none;">
-    <button class="button-close"    id="sendRequestOverClose" >×</button>
-    <div class="overlay-content" id="sendRequestContent">
+    <div class="box-container new-request">
+        <div class="box-content" id="sendRequestContent">
+            <div class="box-top">
+                Send new request
+                <button class="button-close" id="sendRequestOverClose">×</button>
+            </div>
+            <div class="load-content"  id="loadingGif" >
+                <span class="bubble"></span>
+            </div>
+        </div>
     </div>
 </section>
 
