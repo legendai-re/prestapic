@@ -29,7 +29,7 @@ header
 				height: 40px
 
 		.search
-			width: calc(100% - 80px - 400px)
+			width: calc(100% - 70px - 400px)
 			height: 80px
 			display: inline-block
 			float: left
@@ -54,7 +54,7 @@ header
 				ul.search-options
 					margin: 0
 					padding: 0
-					width: 106px
+					width: 87px
 					height: 80px
 					position: absolute
 					top: 0
@@ -76,22 +76,32 @@ header
 							border-radius: 50%
 							color: #ccc
 							border: 1px solid transparent
-
-							&:hover, &.open
-								border: 1px solid $main-color
-								color: $main-color
-
-							&.open
-								box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
+							font-size: 14px
 
 						a.filters
+							border: 1px solid rgba(0,0,0,.1)
 							margin-right: 5px
+							position: relative
+
+							&:hover
+								background: #777
+								color: white
+								border: 1px solid transparent
+
+							&:active
+								background: #444
+								color: white
+
+							&.open
+								border-radius: 0 3px 3px 0
+								background: transparent
+								border: none
 
 							&:before
 								display: block
-								width: 18px
-								height: 16px
-								padding: 15px 14px
+								width: 14px
+								height: 14px
+								padding: 10px
 								font-family: 'pp-font'
 								speak: none
 								font-style: normal
@@ -105,13 +115,22 @@ header
 								content: $icon-filters
 
 						button.go-search
+							background: #F3F3F3
 							margin-right: 5px
+
+							&:hover
+								background: #777
+								color: white
+
+							&:active
+								background: #444
+								color: white
 
 							&:before
 								display: block
-								width: 18px
-								height: 18px
-								padding: 15px
+								width: 14px
+								height: 14px
+								padding: 10px
 								font-family: 'pp-font'
 								speak: none
 								font-style: normal
@@ -123,6 +142,134 @@ header
 								-webkit-font-smoothing: antialiased
 								-moz-osx-font-smoothing: grayscale
 								content: $icon-search
+
+						.filter-choose-category
+							width: 200px
+							display: block
+							overflow: hidden
+							position: absolute
+							display: none
+							font-size: 20px
+							top: 0
+							left: -160px
+							margin: 20px 0
+
+							.filter-choose-text
+								display: inline-block
+								height: 36px
+								padding: 5px 5px 5px 0
+								float: left
+								color: #ccc
+
+							.filter-select
+								width: 175px
+								height: 36px
+								display: inline-block
+								float: left
+								background: #F3F3F3
+								border-radius: 3px
+
+								&:hover
+									background: #777
+
+									.filter-choose-list
+										color: white
+
+								&:active
+									background: #444
+									
+									.filter-choose-list
+										color: white
+
+								&:after
+									display: block
+									width: 14px
+									height: 14px
+									padding: 10px
+									font-family: 'pp-font'
+									speak: none
+									font-style: normal
+									font-weight: normal
+									font-variant: normal
+									text-transform: none
+									line-height: 1
+									/* Better Font Rendering =========== */
+									-webkit-font-smoothing: antialiased
+									-moz-osx-font-smoothing: grayscale
+									content: $icon-filters
+									position: absolute
+									top: 0
+									right: 5px
+									z-index: 1
+									font-size: 14px
+									color: #ccc
+
+								.filter-choose-list
+									background: transparent
+									border-radius: 3px
+									border: none
+									width: 100%
+									height: 36px
+									-webkit-appearance: none
+									-moz-appearance: none
+									appearance: none
+									color: #777
+									padding: 5px 10px
+									z-index: 2
+									position: absolute
+
+				.search-options-list
+					background: white
+					z-index: 1
+					position: relative
+					overflow: hidden
+					border: 1px solid #ccc
+					border-top: none
+					border-radius: 0 0 3px 3px
+
+					ul
+						margin: 0
+						padding: 0
+						list-style: none
+
+						li
+							display: block
+							width: 100%
+
+							a, .infos-all-search
+								width: 100%
+
+								&:hover
+									background: #F3F3F3
+									color: #777
+
+							a
+								display: inline-block
+								padding: 10px 20px
+								color: #777
+
+								.avatar
+									background: #F3F3F3
+									color: rgba(0,0,0,.25)
+									font-size: 18px
+									width: 36px
+									height: 36px
+									float: left
+									display: block
+									text-align: center
+									padding: 6px 0
+									text-transform: uppercase
+									border: 1px solid white
+
+								.infos-search
+									float: left
+									padding: 8px 15px
+
+							.infos-all-search
+								padding: 18px 70px
+								cursor: pointer
+								border: none
+								background: none
 
 		nav.menu
 			width: 400px

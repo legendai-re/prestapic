@@ -1,64 +1,38 @@
 <form ng-controller="filtersController as filters" name="pp_request_homepage_form" novalidate ng-submit="filters.submitForm()" >
     <input type="hidden" name="search_action" value='{{ url('pp_request_homepage', {}, true) }}' />
     
-    <input ng-focus="header.showSearchOptions()" name="name" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find a picture on Prestapic..." />
+    <input ng-focus="header.showSearchOptions()" name="name" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find pictures, requests or users on Prestapic..." />
        
-    <div class="search-options" style="display:none;" id="searchUser" class="stopPropagation">search users : <a href="{{ path('pp_user_search') }}?name={% verbatim %}{{ filters.searchQuery }} {% endverbatim %}" >{% verbatim %}{{ filters.searchQuery }}{% endverbatim %}</a></div>
+    <div class="search-options-list" style="display:none;" id="searchUser" class="stopPropagation">
+        <ul>
+            <li>
+                <a href="{{ path('pp_user_search') }}?name={% verbatim %}{{ filters.searchQuery }} {% endverbatim %}" target="_self">
+                    <div class="avatar">{% verbatim %}{{ filters.searchQuery | limitTo: 1 }}{% endverbatim %}</div>
+                    <div class="infos-search">Search <strong>{% verbatim %}{{ filters.searchQuery }}{% endverbatim %}</strong> in users...</div>
+                </a>
+            </li>
+            <li>
+                <a href="" class="infos-all-search" >
+                    Show all results for <strong>{% verbatim %}{{ filters.searchQuery }}{% endverbatim %}</strong>...
+                </a>
+            </li>
+    </div>
 
     <ul style="display: none;" id="searchOptions" class="search-options stopPropagation" >
         <li class="option">
             <a id="filterButton" ng-click="header.showFilterList()" class="filters" href="" title="Filters"></a>
-        <div id="filterList" class="dropdown filters fixeBodyHover" >
-            <div class="dropdown-caret">
-                <span class="caret-outer"></span>
-                <span class="caret-inner"></span>
+
+            <div id="filterList" class="filter-choose-category">
+                <div class="filter-choose-text">in</div>
+                <div class="filter-select">
+                    <select class="filter-choose-list">
+                        <option value="default" disabled="disabled" selected="selected">a category</option>
+                        {% for category in categories %}
+                            <option id="cat_{{category.id}}" ng-click="filters.addCategory({{category.id}}, '{{ category.name }}')" value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-            <div class="filters-type">
-                <div class="dropdown-title">Search filters</div>
-                <ul class="list-filters">
-                    <li class="filter-group">
-                        <a id="filtersCatButton" ng-click="filters.showFiltersCat()" class="open" href="#">Categories</a>
-                    </li>
-                    <li class="filter-group">
-                        <a id="filtersTagsButton" ng-click="filters.showFiltersTags()" href="#">Tags</a>
-                    </li>
-                    {% if is_granted("ROLE_USER") %}
-                    <li class="filter">
-                        <input ng-model="filters.conceringMe" id="me" name="me" type="checkbox">
-                        <label for="me">Concerning me</label>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
-
-            <div class="filter-cat" id="filtersCat">
-                <div class="dropdown-title">Choose categories</div>
-                <ul class="list-filters">
-
-                    {% for category in categories %}
-                    <li class="filter">
-                        <input id="cat_{{category.id}}" ng-click="filters.addCategory({{category.id}}, '{{ category.name }}')" name="{{ category.id }}" type="checkbox">
-                        <label for="cat_{{ category.id }}">{{ category.name }}</label>
-                    </li>
-                    {% endfor %}
-
-                </ul>
-            </div>
-
-            <div class="filter-tags" id="filtersTags">
-                <div class="dropdown-title no-shadow">Choose tags</div>        
-                <div class="sugg-title">Suggestions</div>
-                <ul class="sugg-tags">
-                    {% for tag in tags %}
-                    <li class="sugg">
-                        <a id="tag_{{tag.id}}" ng-click="filters.addTag({{tag.id}}, '{{ tag.name }}')" href="">{{ tag.name }}</a>
-                    </li>
-                    {% endfor %}            
-                </ul>
-                <input ng-model="filters.tagsListStr" class="list-tags" placeholder="Tags here..." type="text">
-                <small class="comment">Separate tags with commas.</small>        
-            </div>    
-        </div>
         </li>
         <li class="option">                        
             <button type="submit" class="go-search" ></button>
