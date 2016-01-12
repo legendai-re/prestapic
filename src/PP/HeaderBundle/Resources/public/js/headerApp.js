@@ -83,7 +83,8 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             //if(filterListIsOpen)closeFilterList();
             if(userMenuIsOpen)closeUserMenu();
             $('#searchUser').css("display", "none");
-            document.getElementById('searchOptions').style.display = 'none';
+            if($("#categorySelect").val() == -1)$('#searchOptions').css('display', 'none');
+            
         };
 
         this.showMessage = function(){
@@ -342,80 +343,35 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
 
 headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
                 
+        this.categorieSelected = "-1";               
         
-        var closeAll = function(){
+        this.searchQuery = '';
+        
+        if($location.search().search_query != null){
+            this.searchQuery = $location.search().search_query;  
+        }
+                
+        if($location.search().categories != null && $location.search().categories != ''){
+            document.getElementById('searchOptions').style.display = 'block';
+            document.getElementById('filterList').style.display = 'block';
+            $("#filterButton").addClass("open");
+            this.categorieSelected = $location.search().categories;  
+        }
+        
+        var closeAll = function(){            
             document.getElementById('searchOptions').style.display = 'none';             
         };
         
-        /*//////////////////////////////
-         *     CATEGORIES MANAGEMENT
-         */
-        this.categorieSelected = "-1";
-        /*this.addCategory = function(catId, catName){
-            if(this.categoriesList[catId] == null){                
-                this.categoriesList[catId] = catName;
-            }else{                
-                delete this.categoriesList[catId];
-            }                        
-        };*/
-        
-        /// END OF CATEGORIES MANAGEMENT
-        ////////////////////////////////
-        
-        
-        /*//////////////////////////
-         *     TAGS MANAGEMENT
-         */
-        /*this.tagsListClicked = [];
-        this.tagsListStr = null;
-        this.tagList = [];
-        
-        this.addTag = function(tagId, tagName){
-            if(this.tagsListClicked[tagId] == null){
-                $("#tag_"+tagId).addClass("choosen");
-                this.tagsListClicked[tagId] = tagName;
-            }else{
-                $("#tag_"+tagId).removeClass("choosen");
-                delete this.tagsListClicked[tagId];
-            }                        
-        };*/
-        
-        /*this.tagStrToArray = function(){
-            var tempTagList = [];
-            if(this.tagsListStr){
-                this.tagsListStr = this.tagsListStr.toLowerCase()+',';
-                this.tagsListStr = this.tagsListStr.replace(' ', '');
-                var actualTag = '';
-                var tagCharArray = this.tagsListStr.split('');
-                
-                tagCharArray.forEach(function(myChar) {
-                    if(myChar != ','){
-                        actualTag+=myChar;
-                    }else{
-                        if(actualTag){
-                            tempTagList.push(actualTag);
-                        }
-                        actualTag = '';
-                    }
-                });
+        this.onCategoryChange = function(){
+            $('#defaultCat').html("Cancel");
+            if(this.categorieSelected == "-1"){
+                $('#defaultCat').html("a category");
+                document.getElementById('filterList').style.display = 'none';
+                $("#filterButton").removeClass("open");
+                catOpenOnce = false;               
             }
-            this.tagsListClicked.forEach(function(tag) {
-                tempTagList.push(tag);
-            });                        
-
-            var uniqueTags = [];
-            $.each(tempTagList, function(i, el){
-                if($.inArray(el, uniqueTags) === -1) uniqueTags.push(el);
-            });
-
-            this.tagList = uniqueTags;
-            
-        };*/
-        /// END OF TAGS MANAGEMENT
-        //////////////////////////
+        }
         
-        this.conceringMe = false;
-        this.searchQuery = '';
         //////////////////////////
         //     SUBMIT SEARCH
         this.submitForm = function(){
@@ -426,25 +382,7 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
             if(this.categorieSelected == -1){
                 this.categorieSelected = '';
             }
-            var categoriePram = 'categories='+this.categorieSelected;
-            
-            /*var tagListParam = 'tags=';            
-            for(var i =0; i<this.tagList.length; i++){
-                tagListParam += this.tagList[i];
-                if(i<this.tagList.length-1)tagListParam += '+';
-            }
-            var catListParam = 'categories=';
-            for(var i =0; i<this.categoriesList.length; i++){
-                if(this.categoriesList[i]){
-                    catListParam += this.categoriesList[i];
-                    if(i<this.categoriesList.length-1)catListParam += '+';
-                }
-            }*/
-            
-            /*var concerningMeParam = '';
-            if(this.conceringMe){
-                concerningMeParam = 'me=true'
-            }*/
+            var categoriePram = 'categories='+this.categorieSelected;                      
             
             $window.location.href = submitFormUrl+'?'+searchQueryParam+'&'+categoriePram;
         };
