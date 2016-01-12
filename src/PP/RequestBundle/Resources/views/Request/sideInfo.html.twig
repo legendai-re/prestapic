@@ -1,10 +1,10 @@
 
 <div class="widget">
     <h1>Tag trends </h1>    
-    <ul class="tags">
+    <ul class="tag-list">
         {% for tag in popularTags %}    
-            <li class="tag">
-                <a target="_self" class="tag-name" href="{{ path('pp_request_homepage', {'page': 1, 'tags':tag.name }) }}" title="">{{ tag.name }}</a>                
+            <li class="tag-item">
+                <a target="_self" class="tag" href="{{ path('pp_request_homepage', {'page': 1, 'tags':tag.name }) }}" title="">{{ tag.name }}</a>                
                 <span class="subject-count">{{tag.usedNb}} sujets</span>
             </li>            
         {% endfor %}

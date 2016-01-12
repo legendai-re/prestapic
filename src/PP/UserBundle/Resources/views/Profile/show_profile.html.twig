@@ -27,37 +27,58 @@
                 </a>
                 <h1 class="username">{{ pageProfile.name }}</h1>
                 <p class="bio">{{ pageProfile.description }}</p>
-                {% if is_granted('ROLE_USER') %}
-                    {% if isHownProfile == true %}
-                        {{ form(editProfileForm) }}
-                        <a id="editButton" class="button green" ng-click="profile.getEditProfileForm()" >
-                            Edit profile
-                        </a>
-                    {% else %}
-                        {{ form(followForm) }}
-                        {{ form(blockForm) }}
-                        {% if is_granted("ROLE_ADMIN") %}
-                            {{ form(setModeratorForm) }}
-                        {% endif %}
-                        <a id="followButton" class="button green " ng-click="profile.patchFollow()" >
-                            {% if isFollowing == true %}
-                                unfollow
-                            {% else %}
-                                follow
+                <div class="profile-actions">
+                    {% if is_granted('ROLE_USER') %}
+                        {% if isHownProfile == true %}
+                            {{ form(editProfileForm) }}
+                            <a id="editButton" class="button green" ng-click="profile.getEditProfileForm()" >
+                                Edit profile
+                            </a>
+                        {% else %}
+                            {{ form(followForm) }}
+                            {{ form(blockForm) }}
+                            {% if is_granted("ROLE_ADMIN") %}
+                                {{ form(setModeratorForm) }}
                             {% endif %}
-                        </a>                        
-                        
-                        <a id="blockButton" class="button red" ng-click="profile.patchBlock({{ pageProfile.id }})" >{% if isBlocked == true %}unblock{% else %}block{% endif %}</a>
-                       
+                            <a id="followButton" class="button green " ng-click="profile.patchFollow()" >
+                                {% if isFollowing == true %}
+                                    Unfollow
+                                {% else %}
+                                    Follow
+                                {% endif %}
+                            </a>
+                        {% endif %}
                     {% endif %}                                                                                                                
+
                     {% if isHownProfile == false %}
-                        <a href=""  class="button red" ng-click="profile.showReportPopup({{ pageProfile.id }}, 3)" >Report</a>          
+                        {% if is_granted('ROLE_USER') %}
+
+                        <div class="dropdown-container profile-options">
+                            <a class="button"></a>
+                            <ul class="dropdown-choices" id="contentToDisplayFilters">
+                                <li class="dropdown-cat">
+                                    <a id="blockButton" class="dropdown-choice" ng-click="profile.patchBlock({{ pageProfile.id }})" >
+                                        {% if isBlocked == true %}Unblock{% else %}Block{% endif %}
+                                    </a>
+                                    <a href="" class="dropdown-choice" ng-click="profile.showReportPopup({{ pageProfile.id }}, 3)">
+                                        Report
+                                    </a>
+                                </li>
+           
+                                {% if is_granted("ROLE_ADMIN") %}
+                                <li class="dropdown-cat">
+                                    <div class="dropdown-cat-title">Moderator commands</div>
+                                    <a id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">
+                                        {% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}
+                                    </a>
+                                </li>
+                                {% endif %}
+                        </ul>
+                    </div>
+
                     {% endif %}
-       
                 {% endif %}
-                {% if is_granted("ROLE_ADMIN") and isHownProfile == false %}                    
-                        <a id="setModeratorButton" class="button green" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}unset moderator{% else %}Set moderator{% endif %}</a>
-                {% endif %}   
+                </div>
 
                 <ul class="details">
                     <li>

@@ -17,7 +17,7 @@ section.main
 			height: auto
 			margin: 0 0 25px
 
-			a.section, .content-filter .filter-selector
+			a.section, .dropdown-container .dropdown-text
 				font-size: 20px
 				color: #777
 				text-transform: uppercase
@@ -30,63 +30,15 @@ section.main
 				&.selected, &.open
 					color: $main-color
 
-			.content-filter
+			.dropdown-container
 				float: right
-				position: relative
 
-				.filter-selector
-					float: right
-					text-align: right
+				.dropdown-text
 					margin: 0
 
 					&:after
-						font-family: "pp-font"
 						font-size: 20px
 						content: $icon-dropdown
-						float: right
-						width: 20px
-						height: 20px
-						padding: 3px 0 3px 5px
-						font-weight: normal
-
-				ul.filter-choices
-					background: white
-					width: 250px
-					margin: 0
-					padding: 10px 0
-					list-style: none
-					border: 1px solid rgba(0,0,0,.1)
-					border-radius: 3px
-					position: absolute
-					top: 37px
-					right: 0
-
-					li.filter-choices-cat
-						margin-bottom: 5px
-						padding: 5px 0
-						border-bottom: 1px solid rgba(0,0,0,.1)
-
-						&:last-child
-							margin-bottom: 0
-							border-bottom: none
-
-						.filter-title
-							color: #444
-							font-size: 18px
-							text-transform: uppercase
-							font-weight: 600
-							padding: 0 15px
-
-						a.filter-choice
-							padding: 5px 15px
-							display: block
-							color: #777
-
-							&:last-child
-								margin-bottom: 5px
-
-							&:hover
-								background: #F3F3F3
 
 			.select-style
 				color: #777
@@ -159,25 +111,8 @@ section.main
 					width: 445px
 					height: auto
 					float: right
-					display: inline-block
 					text-align: right
-
-					a.tag
-						background: rgba(0, 0, 0, 0.03)
-						color: rgba(0, 0, 0, 0.5)
-						padding: 4px 10px
-						margin: 5px 0 0 5px
-						display: inline-block
-						font-size: 15px
-						border-radius: 3px
-						border: 1px solid rgba(0, 0, 0, 0.1)
-
-						&:last-child
-							margin-right: 0
-
-						&:hover
-							background: rgba(0, 0, 0, 0.25)
-							color: rgba(0, 0, 0, 0.5)
+					display: inline-block
 
 			.propositions-container, .actions-container
 				background-color: rgba(0,0,0,.03)
@@ -654,28 +589,15 @@ section.main
 					background: #ddd
 					color: #555
 
-			ul.tags, ul.users, ul.subjects
+			ul.tag-list, ul.users, ul.subjects
 				margin: 0
 				padding: 0
 
 				li
 					list-style: none
 
-				li.tag
-					margin-bottom: 10px
-
-					a.tag-name
-						background: white
-						display: inline-block
-						padding: 4px 10px
-						color: rgba(0,0,0,.5)
-						font-size: 15px
-						border-radius: 3px
-						border: 1px solid rgba(0, 0, 0, 0.1)
-
-						&:hover
-							background: #C24C4A
-							color: rgba(255,255,255,.75)
+				li.tag-item
+					margin-bottom: 5px
 
 					span.subject-count
 						margin-left: 5px

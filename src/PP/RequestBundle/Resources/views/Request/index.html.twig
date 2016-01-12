@@ -15,18 +15,18 @@
                     <a ng-click="requests.updateMode(3)" id="mode_3" class="section {% if displayMode == 3 %}selected{% endif %}" href="" title="Follows">Follows</a>
                 {% endif %}                              
 
-                <div class="content-filter stopPropagation">
-                    <a href="" id="contentToDisplaySelected" ng-click="requests.showContentToDisplayFilters()" class="filter-selector">{% if contentToDisplay == 2 %}Propositions{% else %}Requests{% endif %}</a>
+                <div class="dropdown-container stopPropagation">
+                    <a href="" id="contentToDisplaySelected" ng-click="requests.showContentToDisplayFilters()" class="dropdown-text">{% if contentToDisplay == 2 %}Propositions{% else %}Requests{% endif %}</a>
 
-                    <ul class="filter-choices" style="z-index: 1; display: none;" id="contentToDisplayFilters">
-                        <li class="filter-choices-cat">
-                            <div class="filter-title">Requests</div>
-                            <a ng-click="requests.update(3)" id="content_mode_3" class="filter-choice {% if contentToDisplay == 3 %}selected{% endif %}" selected href="" title="Pending">Pending requests</a>                            
-                            <a ng-click="requests.update(4)" id="content_mode_4" class="filter-choice {% if contentToDisplay == 4 %}selected{% endif %}" href="" title="closed">Closed requests</a>                            
+                    <ul class="dropdown-choices" style="z-index: 1; display: none;" id="contentToDisplayFilters">
+                        <li class="dropdown-cat">
+                            <div class="dropdown-cat-title">Requests</div>
+                            <a ng-click="requests.update(3)" id="content_mode_3" class="dropdown-choice {% if contentToDisplay == 3 %}selected{% endif %}" selected href="" title="Pending">Pending requests</a>                            
+                            <a ng-click="requests.update(4)" id="content_mode_4" class="dropdown-choice {% if contentToDisplay == 4 %}selected{% endif %}" href="" title="closed">Closed requests</a>                            
                         </li>
-                        <li class="filter-choices-cat">
-                            <div class="filter-title">Propositions</div>                            
-                            <a ng-click="requests.update(2)" id="content_mode_2" class="filter-choice {% if contentToDisplay == 2 %}selected{% endif %}" href="" title="proposition">Galery of propositions</a>
+                        <li class="dropdown-cat">
+                            <div class="dropdown-cat-title">Propositions</div>                            
+                            <a ng-click="requests.update(2)" id="content_mode_2" class="dropdown-choice {% if contentToDisplay == 2 %}selected{% endif %}" href="" title="proposition">Galery of propositions</a>
                         </li>
                     </ul>
                 </div>

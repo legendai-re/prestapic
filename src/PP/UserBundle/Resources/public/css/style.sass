@@ -104,6 +104,33 @@ section.profile
 			font-size: 20px
 			margin: 0 auto 10px
 
+		.profile-actions
+			width: 100%
+			height: auto
+
+			.profile-options
+				width: 36px
+				display: inline
+
+				.button
+					background: transparent
+					width: 36px
+					height: 36px
+					position: relative
+					padding: 8px
+
+					&:before
+						color: rgba(255,255,255,.5)
+						width: 20px
+						height: 20px
+						font-family: "pp-font"
+						content: $icon-dropdown
+						font-size: 16px
+
+				ul.dropdown-choices
+					padding: 0px 0
+					text-align: left
+
 		ul.details
 			margin: 10px auto 0
 			padding: 0
