@@ -40,10 +40,10 @@ section.slideshow
 		transform: translate(-50%, -50%)
 	
 	div.overlay
-		background: -webkit-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
-		background: -o-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
-		background: -ms-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
-		background: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		background: -webkit-linear-gradient(rgba(0, 0, 0, 0.7) 0%, transparent 30%, transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		background: -o-linear-gradient(rgba(0, 0, 0, 0.7) 0%, transparent 30%, transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		background: -ms-linear-gradient(rgba(0, 0, 0, 0.7) 0%, transparent 30%, transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+		background: linear-gradient(rgba(0, 0, 0, 0.7) 0%, transparent 30%, transparent 60%, rgba(0, 0, 0, 0.7) 100%)
 		position: absolute
 		width: 100%
 		height: 100%
@@ -250,3 +250,6 @@ section.slideshow
 				&:hover, &.voted
 					color: #00D084
 					text-shadow: 0 0 10px rgba(0,0,0,.25)
+
+				&.blocked
+					color: rgba(255,255,255,.5)

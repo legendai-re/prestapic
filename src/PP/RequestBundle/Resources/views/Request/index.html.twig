@@ -15,11 +15,27 @@
                     <a ng-click="requests.updateMode(3)" id="mode_3" class="section {% if displayMode == 3 %}selected{% endif %}" href="" title="Follows">Follows</a>
                 {% endif %}
                 
-                <div class="select-style">                      
+               <!-- <div class="select-style">                      
                     <select dir="rtl" id="contentToDisplaySelect" ng-change="requests.update()" ng-model="requests.contentToDisplay">
                         <option {% if contentToDisplay == 1 %}selected{% endif %} value="1">Request</option>
                         <option {% if contentToDisplay == 2 %}selected{% endif %} value="2">Proposition</option>
                     </select>
+                </div> -->
+
+                <div class="content-filter">
+                    <a class="filter-selector">Requests</a>
+
+                    <ul class="filter-choices">
+                        <li class="filter-choices-cat">
+                            <div class="filter-title">Requests</div>
+                            <a class="filter-choice" href="">Pending requests</a>
+                            <a class="filter-choice" href="">Closed requests</a>
+                        </li>
+                        <li class="filter-choices-cat">
+                            <div class="filter-title">Propositions</div>
+                            <a class="filter-choice" href="">Galery of propositions</a>
+                        </li>
+                    </ul>
                 </div>
                
             </div>

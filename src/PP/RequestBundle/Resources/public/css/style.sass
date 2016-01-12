@@ -17,7 +17,7 @@ section.main
 			height: auto
 			margin: 0 0 25px
 
-			a.section
+			a.section, .content-filter .filter-selector
 				font-size: 20px
 				color: #777
 				text-transform: uppercase
@@ -27,8 +27,66 @@ section.main
 				&:hover
 					color: #444
 
-				&.selected
+				&.selected, &.open
 					color: $main-color
+
+			.content-filter
+				float: right
+				position: relative
+
+				.filter-selector
+					float: right
+					text-align: right
+					margin: 0
+
+					&:after
+						font-family: "pp-font"
+						font-size: 20px
+						content: $icon-dropdown
+						float: right
+						width: 20px
+						height: 20px
+						padding: 3px 0 3px 5px
+						font-weight: normal
+
+				ul.filter-choices
+					background: white
+					width: 250px
+					margin: 0
+					padding: 10px 0
+					list-style: none
+					border: 1px solid rgba(0,0,0,.1)
+					border-radius: 3px
+					position: absolute
+					top: 37px
+					right: 0
+
+					li.filter-choices-cat
+						margin-bottom: 5px
+						padding: 5px 0
+						border-bottom: 1px solid rgba(0,0,0,.1)
+
+						&:last-child
+							margin-bottom: 0
+							border-bottom: none
+
+						.filter-title
+							color: #444
+							font-size: 18px
+							text-transform: uppercase
+							font-weight: 600
+							padding: 0 15px
+
+						a.filter-choice
+							padding: 5px 15px
+							display: block
+							color: #777
+
+							&:last-child
+								margin-bottom: 5px
+
+							&:hover
+								background: #F3F3F3
 
 			.select-style
 				color: #777
@@ -220,10 +278,6 @@ section.main
 			margin: 0 -5px
 			display: inline-block
 
-			.reply, .more-replies
-				&:hover
-					box-shadow: 0 0 25px rgba(0,0,0,.1)
-
 			.more-replies
 				background: white
 				width: 770px
@@ -257,7 +311,10 @@ section.main
 						height: 237px
 
 				a.overlay
-					@include vendor-prefix(background, linear-gradient(transparent 60%, rgba(0,0,0,0.7) 100%))
+					background: -webkit-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+					background: -o-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+					background: -ms-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
+					background: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
 					width: 380px
 					height: 260px
 					display: block
@@ -475,7 +532,7 @@ section.main
 				font-size: 15px
 
 		article.comments
-			margin: 0 0 25px
+			margin: 25px 0
 			display: inline-block
 
 			.title-section
