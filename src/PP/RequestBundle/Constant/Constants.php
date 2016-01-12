@@ -9,7 +9,11 @@ namespace PP\RequestBundle\Constant;
 class Constants {
     const DISPLAY_REQUEST = 1;
     const DISPLAY_PROPOSITION = 2;
+    const DISPLAY_REQUEST_PENDING = 3;
+    const DISPLAY_REQUEST_CLOSED = 4;
     
+    const REQUEST_PENDING = 1;
+    const REQUEST_CLOSED = 2;
     
     const REQUEST_PER_PAGE =  10;
     const PROPOSITION_PER_PAGE =  6;

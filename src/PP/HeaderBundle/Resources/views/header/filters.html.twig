@@ -1,7 +1,7 @@
 <form ng-controller="filtersController as filters" name="pp_request_homepage_form" novalidate ng-submit="filters.submitForm()" >
     <input type="hidden" name="search_action" value='{{ url('pp_request_homepage', {}, true) }}' />
     
-    <input ng-focus="header.showSearchOptions()" name="name" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find pictures, requests or users on Prestapic..." />
+    <input ng-focus="header.showSearchOptions(filters.searchQuery)" ng-change="header.showSearchChoise(filters.searchQuery)" name="name" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find pictures, requests or users on Prestapic..." />
        
     <div class="search-options-list" style="display:none;" id="searchUser" class="stopPropagation">
         <ul>
@@ -12,7 +12,7 @@
                 </a>
             </li>
             <li>
-                <a href="" class="infos-all-search" >
+                <a ng-click="filters.submitForm()" href="" class="infos-all-search" >
                     Show all results for <strong>{% verbatim %}{{ filters.searchQuery }}{% endverbatim %}</strong>...
                 </a>
             </li>
@@ -25,8 +25,8 @@
             <div id="filterList" class="filter-choose-category">
                 <div class="filter-choose-text">in</div>
                 <div class="filter-select">
-                    <select class="filter-choose-list">
-                        <option value="default" disabled="disabled" selected="selected">a category</option>
+                    <select ng-model="filters.categorieSelected" class="filter-choose-list">
+                        <option value="-1" selected="selected">a category</option>
                         {% for category in categories %}
                             <option id="cat_{{category.id}}" ng-click="filters.addCategory({{category.id}}, '{{ category.name }}')" value="{{ category.id }}">{{ category.name }}</option>
                         {% endfor %}

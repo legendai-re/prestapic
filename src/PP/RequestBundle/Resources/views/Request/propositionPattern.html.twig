@@ -6,7 +6,7 @@
             alt="{{ proposition.image.alt }}"
             />                
         </div>
-        <a ng-click="requests.showPopup({{ proposition.id }})" class="overlay" href="" title="{{ proposition.title }}"></a>        
+        <a ng-click="requests.showPopup({{ proposition.id }})" class="overlay" ng-href="{{ asset(proposition.image.webPath("original")) }}" title="{{ proposition.title }}"></a>        
         <div class="img-title">                                
             <div class="infos">
                     {{ proposition.createdDate|date('Y-m-d') }} by 

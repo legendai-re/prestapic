@@ -51,19 +51,19 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                         ->getSingleScalarResult();
         }
         
-        public function getImageRequestsId($em, $searchParam, $limit, $page, $displayMode, $userId, $followingIds, $tagsParam = null, $categoriesParam = null, $concerningMeParam = false)
+        public function getImageRequestsId($em, $searchParam, $limit, $page, $displayMode, $userId, $followingIds, $tagsParam = null, $categoriesParam = null, $concerningMeParam = false, $requestType = null)
 	{
              $qb = $this->createQueryBuilder('ir')
                         ->select('ir.id')
                         ->distinct(true)
-                        ->leftJoin('ir.author', 'irA')                        
+                        ->leftJoin('ir.author', 'irA')
+                        ->leftJoin('ir.category', 'c')
                         ->where('ir.enabled = true AND irA.enabled = true')
             ;
              
             if($searchParam != null){
                 $qb = $qb
-                        ->leftJoin('ir.tags', 't')
-                        ->leftJoin('ir.category', 'c')
+                        ->leftJoin('ir.tags', 't')                        
                         ->where($qb->expr()->like('ir.title', ':title'))
                         ->setParameter('title', '%'.$searchParam.'%')
                         ->orWhere($qb->expr()->like('t.name', ':name'))
@@ -88,15 +88,14 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                             ->andWhere($request);
             }
             
-            if($categoriesParam != null){
-                $qb = $qb->leftJoin('ir.category', 'c');
+            if($categoriesParam != null){                
                 $i = 0;
                 $request = '';
                 foreach ($categoriesParam as $cat){
                     if($i>0)$request .= ' OR ';
-                    $request .= 'c.name = :nameC'.$i;
+                    $request .= 'c.id = :idC'.$i;
                     $qb = $qb                            
-                            ->setParameter('nameC'.$i, $cat);
+                            ->setParameter('idC'.$i, $cat);
                     $i++;
                 }
                  $qb = $qb
@@ -125,6 +124,14 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                         ->setParameter('followingIds', array_values($followingIds))
                         ->orderBy('ir.createdDate', 'DESC'); 
                 ;
+            }
+            
+            if($requestType != null){
+                if($requestType == Constants::DISPLAY_REQUEST_CLOSED){
+                    $qb = $qb->andwhere('ir.closed = true');       
+                }else if($requestType == Constants::DISPLAY_REQUEST_PENDING){
+                    $qb = $qb->andwhere('ir.closed = false');       
+                }
             }
             
             $qb = $qb

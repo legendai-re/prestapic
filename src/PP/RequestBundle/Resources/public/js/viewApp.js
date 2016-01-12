@@ -8,7 +8,16 @@ var containerApp = angular.module('containerApp',  ['ngRoute']);
 
 containerApp.config(['$locationProvider', function ($locationProvider) {
     $locationProvider.html5Mode(true);        
-}]);                 
+}]);
+
+containerApp.run(['$rootScope', '$http', '$location',function ($rootScope, $http, $location) {
+    var pathInit = false;
+    if(!pathInit){
+        pathInit = true;
+        $rootScope.currentPath = $location.$$path;
+    }
+    
+}]);
 
 containerApp.controller('requestController',['$scope', '$http', '$location', '$window', function ($scope, $http, $location, $window) {                                                                                                                                                                                                                                                  
         
@@ -87,7 +96,7 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
                 
 }]);
 
-containerApp.controller('propositionsController', ['$scope', '$http', '$compile', '$window', '$location', function ($scope, $http, $compile, $window, $location) {                                                                                                 
+containerApp.controller('propositionsController', ['$rootScope', '$scope', '$http', '$compile', '$window', '$location', function ($rootScope, $scope, $http, $compile, $window, $location) {                                                                                                 
         
         
         var imageRequestId = null;
@@ -204,7 +213,7 @@ containerApp.controller('propositionsController', ['$scope', '$http', '$compile'
         this.showPopup = function(id){
             var message = {
                 id: id,
-                url: $location.$$absUrl
+                url: $rootScope.currentPath
             }
             angular.element(document.getElementById('popupPropApp')).scope().$emit('showPopup', message);                                                
         };

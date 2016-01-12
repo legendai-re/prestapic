@@ -4,7 +4,7 @@
 {% block requestBody %}            
     
         <base href=" " />
-        <div ng-controller="requestsController as requests" ng-init="requests.init({{ displayMode }})">            
+        <div ng-controller="requestsController as requests" ng-init="requests.init({{ displayMode }}, {{ contentToDisplay }})">            
             
             
             {# display choose displayMode form #}
@@ -15,13 +15,10 @@
                     <a ng-click="requests.updateMode(3)" id="mode_3" class="section {% if displayMode == 3 %}selected{% endif %}" href="" title="Follows">Follows</a>
                 {% endif %}
                 
-                <div class="select-style">                      
-                    <select dir="rtl" id="contentToDisplaySelect" ng-change="requests.update()" ng-model="requests.contentToDisplay">
-                        <option {% if contentToDisplay == 1 %}selected{% endif %} value="1">Request</option>
-                        <option {% if contentToDisplay == 2 %}selected{% endif %} value="2">Proposition</option>
-                    </select>
-                </div>
-               
+                
+               <a ng-click="requests.update(3)" id="content_mode_3" class="section {% if contentToDisplay == 3 %}selected{% endif %}" selected href="" title="Pending">Pending</a>
+               <a ng-click="requests.update(4)" id="content_mode_4" class="section {% if contentToDisplay == 4 %}selected{% endif %}" href="" title="closed">Closed</a>
+               <a ng-click="requests.update(2)" id="content_mode_2" class="section {% if contentToDisplay == 2 %}selected{% endif %}" href="" title="proposition">Proposition</a>
             </div>
             {% if haveSearchParam == false %}
                 {#{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}#}

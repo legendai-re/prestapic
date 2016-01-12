@@ -55,7 +55,7 @@
             <div class="tag-list">                
                 {% for tag in imageRequest.tags if not break%}
                     <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'tags':tag.name }) }}">{{ tag.name }}</a>
-                    {% if loop.index == 3  %}{% set break = true %}{% endif %}
+                    {% if loop.index == 6  %}{% set break = true %}{% endif %}
                 {% endfor %}
             </div>                                                                           
         </div>
@@ -95,9 +95,9 @@
         {% if imageRequest.closed %}
         <div class="reply selected">
             <div class="prop">
-              <img src="{{ asset(acceptedProposition.image.webPath("original")) }}" alt="{{ acceptedProposition.title }}">
+              <img src="{{ asset(acceptedProposition.image.webPath("selected")) }}" alt="{{ acceptedProposition.title }}">
             </div>
-            <a ng-click="propositions.showPopup({{ acceptedProposition.id }})" title="{{ acceptedProposition.title }}" class="overlay" href="" title=""></a>
+            <a ng-click="propositions.showPopup({{ acceptedProposition.id }})" title="{{ acceptedProposition.title }}" class="overlay" ng-href="{{ asset(acceptedProposition.image.webPath("original")) }}" title=""></a>
             <a class="selecting-prop selected" href="#" title="Select this picture">Selected picture</a>
             <div class="img-title">
                 <a href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" class="avatar">
