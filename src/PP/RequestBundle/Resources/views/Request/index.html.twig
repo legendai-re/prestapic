@@ -4,7 +4,7 @@
 {% block requestBody %}            
     
         <base href=" " />
-        <div ng-controller="requestsController as requests" ng-init="requests.init({{ displayMode }})">            
+        <div ng-controller="requestsController as requests" ng-init="requests.init({{ displayMode }}, {{ contentToDisplay }})">            
             
             
             {# display choose displayMode form #}
@@ -28,16 +28,16 @@
                     <ul class="filter-choices">
                         <li class="filter-choices-cat">
                             <div class="filter-title">Requests</div>
-                            <a class="filter-choice" href="">Pending requests</a>
-                            <a class="filter-choice" href="">Closed requests</a>
+                            <a ng-click="requests.update(3)" id="content_mode_3" class="filter-choice {% if contentToDisplay == 3 %}selected{% endif %}" selected href="" title="Pending">Pending requests</a>                            
+                            <a ng-click="requests.update(4)" id="content_mode_4" class="filter-choice {% if contentToDisplay == 4 %}selected{% endif %}" href="" title="closed">Closed requests</a>                            
                         </li>
                         <li class="filter-choices-cat">
                             <div class="filter-title">Propositions</div>
                             <a class="filter-choice" href="">Galery of propositions</a>
+                            <a ng-click="requests.update(2)" id="content_mode_2" class="filter-choice {% if contentToDisplay == 2 %}selected{% endif %}" href="" title="proposition">Galery of propositions</a>
                         </li>
                     </ul>
                 </div>
-               
             </div>
             {% if haveSearchParam == false %}
                 {#{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}#}

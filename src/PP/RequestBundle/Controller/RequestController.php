@@ -58,7 +58,7 @@ class RequestController extends Controller
         
         if($session->get('contentToDisplay') != null){
             $contentToDisplay = $session->get('contentToDisplay');
-        }else {$contentToDisplay = Constants::DISPLAY_REQUEST;}                                                                      
+        }else {$contentToDisplay = Constants::DISPLAY_REQUEST_PENDING;}                                                                      
                         
         /////////////////////////////////
         ////////////// FORM /////////////

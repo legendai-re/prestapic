@@ -107,9 +107,9 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
             $request = '';
             foreach ($categoriesParam as $cat){
                 if($i>0)$request .= ' OR ';
-                $request .= 'c.name = :nameC'.$i;
+                $request .= 'c.id = :idC'.$i;
                 $qb = $qb                            
-                        ->setParameter('nameC'.$i, $cat);
+                        ->setParameter('idC'.$i, $cat);
                 $i++;
             }
              $qb = $qb

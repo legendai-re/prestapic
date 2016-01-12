@@ -9,7 +9,8 @@ namespace PP\PropositionBundle\JsonModel;
  */
 class JsonPropositionPopupModel {
     
-    public function __construct($id, $title, $image, $author, $upvoteNb, $selected, $imageRequest, $canUpvote, $createdDate){
+    public function __construct($connected, $id, $title, $image, $author, $upvoteNb, $selected, $imageRequest, $canUpvote, $createdDate){
+        $this->connected = $connected;
         $this->id = $id;
         $this->title = $title;
         $this->image = $image;
@@ -21,6 +22,7 @@ class JsonPropositionPopupModel {
         $this->createdDate = $createdDate;
     }
     
+    public $connected;
     public $id;
     public $title;
     public $image;

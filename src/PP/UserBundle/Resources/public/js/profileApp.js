@@ -17,10 +17,12 @@
 
     // souscription au channel "/messages"
     
-    containerApp.run(['$rootScope','FayeClient', function ($rootScope, FayeClient) {
+    containerApp.run(['$rootScope','FayeClient', '$location', function ($rootScope, FayeClient, $location) {
         FayeClient.subscribe('/messages', function (message) {
             $rootScope.$broadcast('notification', message);            
         });
+        
+        $rootScope.currentPath = $location.$$path;
     }])
 
     containerApp.controller('profileController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
@@ -184,7 +186,7 @@
             }
     }]);
     
-    containerApp.controller('requestsController', ['$scope', '$http', '$compile', '$location', function ($scope, $http, $compile, $location) {
+    containerApp.controller('requestsController', ['$rootScope', '$scope', '$http', '$compile', '$location', function ($rootScope, $scope, $http, $compile, $location) {
             
             var pageProfileId = null;
             
@@ -241,7 +243,7 @@
             this.showPopup = function(id){
                 var message = {
                     id: id,
-                    url: $location.$$absUrl
+                    url: $rootScope.currentPath
                 }
                 angular.element(document.getElementById('popupPropApp')).scope().$emit('showPopup', message);                                                
             };

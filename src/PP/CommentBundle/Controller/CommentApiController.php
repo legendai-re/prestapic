@@ -108,7 +108,7 @@ class CommentApiController extends Controller
             $imageRequest = $imageRequestRepository->find($requestId);         
             $currentUser = $this->getUser();
             
-            if($imageRequest!=null && !in_array($currentUser, $imageRequest->getAuthor()->getBlockedUsers()->toArray())&& $imageRequest->getAuthor() != $currentUser){
+            if($imageRequest!=null && !in_array($currentUser, $imageRequest->getAuthor()->getBlockedUsers()->toArray())){
                 $commentThread = $imageRequest->getCommentThread();
                 $comment = new Comment();
                 $comment->setAuthor($currentUser);
@@ -120,7 +120,7 @@ class CommentApiController extends Controller
                 $em->flush();
                 
                 
-                 if($imageRequest->getAuthor()->getNotificationEnabled()){
+                if($imageRequest->getAuthor()->getNotificationEnabled() && $imageRequest->getAuthor() != $currentUser){
                         /* create notification */
                         $pageProfileNotifThread = $imageRequest->getAuthor()->getNotificationThread();
                         $notification = new Notification(NotificationType::COMMENT);
@@ -157,8 +157,7 @@ class CommentApiController extends Controller
                         );
                         $data = array('notification' => $jsonNotication);                    
                         $faye->send($channel, $data);
-                    }
-                
+                    }                
                 $response->setStatusCode(Response::HTTP_OK);
             }
             else {$response->setStatusCode(Response::HTTP_FORBIDDEN);}

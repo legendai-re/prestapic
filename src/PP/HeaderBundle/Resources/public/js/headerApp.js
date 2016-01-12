@@ -80,9 +80,10 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
         var closeAll = function(){
             if(messageIsOpen)closeMessage();
             if(notificationListIsOpen)closeNotification();
-            if(filterListIsOpen)closeFilterList();
+            //if(filterListIsOpen)closeFilterList();
             if(userMenuIsOpen)closeUserMenu();
             $('#searchUser').css("display", "none");
+            document.getElementById('searchOptions').style.display = 'none';
         };
 
         this.showMessage = function(){
@@ -267,15 +268,12 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             userMenuIsOpen = false;
         };
 
-        this.showFilterList = function(){                
-            if(!filterListIsOpen){
-                closeAll();
-                document.getElementById('filterList').style.display = 'block';                   
-                filterListIsOpen = true;
-                $("#filterButton").addClass("open");
-            }else{
-                closeFilterList();
-            }                
+        this.showFilterList = function(){                                        
+            closeAll();
+            document.getElementById('searchOptions').style.display = 'block';
+            document.getElementById('filterList').style.display = 'block';                   
+            filterListIsOpen = true;
+            $("#filterButton").addClass("open");                          
         };
 
         var closeFilterList = function(){
@@ -287,11 +285,21 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             document.getElementById('searchOptions').style.display = 'none';
         };
 
-        this.showSearchOptions = function(){
-            document.getElementById('searchOptions').style.display = 'block';
-            $('#searchUser').css("display", "block");
+        this.showSearchOptions = function(char){
+            if(char.length > 0){                
+                $('#searchUser').css("display", "block");           
+            }
+            document.getElementById('searchOptions').style.display = 'block';           
         };
-
+        
+        this.showSearchChoise = function(char){            
+            if(char.length > 0){                
+                $('#searchUser').css("display", "block");           
+            }else{
+                $('#searchUser').css("display", "none"); 
+            }
+        }
+        
         /* handle new notification */
         $scope.$on('notification', function (event, message) {                
             if(haveAllreadyOpen){
@@ -333,37 +341,23 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
 }]);
 
 headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
-        
-        this.showFiltersTags = function(){
-            closeAll();
-            document.getElementById('filtersTags').style.display = 'block';
-            $("#filtersTagsButton").addClass("open");
-        };
-        
-        this.showFiltersCat = function(){
-            closeAll();
-            document.getElementById('filtersCat').style.display = 'block';
-            $("#filtersCatButton").addClass("open");
-        };
+                
         
         var closeAll = function(){
-            document.getElementById('filtersTags').style.display = 'none';
-            document.getElementById('filtersCat').style.display = 'none';
-            $("#filtersCatButton").removeClass("open");
-            $("#filtersTagsButton").removeClass("open");
+            document.getElementById('searchOptions').style.display = 'none';             
         };
         
         /*//////////////////////////////
          *     CATEGORIES MANAGEMENT
          */
-        this.categoriesList = [];
-        this.addCategory = function(catId, catName){
+        this.categorieSelected = "-1";
+        /*this.addCategory = function(catId, catName){
             if(this.categoriesList[catId] == null){                
                 this.categoriesList[catId] = catName;
             }else{                
                 delete this.categoriesList[catId];
             }                        
-        };
+        };*/
         
         /// END OF CATEGORIES MANAGEMENT
         ////////////////////////////////
@@ -372,7 +366,7 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
         /*//////////////////////////
          *     TAGS MANAGEMENT
          */
-        this.tagsListClicked = [];
+        /*this.tagsListClicked = [];
         this.tagsListStr = null;
         this.tagList = [];
         
@@ -384,9 +378,9 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
                 $("#tag_"+tagId).removeClass("choosen");
                 delete this.tagsListClicked[tagId];
             }                        
-        };
+        };*/
         
-        this.tagStrToArray = function(){
+        /*this.tagStrToArray = function(){
             var tempTagList = [];
             if(this.tagsListStr){
                 this.tagsListStr = this.tagsListStr.toLowerCase()+',';
@@ -416,7 +410,7 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
 
             this.tagList = uniqueTags;
             
-        };
+        };*/
         /// END OF TAGS MANAGEMENT
         //////////////////////////
         
@@ -425,11 +419,16 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
         //////////////////////////
         //     SUBMIT SEARCH
         this.submitForm = function(){
-            this.tagStrToArray();
+            //this.tagStrToArray();
             
             var submitFormUrl = document.getElementsByName("search_action")[0].value;
             var searchQueryParam = 'search_query='+this.searchQuery;
-            var tagListParam = 'tags=';            
+            if(this.categorieSelected == -1){
+                this.categorieSelected = '';
+            }
+            var categoriePram = 'categories='+this.categorieSelected;
+            
+            /*var tagListParam = 'tags=';            
             for(var i =0; i<this.tagList.length; i++){
                 tagListParam += this.tagList[i];
                 if(i<this.tagList.length-1)tagListParam += '+';
@@ -440,14 +439,14 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
                     catListParam += this.categoriesList[i];
                     if(i<this.categoriesList.length-1)catListParam += '+';
                 }
-            }
+            }*/
             
-            var concerningMeParam = '';
+            /*var concerningMeParam = '';
             if(this.conceringMe){
                 concerningMeParam = 'me=true'
-            }
+            }*/
             
-            $window.location.href = submitFormUrl+'?'+searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam;
+            $window.location.href = submitFormUrl+'?'+searchQueryParam+'&'+categoriePram;
         };
 }]); 
 

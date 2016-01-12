@@ -45,6 +45,7 @@ class RequestApiController extends Controller
         $tagsParam = array();
         $categoriesParam = array();
         $concerningMeParam = false;
+        $requestTypeParam = Constants::REQUEST_PENDING;
         $getParameters = array('page'=>1);
         
          /* handle GET data */
@@ -70,6 +71,7 @@ class RequestApiController extends Controller
             if($currentUser!=null && $request->get('me') != null && $request->get('me') == "true"){
                 $concerningMeParam = true;
             }
+                         
         }                
         
         /* init repositories */
@@ -100,7 +102,7 @@ class RequestApiController extends Controller
         
         if($session->get('contentToDisplay') != null){
             $contentToDisplay = $session->get('contentToDisplay');
-        }else {$contentToDisplay = Constants::DISPLAY_REQUEST;}
+        }else {$contentToDisplay = Constants::DISPLAY_REQUEST_PENDING;}
                                                                             
         /* get image requests  and create edit image request form  */
         if($currentUser != null){
@@ -114,13 +116,12 @@ class RequestApiController extends Controller
         
         $imageRequestList = array();
         $propositionsList = array();
-        
-        $contentToDisplay = $session->get("contentToDisplay");
+                
         $haveNextPage = true;       
         
-        if($contentToDisplay == Constants::DISPLAY_REQUEST){
+        if($contentToDisplay == Constants::DISPLAY_REQUEST_PENDING || $contentToDisplay == Constants::DISPLAY_REQUEST_CLOSED){
             $canUpvoteImageRequest = array();
-            $imageRequestsId = $imageRequestRepository->getImageRequestsId($em, $searchParam, Constants::REQUEST_PER_PAGE, $page, $displayMode, $userId, $followingIds, $tagsParam, $categoriesParam, $concerningMeParam);            
+            $imageRequestsId = $imageRequestRepository->getImageRequestsId($em, $searchParam, Constants::REQUEST_PER_PAGE, $page, $displayMode, $userId, $followingIds, $tagsParam, $categoriesParam, $concerningMeParam, $contentToDisplay);            
             foreach($imageRequestsId as $id){
                 $tempImageRequest = $imageRequestRepository->getOneImageRequest($id["id"]);
                 $tempImageRequest->setDateAgo($this->container->get('pp_notification.ago')->ago($tempImageRequest->getCreatedDate()));
@@ -153,7 +154,7 @@ class RequestApiController extends Controller
             }            
         }                        
         
-        if($contentToDisplay == Constants::DISPLAY_REQUEST){
+        if($contentToDisplay == Constants::DISPLAY_REQUEST_PENDING || $contentToDisplay == Constants::DISPLAY_REQUEST_CLOSED){
             $view = View::create()
                 ->setData(array(                                      
                     'page'=>$page,

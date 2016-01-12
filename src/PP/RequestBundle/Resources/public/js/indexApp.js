@@ -10,22 +10,22 @@
         $locationProvider.html5Mode(true);
     }]);          
         
-    containerApp.run(['$rootScope', '$http',function ($rootScope, $http) {   
-            $rootScope.hello = "hello";
+    containerApp.run(['$rootScope', '$http', '$location',function ($rootScope, $http, $location) {               
+            $rootScope.currentPath = $location.$$path;                        
     }]);
 
     containerApp.controller('requestsController', ['$scope', '$rootScope', '$http', '$compile', '$location', function ($scope, $rootScope, $http, $compile, $location) {                                                                                                 
             
-            this.contentToDisplay = $('#contentToDisplaySelect').val();
             this.displayMode = null;
-            
+            this.contentToDisplay = null;
             var getParams = "?";
             var searchQueryParam = 'search_query=';
             var tagListParam = 'tags='; 
             var catListParam = 'categories=';
             var concerningMeParam = 'me=false';
-            this.init = function(mode){
+            this.init = function(mode, contentToDisplay){
                 this.displayMode = mode;
+                this.contentToDisplay = contentToDisplay;
                 if($location.search().search_query != null){
                     searchQueryParam += $location.search().search_query;  
                 }
@@ -39,7 +39,7 @@
                     concerningMeParam = "me=true";  
                 }
                 getParams += searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam;
-                this.update();                                
+                this.update(contentToDisplay);                              
             };
             
             var nextLoadTrigger = '#loadPageTrigger2';            
@@ -62,20 +62,28 @@
                 );                                            
             };                       
                         
-            this.update = function(){                                
-                console.log(this.contentToDisplay);
+            this.update = function(contentToDisplay){
+                this.contentToDisplay = contentToDisplay;
                 $("#loadPage1").html("");
                 nextLoadTrigger = '#loadPageTrigger2';            
                 nextPage = 2;
-                 getParams = "?"+searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam+"&display_mode="+this.displayMode+"&content_to_display="+this.contentToDisplay;
+                removeContentModeClass();
+                $('#content_mode_'+contentToDisplay).addClass("selected");
+                getParams = "?"+searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam+"&display_mode="+this.displayMode+"&content_to_display="+contentToDisplay;
                 getRequests(1);
             };                        
+            
+            var removeContentModeClass = function(){
+                $('#content_mode_3').removeClass("selected");
+                $('#content_mode_4').removeClass("selected");
+                $('#content_mode_2').removeClass("selected");
+            }
             
             this.updateMode = function(mode){
                 this.displayMode = mode;
                 $('.section').removeClass("selected");
                 $('#mode_'+mode).addClass("selected");
-                this.update();
+                this.update(this.contentToDisplay);
             }
             
             var readyForRequestVote = true;
@@ -134,10 +142,10 @@
                 }
             };            
             
-            this.showPopup = function(id){
+            this.showPopup = function(id){                
                 var message = {
                     id: id,
-                    url: $location.$$absUrl
+                    url: $rootScope.currentPath
                 }
                 angular.element(document.getElementById('popupPropApp')).scope().$emit('showPopup', message);                                                
             };

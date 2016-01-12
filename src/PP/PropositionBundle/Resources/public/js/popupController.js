@@ -14,17 +14,22 @@ popupPropApp.config(['$locationProvider', function ($locationProvider) {
     $locationProvider.html5Mode(true);
 }]);
 
-popupPropApp.run(['$rootScope', '$http',function ($rootScope, $http) {   
-        $rootScope.hello = "hello";
+popupPropApp.run(['$rootScope', '$http', '$location', function ($rootScope, $http, $location) {   
+        $rootScope.imagePath =  $location.$$path;
+        
 }]);
 
 popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$compile', '$location', '$window', function ($scope, $rootScope, $http, $compile, $location, $window) {
     $scope.propositionLoaded = [];
     $scope.currentLocation = null;
-
+    var initPath = false;
+    
     $rootScope.$on('showPopup', function(event, message){            
         showPopup(message.id);
-        $scope.currentLocation = message.url;
+        if(!initPath){
+            initPath = true;
+            $scope.currentLocation = message.url;
+        }
     });
 
     $scope.proposition = null;        
@@ -32,7 +37,7 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
     var showPopup = function(id){
         $("#popupPropApp").css("display", "block");
         $("#propositionUpvoteButton").removeClass("animate");
-        if($scope.propositionLoaded[id] == null){
+       
             var formAction = document.forms["pp_proposition_api_get_proposition_form"].action;                              
             $http.get(formAction+".html?id="+id).
                 then(function(response) {
@@ -43,15 +48,20 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
                     console.log("Request failed : "+response.statusText );                        
                 }
             );
+        /*if($scope.propositionLoaded[id] == null){
         }else{                
             $scope.proposition = $scope.propositionLoaded[id];
             updateUpvote();
             $scope.$apply();
-        }
+        }*/
     };
 
-    var updateUpvote = function(){            
-        if(!$scope.proposition.canUpvote){                
+    var updateUpvote = function(){
+        if(!$scope.proposition.connected){
+             $("#propositionUpvoteButton").addClass("blocked");
+        }else if($scope.proposition.author.isAuthor){
+            $("#propositionUpvoteButton").addClass("blocked");
+        }else if(!$scope.proposition.canUpvote){                
             $("#propositionUpvoteButton").addClass("voted");
         }
     };
@@ -110,10 +120,12 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
         angular.element(document.getElementById('reportPopupApp')).scope().$emit('showPopup', message);                                                
     };
     
-    this.close = function(){
+    this.close = function(){                                        
         $("#popupPropApp").css("display", "none");
         $("#propositionUpvoteButton").removeClass("voted");
-        $scope.proposition = null;                                           
+        $("#propositionUpvoteButton").removeClass("blocked");
+        $scope.proposition = null;  
+        $location.path($scope.currentLocation);
     };
 
     var timeout = null;

@@ -37,8 +37,9 @@ class PropositionApiController extends Controller
         $propAuthor = $proposition->getAuthor();
         $isProAuthor = false;
         $isIrAuthor = false;
-        
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {            
+        $connected = false;
+        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+            $connected = true;
             $currentUser = $this->getUser();
             if($currentUser != null && $currentUser->getId() == $propAuthor->getId()){
                 $isProAuthor = true;
@@ -55,6 +56,7 @@ class PropositionApiController extends Controller
         }
         
         $jsonProposition = new JsonPropositionPopupModel(
+                                        $connected,
                                         $proposition->getId(),
                                         $proposition->getTitle(),
                                         $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$proposition->getImage()->getWebPath('original'),
