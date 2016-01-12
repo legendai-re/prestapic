@@ -56,6 +56,7 @@ class RequestController extends Controller
         }else {$displayMode = Constants::ORDER_BY_DATE;}
         if($currentUser == null && $displayMode == Constants::ORDER_BY_INTEREST ){$displayMode = Constants::ORDER_BY_DATE;}
         
+        $contentToDisplay = Constants::DISPLAY_REQUEST_PENDING;
         if($session->get('contentToDisplay') != null){
             $contentToDisplay = $session->get('contentToDisplay');
         }else {$contentToDisplay = Constants::DISPLAY_REQUEST_PENDING;}                                                                      

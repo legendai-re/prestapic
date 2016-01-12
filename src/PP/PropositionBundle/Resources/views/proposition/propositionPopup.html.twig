@@ -18,8 +18,10 @@
 				<a class="icon share" href="#"></a>
 				<a target="_self" class="icon download" href="{{ proposition.image }}" download="{{ proposition.title }}"></a>
                                 {% endverbatim %}
+                                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
 				<a ng-if="!proposition.author.isAuthor" class="icon report" href="" ng-click="popup.showReportPopup(proposition.id,2)"></a>                                
 				<a ng-if="proposition.author.isAuthor" class="icon delete" href="" ng-click="popup.patchDisable()"></a>
+                                {% endif %}
                                 {% verbatim %}
 			</div>                        
 			<div class="action-group right">

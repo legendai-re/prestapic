@@ -273,7 +273,7 @@ containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$
                         name: $scope.currentUser.name,
                         url: $scope.currentUser.url
                     }
-                };
+                };                
                 $scope.commentList.push(newComment);
                 
                 canPostComment = false;
@@ -291,6 +291,7 @@ containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$
                         console.log("Request failed : "+response.statusText );                        
                     }
                 );
+                $scope.comment.content = "";
             }
         };
 }]);

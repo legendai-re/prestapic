@@ -48,43 +48,51 @@
             
             var nextLoadTrigger = '#loadPageTrigger2';            
             var nextPage = 2;                                  
+            var readyToChange = true;
             
             var getRequests = function(page){
+                readyToChange = false;
                 var formAction = document.forms["pp_request_api_get_request_form_"+page].action;
                 document.getElementById('loadingGif').style.display = 'block';                    
                 $http.get(formAction+".html"+getParams).
-                    then(function(response) {
-                        
+                    then(function(response) {                        
                         var newPage = angular.element(response.data);                        
                         $compile(newPage)($scope);                             
                         angular.element( document.querySelector('#loadPage1')).append(newPage);                        
                         document.getElementById('loadingGif').style.display = 'none';
-
+                        readyToChange = true;
                     }, function(response) {
-                     console.log("Request failed : "+response.statusText );                        
+                     console.log("Request failed : "+response.statusText );
+                        readyToChange = true;
                     }
                 );                                            
             };                       
             
             this.showContentToDisplayFilters = function(){
-                $("#contentToDisplayFilters").css("display", "block");
+                if($("#contentToDisplayFilters").css("display") == "block"){
+                    $("#contentToDisplayFilters").css("display", "none");
+                }else{
+                    $("#contentToDisplayFilters").css("display", "block");
+                }
             }
             
             this.update = function(contentToDisplay){
-                $("#loadPage1").html("");
-                nextLoadTrigger = '#loadPageTrigger2';            
-                nextPage = 2;
-                getParams = "?"+searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam+"&display_mode="+this.displayMode+"&content_to_display="+contentToDisplay;
-                getRequests(1);
-               
-                this.contentToDisplay = contentToDisplay;                                
-                removeContentModeClass();
-                $('#content_mode_'+contentToDisplay).addClass("selected");
-                $("#contentToDisplayFilters").css("display", "none");
-                if(contentToDisplay == DISPLAY_PROPOSITION){
-                    $('#contentToDisplaySelected').html("Propositions");
-                }else{
-                    $('#contentToDisplaySelected').html("Requests");
+                if(readyToChange){
+                    $("#loadPage1").html("");
+                    nextLoadTrigger = '#loadPageTrigger2';            
+                    nextPage = 2;
+                    getParams = "?"+searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam+"&display_mode="+this.displayMode+"&content_to_display="+contentToDisplay;
+                    getRequests(1);
+
+                    this.contentToDisplay = contentToDisplay;                                
+                    removeContentModeClass();
+                    $('#content_mode_'+contentToDisplay).addClass("selected");
+                    $("#contentToDisplayFilters").css("display", "none");
+                    if(contentToDisplay == DISPLAY_PROPOSITION){
+                        $('#contentToDisplaySelected').html("Propositions");
+                    }else{
+                        $('#contentToDisplaySelected').html("Requests");
+                    }
                 }
             };                        
             
@@ -99,10 +107,12 @@
             }
             
             this.updateMode = function(mode){
-                this.displayMode = mode;
-                $('.section').removeClass("selected");
-                $('#mode_'+mode).addClass("selected");
-                this.update(this.contentToDisplay);
+                if(readyToChange){
+                    this.displayMode = mode;
+                    $('.section').removeClass("selected");
+                    $('#mode_'+mode).addClass("selected");
+                    this.update(this.contentToDisplay);
+                }
             }
             
             var readyForRequestVote = true;
