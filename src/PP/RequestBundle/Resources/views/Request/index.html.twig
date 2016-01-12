@@ -13,35 +13,24 @@
                 <a ng-click="requests.updateMode(1)" id="mode_1" class="section {% if displayMode == 1 %}selected{% endif %}" href="" title="Recent">Recent</a>
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                     <a ng-click="requests.updateMode(3)" id="mode_3" class="section {% if displayMode == 3 %}selected{% endif %}" href="" title="Follows">Follows</a>
-                {% endif %}
-                
-               <!-- <div class="select-style">                      
-                    <select dir="rtl" id="contentToDisplaySelect" ng-change="requests.update()" ng-model="requests.contentToDisplay">
-                        <option {% if contentToDisplay == 1 %}selected{% endif %} value="1">Request</option>
-                        <option {% if contentToDisplay == 2 %}selected{% endif %} value="2">Proposition</option>
-                    </select>
-                </div> -->
+                {% endif %}                              
 
-                <div class="content-filter">
-                    <a class="filter-selector">Requests</a>
+                <div class="content-filter stopPropagation">
+                    <a href="" id="contentToDisplaySelected" ng-click="requests.showContentToDisplayFilters()" class="filter-selector">{% if contentToDisplay == 2 %}Propositions{% else %}Requests{% endif %}</a>
 
-                    <ul class="filter-choices">
+                    <ul class="filter-choices" style="z-index: 1; display: none;" id="contentToDisplayFilters">
                         <li class="filter-choices-cat">
                             <div class="filter-title">Requests</div>
                             <a ng-click="requests.update(3)" id="content_mode_3" class="filter-choice {% if contentToDisplay == 3 %}selected{% endif %}" selected href="" title="Pending">Pending requests</a>                            
                             <a ng-click="requests.update(4)" id="content_mode_4" class="filter-choice {% if contentToDisplay == 4 %}selected{% endif %}" href="" title="closed">Closed requests</a>                            
                         </li>
                         <li class="filter-choices-cat">
-                            <div class="filter-title">Propositions</div>
-                            <a class="filter-choice" href="">Galery of propositions</a>
+                            <div class="filter-title">Propositions</div>                            
                             <a ng-click="requests.update(2)" id="content_mode_2" class="filter-choice {% if contentToDisplay == 2 %}selected{% endif %}" href="" title="proposition">Galery of propositions</a>
                         </li>
                     </ul>
                 </div>
-            </div>
-            {% if haveSearchParam == false %}
-                {#{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}#}
-            {% endif %}
+            </div>            
             
             {{ form(loadRequestForm) }}
             {{ form(upvoteRequestForm) }}

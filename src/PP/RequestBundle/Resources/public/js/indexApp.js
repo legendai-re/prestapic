@@ -1,4 +1,8 @@
-    
+        
+    var DISPLAY_PROPOSITION = 2;
+    var DISPLAY_REQUEST_PENDING = 3;
+    var DISPLAY_REQUEST_CLOSED = 4;
+        
     angular.element(document).ready(function() {
         var myDiv2 = document.getElementById("containerApp");
         angular.bootstrap(myDiv2, ["containerApp"]);
@@ -61,17 +65,32 @@
                     }
                 );                                            
             };                       
-                        
+            
+            this.showContentToDisplayFilters = function(){
+                $("#contentToDisplayFilters").css("display", "block");
+            }
+            
             this.update = function(contentToDisplay){
-                this.contentToDisplay = contentToDisplay;
                 $("#loadPage1").html("");
                 nextLoadTrigger = '#loadPageTrigger2';            
                 nextPage = 2;
-                removeContentModeClass();
-                $('#content_mode_'+contentToDisplay).addClass("selected");
                 getParams = "?"+searchQueryParam+'&'+tagListParam+'&'+catListParam+'&'+concerningMeParam+"&display_mode="+this.displayMode+"&content_to_display="+contentToDisplay;
                 getRequests(1);
+               
+                this.contentToDisplay = contentToDisplay;                                
+                removeContentModeClass();
+                $('#content_mode_'+contentToDisplay).addClass("selected");
+                $("#contentToDisplayFilters").css("display", "none");
+                if(contentToDisplay == DISPLAY_PROPOSITION){
+                    $('#contentToDisplaySelected').html("Propositions");
+                }else{
+                    $('#contentToDisplaySelected').html("Requests");
+                }
             };                        
+            
+            $('html').click(function() {                
+                $("#contentToDisplayFilters").css("display", "none");             
+            });
             
             var removeContentModeClass = function(){
                 $('#content_mode_3').removeClass("selected");
