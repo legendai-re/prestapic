@@ -32,6 +32,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use PP\RequestBundle\Constant\Constants;
 use PP\NotificationBundle\Constant\Notification;
 use PP\NotificationBundle\Entity\NotificationFollow;
+use PP\NotificationBundle\Entity\NotificationComment;
 use PP\NotificationBundle\JsonNotificationModel\JsonNotificationFollow;
 use PP\NotificationBundle\JsonNotificationModel\JsonNotificationNewProposition;
 use PP\NotificationBundle\JsonNotificationModel\JsonNotificationSelected;
@@ -79,6 +80,7 @@ class NotificationApiController extends Controller
             $notificationNewPropositionRepository = $em->getRepository('PPNotificationBundle:NotificationNewProposition');
             $notificationSelectedRepository = $em->getRepository('PPNotificationBundle:NotificationSelected');                    
             $notificationMessageRepository = $em->getRepository('PPNotificationBundle:NotificationMessage');                    
+            $notificationCommentRepository = $em->getRepository('PPNotificationBundle:NotificationComment');                    
                     
             if($currentUser != null){
                 $data["notifThreadSlug"] = $currentUser->getNotificationThread()->getSlug();
@@ -95,6 +97,13 @@ class NotificationApiController extends Controller
                     foreach ($notificationsList as $notification){                                                                
                         
                         $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));                        
+                        $messageThreadId = null;
+                        $type = null;
+                        $redirectUrl = null;                       ;
+                        $authorId = null;
+                        $authorName = null;
+                        $authorImg = null;
+                        $targetTitle = null;
                         $messageThreadId = null;
                         
                         switch ($notification->getNotificationType()){
@@ -139,8 +148,20 @@ class NotificationApiController extends Controller
                                 $targetTitle = null;
                                 $messageThreadId = $notificationMessage->getMessage()->getMessageThread()->getId();
                                 break;
+                            
+                            case NotificationType::COMMENT:
+                                $notificationComment = $notificationCommentRepository->findOneBy(array("notificationBase"=>$notification));
+                                if($notificationComment!=null){
+                                    $type = NotificationType::COMMENT;
+                                    $redirectUrl = $this->generateUrl('pp_request_view', array('slug' => $notificationComment->getImageRequest()->getSlug()));
+                                    $authorName = $notificationComment->getComment()->getAuthor()->getName();
+                                    $authorId =  $notificationComment->getComment()->getAuthor()->getId();
+                                    $authorImg = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $notificationComment->getComment()->getAuthor()->getProfilImage()->getWebPath("70x70");
+                                    $targetTitle = $notificationComment->getImageRequest()->getTitle();
+                                }
+                                break;
                         }
-                        
+                                                    
                         $jsonNotication = new JsonNotification(
                                     $type,
                                     $notification->getIsViewed(),
@@ -155,7 +176,8 @@ class NotificationApiController extends Controller
                                     $targetTitle,
                                     $messageThreadId
                         );
-                        array_push($data["notifications"], $jsonNotication );
+                        array_push($data["notifications"], $jsonNotication );                            
+                           
                     }
                 }
 

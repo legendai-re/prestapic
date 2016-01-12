@@ -307,7 +307,11 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
         $('html').click(function() {                
             closeAll();                
         });
-
+        
+        $('#buttonCloseMessage').click(function(event){
+            closeAll();
+        });
+        
         $('.stopPropagation').click(function(event){
             event.stopPropagation();
         });

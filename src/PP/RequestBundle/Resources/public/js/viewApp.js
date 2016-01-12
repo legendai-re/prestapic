@@ -240,7 +240,7 @@ containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$
                 then(function(response){                    
                     $scope.commentThread = response.data;
                     for(var i=0; i<response.data.comments.length; i++){
-                        $scope.commentList.push(response.data.comments[i]);
+                        $scope.commentList.unshift(response.data.comments[i]);
                     }
                     $scope.currentUser = response.data.currentUser;
                 },function(response) {

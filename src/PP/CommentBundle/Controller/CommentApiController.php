@@ -29,6 +29,11 @@ use PP\CommentBundle\JsonModel\JsonCommentModel;
 use PP\CommentBundle\JsonModel\JsonCommentThreadModel;
 use PP\UserBundle\JsonModel\JsonUserModel;
 
+use PP\NotificationBundle\Entity\Notification;
+use PP\NotificationBundle\Entity\NotificationComment;
+use PP\NotificationBundle\Constant\NotificationType;
+use PP\NotificationBundle\JsonNotificationModel\JsonNotification;
+
 class CommentApiController extends Controller
 {
 
@@ -103,7 +108,7 @@ class CommentApiController extends Controller
             $imageRequest = $imageRequestRepository->find($requestId);         
             $currentUser = $this->getUser();
             
-            if($imageRequest!=null && !in_array($currentUser, $imageRequest->getAuthor()->getBlockedUsers()->toArray())){
+            if($imageRequest!=null && !in_array($currentUser, $imageRequest->getAuthor()->getBlockedUsers()->toArray())&& $imageRequest->getAuthor() != $currentUser){
                 $commentThread = $imageRequest->getCommentThread();
                 $comment = new Comment();
                 $comment->setAuthor($currentUser);
@@ -113,6 +118,47 @@ class CommentApiController extends Controller
                 $em->persist($commentThread);
                 $em->persist($comment);
                 $em->flush();
+                
+                
+                 if($imageRequest->getAuthor()->getNotificationEnabled()){
+                        /* create notification */
+                        $pageProfileNotifThread = $imageRequest->getAuthor()->getNotificationThread();
+                        $notification = new Notification(NotificationType::COMMENT);
+                        $pageProfileNotifThread->addNotification($notification);
+                        $imageRequest->getAuthor()->incrementNotificationsNb();
+                        $em->persist($pageProfileNotifThread);
+                        $em->persist($currentUser);
+                        $em->flush();
+
+                        $notificationComment = new NotificationComment($notification->getId());
+                        $notificationComment->setNotificationBase($notification);
+                        $notificationComment->setImageRequest($imageRequest);
+                        $notificationComment->setComment($comment);
+                        $em->persist($notificationComment);
+                        $em->flush();
+
+                        /* send notification */
+                        $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
+
+                        $faye = $this->container->get('pp_notification.faye.client');                    
+                        $channel = '/notification/'.$pageProfileNotifThread->getSlug();                    
+                        $jsonNotication = new JsonNotification(
+                                NotificationType::COMMENT,
+                                false,
+                                false,
+                                $notification->getCreateDate(),
+                                $this->container->get('pp_notification.ago')->ago($notification->getCreateDate()),
+                                $this->generateUrl('pp_request_view', array('slug' => $imageRequest->getSlug())),
+                                $setClickedUrl,
+                                $currentUser->getId(),
+                                $currentUser->getName(),
+                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'. $currentUser->getProfilImage()->getWebPath("70x70"),
+                                $imageRequest->getTitle()  
+                        );
+                        $data = array('notification' => $jsonNotication);                    
+                        $faye->send($channel, $data);
+                    }
+                
                 $response->setStatusCode(Response::HTTP_OK);
             }
             else {$response->setStatusCode(Response::HTTP_FORBIDDEN);}

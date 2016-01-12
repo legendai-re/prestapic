@@ -70,6 +70,14 @@
                                             <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
                                         </div>
                                         
+                                        <!-- proposition comment -->
+                                        <div class="desc" ng-if="notification.type==5">
+                                            <b>{{ notification.authorName }}</b>
+                                            post a comment on
+                                            <b>{{ notification.targetTitle }}</b>
+                                            <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
+                                        </div>
+                                        
                                         <span ng-if="notification.isClicked"class="dot visited"></span>
                                         <span ng-if="notification.isViewed && !notification.isClicked" class="dot seen" ></span>
                                         <span ng-if="!notification.isViewed && !notification.isClicked" class="dot new" ></span></span>

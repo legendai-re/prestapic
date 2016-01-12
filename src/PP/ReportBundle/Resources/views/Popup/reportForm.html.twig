@@ -2,28 +2,33 @@
     <base href=" " />
     {{ form(reportTicketForm) }}
     <div class="box-container report">
-        <div class="box-content">
-            <div class="box-top">
-                Report a Policy violation
-                <button ng-click="report.close()" class="button-close">×</button>
-            </div>
-            <div class="box-text">
-                Please select the Type of Violation you feel best represents the submission.
-            </div>
-            <form ng-submit="report.postReport()">
-                <div class="box-choice">                    
-                    <select ng-model="report.reportData.reasonId">
-                        <option value="default" disabled>Choose a report reason</option>
-                    {% for reason in reportReasons %}
-                        <option value="{{ reason.id }}">{{ reason.name }}</option>
-                    {% endfor %}
-                    </select>                
-                    <textarea ng-model="report.reportData.details" placeholder="More details..."></textarea>
+        <div class="box-content" >
+           
+                <div class="box-top">
+                    Report a Policy violation
+                    <button ng-click="report.close()" class="button-close">×</button>
                 </div>
-                <div class="box-bottom">
-                    <input class="button" type="submit" value="Send Report">
+            <div id="reportContainer">
+                <div class="box-text">
+                    Please select the Type of Violation you feel best represents the submission.
                 </div>
-            </form>
-        </div>
+                <form ng-submit="report.postReport()">
+                    <div class="box-choice">                    
+                        <select required ng-model="report.reportData.reasonId">
+                            <option value="default" disabled>Choose a report reason</option>
+                        {% for reason in reportReasons %}
+                            <option value="{{ reason.id }}">{{ reason.name }}</option>
+                        {% endfor %}
+                        </select>                
+                        <textarea ng-model="report.reportData.details" placeholder="More details..."></textarea>
+                    </div>
+                    <div class="box-bottom">
+                        <input class="button" type="submit" value="Send Report">
+                    </div>
+                </form>
+            </div>
+            <div id="reportContainerAfter">
+            </div>
+        </div>        
     </div>
 </section>

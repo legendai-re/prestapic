@@ -18,7 +18,8 @@ class CommentRepository extends \Doctrine\ORM\EntityRepository
                         ->leftJoin('c.author', 'cA')
                         ->addSelect('cA')                        
                         ->where('ct.id = :id')
-                        ->setParameter('id', $id);
+                        ->setParameter('id', $id)
+                        ->orderBy('c.createdDate', 'DESC')                                
         ;
         
         $qb = $qb

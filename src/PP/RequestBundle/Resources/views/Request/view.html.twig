@@ -72,12 +72,9 @@
         
              {# edit request form #}
         {% if isAuthor == true %}
-                {{ form_start(getEditForm)}}
-
-                {{ form_end(getEditForm)}}
+                {{ form(getEditForm)}}              
                 <input type="submit" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" />
-        {% endif %}         
-
+        {% endif %}
 
         {# report and delete image request form #}
         {% if is_granted("ROLE_USER") %}

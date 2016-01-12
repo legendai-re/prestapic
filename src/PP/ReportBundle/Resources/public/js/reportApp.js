@@ -54,6 +54,8 @@ reportPopupApp.controller('reportController', ['$scope', '$rootScope', '$http', 
     
     // send report //
     this.postReport = function(){
+        $('#reportContainer').html("");
+        $('#reportContainerAfter').html("Thanks, your report has been sent");
         this.reportData.ticketType = ticketType;
         this.reportData.targetId = targetId;
         console.log(this.reportData);

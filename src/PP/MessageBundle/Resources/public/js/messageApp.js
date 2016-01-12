@@ -1,3 +1,4 @@
+var isInSearch = false;
 var appLoaded = false;
 var readyForMessage = true;
 
@@ -96,6 +97,9 @@ messageApp.controller('searchController',[ '$scope', '$rootScope', '$http',  fun
         };
                 
         this.getThread = function(user){
+            $('#inboxBlock').css("display", "block");
+            $('#searchBlock').css("display", "none");
+            isInSearch = false;
             var thread ={                
                 target: user
             }
@@ -128,16 +132,19 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                             thread = $rootScope.currentUser.threadList[threadId];                            
                             threadFounded = true;  
                             $scope.currentThread = thread;
+                            $rootScope.currentUser.selectedThreadId = thread.id;
                             break;
                         }  
                     }                                    
                     if(!threadFounded){                        
                         $scope.currentThread = thread;
+                        $rootScope.currentUser.selectedThreadId = thread.id;
                     }     
                 }                
                 if(threadFounded){
                     if(!$rootScope.currentUser.threadList[thread.id].haveReceiveMessage && ($rootScope.currentUser.threadList[thread.id] == null || $rootScope.currentUser.threadList[thread.id].messageList.length > 0)){
-                        $scope.currentThread = thread;
+                        $scope.currentThread = thread;  
+                        $rootScope.currentUser.selectedThreadId = thread.id;
                     }else if(threadFounded){
                         // load from inbox
                         // GET CONVERSATION //
@@ -145,7 +152,8 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                         readyForMessage = false;
                         $http.get($rootScope.currentUser.getConversationApiUrl+'?threadId='+thread.id+"&page=1").
                             then(function(response){
-                                $scope.currentThread = thread;                               
+                                $scope.currentThread = thread;
+                                $rootScope.currentUser.selectedThreadId = thread.id;
                                 // if the current message thread had new messages, set them viewed                                               
                                 $rootScope.currentUser.threadList[thread.id].haveNewMessage = false;                                                                                                                                                                     
                                 $rootScope.currentUser.threadList[thread.id].messageList = response.data.messages;                                                            
@@ -190,7 +198,7 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                                       
         /* send message */
         
-        var sendMessage = function(){            
+        var sendMessage = function(){
             if($scope.messageContent){
                 myData = {
                     threadId: $scope.currentThread.id,
@@ -219,6 +227,7 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                             // if it's the first message with this person, thread have been created so handle it and add it to inbox 
                             if($scope.currentThread.id == null){
                                 $scope.currentThread = response.data.newThread;
+                                $rootScope.currentUser.selectedThreadId = $scope.currentThread.id;
                                 if($rootScope.currentUser.threadList[response.data.newThread.id]==null)$rootScope.currentUser.threadList[response.data.newThread.id] = response.data.newThread;                                
                             }
                        }, function(response) {
@@ -262,9 +271,6 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
         
 }]);
 
-
-
-var isInSearch = false;
 
 $('#searchButton').click(function(){
     if(!isInSearch){
