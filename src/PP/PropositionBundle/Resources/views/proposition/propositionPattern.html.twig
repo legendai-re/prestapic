@@ -19,11 +19,17 @@
             </div>                             
             <div class="actions">               
                 <a id="propositionUpvoteButton_{{ proposition.id }}"  href="" title="Up vote"
-                    {% if canUpvoteProposition[proposition.id] == true %}
-                        ng-click="propositions.postPropositionVote({{ proposition.id }})"
-                        class="count-vote"
+                    {% if  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        {% if app.user.id == proposition.author.id %}
+                            class="count-vote blocked"
+                        {% elseif canUpvoteProposition[proposition.id] == true %}
+                            ng-click="propositions.postPropositionVote({{ proposition.id }})"
+                            class="count-vote"
+                        {% else %}
+                            class="count-vote voted"
+                        {% endif %}
                     {% else %}
-                        class="count-vote voted"
+                        class="count-vote blocked"
                     {% endif %}
                     >
                     {{ proposition.upvote }}

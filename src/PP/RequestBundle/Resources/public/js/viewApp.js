@@ -84,6 +84,7 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
                     }
                 );
         };
+                
 }]);
 
 containerApp.controller('propositionsController', ['$scope', '$http', '$compile', '$window', '$location', function ($scope, $http, $compile, $window, $location) {                                                                                                 

@@ -97,7 +97,7 @@
             <div class="prop">
               <img src="{{ asset(acceptedProposition.image.webPath("original")) }}" alt="{{ acceptedProposition.title }}">
             </div>
-            <a title="{{ acceptedProposition.title }}" class="overlay" href="{{ asset(acceptedProposition.image.webPath("selected"))}}" title=""></a>
+            <a ng-click="propositions.showPopup({{ acceptedProposition.id }})" title="{{ acceptedProposition.title }}" class="overlay" href="" title=""></a>
             <a class="selecting-prop selected" href="#" title="Select this picture">Selected picture</a>
             <div class="img-title">
                 <a href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" class="avatar">
