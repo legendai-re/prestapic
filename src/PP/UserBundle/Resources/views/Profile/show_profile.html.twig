@@ -40,22 +40,16 @@
                             {% if is_granted("ROLE_ADMIN") %}
                                 {{ form(setModeratorForm) }}
                             {% endif %}
-                            <a id="followButton" class="button green " ng-click="profile.patchFollow()" >
-                                {% if isFollowing == true %}
-                                    Unfollow
-                                {% else %}
-                                    Follow
-                                {% endif %}
-                            </a>
+                            <a id="followButton" class="button green " ng-click="profile.patchFollow()" >{% if isFollowing == true %}Unfollow{% else %}Follow{% endif %}</a>
                         {% endif %}
                     {% endif %}                                                                                                                
 
                     {% if isHownProfile == false %}
                         {% if is_granted('ROLE_USER') %}
 
-                        <div class="dropdown-container profile-options">
-                            <a class="button"></a>
-                            <ul class="dropdown-choices" id="contentToDisplayFilters">
+                        <div class="dropdown-container profile-options stopPropagation">
+                            <a ng-click="profile.showProfileOptions()" class="button"></a>
+                            <ul class="dropdown-choices" id="profileOptions" style="display: none;">
                                 <li class="dropdown-cat">
                                     <a id="blockButton" class="dropdown-choice" ng-click="profile.patchBlock({{ pageProfile.id }})" >
                                         {% if isBlocked == true %}Unblock{% else %}Block{% endif %}
@@ -68,13 +62,11 @@
                                 {% if is_granted("ROLE_ADMIN") %}
                                 <li class="dropdown-cat">
                                     <div class="dropdown-cat-title">Moderator commands</div>
-                                    <a id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">
-                                        {% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}
-                                    </a>
+                                    <a id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
                                 </li>
                                 {% endif %}
-                        </ul>
-                    </div>
+                            </ul>
+                        </div>
 
                     {% endif %}
                 {% endif %}
@@ -99,14 +91,14 @@
     </section>
     
     {# display galery #}
-    <section class="profile-galery">        
+    <section class="profile-galery" ng-controller="galleryController as gallery">        
         <div class="content">
             <a target="_self" href="{{ path('pp_user_gallery', {'slug':pageProfile.slug})}}"><h1>Gallery ({{ galleryImagesNb }} picture{% if galleryImagesNb > 0 %}s{% endif %})</h1></a>
             {% set break = false %}
             <ul>
             {% for proposition in galleryImages if not break %}
                 <li>
-                    <a target="_self" href="{{ path('pp_request_view', {'slug':proposition.imageRequest.slug}) }}"><img src="{{ asset(proposition.image.webPath("single")) }}" alt="{{ proposition.image.alt }}"></a>                    
+                    <a ng-click="gallery.showPopup({{ proposition.id }})" ng-href="{{ asset(proposition.image.webPath("original")) }}"><img src="{{ asset(proposition.image.webPath("single")) }}" alt="{{ proposition.image.alt }}"></a>                    
                 </li>
                {% if loop.index >= 4  %}{% set break = true %}{% endif %}
                {% if loop.index >= 3 and galleryImagesNb > 4 %}{% set break = true %}{% endif %}

@@ -26,7 +26,20 @@
     }])
 
     containerApp.controller('profileController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
-
+            
+            
+            this.showProfileOptions = function(){
+                 if($("#profileOptions").css("display") == "block"){
+                     $('#profileOptions').css("display", "none");
+                 }else{
+                     $('#profileOptions').css("display", "block");
+                 }
+            }
+            
+            $('html').click(function() {                
+                $('#profileOptions').css("display", "none");          
+            });
+            
             function handleProfileFileSelect(evt) {
                     console.log(evt.target);
                     var files = evt.target.files; // FileList object
@@ -71,31 +84,34 @@
                 }
             }
             
-            
-            this.patchFollow = function(){                
-                var formAction = document.forms["pp_user_api_patch_user_follow_form"].action;
-                
-                var myData = {};
-                
-                $http({
-                    method: 'PATCH',
-                    url: formAction,                    
-                    data: JSON.stringify(myData)
-                 }). 
-                    then(function(response) {
-                        var jsonResponse = JSON.parse(response.data);                            
-                        document.getElementById('followButton').innerHTML = jsonResponse.newValue;
-                    }, function(response) {
-                     console.log("Request failed : "+response.statusText );                        
-                    }
-                );   
+            var canFollow = true;
+            this.patchFollow = function(){
+                if(canFollow){
+                    canFollow = false;
+                    if($("#followButton").html() == "Follow")$("#followButton").html("Unfollow")
+                    else $("#followButton").html("Follow")
+                    var formAction = document.forms["pp_user_api_patch_user_follow_form"].action;
+                    var myData = {};                    
+                    $http({
+                        method: 'PATCH',
+                        url: formAction,                    
+                        data: JSON.stringify(myData)
+                     }). 
+                        then(function(response) {
+                            canFollow = true;                            
+                        }, function(response) {
+                            console.log("Request failed : "+response.statusText );
+                            canFollow = true; 
+                        }
+                    );
+                }
             }
             
             var canBlock = true;
             this.patchBlock = function(id){                
                 if(canBlock){                   
-                    if($("#blockButton").html() == "block")$("#blockButton").html("unblock")
-                    else $("#blockButton").html("block")
+                    if($("#blockButton").html() == "Block")$("#blockButton").html("Unblock")
+                    else $("#blockButton").html("Block")
                     
                     canBlock = false;
                     var formAction = document.forms["pp_user_api_patch_blocked_form"].action;
@@ -122,7 +138,7 @@
             this.patchModerator = function(id){
                 canPatchModerator = false;
                 if($("#setModeratorButton").html() == "Set moderator"){
-                    $("#setModeratorButton").html("unset moderator");
+                    $("#setModeratorButton").html("Unset moderator");
                 }else{
                      $("#setModeratorButton").html("Set moderator");
                 }
@@ -264,3 +280,14 @@
                        
     }]);
     
+    containerApp.controller('galleryController', ['$rootScope', '$scope', '$http', '$compile', '$location', '$window', function ($rootScope, $scope, $http, $compile, $location, $window) {
+        
+        this.showPopup = function(id){
+            var message = {
+                id: id,
+                url: $rootScope.currentPath
+            }
+            angular.element(document.getElementById('popupPropApp')).scope().$emit('showPopup', message);                                                
+        };
+        
+    }]);
