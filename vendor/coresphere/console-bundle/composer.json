@@ -1,0 +1,36 @@
+{
+    "name": "coresphere/console-bundle",
+    "description": "This bundle allows you accessing the symfony2 console via your browser",
+    "keywords": ["console","javascript","symfony"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Laszlo Korte",
+            "email": "coresphere@laszlokorte.de"
+        },
+        {
+            "name": "Marmus Ullman",
+            "email": "mail@markus-ullmann.de"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "symfony/console": "~2.7|~3.0",
+        "symfony/dependency-injection": "~2.7|~3.0",
+        "symfony/event-dispatcher": "~2.7|~3.0",
+        "symfony/framework-bundle": "~2.7|~3.0",
+        "symfony/http-kernel": "~2.7|~3.0"
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^2.2",
+        "doctrine/doctrine-migrations-bundle": "^1.0",
+        "phpunit/phpunit": "^4.8",
+        "symfony/finder": "^2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "CoreSphere\\ConsoleBundle\\": "."
+        }
+    }
+}
