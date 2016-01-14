@@ -1,3 +1,0 @@
-pp_notification_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: PPNotificationBundle:Default:index }

@@ -11,22 +11,16 @@
 
 namespace PP\CommentBundle\Controller;
 
-use FOS\RestBundle\View\View;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-
-use PP\RequestBundle\Entity\ImageRequest;
-use PP\RequestBundle\Constant\Constants;
-use PP\RequestBundle\Form\Type\ImageRequestType;
 
 use PP\CommentBundle\Entity\Comment;
-
 use PP\CommentBundle\JsonModel\JsonCommentModel;
 use PP\CommentBundle\JsonModel\JsonCommentThreadModel;
+
 use PP\UserBundle\JsonModel\JsonUserModel;
 
 use PP\NotificationBundle\Entity\Notification;

@@ -11,31 +11,12 @@
 
 namespace PP\NotificationBundle\Controller;
 
-
-use FOS\RestBundle\Util\Codes;
-use FOS\RestBundle\View\RouteRedirectView;
-use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use PP\RequestBundle\Form\Type\ImageRequestType;
-use PP\RequestBundle\Entity\ImageRequest;
-use PP\PropositionBundle\Form\Type\PropositionType;
-use PP\PropositionBundle\Entity\Proposition;
-use Symfony\Component\Validator\Constraints\DateTime;
-use PP\RequestBundle\Constant\Constants;
 use PP\NotificationBundle\Constant\Notification;
-use PP\NotificationBundle\Entity\NotificationFollow;
-use PP\NotificationBundle\Entity\NotificationComment;
-use PP\NotificationBundle\JsonNotificationModel\JsonNotificationFollow;
-use PP\NotificationBundle\JsonNotificationModel\JsonNotificationNewProposition;
-use PP\NotificationBundle\JsonNotificationModel\JsonNotificationSelected;
 use PP\NotificationBundle\JsonNotificationModel\JsonNotification;
 
 use PP\NotificationBundle\Constant\NotificationType;

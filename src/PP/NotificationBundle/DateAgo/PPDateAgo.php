@@ -24,7 +24,7 @@ class PPDateAgo {
                 if ( $v = $interval->y >= 1 ) return $this->pluralize( $interval->y, 'year' ) . $suffix;
                 if ( $v = $interval->m >= 1 ) return $datetime->format('M d');
                 if ( $v = $interval->d > 1 )  return $datetime->format('M d');
-                if ( $v = $interval->d == 1 ) return 'yesterday at '.$datetime->format('H:m');
+                if ( $v = $interval->d == 1 ) return 'yesterday';
                 if ( $v = $interval->h >= 1 ) return $this->pluralize( $interval->h, 'hour' ) . $suffix;
                 if ( $v = $interval->i >= 1 ) return $this->pluralize( $interval->i, 'minute' ) . $suffix;
                 return 'now';

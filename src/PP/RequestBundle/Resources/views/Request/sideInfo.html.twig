@@ -16,10 +16,10 @@
     <ul class="users">
         {% for user in activeUsers %}    
             <li class="user">
-                <a target="_self" href="{{ path('pp_user_profile', {'slug': user[0].slug}) }}" class="avatar">
-                    <img src="{{ asset(user[0].profilImage.webPath("70x70")) }}" alt="{{ user[0].profilImage.alt }}">                    
+                <a target="_self" href="{{ path('pp_user_profile', {'slug': user.user.slug}) }}" class="avatar">
+                    <img src="{{ asset(user.user.profilImage.webPath("70x70")) }}" alt="{{ user.user.profilImage.alt }}">                    
                 </a>
-                <a target="_self" class="username" href="{{ path('pp_user_profile', {'slug': user[0].slug}) }}" title="" >{{ user[0].name }}</a>
+                <a target="_self" class="username" href="{{ path('pp_user_profile', {'slug': user.user.slug}) }}" title="" >{{ user.user.name }}</a>
             </li>
         {% endfor %}
     </ul>
@@ -30,11 +30,11 @@
     <ul class="subjects">
         {% for imageRequest in imageRequests %}    
             <li class="subject">
-                <a target="_self" class="title" href="{{ path('pp_request_view', {'slug': imageRequest.slug}) }}" title="">{{ imageRequest.title }}</a>
+                <a target="_self" class="title" href="{{ path('pp_request_view', {'slug': imageRequest.imageRequest.slug}) }}" title="">{{ imageRequest.imageRequest.title }}</a>
                 <span class="author">
                     par
-                    <a target="_self" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}" title="">{{ imageRequest.author.name }}</a>
-                    {{ imageRequest.upvote }} upvotes
+                    <a target="_self" href="{{ path('pp_user_profile', {'slug': imageRequest.imageRequest.author.slug}) }}" title="">{{ imageRequest.imageRequest.author.name }}</a>
+                    {{ imageRequest.imageRequest.upvote }} upvotes
                 </span>
             </li>
         {% endfor %}

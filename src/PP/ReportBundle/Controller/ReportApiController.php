@@ -7,16 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-use PP\RequestBundle\Constant\Constants;
 use PP\ReportBundle\Constant\ReportTicketType;
 
 use PP\ReportBundle\Entity\DisableTicket;
 use PP\ReportBundle\Entity\ReportTicket;
-use PP\ReportBundle\Entity\ReportReason;
 
 class ReportApiController extends Controller
 {
