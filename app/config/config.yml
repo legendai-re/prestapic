@@ -95,6 +95,16 @@ fos_user:
     db_driver:     orm
     firewall_name: main
     user_class:    PP\UserBundle\Entity\User
+    service:
+        mailer: fos_user.mailer.twig_swift
+    registration:                  
+        confirmation:
+            from_email:
+                address:        accounts@prestapic.com
+                sender_name:    Prestapic
+            enabled: true
+            template: FOSUserBundle:Registration:email.txt.twig
+            
 
    
 

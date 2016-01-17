@@ -9,4 +9,7 @@
 /web/bundles/
 /web/js/
 /web/css/
+/vendor/
+/bin/
+/web/uploads/
 .DS_Store
