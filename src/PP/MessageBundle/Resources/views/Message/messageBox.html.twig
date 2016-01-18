@@ -5,7 +5,7 @@
         <div class="message-top">
             <div class="inbox-top">
                 Inbox
-            <a id="searchButton" class="new-message" href=""></a>
+                <a class="button new-message" id="searchButton" href="">New PM</a>
             </div>
             <div class="chat-top">
                   <div class="chat-name" id="chatTitle"></div>
@@ -26,7 +26,11 @@
                             </div>
                             <div class="desc">
                                 <div class="name">{{ thread.target.name }}</div>
-                                <div class="last-message"><span ng-if="thread.lastMessage.messageFromUs">You: </span>{{ thread.lastMessage.content | limitTo: 23 }}</div>
+                                <div class="last-message">
+                                    <span ng-if="thread.lastMessage.messageFromUs">You: </span>
+                                    {{ thread.lastMessage.content | limitTo: 24 }}
+                                    <span ng-if="thread.lastMessage.content.length > 25">...</span>
+                                </div>
                                 <span class="dot new"></span>
                             </div>
                             <span ng-if="thread.haveNewMessage"></span>
@@ -35,15 +39,14 @@
                 </ul>                        
             </div>
 
-            <div id="searchBlock" ng-controller="searchController as search" style="display: none;  background: #fafafa; width: 300px; border-right: 1px solid #ccc; ">            
-                <h2>Search</h2>                        
+            <div id="searchBlock" ng-controller="searchController as search" class="search-box" style="display: none;">
                 <form action="{% endverbatim %}{{ path('pp_user_api_get_search_user') }}{% verbatim %}" name="pp_user_api_get_search_user_form">
-                    <input type="text" name="search" ng-model="search.search" ng-change="search.searchUser()"/>
+                    <input placeholder="Type an username here..." class="search-box-input" type="text" name="search" ng-model="search.search" ng-change="search.searchUser()"/>
                 </form>                
                 <ul>
-                    <li ng-repeat="user in userSearchList" >
+                    <li ng-repeat="user in userSearchList" class="search-box-user">
                         <a href="" ng-click="search.getThread(user)">
-                            <img width="50" heigth="50" class="avatar" ng-src="{{ user.image }}" />{{ user.name }}
+                            <img class="avatar" ng-src="{{ user.image }}" />{{ user.name }}
                         </a>
                     </li>
                 </ul>
@@ -57,19 +60,15 @@
                             <div ng-if="message.messageFromUs" class="message me">
                                 <div class="message-content" ng-bind-html="message.content | linky ">
                                     {{ message.content }}
-                                </div>
-                                <div class="avatar" >
-                                    <img  ng-if="!currentUser.threadList[currentThread.id].messageList[$index+1].messageFromUs" ng-src="{{ currentUser.image }}">
-                                </div>                            
+                                </div>                         
                             </div>
 
                             <div ng-if="!message.messageFromUs" class="message">
                                 <div class="message-content" ng-bind-html="message.content | linky ">
                                     {{ message.content }}
                                 </div>
-                                <div class="avatar">
-                                    <img  ng-if="!currentUser.threadList[currentThread.id].messageList[$index+1]" ng-src="{{ message.author.image }}">
-                                    <img  ng-if="currentUser.threadList[currentThread.id].messageList[$index+1].messageFromUs" ng-src="{{ message.author.image }}">
+                                <div class="avatar" ng:class="{true:'avatar last', false:'avatar'}[!currentUser.threadList[currentThread.id].messageList[$index+1] || currentUser.threadList[currentThread.id].messageList[$index+1].messageFromUs]">
+                                    <img ng-src="{{ message.author.image }}">
                                 </div>
                             </div>
                         </div>

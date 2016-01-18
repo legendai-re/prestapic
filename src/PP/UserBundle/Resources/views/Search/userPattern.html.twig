@@ -1,9 +1,33 @@
 
-<article>
-    <a target="_self" href="{{ path('pp_user_profile', {'slug': user.slug}) }}" class="avatar">
-        <img bn-lazy-src="{{ asset(user.profilImage.webPath("70x70")) }}" alt="{{ user.profilImage.alt }}">
-    </a>
-        <a target="_self" href="{{ path('pp_user_profile', {'slug': user.slug}) }}"><h2>{{ user.name }}</h2></a>
+<article class="profile-card">
+	<div class="profile-card-top">
+		<a href="{{ path('pp_user_profile', {'slug': user.slug}) }}" target="_self" class="profile-card-cover">
+			{% if user.coverImage != null %}
+				<div class="banner" style="background-image: url({{ asset(user.coverImage.webPath("1500x500")) }})"></div>
+				<div class="overlay"></div>
+			{% endif %}
+		</a>
+	</div>
+	<div class="profile-card-bottom">
+		<a href="{{ path('pp_user_profile', {'slug': user.slug}) }}" target="_self" class="avatar">
+			<img bn-lazy-src="{{ asset(user.profilImage.webPath("70x70")) }}" alt="{{ user.profilImage.alt }}"/>
+		</a>
+		<div class="profile-card-infos">
+			<div class="username">
+				<a href="{{ path('pp_user_profile', {'slug': user.slug}) }}" target="_self">
+					{{ user.name }}
+				</a>
+			</div>
+			<div class="screenname">
+				<a href="{{ path('pp_user_profile', {'slug': user.slug}) }}" target="_self">
+					@{{ user.name }}
+				</a>
+			</div>
+		</div>
+		<div class="profile-card-bio">
+			{{ user.description }}
+		</div>
+	</div>
 </article>
    
     

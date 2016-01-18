@@ -75,8 +75,8 @@
                       reader.onload = (function(theFile) {
                         return function(e) {
                           var div = document.getElementById('coverImageContainer');
-                          div.innerHTML = ['<img src="', e.target.result,
-                                            '" title="', escape(theFile.name), '"/>'].join('');                          
+                          div.innerHTML = ['<div class="cover-upload" style="background-image: url(', e.target.result,
+                                            ')"></div>'].join('');                          
                           
                         };
                       })(f);
@@ -181,7 +181,7 @@
                 }else{
                     showEditProfile();
                 }
-            }            
+            }
             
             this.showReportPopup = function(id, type){                
                 var message = {

@@ -2,15 +2,17 @@
 <form action="{{ path('pp_user_edit')}}" {{ form_enctype(editUserForm) }} method="POST" class="editProfileForm" >
 
     {{ form_errors(editUserForm) }}
-    {{ form_row(editUserForm.coverImage) }}
-    <div class="banner">
-        <div id="coverImageContainer">
-        {% if currentUser.coverImage != null %}
-            <img src="{{ asset(currentUser.coverImage.webPath("1500x500")) }}" alt="{{ currentUser.coverImage.alt }}">
-        {% endif %}
+
+    <div class="profile-cover">
+        <div class="edit-cover">
+            {{ form_row(editUserForm.coverImage) }}
         </div>
-        <div class="overlay"></div>
+        {% if currentUser.coverImage != null %}
+            <div class="banner" style="background-image: url({{ asset(currentUser.coverImage.webPath("1500x500")) }})"></div>
+            <div class="overlay"></div> 
+        {% endif %}
     </div>
+    <div class="cover-image-container" id="coverImageContainer"></div>
 
     <div class="profile-details">
         <div class="avatar">

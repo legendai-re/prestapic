@@ -1,30 +1,175 @@
 @import ../../../../../AppBundle/Resources/public/css/init.sass
 
+article.profile-card
+	background: white
+	width: 380px
+	height: 225px
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+	overflow: hidden
+	border-radius: 3px
+	display: block
+	float: left
+	margin-bottom: 10px
+
+	&:nth-child(odd)
+		margin-right: 10px
+
+	.profile-card-top
+		background: $main-color
+		width: 100%
+		height: 70px
+
+		a.profile-card-cover
+			width: 100%
+			height: 70px
+			position: relative
+			display: block
+
+			.banner
+				background-position: center bottom
+				background-repeat: no-repeat
+				background-size: cover
+				position: absolute
+				width: 100%
+				height: 100%
+				top: 0
+				z-index: 0
+
+			.overlay
+				width: 100%
+				height: 100%
+				background: rgba(0,0,0,.25)
+				position: absolute
+				top: 0
+				z-index: 1
+
+	.profile-card-bottom
+		text-align: center
+		padding: 0 20px 20px
+		position: relative
+		z-index: 2
+
+		a.avatar
+			width: 70px
+			height: 70px
+			margin: -50px auto 0
+			border: 1px solid white
+
+		.profile-card-infos
+			margin: 10px 0
+
+			.username
+				display: block
+				line-height: 22px
+
+				a
+					font-size: 18px
+					line-height: 18px
+					font-weight: 700
+
+					&:hover
+						text-decoration: underline
+
+			.screenname
+				display: block
+				line-height: 14px
+
+				a
+					color: #777
+					font-size: 14px
+					line-height: 14px
+
+					&:hover
+						text-decoration: underline
+
+		.profile-card-bio
+			color: #777
+			font-size: 14px
+
 section.profile
 	position: relative
 	width: 100%
-	height: 470px
+	height: auto
 
-	.banner
+	.profile-cover
+		background: $main-color
 		position: absolute
-		background: #999
 		width: 100%
-		height: 470px
+		height: 100%
 		overflow: hidden
 
-		img
-			width: 100%
+		.banner
+			background-position: center center
+			background-repeat: no-repeat
+			background-size: cover
 			position: absolute
-			left: 0
-			right: 0
-			top: -9999px
-			bottom: -9999px
-			margin: auto 0
+			width: 100%
+			height: 100%
+			top: 0
+			z-index: 0
 
 		.overlay
 			width: 100%
-			height: 470px
-			background: rgba(0,0,0,.5)
+			height: 100%
+			background: rgba(0,0,0,.25)
+			position: absolute
+			top: 0
+			z-index: 0
+
+		.edit-cover
+			position: absolute
+			z-index: 1
+			width: 100%
+			height: 100%
+			border: 5px solid transparent
+
+			&:before
+				position: absolute
+				top: 15px
+				left: 15px
+				font-family: "pp-font"
+				content: $icon-upload
+				color: white
+				font-size: 15px
+				z-index: 1
+
+			&:hover
+				background: rgba(0,0,0,.25)
+				border: 5px solid $main-color
+
+			label
+				display: none
+
+			input
+				position: absolute
+				z-index: 2
+				margin: 0
+				padding: 0
+				width: 100%
+				height: 100%
+				outline: none
+				top: 0
+				left: 0
+				opacity: 0
+				cursor: pointer
+
+	.cover-image-container
+		z-index: 0
+
+		.cover-upload
+			background-position: center center
+			background-repeat: no-repeat
+			background-size: cover
+			position: absolute
+			width: 100%
+			height: 100%
+			top: 0
+			z-index: 0
+
+		.overlay
+			width: 100%
+			height: 100%
+			background: rgba(0,0,0,.25)
 			position: absolute
 			top: 0
 			z-index: 1
@@ -39,11 +184,12 @@ section.profile
 		color: white
 		text-align: center
 
-		input[type="text"]
+		input[type="text"], textarea
 			background: transparent
 			width: 100%
 			border: none
 			text-align: center
+			resize: none
 
 		.avatar
 			width: 100px

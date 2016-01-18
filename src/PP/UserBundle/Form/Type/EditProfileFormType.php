@@ -47,7 +47,7 @@ class EditProfileFormType extends AbstractType
                 'required'  => false,
                 'data'      => $this->user->getCoverImage()
                 ))
-            ->add('description',     'text',array(
+            ->add('description',     'textarea',array(
                 'label'     => false,
                 'required'  => false,
                 'data'      => $this->user->getDescription()

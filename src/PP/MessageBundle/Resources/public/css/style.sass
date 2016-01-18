@@ -65,28 +65,13 @@ section.overlay-messages
 					font-weight: 600
 					font-size: 18px
 
-					a.new-message
-						position: absolute
-						top: 8px
-						right: 8px
+					a.button
+						padding: 5px 8px
 
-						&:before
-							display: block
-							width: 18px
-							height: 18px
-							padding: 5px
-							text-align: center
-							font-family: "pp-font"
-							speak: none
-							font-size: 18px
-							font-style: normal
-							font-weight: normal
-							font-variant: normal
-							text-transform: none
-							line-height: 1
-							-webkit-font-smoothing: antialiased
-							-moz-osx-font-smoothing: grayscale
-							content: $icon-new
+						&.new-message
+							position: absolute
+							top: 8px
+							right: 8px
 
 				.chat-top
 					width: 600px
@@ -174,6 +159,43 @@ section.overlay-messages
 										font-size: 15px
 										color: #777
 
+				.search-box
+					background: #fafafa
+					width: 300px
+					border-right: 1px solid rgba(0,0,0,.1)
+
+					input.search-box-input
+						width: 100%
+						padding: 15px
+						border: none
+						border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+
+					ul
+						li.search-box-user
+							border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+
+							&:last-child
+								border-bottom: none
+
+							&:hover
+								border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+
+							a
+								padding: 15px
+								display: block
+								line-height: 46px
+
+								&:hover
+									background: rgba(0, 0, 0, 0.03)
+
+								.avatar
+									float: left
+									width: 46px
+									height: 46px
+									margin-right: 10px
+
+
+
 				.chat-container
 					background: white
 					width: 600px
@@ -236,30 +258,7 @@ section.overlay-messages
 									position: relative
 									margin-left: 5px
 									justify-content: flex-start
-									
-									&:before
-										top: auto
-										bottom: 6px
-
-										border-style: solid
-										border-width: 5px
-										content: ""
-										display: block
-										position: absolute
-										height: 0
-										width: 0
-										border-color: #ededed
-									
-										border-left-width: 0!important
-										//border-left-width: 5px!important
-										border-bottom-color: transparent!important
-										border-left-color: transparent!important
-										border-top-color: transparent!important
-										left: -10px
-										top: auto
-										-webkit-transform: translateX(100%) translateY(-50%)
-										-ms-transform: translateX(100%) translateY(-50%)
-										transform: translateX(100%) translateY(-50%)
+									word-wrap: break-word
 
 								&.me
 									float: right
@@ -271,28 +270,27 @@ section.overlay-messages
 										color: white
 										margin-left: 0
 										margin-right: 5px
-										
-										&:before
-											border-color: $main-color
-											right: 0
-											left: initial
-											border-left-width: 5px!important
-											border-left-color: $main-color!important
-											border-right-width: 0!important
-											border-right-color: transparent!important
 									
 									.avatar
+										opacity: 0
 										float: right
 										margin: 0 0 0 10px
 										order: 0
+
+										&.last
+											opacity: 1
 										
 								.avatar
+									opacity: 0
 									width: 40px
 									height: 40px
 									float: right
 									margin-right: 10px
 									align-self: flex-end
 									order: -1
+
+									&.last
+										opacity: 1
 
 									img
 										width: 40px
