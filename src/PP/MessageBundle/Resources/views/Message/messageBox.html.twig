@@ -28,8 +28,8 @@
                                 <div class="name">{{ thread.target.name }}</div>
                                 <div class="last-message">
                                     <span ng-if="thread.lastMessage.messageFromUs">You: </span>
-                                    {{ thread.lastMessage.content | limitTo: 24 }}
-                                    <span ng-if="thread.lastMessage.content.length > 25">...</span>
+                                    {{ thread.lastMessage.content | limitTo: 21 }}
+                                    <span ng-if="thread.lastMessage.content.length > 22">...</span>
                                 </div>
                                 <span class="dot new"></span>
                             </div>
@@ -41,7 +41,7 @@
 
             <div id="searchBlock" ng-controller="searchController as search" class="search-box" style="display: none;">
                 <form action="{% endverbatim %}{{ path('pp_user_api_get_search_user') }}{% verbatim %}" name="pp_user_api_get_search_user_form">
-                    <input placeholder="Type an username here..." class="search-box-input" type="text" name="search" ng-model="search.search" ng-change="search.searchUser()"/>
+                    <input autocomplete="off" placeholder="Type an username here..." class="search-box-input" type="text" name="search" ng-model="search.search" ng-change="search.searchUser()"/>
                 </form>                
                 <ul>
                     <li ng-repeat="user in userSearchList" class="search-box-user">
@@ -54,8 +54,14 @@
 
             <div ng-controller="chatController as chat" class="chat-container" >
                 <div id="conversation" class="chat-conversation">
-                    <div class="chat-scroller">
-                        <a href="" class="chat-more" ng-click="chat.loadMore()">load more</a>
+                    <div ng-show="!currentUser.threadList[currentThread.id].messageList.length && !firstMessage" class="chat-scroller" id="no_message">
+                        <h2>No message yet</h2>
+                    </div>
+                    <div class="chat-scroller" id="chat_scroller">                        
+                        <a href="" ng-if="currentUser.threadList[currentThread.id].messageList.length % 20 == 0" class="chat-more" ng-click="chat.loadMore()">load more</a>
+                        <div ng-if="firstMessage">
+                            You haven't talk with {{ currentThread.target.name }} yet !
+                        </div>
                         <div  ng-repeat="message in currentUser.threadList[currentThread.id].messageList" >
                             <div ng-if="message.messageFromUs" class="message me">
                                 <div class="message-content" ng-bind-html="message.content | linky ">
@@ -71,14 +77,19 @@
                                     <img ng-src="{{ message.author.image }}">
                                 </div>
                             </div>
-                        </div>
-                        <div ng-show="!currentUser.threadList[currentThread.id].messageList.length">No message yet</div>
+                        </div>                        
                     </div>
                 </div>
-                <div class="chat-composer">                    
+                <div ng-show="currentThread.id || firstMessage" id="chatComposer" class="chat-composer" style="overflow: hidden; padding: 0px; min-height: initial;">                    
                     <form>
-                        <textarea  id="chatTextArea" placeholder="Type your text here ..."  name="message_value" ng-model="messageContent"></textarea>
-                        <button type="submit" ng-click="chat.callSendMessage()">Send</button>
+                        <textarea row="1" style="height:1em;
+                                                align-self: flex-end;
+                                                overflow: hidden;
+                                                padding: 15px;
+                                                outline: none;    
+                                                resize: none;" 
+                    id="chatTextArea" placeholder="Type your text here ..."  name="message_value" ng-model="messageContent"></textarea>
+                        <button style="margin: 15px;" type="submit" ng-click="chat.callSendMessage()">Send</button>
                     </form>
                 </div>
             </div>

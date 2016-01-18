@@ -12,9 +12,63 @@ messageApp.service('FayeClient', function () {
             return new Faye.Client('http://alexandrejolly.com:3000/');
 });
 
+var observe;
+if (window.attachEvent) {
+    observe = function (element, event, handler) {
+        element.attachEvent('on'+event, handler);
+    };
+}
+else {
+    observe = function (element, event, handler) {
+        element.addEventListener(event, handler, false);
+    };
+}
 
 /* start app */
-messageApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeClient, $http) {            
+messageApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeClient, $http) {
+        
+    var text = document.getElementById('chatTextArea');
+    var chatComposer = document.getElementById('chatComposer');
+    function resize () {
+        text.style.height = 'auto';       
+        text.style.minHeight = (text.scrollHeight)+'px';
+        chatComposer.style.minHeight = (text.scrollHeight)+'px';
+        chatComposer.style.maxHeight = (text.scrollHeight)+'px';
+        if($('#chatTextArea').height() < 200){
+            text.style.maxHeight = (text.scrollHeight)+'px';
+        }else{
+            $('#chatTextArea').css("overflow", 'auto');
+            text.style.maxHeight = 199+'px';
+            text.style.minHeight = 199+'px';
+            chatComposer.style.minHeight = 199+'px';
+            chatComposer.style.maxHeight = 199+'px';
+            console.log("max");
+        }
+       
+        if($('#chatTextArea').val().length == 0){
+            text.style.minHeight = 70+'px';
+            text.style.maxHeight = 70+'px';  
+            chatComposer.style.minHeight = 70+'px';
+            chatComposer.style.maxHeight = 70+'px';
+        }
+        goDown();
+    }        
+    
+    /* 0-timeout to get the already changed text */
+    function delayedResize () {
+        window.setTimeout(resize, 0);
+    }
+    observe(text, 'change',  delayedResize);
+    observe(text, 'cut',     delayedResize);
+    observe(text, 'paste',   delayedResize);
+    observe(text, 'drop',    delayedResize);
+    observe(text, 'keydown', delayedResize);
+    
+    text.focus();
+    text.select();
+    resize();          
+    text.style.minHeight = '70px';
+    
     $rootScope.currentUser = {};
     var formAction = document.forms["pp_message_api_get_current_user_form"].action;                                
     var threadToLoad = null;
@@ -39,6 +93,14 @@ messageApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeCl
             if(threadToLoad!=null){
                 $rootScope.$emit('loadConversation', $rootScope.currentUser.threadList[threadToLoad.id]);
             }
+            
+            var firstThread = $rootScope.currentUser.threadList[Object.keys($rootScope.currentUser.threadList)[0]];            
+            if(firstThread){
+                $rootScope.$emit('loadConversation', firstThread);                
+            }else{
+                $("#no_message").css("display", "block");
+            }
+            
             $(".chat-conversation").scrollTop($(".chat-conversation").height());
             appLoaded = true;
         },function(response) {
@@ -109,15 +171,17 @@ messageApp.controller('searchController',[ '$scope', '$rootScope', '$http',  fun
            
 }]);
 
+var goDown = function(){
+    $('#conversation').scrollTop($('#conversation')[0].scrollHeight);
+};
+
 /* chat controller */
 messageApp.controller('chatController',['$scope', '$rootScope', '$http', function ( $scope, $rootScope, $http) {                           
             
             $scope.conversation = [];
             $scope.messageContent = null;                                  
             
-            var goDown = function(){
-                    $('#conversation').scrollTop($('#conversation')[0].scrollHeight);
-            };
+            
                 
             /* load new conversation */
             $rootScope.$on('loadConversation', function (event, thread) {                               
@@ -133,12 +197,14 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                             threadFounded = true;  
                             $scope.currentThread = thread;
                             $rootScope.currentUser.selectedThreadId = thread.id;
+                            $rootScope.firstMessage
                             break;
                         }  
                     }                                    
                     if(!threadFounded){                        
                         $scope.currentThread = thread;
                         $rootScope.currentUser.selectedThreadId = thread.id;
+                        $rootScope.firstMessage = true;                        
                     }     
                 }                
                 if(threadFounded){
@@ -198,24 +264,25 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                                       
         /* send message */
         
-        var sendMessage = function(){
-            if($scope.messageContent){
+        var sendMessage = function(messageText){
+            if(messageText){
                 myData = {
                     threadId: $scope.currentThread.id,
                     targetId: $scope.currentThread.target.id,
-                    messageContent: $scope.messageContent
+                    messageContent: messageText
                 };
 
                 if(readyForMessage){                    
                     /* add new message to conversation (client only) */
                     var newMessage = {
-                        content: $scope.messageContent,
+                        content: messageText,
                         authorName: $rootScope.currentUser.name,
                         messageFromUs: true
                     }; 
                     
                     if($scope.currentThread.id != null){
-                        $rootScope.currentUser.threadList[$scope.currentThread.id].messageList.push(newMessage);                        
+                        $rootScope.currentUser.threadList[$scope.currentThread.id].messageList.push(newMessage);
+                        $rootScope.currentUser.threadList[$scope.currentThread.id].lastMessage = newMessage;
                     }
                     
                     $http({
@@ -225,36 +292,44 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                     }). 
                        then(function(response) {
                             // if it's the first message with this person, thread have been created so handle it and add it to inbox 
-                            if($scope.currentThread.id == null){
+                            if($scope.currentThread.id == null){                                
                                 $scope.currentThread = response.data.newThread;
                                 $rootScope.currentUser.selectedThreadId = $scope.currentThread.id;
-                                if($rootScope.currentUser.threadList[response.data.newThread.id]==null)$rootScope.currentUser.threadList[response.data.newThread.id] = response.data.newThread;                                
+                                if($rootScope.currentUser.threadList[response.data.newThread.id]==null)$rootScope.currentUser.threadList[response.data.newThread.id] = response.data.newThread;
+                                $rootScope.firstMessage = false;
                             }
                        }, function(response) {
                            console.log("Request failed : "+response.statusText );                        
                        }
                     );
-                                                                                                                           
-
-                    $scope.messageContent = null;
+            
                     setTimeout(goDown,10);                  
                 }
             }
         };
         
         this.callSendMessage = function(){
-            sendMessage();
+            sendMessage($scope.messageContent);
         }               
         
         var linesNumber = 0;
-        $('#chatTextArea').elastic();
+        var text = document.getElementById('chatTextArea');
+        var chatComposer = document.getElementById('chatComposer');
+        //$('#chatTextArea').elastic();
         $('#chatTextArea').on('keydown', function(event) {
-            if (event.keyCode == 13){
-                if (!event.shiftKey){                    
-                    sendMessage();                    
-                }else{
-                    setTimeout(goDown,10);
-                }                
+            if (event.keyCode == 13){                                   
+                sendMessage($scope.messageContent);
+                setTimeout(goDown,10);
+                $scope.messageContent = null;
+                setTimeout(function(){
+                    $('#chatTextArea').html('');
+                    $('#chatTextArea').val().replace(/^(\r\n)|(\n)/,'');
+                    document.getElementById('chatTextArea').style.height = 'auto';
+                    text.style.minHeight = 70+'px';
+                    text.style.maxHeight = 70+'px';  
+                    chatComposer.style.minHeight = 70+'px';
+                    chatComposer.style.maxHeight = 70+'px';
+                }, 10);
             }
         });               
         
