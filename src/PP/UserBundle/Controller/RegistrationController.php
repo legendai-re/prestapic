@@ -80,7 +80,9 @@ class RegistrationController extends Controller
 
             $user->setProfilImage($profilImage);            
             $user->setRoles(array('ROLE_USER'));
-            $user->setUsername($form->getData()->getEmail());            
+            $user->setUsername($form->getData()->getEmail());
+            $user->setEnabled(true);
+            $user->setEmailConfirmed(false);
             ////////////////
 
             $userManager->updateUser($user);
@@ -93,6 +95,21 @@ class RegistrationController extends Controller
                 $em->persist($user);
                 $em->flush();
             }                        
+            
+            /*$message = \Swift_Message::newInstance()
+                ->setSubject('Confirmation')
+                ->setFrom('pretsapic@gmail.com')
+                ->setTo("olivier28.coue@gmail.com")
+                ->setBody(
+                    $this->renderView(
+                        // app/Resources/views/Emails/registration.html.twig
+                        'PPUserBundle:Email:confirmation.html.twig',
+                        array("user" => $currentUser)
+                    ),
+                    'text/html'
+                )                   
+            ;
+            $this->get('mailer')->send($message);*/
             
             if (null === $response = $event->getResponse()) {
                 //$url = $this->generateUrl('fos_user_registration_confirmed');
@@ -147,14 +164,15 @@ class RegistrationController extends Controller
 
         $user->setConfirmationToken(null);
         $user->setEnabled(true);
-
+        $user->setEmailConfirmed(true);
+        
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRM, $event);
 
         $userManager->updateUser($user);
 
         if (null === $response = $event->getResponse()) {
-            $url = $this->generateUrl('fos_user_registration_confirmed');
+            $url = $this->generateUrl('pp_user_profile', array('slug'=>$user->getSlug()));
             $response = new RedirectResponse($url);
         }
 

@@ -27,7 +27,14 @@ class User extends BaseUser
     * @ORM\GeneratedValue(strategy="AUTO")
     */
     protected $id;
-
+    
+    /**
+    * @var boolean $emailConfirmed
+    *
+    * @ORM\Column(name="emailConfirmed", type="boolean")   
+    */
+    private $emailConfirmed;
+    
     /**
     * @Gedmo\Slug(fields={"name"})
     * @ORM\Column(length=128, unique=true)
@@ -924,5 +931,39 @@ class User extends BaseUser
     public function getBlockedUsers()
     {
         return $this->blockedUsers;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \PP\CommentBundle\Entity\Comment $comment
+     *
+     * @return User
+     */
+    public function addComment(\PP\CommentBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \PP\CommentBundle\Entity\Comment $comment
+     */
+    public function removeComment(\PP\CommentBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }

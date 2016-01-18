@@ -81,7 +81,7 @@ doctrine:
 swiftmailer:
     transport: "%mailer_transport%"
     host:      "%mailer_host%"
-    port:      "%mailer_port%"
+    encryption: "%mailer_encryption%"
     auth_mode: "%mailer_auth_mode%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"    
@@ -96,7 +96,23 @@ stof_doctrine_extensions:
 fos_user:
     db_driver:     orm
     firewall_name: main
-    user_class:    PP\UserBundle\Entity\User   
+    user_class:    PP\UserBundle\Entity\User
+    service:
+        mailer: fos_user.mailer.twig_swift
+    registration:
+        confirmation:            
+            from_email:
+                address:        prestapic@gmail.com
+                sender_name:    Prestapic
+            enabled:    true
+            template:   PPUserBundle:Registration:email.txt.twig
+    resetting:
+        token_ttl: 86400
+        email:
+            from_email:
+                address:        prestapic@gmail.com
+                sender_name:    Prestapic
+            template:   FOSUserBundle:Resetting:email.txt.twig
             
 
    
