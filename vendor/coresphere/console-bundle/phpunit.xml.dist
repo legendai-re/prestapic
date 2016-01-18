@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="vendor/autoload.php"
+>
+
+    <filter>
+        <whitelist>
+            <directory>.</directory>
+            <exclude>
+                <directory>Tests</directory>
+                <directory>vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <testsuites>
+        <testsuite>
+            <directory>Tests</directory>
+        </testsuite>
+    </testsuites>
+
+</phpunit>

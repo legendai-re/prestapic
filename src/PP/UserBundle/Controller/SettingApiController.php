@@ -2,30 +2,9 @@
 
 namespace PP\UserBundle\Controller;
 
-use FOS\RestBundle\Util\Codes;
-use FOS\RestBundle\View\RouteRedirectView;
-use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
-use PP\PropositionBundle\Form\Type\PropositionType;
-use PP\PropositionBundle\Entity\Proposition;
-use PP\RequestBundle\Constant\Constants;
-
-use PP\UserBundle\Form\Type\EditProfileFormType;
-
-use PP\NotificationBundle\Entity\Notification;
-use PP\NotificationBundle\Entity\NotificationFollow;
-use PP\NotificationBundle\Constant\NotificationType;
-use PP\NotificationBundle\JsonNotificationModel\JsonNotification;
-
-use PP\MessageBundle\JsonModel\JsonUserModel;
 
 class SettingApiController extends Controller
 {

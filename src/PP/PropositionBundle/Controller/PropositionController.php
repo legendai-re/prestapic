@@ -9,8 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use PP\PropositionBundle\Form\Type\PropositionType;
 use PP\PropositionBundle\Entity\Proposition;
 
-
-
 class PropositionController extends Controller
 {
     public function displayPorpositionsAction(Request $request, $id)

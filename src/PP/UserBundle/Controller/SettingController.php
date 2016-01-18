@@ -4,28 +4,14 @@ namespace PP\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
-use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Doctrine\Common\Collections\ArrayCollection;
-use PP\RequestBundle\Constant\Constants;
-use PP\RequestBundle\Entity\ImageRequest;
-use PP\UserBundle\Entity\User;
-use PP\RequestBundle\Form\Type\ImageRequestType;
-use PP\UserBundle\Form\Type\EditProfileFormType;
-
 use PP\ReportBundle\Constant\ReportTicketType;
-
-use PP\ReportBundle\Entity\DisableTicket;
-use PP\ReportBundle\Entity\ReportTicket;
-use PP\ReportBundle\Entity\ReportReason;
 
 class SettingController extends Controller 
 {

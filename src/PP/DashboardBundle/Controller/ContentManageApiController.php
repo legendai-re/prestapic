@@ -4,24 +4,17 @@ namespace PP\DashboardBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use FOS\RestBundle\View\View;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
+
+
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-use PP\RequestBundle\Constant\Constants;
 use PP\RequestBundle\Entity\Category;
-
 
 use PP\DashboardBundle\JsonModel\JsonAllContentModel;
 use PP\DashboardBundle\JsonModel\JsonCategoryModel;
-use PP\DashboardBundle\JsonModel\JsonUserReportedModel;
 use PP\DashboardBundle\JsonModel\JsonTagModel;
-use PP\ReportBundle\JsonModel\JsonReportReasonModel;
-use PP\ReportBundle\JsonModel\JsonReportTicketModel;
-use PP\MessageBundle\JsonModel\JsonUserModel;
 
 class ContentManageApiController extends Controller
 {

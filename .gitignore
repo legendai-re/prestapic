@@ -5,12 +5,11 @@
 /app/logs/*
 !app/logs/.gitkeep
 /app/phpunit.xml
-/bin/
 /composer.phar
-/vendor/
 /web/bundles/
-/web/uploads/
-/web/Resources/
 /web/js/
 /web/css/
+/vendor/
+/bin/
+/web/uploads/
 .DS_Store

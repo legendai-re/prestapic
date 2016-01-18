@@ -75,7 +75,7 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
                 );
             }
             $('#sendRequestOver').fadeIn();           
-        }
+        };
         
         var closeAll = function(){
             if(messageIsOpen)closeMessage();
@@ -249,7 +249,7 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
                         name: currentNotif.authorName,
                         image: currentNotif.authorImg
                     }
-                }               
+                }   ;            
                 angular.element(document.getElementById('messageApp')).scope().$emit('showNewMessage', thread);
             }
         };
@@ -286,20 +286,20 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             document.getElementById('searchOptions').style.display = 'none';
         };
 
-        this.showSearchOptions = function(char){
-            if(char.length > 0){                
+        this.showSearchOptions = function(myChar){
+            if(myChar.length > 0){                
                 $('#searchUser').css("display", "block");           
             }
             document.getElementById('searchOptions').style.display = 'block';           
         };
         
-        this.showSearchChoise = function(char){            
-            if(char.length > 0){                
+        this.showSearchChoise = function(myChar){            
+            if(myChar.length > 0){                
                 $('#searchUser').css("display", "block");           
             }else{
                 $('#searchUser').css("display", "none"); 
             }
-        }
+        };
         
         /* handle new notification */
         $scope.$on('notification', function (event, message) {                
@@ -337,7 +337,7 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
         
         $scope.leave = function(){
             closeAll();
-        }
+        };
 
 }]);
 
@@ -370,7 +370,7 @@ headerApp.controller('filtersController', ['$scope', '$http', '$compile', '$loca
                 $("#filterButton").removeClass("open");
                 catOpenOnce = false;               
             }
-        }
+        };
         
         //////////////////////////
         //     SUBMIT SEARCH

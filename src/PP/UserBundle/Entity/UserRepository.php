@@ -38,8 +38,9 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
                     ->setParameter('lastWeek', $lastWeek)
                     ->setParameter('today', $today)
                     ->groupBy('u.id')
-                    ->addSelect('COUNT(ir.id)+COUNT(p.id) as irNb')
-                    ->addOrderBy('irNb', 'DESC')
+                    ->select('u.id as userId')
+                    ->addSelect('COUNT(ir.id)+COUNT(p.id) as contributionNb')
+                    ->addOrderBy('contributionNb', 'DESC')
                     ->setMaxResults($limit)                                        
         ; 
         return  $qb

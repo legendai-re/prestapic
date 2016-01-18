@@ -4,14 +4,11 @@ namespace PP\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use PP\RequestBundle\Constant\Constants;
 use PP\RequestBundle\Entity\ImageRequest;
-use PP\UserBundle\Entity\User;
 use PP\RequestBundle\Form\Type\ImageRequestType;
+
 use PP\UserBundle\Form\Type\EditProfileFormType;
 
 class ShowUserController extends Controller 
@@ -188,6 +185,13 @@ class ShowUserController extends Controller
                     $em->flush();
                     
                     $currentUser->createThumbnail();
+                    
+                    if(in_array($currentUser->getSlug(), array("users", "_profiler"))){
+                        $em = $this->getDoctrine()->getManager();                                                
+                        $currentUser->setSlug($currentUser->getSlug()."-nope");
+                        $em->persist($currentUser);
+                        $em->flush();
+                    }
                     
                     return $this->redirect($this->generateUrl('pp_user_profile', array(
                         'slug' => $currentUser->getSlug()                        

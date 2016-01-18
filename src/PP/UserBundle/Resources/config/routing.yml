@@ -27,4 +27,19 @@ pp_user_setting:
 pp_user_disable_account:
     path:     /settings/disable
     defaults: { _controller: PPUserBundle:Setting:disableAccount}
-    
+
+pp_user_resetting_request:
+    path: /security/request
+    defaults: { _controller: PPUserBundle:Resetting:myRequest}        
+
+pp_user_resetting_send_email:
+    path: /security/send-email
+    defaults: { _controller: PPUserBundle:Resetting:mySendEmail} 
+
+pp_user_resetting_check_email:
+    path: /security/check-email
+    defaults: { _controller: PPUserBundle:Resetting:myCheckEmail}     
+
+pp_user_resetting_reset:
+    path: /security/reset/{token}
+    defaults: { _controller: PPUserBundle:Resetting:reset} 

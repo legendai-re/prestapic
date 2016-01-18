@@ -27,7 +27,14 @@ class User extends BaseUser
     * @ORM\GeneratedValue(strategy="AUTO")
     */
     protected $id;
-
+    
+    /**
+    * @var boolean $emailConfirmed
+    *
+    * @ORM\Column(name="emailConfirmed", type="boolean")   
+    */
+    private $emailConfirmed;
+    
     /**
     * @Gedmo\Slug(fields={"name"})
     * @ORM\Column(length=128, unique=true)
@@ -958,5 +965,29 @@ class User extends BaseUser
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Set emailConfirmed
+     *
+     * @param boolean $emailConfirmed
+     *
+     * @return User
+     */
+    public function setEmailConfirmed($emailConfirmed)
+    {
+        $this->emailConfirmed = $emailConfirmed;
+
+        return $this;
+    }
+
+    /**
+     * Get emailConfirmed
+     *
+     * @return boolean
+     */
+    public function getEmailConfirmed()
+    {
+        return $this->emailConfirmed;
     }
 }

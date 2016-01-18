@@ -52,7 +52,7 @@ class RegistrationController extends Controller
         }
         
         
-        $form = $this->get('form.factory')->create(new  \PP\UserBundle\Form\Type\RegistrationFormType(\PP\UserBundle\Entity\User::class), $user, array(            
+        $form = $this->get('form.factory')->create(new  RegistrationFormType(\PP\UserBundle\Entity\User::class), $user, array(            
             'action' => $this->generateUrl('pp_user_register'),
             'method' => 'POST',
         ));
@@ -64,33 +64,57 @@ class RegistrationController extends Controller
         if ($form->isValid()) {
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
-            
-            
-            if($form->getData()->getName() != "users"){
-                ////////////////
-                /* my setting */            
-                $imgName = rand(1, 7);        
-                copy(__DIR__.'/../../../../web/Resources/public/images/profile/avatar_'.$imgName.'.jpg',  __DIR__.'/../../../../web/uploads/img/user/profile/original/new.jpg');
-                $profilImage = new \PP\ImageBundle\Entity\Image();
-                $profilImage->setUploadDir('user/profile');
-                $profilImage->setAlt('profilImg');
-                $profilImage->setUrl('png');        
-                $imgsize = getimagesize(__DIR__.'/../../../../web/uploads/img/user/profile/original/new.jpg');
-                $mime = $imgsize['mime'];
-                $file = new UploadedFile(__DIR__.'/../../../../web/uploads/img/user/profile/original/new.jpg', "new", $mime, $imgsize, 0, true );
-                $profilImage->setFile($file);           
+                                    
+            ////////////////
+            /* my setting */            
+            $imgName = rand(1, 7);        
+            copy(__DIR__.'/../../../../web/Resources/public/images/profile/avatar_'.$imgName.'.jpg',  __DIR__.'/../../../../web/uploads/img/user/profile/original/new.jpg');
+            $profilImage = new \PP\ImageBundle\Entity\Image();
+            $profilImage->setUploadDir('user/profile');
+            $profilImage->setAlt('profilImg');
+            $profilImage->setUrl('png');        
+            $imgsize = getimagesize(__DIR__.'/../../../../web/uploads/img/user/profile/original/new.jpg');
+            $mime = $imgsize['mime'];
+            $file = new UploadedFile(__DIR__.'/../../../../web/uploads/img/user/profile/original/new.jpg', "new", $mime, $imgsize, 0, true );
+            $profilImage->setFile($file);           
 
-                $user->setProfilImage($profilImage);            
-                $user->setRoles(array('ROLE_USER'));
-                $user->setUsername($form->getData()->getEmail());            
-                ////////////////
+            $user->setProfilImage($profilImage);            
+            $user->setRoles(array('ROLE_USER'));
+            $user->setUsername($form->getData()->getEmail());
+            $user->setEnabled(true);
+            $user->setEmailConfirmed(false);
+            ////////////////
 
-                $userManager->updateUser($user);
-            }
+            $userManager->updateUser($user);
+
+            if(in_array($user->getSlug(), array("users", "_profiler"))){
+                $em = $this->getDoctrine()->getManager();
+                $userRepository = $em->getRepository('PPUserBundle:User');
+                $user = $userRepository->find($user->getId());
+                $user->setSlug($user->getSlug()."-nope");
+                $em->persist($user);
+                $em->flush();
+            }                        
+            
+            /*$message = \Swift_Message::newInstance()
+                ->setSubject('Confirmation')
+                ->setFrom('pretsapic@gmail.com')
+                ->setTo("olivier28.coue@gmail.com")
+                ->setBody(
+                    $this->renderView(
+                        // app/Resources/views/Emails/registration.html.twig
+                        'PPUserBundle:Email:confirmation.html.twig',
+                        array("user" => $currentUser)
+                    ),
+                    'text/html'
+                )                   
+            ;
+            $this->get('mailer')->send($message);*/
+            
             if (null === $response = $event->getResponse()) {
                 //$url = $this->generateUrl('fos_user_registration_confirmed');
                 $url = $this->generateUrl('pp_user_profile', array('slug'=>$user->getSlug()));
-                $response = new RedirectResponse($url);
+                $response = new RedirectResponse($url);                
             }
 
             $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
@@ -140,14 +164,15 @@ class RegistrationController extends Controller
 
         $user->setConfirmationToken(null);
         $user->setEnabled(true);
-
+        $user->setEmailConfirmed(true);
+        
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRM, $event);
 
         $userManager->updateUser($user);
 
         if (null === $response = $event->getResponse()) {
-            $url = $this->generateUrl('fos_user_registration_confirmed');
+            $url = $this->generateUrl('pp_user_profile', array('slug'=>$user->getSlug()));
             $response = new RedirectResponse($url);
         }
 

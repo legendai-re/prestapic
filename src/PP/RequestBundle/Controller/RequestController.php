@@ -19,9 +19,6 @@ use PP\NotificationBundle\Entity\NotificationNewProposition;
 use PP\NotificationBundle\Entity\Notification;
 use PP\NotificationBundle\Constant\NotificationType;
 
-use PP\ReportBundle\Entity\ReportTicket;
-use PP\ReportBundle\Constant\ReportTicketType;
-
 use PP\CommentBundle\Entity\CommentThread;
 
 class RequestController extends Controller
@@ -44,7 +41,7 @@ class RequestController extends Controller
             if($request->get('search_query') != null || $request->get('categories') != null || $request->get('tags') != null || $request->get('me') != null){
                 $haveSearchParam = true;             
             }            
-        }               
+        }                                               
         
         /* init repositories */
         $em = $this->getDoctrine()->getManager();
@@ -438,16 +435,14 @@ class RequestController extends Controller
     
     public function sideInfoAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();        
-        $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
-        $userRepository = $em->getRepository('PPUserBundle:User');
+        $em = $this->getDoctrine()->getManager();                
+        $activeUserRepository = $em->getRepository('PPUserBundle:ActiveUser');
+        $popularRequestRepository = $em->getRepository('PPRequestBundle:PopularRequest');
         $tagRepository = $em->getRepository('PPRequestBundle:Tag');
         
         $popularTags = $tagRepository->getPopularTags(5);
-        //$activeUsers = $userRepository->getActiveUsers(3);
-        $activeUsers = array();
-        //$imageRequests = $imageRequestRepository->getPopularImageRequests(3);
-        $imageRequests = array();
+        $activeUsers = $activeUserRepository->getActiveUsers(3);        
+        $imageRequests = $popularRequestRepository->getPopularImageRequests(5);       
         
         return $this->render('PPRequestBundle:Request:sideInfo.html.twig', array(
             'popularTags' => $popularTags,

@@ -46,6 +46,7 @@ class c_LoadUser implements FixtureInterface{
             $user->setEnabled(true);
             $user->setEmail($emailList[$i]);
             $user->setUsername($emailList[$i]);
+            $user->setEmailConfirmed(true);
             $em->persist($user);
             
         

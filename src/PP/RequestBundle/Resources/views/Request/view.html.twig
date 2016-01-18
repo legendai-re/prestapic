@@ -48,7 +48,7 @@
                     <span title="{{ imageRequest.createdDate|date('Y-m-d H:i:s') }}">{{ imageRequest.dateAgo }}</span> in                 
                     <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'categories': imageRequest.category.id }) }}" >{{ imageRequest.category.name }}</a> by                 
                 </span>
-                <a class="author-username" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}">{{ imageRequest.author.name }}</a>  
+                <a target="_self" class="author-username" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}">{{ imageRequest.author.name }}</a>  
             </div>
                                                              
             {% set break = false %}

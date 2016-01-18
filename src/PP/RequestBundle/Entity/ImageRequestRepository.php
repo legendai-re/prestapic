@@ -198,11 +198,12 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
             $qb = $this->createQueryBuilder('ir')
                         ->distinct(true)
                         ->leftJoin('ir.author', 'irA')
-                        ->addSelect('irA')
+                        ->select('ir.id as imageRequestId')
                         ->where('ir.createdDate BETWEEN :lastWeek AND :today' )                        
                         ->setParameter('lastWeek', $lastWeek)
                         ->setParameter('today', $today)
                         ->andWhere('irA.enabled = true')
+                        ->andWhere('ir.enabled = true')
                         ->addOrderBy('ir.upvote + ir.propositionsNb', 'DESC')
                         ->setMaxResults($limit)
         ; 
