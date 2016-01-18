@@ -43,6 +43,22 @@ class RequestController extends Controller
             }            
         }               
         
+        /* send email comfirmation */
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Confirmation')
+            ->setFrom('accounts@pretsapic.com')
+            ->setTo("olivier28.coue@gmail.com")
+            ->setBody(
+                $this->renderView(
+                    // app/Resources/views/Emails/registration.html.twig
+                    'PPUserBundle:Email:confirmation.html.twig',
+                    array()
+                ),
+                'text/html'
+            )                   
+        ;
+        $this->get('mailer')->send($message);
+        
         /* init repositories */
         $em = $this->getDoctrine()->getManager();
 	$imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');                                                                       

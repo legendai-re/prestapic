@@ -81,8 +81,10 @@ doctrine:
 swiftmailer:
     transport: "%mailer_transport%"
     host:      "%mailer_host%"
+    port:      "%mailer_port%"
+    auth_mode: "%mailer_auth_mode%"
     username:  "%mailer_user%"
-    password:  "%mailer_password%"
+    password:  "%mailer_password%"    
     spool:     { type: memory }
 
 # Stof\DoctrineExtensionsBundle configuration
@@ -94,16 +96,7 @@ stof_doctrine_extensions:
 fos_user:
     db_driver:     orm
     firewall_name: main
-    user_class:    PP\UserBundle\Entity\User
-    service:
-        mailer: fos_user.mailer.twig_swift
-    registration:                  
-        confirmation:
-            from_email:
-                address:        accounts@prestapic.com
-                sender_name:    Prestapic
-            enabled: true
-            template: FOSUserBundle:Registration:email.txt.twig
+    user_class:    PP\UserBundle\Entity\User   
             
 
    

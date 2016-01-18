@@ -92,12 +92,12 @@ class RegistrationController extends Controller
                 $user->setSlug($user->getSlug()."-nope");
                 $em->persist($user);
                 $em->flush();
-            }
+            }                        
             
             if (null === $response = $event->getResponse()) {
                 //$url = $this->generateUrl('fos_user_registration_confirmed');
                 $url = $this->generateUrl('pp_user_profile', array('slug'=>$user->getSlug()));
-                $response = new RedirectResponse($url);
+                $response = new RedirectResponse($url);                
             }
 
             $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
