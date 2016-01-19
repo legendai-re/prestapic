@@ -1,5 +1,8 @@
-{% extends "PPUserBundle::layout.html.twig" %}
+{% extends "::layout.html.twig" %}
 
-{% block fos_user_content %}
+{% block body %}
     {% include "PPUserBundle:Registration:register_content.html.twig" %}
-{% endblock fos_user_content %}
+{% endblock body %}
+
+{% block sideInfo %}
+{% endblock sideInfo %}

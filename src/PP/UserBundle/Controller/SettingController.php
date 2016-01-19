@@ -112,7 +112,7 @@ class SettingController extends Controller
                 )));
             }
             return $this->redirect($this->generateUrl('pp_user_setting', array(  
-                "slug"=>$currentUser->getSlug()                                         
+                "slug"=>$currentUser->getSlug()                
             )));
         }
         return $this->redirect($this->generateUrl('pp_request_homepage', array(                                           

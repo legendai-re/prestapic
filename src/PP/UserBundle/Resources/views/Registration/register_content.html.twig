@@ -1,25 +1,38 @@
+<div style="margin: auto;" class="full-main">
+    <div class="full-main-top">
+        <h1>Register</h1>
+    </div>
+    <div class="full-main-container" >
+        <div class="full-main-container-center">
+            <div class="full-main-content">
+                <form action="{{ path('pp_user_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+                    <div class="fcontent-choice">
+                        {{ form_errors(form.name) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'full-width-input', 'placeholder': 'Username'}}) }}
 
-{% trans_default_domain 'FOSUserBundle' %}
+                        {{ form_errors(form.email) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'full-width-input', 'placeholder': 'Email'}}) }}
 
-<div class="demand-list">
-    <form action="{{ path('pp_user_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+                        {%  for passwordField in form.plainPassword %}
+                            {%  if loop.index == 1 %}
+                                {{ form_errors(passwordField) }}
+                                {{ form_widget(passwordField, {'attr': {'class': 'full-width-input', 'placeholder': 'Password'}}) }}
+                            {% else %}
+                                {{ form_errors(passwordField) }}
+                                {{ form_widget(passwordField, {'attr': {'class': 'full-width-input', 'placeholder': 'Repeat password'}}) }}
+                            {% endif %}
+                        {% endfor %}
 
-        {{ form_errors(form.name) }}
-        {{ form_row(form.name) }}
-
-        {{ form_errors(form.email) }}
-        {{ form_row(form.email) }}
-
-        {{ form_errors(form.plainPassword) }}
-        {{ form_row(form.plainPassword) }}
-
-        {{ form_row(form.username) }}    
-        {{ form_rest(form) }}
-
-        <div>
-            <input type="submit" value="{{ 'registration.submit'|trans }}" />
+                        {{ form_row(form.username) }}    
+                        {{ form_rest(form) }}
+                    </div>
+                    <div class="fcontent-bottom">
+                        <input class="button" type="submit" value="Sign up" />
+                    </div>
+                </form>
+            </div>
         </div>
-
-    </form>
+    </div>
 </div>
+
 

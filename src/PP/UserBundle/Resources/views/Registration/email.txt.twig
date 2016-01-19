@@ -1,12 +1,20 @@
 {% trans_default_domain 'FOSUserBundle' %}
 {% block subject %}
 {% autoescape false %}
-{{ 'registration.email.subject'|trans({'%username%': user.name, '%confirmationUrl%': confirmationUrl}) }}
+Welcome to Prestapic {{ user.name }} !
 {% endautoescape %}
 {% endblock %}
+
+
 {% block body_text %}
 {% autoescape false %}
-{{ 'registration.email.message'|trans({'%username%': user.name, '%confirmationUrl%': confirmationUrl}) }}
+    <h2>Hi {{ user.name }} and thanks for subscribing to Prestapic</h2>
+    <p>Click this link to confirm your email adress : <a href="{{ confirmationUrl }}">CONFIRM</a>
 {% endautoescape %}
 {% endblock %}
-{% block body_html %}{% endblock %}
+
+
+{% block body_html %}
+    <h2>Hi {{ user.name }} and thanks for subscribing to Prestapic</h2>
+    <p>Click this link to confirm you email adress : <a href="{{ confirmationUrl }}">CONFIRM</a>
+{% endblock %}

@@ -58,12 +58,14 @@
                             Change your password or <a href="{{ path('pp_user_resetting_request') }}" target="_self">recover</a> your current one.
                         </div>
                         <div class="fcontent-choice">
-                            {{ form_errors(changePasswordForm) }}
+                            {{ form_errors(changePasswordForm.current_password) }}
                             {{ form_widget(changePasswordForm.current_password, {'attr': {'class': 'full-width-input', 'placeholder': 'Your current password'}}) }}
                             {%  for passwordField in changePasswordForm.plainPassword %}
                                 {%  if loop.index == 1 %}
+                                    {{ form_errors(passwordField) }}
                                     {{ form_widget(passwordField, {'attr': {'class': 'full-width-input', 'placeholder': 'Set a new password'}}) }}
                                 {% else %}
+                                    {{ form_errors(passwordField) }}
                                     {{ form_widget(passwordField, {'attr': {'class': 'full-width-input', 'placeholder': 'Repeat password'}}) }}
                                 {% endif %}
                             {% endfor %}
@@ -85,7 +87,7 @@
                         <div class="fcontent-text">
                             By deleting your account you remove your personal information from Prestapic. Your account cannot be restored.
                         </div>
-                        <div class="fcontent-choice">
+                        <div class="fcontent-choice">                            
                             <input class="full-width-input" type="password" name="password" required value="" placeholder="Enter your password"/>
                         </div>
                         <div class="fcontent-bottom">
