@@ -11,8 +11,12 @@ a
 	text-decoration: none
 	transition-duration: none
 
-	&:hover
+	&:hover, &:focus
 		color: $main-color-hover
+
+	&:focus
+		outline-color: $main-color
+		outline-style: dotted
 
 	&:active
 		color: $main-color-active

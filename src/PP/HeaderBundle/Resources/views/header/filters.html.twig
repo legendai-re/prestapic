@@ -1,18 +1,18 @@
 <form ng-controller="filtersController as filters" name="pp_request_homepage_form" novalidate ng-submit="filters.submitForm()" >
     <input type="hidden" name="search_action" value='{{ url('pp_request_homepage', {}, true) }}' />
     
-    <input autocomplete="off" ng-focus="header.showSearchOptions(filters.searchQuery)" ng-change="header.showSearchChoise(filters.searchQuery)" name="name" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find pictures, requests or users on Prestapic..." />
+    <input tabindex="1" autocomplete="off" ng-focus="header.showSearchOptions(filters.searchQuery)" ng-change="header.showSearchChoise(filters.searchQuery)" name="name" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find pictures, requests or users on Prestapic..." />
        
     <div class="search-options-list" style="display:none;" id="searchUser" class="stopPropagation">
         <ul>
             <li>
-                <a href="{{ path('pp_user_search') }}?name={% verbatim %}{{ filters.searchQuery }} {% endverbatim %}" target="_self">
+                <a tabindex="2" href="{{ path('pp_user_search') }}?name={% verbatim %}{{ filters.searchQuery }} {% endverbatim %}" target="_self">
                     <div class="avatar">{% verbatim %}{{ filters.searchQuery | limitTo: 1 }}{% endverbatim %}</div>
                     <div class="infos-search">Search <strong>{% verbatim %}{{ filters.searchQuery }}{% endverbatim %}</strong> in users...</div>
                 </a>
             </li>
             <li>
-                <a ng-click="filters.submitForm()" href="" class="infos-all-search" >
+                <a tabindex="3" ng-click="filters.submitForm()" href="" class="infos-all-search" >
                     Show all results for <strong>{% verbatim %}{{ filters.searchQuery }}{% endverbatim %}</strong>...
                 </a>
             </li>

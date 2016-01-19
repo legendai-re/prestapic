@@ -135,26 +135,26 @@ containerApp.controller('propositionsController', ['$rootScope', '$scope', '$htt
         
         if(document.getElementById('pp_propositionbundle_proposition_image_file')!=null)document.getElementById('pp_propositionbundle_proposition_image_file').addEventListener('change', handlePropositionFileSelect, false);
         function handlePropositionFileSelect(evt) {
-                   console.log(evt.target);
-                   var files = evt.target.files; // FileList object
+            var files = evt.target.files; // FileList object
 
-                   for (var i = 0, f; f = files[i]; i++) {                                          
-                     if (!f.type.match('image.*')) {
-                       continue;
-                     }
+            for (var i = 0, f; f = files[i]; i++) {
+                if (!f.type.match('image.*')) {
+                    continue;
+                }
 
-                     var reader = new FileReader();                                            
-                     reader.onload = (function(theFile) {
-                       return function(e) {
-                         var div = document.getElementById('uploaded_proposition');
-                         div.innerHTML = ['<img src="', e.target.result,
-                                           '" title="', escape(theFile.name), '"/>'].join('');                          
+                var reader = new FileReader();                                            
+                reader.onload = (function(theFile) {
+                    return function(e) {
+                        $("#dragzoneUploaded").css("display", "block");
+                        var div = document.getElementById('uploaded_proposition');
+                        div.innerHTML = ['<div class="img-preview" style="background-image: url(', e.target.result,')"></div>'].join('');
+                    };
+                })(f);
+                reader.readAsDataURL(f);                    
+            }
+        }
 
-                       };
-                     })(f);
-                     reader.readAsDataURL(f);                    
-               }
-           }
+        
         
         var readyForPropositionVote = true;
         var votedProposition = [];
@@ -233,6 +233,13 @@ containerApp.controller('propositionsController', ['$rootScope', '$scope', '$htt
         });
 
 }]);  
+
+containerApp.controller('uploadController', ['$scope', '$http', '$compile', '$window', '$location', function ($scope, $http, $compile, $window, $location) {
+    this.cancelDragZoneUpload = function(){
+        document.getElementById("pp_propositionbundle_proposition_image_file").value = "";
+        $("#dragzoneUploaded").css("display", "none");
+    }
+}]);
 
 containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$window', '$location', function ($scope, $http, $compile, $window, $location) {
         
