@@ -10,6 +10,8 @@
 /web/js/
 /web/css/
 /vendor/
+/vendor_/
 /bin/
+/bin_/
 /web/uploads/
 .DS_Store
