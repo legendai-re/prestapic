@@ -4,22 +4,23 @@ namespace PP\DashboardBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use PP\RequestBundle\Entity\Category;
 
+use PP\ReportBundle\Entity\ReportReason;
+
 use PP\DashboardBundle\JsonModel\JsonAllContentModel;
 use PP\DashboardBundle\JsonModel\JsonCategoryModel;
 use PP\DashboardBundle\JsonModel\JsonTagModel;
+use PP\DashboardBundle\JsonModel\JsonReportReasonModel;
 
 class ContentManageApiController extends Controller
 {
     /**
-    * @Security("has_role('ROLE_MODERATOR')")
+    * @Security("has_role('ROLE_ADMIN')")
     */
     public function getContentAction()
     {
@@ -29,9 +30,11 @@ class ContentManageApiController extends Controller
         $em = $this->getDoctrine()->getManager();
         $categoryRepository = $em->getRepository('PPRequestBundle:Category');
         $tagRepository = $em->getRepository('PPRequestBundle:Tag');
+        $reportReasonRepository = $em->getRepository('PPReportBundle:ReportReason');
         
         $categories = $categoryRepository->findAll();
         $tags = $tagRepository->findAll();
+        $reportReasons = $reportReasonRepository->findByEnabled(true);
         
         $jsonCategories = array();
         foreach ($categories as $category){
@@ -42,21 +45,29 @@ class ContentManageApiController extends Controller
         foreach ($tags as $tag){
             $jsonTags[$tag->getId()] = new JsonTagModel($tag->getId(), $tag->getName());
         }
-                
+        
+        $jsonReportReasons = array();
+        foreach($reportReasons as $reportReason){
+            $jsonReportReasons[$reportReason->getId()] = new JsonReportReasonModel($reportReason->getId(), $reportReason->getName(), $reportReason->getType());
+        }
+        
         echo json_encode(new JsonAllContentModel(
                 $jsonCategories,
                 $jsonTags,
+                $jsonReportReasons,
                 $this->generateUrl("pp_dashboard_content_api_post_category", array(), true),
                 $this->generateUrl("pp_dashboard_content_api_post_delete_category", array(), true),
                 $this->generateUrl("pp_dashboard_content_api_patch_category", array(), true),
-                $this->generateUrl("pp_dashboard_content_api_post_delete_tag", array(), true)
+                $this->generateUrl("pp_dashboard_content_api_post_delete_tag", array(), true),
+                $this->generateUrl("pp_dashboard_content_api_post_report_reason", array(), true),
+                $this->generateUrl("pp_dashboard_content_api_post_delete_report_reason", array(), true)
         ));
         
         return $response;
     }
     
     /**
-    * @Security("has_role('ROLE_MODERATOR')")
+    * @Security("has_role('ROLE_ADMIN')")
     */
     public function postCategoryAction(Request $request){
         $response = new Response();          
@@ -79,7 +90,7 @@ class ContentManageApiController extends Controller
     }
     
      /**
-    * @Security("has_role('ROLE_MODERATOR')")
+    * @Security("has_role('ROLE_ADMIN')")
     */
     public function patchCategoryAction(Request $request){
         $response = new Response();          
@@ -97,7 +108,7 @@ class ContentManageApiController extends Controller
                 if($catToPatch != null){
                     $catToPatch->setName($catName);
                     $em->persist($catToPatch);
-                    $em->flush();
+                    $em->flush();                    
                 }else {$response->setStatusCode(Response::HTTP_NO_CONTENT);}
                 
             }else {$response->setStatusCode(Response::HTTP_CONFLICT);}            
@@ -108,7 +119,7 @@ class ContentManageApiController extends Controller
     }
     
     /**
-    * @Security("has_role('ROLE_MODERATOR')")
+    * @Security("has_role('ROLE_ADMIN')")
     */
     public function postDeleteCategoryAction(Request $request){
         $response = new Response();          
@@ -140,7 +151,7 @@ class ContentManageApiController extends Controller
     }
     
     /**
-    * @Security("has_role('ROLE_MODERATOR')")
+    * @Security("has_role('ROLE_ADMIN')")
     */
     public function postDeleteTagAction(Request $request){
         $response = new Response();          
@@ -162,10 +173,55 @@ class ContentManageApiController extends Controller
                 }                
                 $em->remove($tagToDelete);
                 $em->flush();
-            }
-                             
-        }
-        
+            }                             
+        }        
+        return $response;
+    }
+    
+    /**
+    * @Security("has_role('ROLE_ADMIN')")
+    */
+    public function postReportReasonAction(Request $request){
+        $response = new Response();          
+        $type = $request->get("type");
+        $name = $request->get("name");
+
+        if($type != null && $name != null){
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $reportReason = new ReportReason();
+            $reportReason->setDetails("empry");
+            $reportReason->setName($name);
+            $reportReason->setType($type);
+                       
+            $em->persist($reportReason);
+            $em->flush();
+            echo json_encode(array("id"=>$reportReason->getId()));
+        }        
+        return $response;
+    }
+    
+    /**
+    * @Security("has_role('ROLE_ADMIN')")
+    */
+    public function postDeleteReportReasonAction(Request $request){
+        $response = new Response();          
+        $reportReasonId = $request->get("id");
+
+        if($reportReasonId != null){
+            
+            $em = $this->getDoctrine()->getManager();
+            $reportReasonRepository = $em->getRepository('PPReportBundle:ReportReason');            
+                               
+            $reportReasonToDelete = $reportReasonRepository->find($reportReasonId);
+            
+            if($reportReasonToDelete){                
+                $reportReasonToDelete->setEnabled(false);
+                $em->persist($reportReasonToDelete);
+                $em->flush();
+            }                             
+        }        
         return $response;
     }
     

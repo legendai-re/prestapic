@@ -45,7 +45,7 @@ class RequestController extends Controller
         
         /* init repositories */
         $em = $this->getDoctrine()->getManager();
-	$imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');                                                                       
+	$imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');                                                                              
         
         /* set displayMode (default ORDER_BY_DATE) */
         if($session->get('imageRequestOrder') != null){

@@ -17,7 +17,9 @@
                         <select required ng-model="report.reportData.reasonId">
                             <option value="default" disabled>Choose a report reason</option>
                         {% for reason in reportReasons %}
-                            <option value="{{ reason.id }}">{{ reason.name }}</option>
+                            {% if reason.enabled == true %}
+                                <option value="{{ reason.id }}">{{ reason.name }}</option>
+                            {% endif %}
                         {% endfor %}
                         </select>                
                         <textarea ng-model="report.reportData.details" placeholder="More details..."></textarea>

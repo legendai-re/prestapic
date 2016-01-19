@@ -121,4 +121,51 @@
         
     }]);
     
+    var TYPE_IMAGE_REQUEST = 1;    
+    var TYPE_PROPOSITION = 2;
+    var TYPE_USER = 3;
+    containerApp.controller('reportController', ['$scope', '$rootScope', '$http', '$compile', '$location', function ($scope, $rootScope, $http, $compile, $location) {
+        
+        $scope.currentReportReasonType = TYPE_IMAGE_REQUEST;               
+        $scope.newReportReason = {};
+        this.postReportReason = function(){
+            $scope.newReportReason.type = $scope.currentReportReasonType;
+            if (confirm('Do you realy want to add report reason : '+$scope.newReportReason.name+" ?")) {
+                    $http({
+                            method: 'POST',
+                            url: $rootScope.content.postReportReasonUrl,                    
+                            data: JSON.stringify($scope.newReportReason)
+                             }).
+                            then(function(response){
+                                $rootScope.content.reportReasons[response.data.id] = {id: response.data.id, name: $scope.newReportReason.name, type: $scope.newReportReason.type};                                
+                                showBannerAlert("success", "Well done !", "Report reason added added");
+                                $scope.newReportReason.name = '';
+                            },function(response) {                            
+                                $scope.newReportReason.name = '';                                                               
+                                showBannerAlert("danger", "Error "+response.status+" !", "");                                                          
+                            }
+                    );
+                }           
+        };
+        
+        this.deleteReportReason = function(id){
+            var promptValue = prompt("Type \"YES\" to delete \""+$rootScope.content.reportReasons[id].name+"\" : ");
+            if (promptValue == "YES") {
+                $http({
+                    method: 'POST',
+                    url: $rootScope.content.deleteReportReasonUrl,                    
+                    data: JSON.stringify({id: id})
+                     }).
+                    then(function(response){
+                        $rootScope.content.reportReasons[id] = null;                     
+                        showBannerAlert("success", "Well done !", "Report reason deleted ");
+                    },function(response) {
+                        showBannerAlert("danger", "Error "+response.status+" !", "");
+                    }
+                );
+           }else showBannerAlert("warning", "Warning", "Text entered not match");          
+       }
+        
+    }]);
+    
     

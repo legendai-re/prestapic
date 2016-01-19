@@ -60,7 +60,7 @@ class User extends BaseUser
     *
     * @ORM\Column(name="description", type="string", length=255, nullable=true)
     * @Assert\Length(    
-    *      max = 255,    
+    *      max = 175,    
     *      maxMessage = "Your description cannot be longer than {{ limit }} characters"
     * )
     */
