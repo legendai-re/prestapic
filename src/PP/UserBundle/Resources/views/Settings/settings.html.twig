@@ -10,30 +10,92 @@
 {% block body %}
    
     {% if user.enabled == true %}
-       
-        <div class="main-left" > 
-            <base href=" " />
-            <h1>Settings</h1>            
-            {{ form_start(changePasswordForm, { 'action': path('pp_user_setting', {'slug': user.slug}), 'attr': { 'class': 'fos_user_change_password' } }) }}
-                {{ form_widget(changePasswordForm) }}
-                <div>
-                    <input type="submit" value="Save" />
-                </div>
-            {{ form_end(changePasswordForm) }}                  
-                        
-            {{ form(formNotifEnable) }}
-            <div ng-controller="settingController as setting" >
-                <h3>Notifications : </h3>               
-                <input id="notif_mode" type="checkbox" ng-model="setting.notificationMode" {% if user.notificationEnabled == true %}checked{% endif %} ng-change="setting.patchNotificationMode()" name="notif_mode" value="notif_mode" />
-                <label for="notif_mode">Notifications : </label>
-                
-                
-                <form action="{{ path('pp_user_disable_account') }}" method="POST">
-                    <input type="password" name="password" required value="" placeholder="password"/>
-                    <input type="submit" value="delete account" />
-                </form>                    
+
+        <div class="full-main">
+            <div class="full-main-top">
+                <h1>Settings</h1>
             </div>
-        </div>
+
+            <div class="full-main-container" ng-controller="settingController as settings">
+                <base href=" " />
+
+                <!-- CONTAINER LEFT -->
+                <div class="full-main-container-left">
+
+                    <div class="full-main-content">
+                        <div class="fcontent-top">Notifications</div>
+                        {{ form(formNotifEnable) }}
+                        <div class="fcontent-text">
+                            Choose the notifications you want to receive in your notification center.
+                        </div>
+                        <div class="fcontent-choice">
+                            <ul class="fcontent-choice-list">
+                                <li class="fcontent-choice-item">
+                                    <div class="fcontent-choice-item-checkboxes">
+                                        <input id="notif_mode" type="checkbox" ng-model="settings.notificationMode" {% if user.notificationEnabled == true %}checked{% endif %} ng-change="settings.patchNotificationMode()" name="notif_mode" value="notif_mode" />
+                                        <label for="notif_mode">
+                                            <span class="fcontent-choice-item-title">Notifications</span>
+                                            <span class="fcontent-choice-item-desc">Receive all notification (WIP)</span>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="fcontent-bottom">
+                            <input type="submit" value="Auto save" class="button" disabled /> 
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- CONTAINER CENTER -->
+                <div class="full-main-container-center">
+                    
+                    <div class="full-main-content">
+                        {{ form_start(changePasswordForm, { 'action': path('pp_user_setting', {'slug': user.slug}), 'attr': { 'class': 'fos_user_change_password' } }) }}
+                        <div class="fcontent-top">Password</div>
+                        <div class="fcontent-text">
+                            Change your password or <a href="{{ path('pp_user_resetting_request') }}" target="_self">recover</a> your current one.
+                        </div>
+                        <div class="fcontent-choice">
+                            {{ form_errors(changePasswordForm) }}
+                            {{ form_widget(changePasswordForm.current_password, {'attr': {'class': 'full-width-input', 'placeholder': 'Your current password'}}) }}
+                            {%  for passwordField in changePasswordForm.plainPassword %}
+                                {%  if loop.index == 1 %}
+                                    {{ form_widget(passwordField, {'attr': {'class': 'full-width-input', 'placeholder': 'Set a new password'}}) }}
+                                {% else %}
+                                    {{ form_widget(passwordField, {'attr': {'class': 'full-width-input', 'placeholder': 'Repeat password'}}) }}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="fcontent-bottom">
+                            <input type="submit" value="Save changes" class="button" /> 
+                        </div>
+                        {{ form_end(changePasswordForm) }}
+                    </div>
+
+                </div>
+
+                <!-- CONTAINER RIGHT -->
+                <div class="full-main-container-right">
+
+                    <form action="{{ path('pp_user_disable_account') }}" method="POST">
+                    <div class="full-main-content">
+                        <div class="fcontent-top">Account deletion</div>
+                        <div class="fcontent-text">
+                            By deleting your account you remove your personal information from Prestapic. Your account cannot be restored.
+                        </div>
+                        <div class="fcontent-choice">
+                            <input class="full-width-input" type="password" name="password" required value="" placeholder="Enter your password"/>
+                        </div>
+                        <div class="fcontent-bottom">
+                            <input type="submit" value="Delete my account" class="button" /> 
+                        </div>
+                    </div>
+                    </form>
+
+                </div>
+            </div>
 
     {% endif %}
 {% endblock %}

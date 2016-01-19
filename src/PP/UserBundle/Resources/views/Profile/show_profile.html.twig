@@ -22,16 +22,16 @@
                 {% endif %}
             </div>      
             <div class="profile-details">
-                <a class="avatar"  href="#" title="">
+                <div class="avatar">
                   <img src="{{ asset(pageProfile.profilImage.webPath("70x70")) }}" alt="{{ pageProfile.profilImage.alt }}">
-                </a>
+                </div>
                 <h1 class="username">{{ pageProfile.name }}</h1>
                 <p class="bio">{{ pageProfile.description }}</p>
                 <div class="profile-actions">
                     {% if is_granted('ROLE_USER') %}
                         {% if isHownProfile == true %}
                             {{ form(editProfileForm) }}
-                            <a id="editButton" class="button green" ng-click="profile.getEditProfileForm()" >
+                            <a href="" id="editButton" class="button green" ng-click="profile.getEditProfileForm()" >
                                 Edit profile
                             </a>
                         {% else %}
@@ -40,7 +40,7 @@
                             {% if is_granted("ROLE_ADMIN") %}
                                 {{ form(setModeratorForm) }}
                             {% endif %}
-                            <a id="followButton" class="button green " ng-click="profile.patchFollow()" >{% if isFollowing == true %}Unfollow{% else %}Follow{% endif %}</a>
+                            <a href="" id="followButton" class="button green " ng-click="profile.patchFollow()" >{% if isFollowing == true %}Unfollow{% else %}Follow{% endif %}</a>
                         {% endif %}
                     {% endif %}                                                                                                                
 
@@ -48,10 +48,10 @@
                         {% if is_granted('ROLE_USER') %}
 
                         <div class="dropdown-container profile-options stopPropagation">
-                            <a ng-click="profile.showProfileOptions()" class="button"></a>
+                            <a href="" ng-click="profile.showProfileOptions()" class="button"></a>
                             <ul class="dropdown-choices" id="profileOptions" style="display: none;">
                                 <li class="dropdown-cat">
-                                    <a id="blockButton" class="dropdown-choice" ng-click="profile.patchBlock({{ pageProfile.id }})" >
+                                    <a href="" id="blockButton" class="dropdown-choice" ng-click="profile.patchBlock({{ pageProfile.id }})" >
                                         {% if isBlocked == true %}Unblock{% else %}Block{% endif %}
                                     </a>
                                     <a href="" class="dropdown-choice" ng-click="profile.showReportPopup({{ pageProfile.id }}, 3)">
@@ -62,7 +62,7 @@
                                 {% if is_granted("ROLE_ADMIN") %}
                                 <li class="dropdown-cat">
                                     <div class="dropdown-cat-title">Moderator commands</div>
-                                    <a id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
+                                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
                                 </li>
                                 {% endif %}
                             </ul>

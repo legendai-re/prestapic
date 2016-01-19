@@ -84,6 +84,7 @@ article.profile-card
 		.profile-card-bio
 			color: #777
 			font-size: 14px
+			word-wrap: break-word
 
 section.profile
 	position: relative
@@ -260,6 +261,7 @@ section.profile
 		p.bio, .bio
 			font-size: 20px
 			margin: 0 auto 10px
+			word-wrap: break-word
 
 		.profile-actions
 			width: 100%
@@ -365,3 +367,91 @@ section.profile-galery
 					img
 						width: 285px
 						height: 195px
+
+.full-main
+	width: 1200px
+	height: auto
+	display: block
+
+	.full-main-top
+		width: 100%
+		height: auto
+		display: block
+		margin-bottom: 25px
+
+		h1
+			font-size: 22px
+			font-weight: 600
+			color: $main-color
+			text-transform: uppercase
+
+	.full-main-container
+		.full-main-container-left, .full-main-container-center, .full-main-container-right
+			width: 390px
+			height: auto
+			display: block
+			float: left
+
+		.full-main-container-left, .full-main-container-center
+			margin-right: 15px
+
+		.full-main-content
+			background: white
+			width: 390px
+			height: auto
+			border-bottom: 1px solid rgba(0,0,0,.1)
+			font-size: 16px
+
+			.fcontent-top
+				padding: 10px 15px
+				border-bottom: 1px solid rgba(0,0,0,.1)
+				font-size: 18px
+				font-weight: 600
+				color: #444
+				text-transform: uppercase
+
+			.fcontent-text
+				padding: 10px 15px 20px
+				border-bottom: 1px solid rgba(0,0,0,.1)
+				color: #777
+
+			.fcontent-choice
+				display: block
+
+				.full-width-input
+					width: 100%
+					height: auto
+					padding: 10px 15px
+					border: none
+					border-bottom: 1px solid rgba(0,0,0,.1)
+
+				.fcontent-choice-list
+					.fcontent-choice-item
+						padding: 10px 15px 15px
+						border-bottom: 1px solid rgba(0,0,0,.1)
+
+						&:hover
+							background: rgba(0,0,0,.03)
+
+						label
+							padding-left: 36px
+							display: block
+							overflow: hidden
+
+							span.fcontent-choice-item-title, span.fcontent-choice-item-desc
+								display: block
+								width: 324px
+
+							span.fcontent-choice-item-title
+								color: #777
+
+							span.fcontent-choice-item-desc
+								color: #BBB
+
+			.fcontent-bottom
+				padding: 10px 15px
+				display: block
+				overflow: hidden
+
+				.button
+					float: right
