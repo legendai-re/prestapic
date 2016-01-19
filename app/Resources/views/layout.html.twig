@@ -92,7 +92,8 @@
     {% block js %}                                         
     {% endblock %}
 
-    {% javascripts filter='?yui_js''@PPRequestBundle/Resources/public/js/global.js' 
+    {% javascripts filter='?yui_js''@PPRequestBundle/Resources/public/js/global.js'
+                                   '@PPRequestBundle/Resources/public/js/tabindex.js' 
                                    '@PPHeaderBundle/Resources/public/js/headerApp.js'
                                    '@PPRequestBundle/Resources/public/js/lazyLoadDirective.js' 
                                    '@PPMessageBundle/Resources/public/js/messageApp.js'

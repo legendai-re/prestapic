@@ -30,6 +30,13 @@ class ReportReason
     private $name;
     
     /**
+     * @var Boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean")
+     */
+    private $enabled;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="type", type="integer")
@@ -119,6 +126,7 @@ class ReportReason
      */
     public function __construct()
     {
+        $this->enabled = true;
         $this->reportTickets = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -246,5 +254,29 @@ class ReportReason
     public function getDisabledTickets()
     {
         return $this->disabledTickets;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     *
+     * @return ReportReason
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
     }
 }

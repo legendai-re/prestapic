@@ -16,7 +16,7 @@ class c_LoadUser implements FixtureInterface{
     public function load(ObjectManager $em)
     {
         
-        $namesList = ['Admin', 'Olivier', 'Paul', 'Alexandre', 'Reid', 'Briggs', 'Ibarra', 'Hunter', 'Daniels', 'Barry', 'Norman', 'Hurley', 'Leblanc', 'Anthony', 'Blackwell', 'Palmer', 'Guzman', 'Johnston', 'Hanson', 'Chase', 'Nielsen', 'Bray', 'Holden', 'Evans', 'Drake', 'Espinoza', 'Curry', 'Hodge', 'Stanton', 'Peterson', 'Gilmore', 'Keith', 'Clements'];
+        $namesList = ['OlivierCoue', 'AlexandreJolly', 'Paul', 'Reid', 'Briggs', 'Ibarra', 'Hunter', 'Daniels', 'Barry', 'Norman', 'Hurley', 'Leblanc', 'Anthony', 'Blackwell', 'Palmer', 'Guzman', 'Johnston', 'Hanson', 'Chase', 'Nielsen', 'Bray', 'Holden', 'Evans', 'Drake', 'Espinoza', 'Curry', 'Hodge', 'Stanton', 'Peterson', 'Gilmore', 'Keith', 'Clements'];
         $emailList = array();
         foreach ($namesList as $name){
             array_push($emailList, strtolower($name).'@gmail.com');
@@ -38,21 +38,32 @@ class c_LoadUser implements FixtureInterface{
             $user = new User();
             $user->setName($namesList[$i]);
             $user->setProfilImage($profilImage);
-            if(strcmp($namesList[$i], 'Admin') == 0 || strcmp($namesList[$i], 'Olivier') == 0){
-                $user->addRole('ROLE_ADMIN');
-            }
-            else $user->setRoles(array('ROLE_USER'));
+            $user->setRoles(array('ROLE_USER'));
             $user->setPlainPassword(strtolower($namesList[$i]));
-            $user->setEnabled(true);
+            $user->setEnabled(true);         
             $user->setEmail($emailList[$i]);
             $user->setUsername($emailList[$i]);
             $user->setEmailConfirmed(true);
-            $em->persist($user);
             
-        
-        }
-        
-        
+            if(strcmp($namesList[$i], 'AlexandreJolly') == 0 || strcmp($namesList[$i], 'OlivierCoue') == 0){
+                $user->addRole('ROLE_ADMIN');
+                if(strcmp($namesList[$i], 'AlexandreJolly') == 0){
+                    $user->setEmail("accounts@alexandrejolly.com");
+                    $user->setUsername("accounts@alexandrejolly.com");
+                    $user->setDescription("Student at MMI Bordeaux and passionate, everyday I learn how to design better experiences for people.");
+                    $user->setContact("www.alexandrejolly.com");
+                    $user->setPlainPassword("alexandre");
+                }
+                if(strcmp($namesList[$i], 'OlivierCoue') == 0){
+                    $user->setEmail("olivier28.coue@gmail.com");
+                    $user->setUsername("olivier28.coue@gmail.com");
+                    $user->setDescription("Hi, my name is Olivier. I am passionate about development of web, mobile or software applications.");
+                    $user->setContact("oliviercoue.com");
+                    $user->setPlainPassword("olivier");
+                } 
+            }            
+            $em->persist($user);                    
+        }                
         $em->flush();
     }
       

@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class ContentController extends Controller
 {
    /**
-   * @Security("has_role('ROLE_MODERATOR')")
+   * @Security("has_role('ROLE_ADMIN')")
    */
     public function indexAction()
     {        

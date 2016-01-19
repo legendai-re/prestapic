@@ -48,6 +48,34 @@
             <p>{{ tagError }}</p>
         </div>
     </div>
+        
+    <div style="display: inline-block; margin-left: 50px;">
+        <h1>Reports</h1>
+        <div ng-controller="reportController as report" style="width: 300px; background-color: #DDD;">
+            <select ng-model="currentReportReasonType">
+                <option value="1">Image Request</option>
+                <option value="2">Proposition</option>
+                <option value="3">User</option>
+            </select>
+            <div  style="width: 300px; height: 496px; max-height: 496px; overflow: auto;">
+                <ul style="list-style-type: none; padding: 0px; margin: 0px;">
+                    <li ng-repeat="reason in content.reportReasons" ng-if="reason.type == currentReportReasonType" style="padding-top: 5px; padding-bottom: 5px;">
+                        {{ reason.name }}
+                        <div style="float: right;">
+                            <input type="submit" value="delete" ng-click="report.deleteReportReason( reason.id )" />                            
+                        </div>
+                    </li>
+                </ul>
+                <div style="width: 300px; padding-top: 10px;">
+                    <h3>Add new report reason</h3>
+                    <form ng-submit="report.postReportReason()">
+                        <input style="display: inline;" required type="text" ng-model="newReportReason.name" />
+                        <input style="display: inline;" type="submit" value="submit" />                            
+                    </form>
+                </div>
+            </div>            
+        </div>
+    </div>
     {% endverbatim %}
     
 {% endblock %}
