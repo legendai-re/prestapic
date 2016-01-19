@@ -232,9 +232,12 @@
             }                       
             
             var readyForRequestVote = true;
+            var upvotedRequest = []
             this.postRequestVote = function(id){
-                if(readyForRequestVote){
+                if(readyForRequestVote && upvotedRequest[id] == null){
                     readyForRequestVote=false;
+                    upvotedRequest[id] = true;
+                    $("#imageRequestUpvoteButton_"+id).addClass("animate");
                     $("#imageRequestUpvoteButton_"+id).addClass("voted");
                     document.getElementById('imageRequestUpvoteButton_'+id).innerHTML = parseInt($('#imageRequestUpvoteButton_'+id).html())+1;                            
                     var myData = {

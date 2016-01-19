@@ -743,8 +743,8 @@ class User extends BaseUser
      * @return User
      */
     public function setContact($contact)
-    {
-        $this->contact = $contact;
+    {        
+        $this->contact = preg_replace('#^https?://#', '', $contact);;
 
         return $this;
     }

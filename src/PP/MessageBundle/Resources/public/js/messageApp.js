@@ -90,12 +90,10 @@ messageApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeCl
                 $rootScope.$broadcast('newMessage', message);            
             });
             
+            var firstThread = $rootScope.currentUser.threadList[Object.keys($rootScope.currentUser.threadList)[0]];            
             if(threadToLoad!=null){
                 $rootScope.$emit('loadConversation', $rootScope.currentUser.threadList[threadToLoad.id]);
-            }
-            
-            var firstThread = $rootScope.currentUser.threadList[Object.keys($rootScope.currentUser.threadList)[0]];            
-            if(firstThread){
+            }else if(firstThread){
                 $rootScope.$emit('loadConversation', firstThread);                
             }else{
                 $("#no_message").css("display", "block");
@@ -196,8 +194,7 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                             thread = $rootScope.currentUser.threadList[threadId];                            
                             threadFounded = true;  
                             $scope.currentThread = thread;
-                            $rootScope.currentUser.selectedThreadId = thread.id;
-                            $rootScope.firstMessage
+                            $rootScope.currentUser.selectedThreadId = thread.id;                            
                             break;
                         }  
                     }                                    
@@ -208,6 +205,7 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                     }     
                 }                
                 if(threadFounded){
+                    $rootScope.firstMessage = false;
                     if(!$rootScope.currentUser.threadList[thread.id].haveReceiveMessage && ($rootScope.currentUser.threadList[thread.id] == null || $rootScope.currentUser.threadList[thread.id].messageList.length > 0)){
                         $scope.currentThread = thread;  
                         $rootScope.currentUser.selectedThreadId = thread.id;

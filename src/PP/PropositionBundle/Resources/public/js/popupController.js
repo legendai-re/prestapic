@@ -103,8 +103,9 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
             method: 'PATCH',
             url: formAction,                    
             data: JSON.stringify(myData)
-             }).$window.loc
+             }).
             then(function(response){
+                $location.path($scope.currentLocation);
                 $window.location.href = $location.$$absUrl;
             },function(response) {
                 console.log("Request failed : "+response.statusText );                   

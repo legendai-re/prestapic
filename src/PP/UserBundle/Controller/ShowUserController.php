@@ -181,13 +181,14 @@ class ShowUserController extends Controller
             if ($request->isMethod('POST')) {            
                 $editUserForm->handleRequest($request);
                 if ($editUserForm->isValid()) {
+                    
                     $em->persist($currentUser);
                     $em->flush();
                     
                     $currentUser->createThumbnail();
                     
                     if(in_array($currentUser->getSlug(), array("users", "_profiler"))){
-                        $em = $this->getDoctrine()->getManager();                                                
+                        $em = $this->getDoctrine()->getManager();                                  
                         $currentUser->setSlug($currentUser->getSlug()."-nope");
                         $em->persist($currentUser);
                         $em->flush();

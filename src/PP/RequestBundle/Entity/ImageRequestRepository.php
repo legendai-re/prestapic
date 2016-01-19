@@ -170,11 +170,10 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
         public function getUserImageRequestContributionIds($userid, $limit, $page){
              $qb = $this
                 ->createQueryBuilder('ir')
-                ->select('ir.id')
-                ->where('ir.enabled = true')
-                ->andWhere('ir.author = :userId')                
+                ->select('ir.id')                               
                 ->leftJoin('ir.propositions', 'p')
-                ->orWhere('p.author = :userId')
+                ->where('ir.enabled = true and p.enabled = true')                
+                ->andWhere('ir.author = :userId or p.author = :userId')
                 ->setParameter('userId', $userid)
                 ->orderBy('ir.createdDate', 'DESC')
                 ->distinct(true)                

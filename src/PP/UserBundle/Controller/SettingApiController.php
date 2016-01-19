@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
+use PP\ReportBundle\Entity\DisableTicket;
+
 class SettingApiController extends Controller
 {
     public function patchNotificationModeAction(Request $request){
