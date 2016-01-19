@@ -382,28 +382,62 @@ section.main
 
 			.dragzone
 				width: 730px
-				min-height: 500px
+				height: 480px
 				border: 2px dashed rgba(0,0,0,.1)
 				margin-bottom: 10px
 				position: relative
+				overflow: hidden
 				z-index: 0
 
-				&.drag
+				&:hover, &.drag
 					border-color: rgba(0,0,0,.25)
 
-					&.success
-						border-color: #0ABC4B
+				.dragzone-uploaded
+					position: absolute
+					top: 50%
+					left: 50%
+					@include vendor-prefix(transform, translate(-50%,-50%))
+					min-width: 100%
+					min-height: 100%
+					z-index: 2
 
-					&.danger
-						border-color: #F23F2D
+					.banner, .overlay
+						position: absolute
+						top: 50%
+						left: 50%
+						@include vendor-prefix(transform, translate(-50%,-50%))
+						min-width: 100%
+						min-height: 100%
+						z-index: 2
 
-					&.warning
-						border-color: #F7CA18
+						.img-preview
+							background-repeat: no-repeat
+							background-size: cover
+							position: absolute
+							top: 50%
+							left: 50%
+							@include vendor-prefix(transform, translate(-50%,-50%))
+							width: 100%
+							height: 100%
+							z-index: 2
 
-					&.info
-						border-color: #02AAE9
+					.overlay
+						.button-close
+							background: transparent
+							border: 0
+							font-size: 32px
+							padding: 5px 20px 5px 10px
+							font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif
+							letter-spacing: 0
+							font-weight: 300
+							font-style: normal
+							color: white
+							text-shadow: 0 0 15px rgba(0,0,0,.5)
+							position: absolute
+							top: 0
+							right: 0
 
-				form
+				.dragzone-upload
 					width: 100%
 					min-height: 500px
 					position: relative
@@ -421,6 +455,7 @@ section.main
 							color: rgba(0,0,0,.1)
 							content: $icon-upload
 							font-size: 120px
+							margin-bottom: 10px
 
 						.choose
 							color: $main-color
@@ -465,6 +500,9 @@ section.main
 			span
 				color: #777
 				font-size: 15px
+
+			.button
+				float: right
 
 		article.comments
 			margin: 25px 0

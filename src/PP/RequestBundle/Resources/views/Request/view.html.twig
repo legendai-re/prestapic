@@ -137,18 +137,24 @@
     </article>
     {% if is_granted("ROLE_USER") %}
         {% if not imageRequest.closed and imageRequest.author.id != app.user.id and canProposeImage == true %}
-            <article class="add-prop">  
+            <article ng-controller="uploadController as upload" class="add-prop">  
                 <div class="title-boxe">Add your proposition</div>
+                {{ form_start(propositionForm) }}
                 <div class="dragzone" id="dragzone_proposition">
-                    <div id="uploaded_proposition">
+                    <div class="dragzone-uploaded" id="dragzoneUploaded" style="display: none;">
+                        <div class="banner" id="uploaded_proposition"></div>
+                        <div class="overlay">
+                            <a href="" ng-click="upload.cancelDragZoneUpload()" class="button-close">×</a>
+                        </div>
                     </div>
-                     {{ form_start(propositionForm) }}                                           
+                    <div class="dragzone-upload">
                          {{ form_row(propositionForm.image) }}
-                         <p><strong class="choose">Choose an image</strong> or drag it here</p>
-                         <button class="button" type="submit">Upload image</button>
-                     {{ form_end(propositionForm) }}
+                         <p><strong class="choose">Choose an image</strong> or drag it/click here</p>
+                    </div>
                 </div>
                 <span>By clicking « upload photo » you accept our <a href="">terms</a> again.</span>
+                <button class="button" type="submit">Upload image</button>
+                {{ form_end(propositionForm) }}
             </article>
         {% endif %}
     {% endif %}

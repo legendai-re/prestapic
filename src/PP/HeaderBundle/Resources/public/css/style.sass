@@ -173,9 +173,7 @@ header
 									background: rgba(0,0,0,.1)
 
 								&:active
-									background: #444
-									
-									.filter-choose-list										
+									background: #444							
 
 								&:after
 									display: block
@@ -216,7 +214,7 @@ header
 
 				.search-options-list
 					background: white
-					z-index: 2
+					z-index: 4
 					position: relative
 					overflow: hidden
 					border: 1px solid #ccc
@@ -238,6 +236,11 @@ header
 								&:hover
 									background: #F3F3F3
 									color: #777
+
+								&:focus
+									background: $main-color
+									color: white
+									outline: none
 
 							a
 								display: inline-block
