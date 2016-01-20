@@ -59,7 +59,8 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
             reasonId: 1,
             details: " "
         };       
-       
+        
+        var haveAlreadyReport = false;
         this.postDisableRequest = function(id){
             if(!haveAlreadyReport){
                 haveAlreadyReport = true;

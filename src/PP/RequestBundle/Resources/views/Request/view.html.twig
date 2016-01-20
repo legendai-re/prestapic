@@ -156,15 +156,7 @@
                 <button class="button" type="submit">Upload image</button>
                 {{ form_end(propositionForm) }}
             </article>
-        {% endif %}
-    {% endif %}
-            
-    {% else %}
-        {# if image request disabled #}
-        <h2>This image request have been deleted</h2>
-        <p>reason : {{ imageRequest.disableTicket.reason.name }}</p>
-        <p>Details : {{  imageRequest.disableTicket.details }}</p>
-    {% endif %}
+        {% endif %}    
     
     <article class="comments" ng-controller="commentsController as comments" ng-init="comments.init({{ imageRequest.id }})">
         {{ form(getCommentForm) }}
@@ -200,7 +192,15 @@
             </li>
             {% endif %}
         </ul>
-    </article>   
+    </article>
+    {% endif %}
+            
+    {% else %}
+        {# if image request disabled #}
+        <h2>This image request have been deleted</h2>
+        <p>reason : {{ imageRequest.disableTicket.reason.name }}</p>
+        <p>Details : {{  imageRequest.disableTicket.details }}</p>
+    {% endif %}
 </div>
               
 {% endblock %}
