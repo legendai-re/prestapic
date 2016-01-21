@@ -46,8 +46,8 @@ class User extends BaseUser
     *
     * @ORM\Column(name="name", type="string", length=40)
     * @Assert\Length(
-    *      min = 2,
-    *      max = 40,
+    *      min = 1,
+    *      max = 25,
     *      minMessage = "Your name must be at least {{ limit }} characters long",
     *      maxMessage = "Your name cannot be longer than {{ limit }} characters"
     * )
@@ -60,7 +60,7 @@ class User extends BaseUser
     *
     * @ORM\Column(name="description", type="string", length=255, nullable=true)
     * @Assert\Length(    
-    *      max = 175,    
+    *      max = 175,
     *      maxMessage = "Your description cannot be longer than {{ limit }} characters"
     * )
     */
@@ -70,9 +70,11 @@ class User extends BaseUser
     * @var string $contact
     *
     * @ORM\Column(name="contact", type="string", length=100, nullable=true)
-    * @Assert\Length(    
-    *      max = 100,    
-    *      maxMessage = "Your description cannot be longer than {{ limit }} characters"
+    * @Assert\Length(
+    *      min = 1,    
+    *      max = 50,
+    *      minMessage = "Your contact must be at least {{ limit }} characters long",  
+    *      maxMessage = "Your contact cannot be longer than {{ limit }} characters"
     * )
     */
     private $contact;

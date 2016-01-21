@@ -28,6 +28,12 @@ class Comment
      * @var string
      *
      * @ORM\Column(name="content", type="text")
+     * @Assert\Length(
+     *      min = 1,    
+     *      max = 10000,
+     *      minMessage = "Your comment must be at least {{ limit }} characters long",
+     *      maxMessage = "Your comment be longer than {{ limit }} characters"
+     * )
      */
     private $content;
 

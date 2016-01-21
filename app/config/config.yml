@@ -102,7 +102,7 @@ fos_user:
     registration:
         confirmation:            
             from_email:
-                address:        prestapic@gmail.com
+                address:        accounts@prestapic.com
                 sender_name:    Prestapic
             enabled:    true
             template:   PPUserBundle:Registration:email.txt.twig
@@ -110,7 +110,7 @@ fos_user:
         token_ttl: 86400
         email:
             from_email:
-                address:        prestapic@gmail.com
+                address:        accounts@prestapic.com
                 sender_name:    Prestapic
             template:   FOSUserBundle:Resetting:email.txt.twig
             

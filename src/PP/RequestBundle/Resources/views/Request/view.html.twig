@@ -35,8 +35,8 @@
                 {{ imageRequest.upvote }}
             </a>
             
-            <div class="request-content">
-                <p>{{ imageRequest.request }}</p>
+            <div class="request-content">                
+                <p>{{ imageRequest.request|nl2br }}</p>                
             </div>
             
             <div class="author-container">
@@ -58,8 +58,7 @@
                     {% if loop.index == 6  %}{% set break = true %}{% endif %}
                 {% endfor %}
             </div>                                                                           
-        </div>
-        <div id="editRequestContent"></div>
+        </div>        
         <div class="actions-container">
             <div class="actions-left">
                 <a href="" class="action share">share</a>
@@ -73,7 +72,7 @@
              {# edit request form #}
         {% if isAuthor == true %}
                 {{ form(getEditForm)}}              
-                <input type="submit" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" />
+                <input type="submit" class="stopPropagation" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" />
         {% endif %}
 
         {# report and delete image request form #}

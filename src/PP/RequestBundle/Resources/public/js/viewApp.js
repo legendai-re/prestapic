@@ -81,18 +81,26 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
             }
         };
         
+        $("#editRequestOverClose").click(function () {
+            $('#editRequestOver').fadeOut();  
+        });
+        $("html").click(function () {
+            $('#editRequestOver').fadeOut();  
+        });
+        var haveLoadeEditForm = false;
         this.getEditForm = function(id){
-            console.log("hello");
-            var formAction = document.forms["pp_request_api_get_edit_request_form"].action;
+            $('#editRequestOver').fadeIn();
+            if(!haveLoadeEditForm){
+                haveLoadeEditForm = true;
+                var formAction = document.forms["pp_request_api_get_edit_request_form"].action;
                 $http.get(formAction+".html?id="+id).
-                    then(function(response){                                               
-                        $("#requestContent").css("display", "none");
-                        $("#editRequestContent").append(response.data);
-                        $("#editRequestContent").css("display", "block");
+                    then(function(response){                                                                       
+                        $("#editRequestContent").html(response.data);                       
                     },function(response) {
                         console.log("Request failed : "+response.statusText );                        
                     }
                 );
+            }
         };
                 
 }]);

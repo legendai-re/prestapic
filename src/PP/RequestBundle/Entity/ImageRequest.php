@@ -108,6 +108,12 @@ class ImageRequest
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 90,
+     *      minMessage = "Your request title must be at least {{ limit }} characters long",
+     *      maxMessage = "Your request title cannot be longer than {{ limit }} characters"
+     * )
      */
     private $title;
 
@@ -115,6 +121,12 @@ class ImageRequest
      * @var string
      *
      * @ORM\Column(name="request", type="text")
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 30000,
+     *      minMessage = "Your request description must be at least {{ limit }} characters long",
+     *      maxMessage = "Your request description cannot be longer than {{ limit }} characters"
+     * )
      */
     private $request;
 
@@ -739,4 +751,5 @@ class ImageRequest
     {
         return $this->commentThread;
     }
+    
 }
