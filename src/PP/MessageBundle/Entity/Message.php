@@ -35,6 +35,12 @@ class Message
      * @var string
      *
      * @ORM\Column(name="content", type="text")
+     * @Assert\Length(
+     *      min = 1,    
+     *      max = 10000,
+     *      minMessage = "Your message must be at least {{ limit }} characters long",
+     *      maxMessage = "Your message be longer than {{ limit }} characters"
+     * )
      */
     private $content;
 

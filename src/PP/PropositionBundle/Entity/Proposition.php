@@ -59,6 +59,12 @@ class Proposition
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\Length(
+     *      min = 1,    
+     *      max = 255,
+     *      minMessage = "Your proposition title must be at least {{ limit }} characters long",
+     *      maxMessage = "Your proposition title be longer than {{ limit }} characters"
+     * )
      */
     private $title;
 
