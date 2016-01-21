@@ -57,35 +57,40 @@
                     <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'tags':tag.name }) }}">{{ tag.name }}</a>
                     {% if loop.index == 6  %}{% set break = true %}{% endif %}
                 {% endfor %}
-            </div>                                                                           
+            </div>
         </div>
         <div id="editRequestContent"></div>
         <div class="actions-container">
             <div class="actions-left">
                 <a href="" class="action share">share</a>
             </div>
+            {% if is_granted("ROLE_USER") %}
             <div class="actions-right">
                 <a href="" class="action">ask clarification</a>
-                <a href="" class="action more">more</a>
-            </div>            
+                <div class="dropdown-container stopPropagation">
+                    <a ng-click="request.showMoreOption()" href="" class="action more">More</a>
+                    <ul id="show_more_request_option" class="dropdown-choices" style="display: none;">
+                        {% if isAuthor == true %}
+                        <li class="dropdown-cat">
+                            <span>
+                                {{ form(getEditForm)}}  
+                                <input class="dropdown-choice" type="submit" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" title="Edit"/>
+                            </span>
+                            <span>
+                                <input class="dropdown-choice" type="submit" value="Delete request" ng-click="request.postDisableRequest({{ imageRequest.id }})" />
+                                {{ form(disableTicketForm) }}
+                            </span>
+                        </li>
+                        {% else %}
+                        <li class="dropdown-cat">
+                            <a class="dropdown-choice" ng-click="request.showReportPopup({{ imageRequest.id }},1)" href="" title="Report">Report</a>   
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %} 
         </div>
-        
-             {# edit request form #}
-        {% if isAuthor == true %}
-                {{ form(getEditForm)}}              
-                <input type="submit" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" />
-        {% endif %}
-
-        {# report and delete image request form #}
-        {% if is_granted("ROLE_USER") %}
-            {% if imageRequest.author.id == currentUser.id %}
-                <input type="submit" value="Delete request" ng-click="request.postDisableRequest({{ imageRequest.id }})" />
-                {{ form(disableTicketForm) }}                                                          
-            {% else %}
-                <a ng-click="request.showReportPopup({{ imageRequest.id }},1)" href="">Report</a>                      
-            {% endif %}
-        {% endif %} 
-        
     </article> 
                  
 

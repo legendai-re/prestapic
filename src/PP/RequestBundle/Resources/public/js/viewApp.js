@@ -93,6 +93,18 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
                     }
                 );
         };
+
+        this.showMoreOption = function(){
+            if($('#show_more_request_option').css("display") == "none"){
+                $('#show_more_request_option').css("display", "block");
+            }else{
+                $('#show_more_request_option').css("display", "none");
+            }
+        };
+
+        $('html').click(function(){
+            $('#show_more_request_option').css("display", "none");
+        });
                 
 }]);
 
