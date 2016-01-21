@@ -1,5 +1,6 @@
 .dropdown-container
 	position: relative
+	display: inline
 
 	.dropdown-text
 		float: right
@@ -42,7 +43,13 @@
 				font-weight: 600
 				padding: 0 15px
 
-			a.dropdown-choice
+			input.dropdown-choice
+				border: none
+				background: none
+				width: 100%
+				text-align: left
+
+			a.dropdown-choice, input.dropdown-choice
 				padding: 5px 15px
 				display: block
 				color: #777
