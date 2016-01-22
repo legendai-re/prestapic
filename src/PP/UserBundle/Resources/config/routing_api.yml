@@ -9,4 +9,9 @@ pp_user_api_settings:
     resource: PP\UserBundle\Controller\SettingApiController
     name_prefix: pp_user_api_settings_
     
+pp_user_api_register:
+    type: rest
+    resource: PP\UserBundle\Controller\RegistrationApiController
+    name_prefix: pp_user_api_register_
+    
  

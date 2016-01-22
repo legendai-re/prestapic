@@ -1,38 +1,32 @@
-<div style="margin: auto;" class="full-main">
-    <div class="full-main-top">
-        <h1>Register</h1>
-    </div>
-    <div class="full-main-container" >
-        <div class="full-main-container-center">
-            <div class="full-main-content">
-                <form action="{{ path('pp_user_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-                    <div class="fcontent-choice">
-                        {{ form_errors(form.name) }}
-                        {{ form_widget(form.name, {'attr': {'class': 'full-width-input', 'placeholder': 'Username'}}) }}
+<div class="signin-form">
+    <form action="{{ path('pp_user_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+        <div class="signin-rigth">
+            {{ form_errors(form.username) }}
+            {{ form_widget(form.username, {'attr': {'class': 'username', 'placeholder': 'Username'}}) }}
 
-                        {{ form_errors(form.email) }}
-                        {{ form_widget(form.email, {'attr': {'class': 'full-width-input', 'placeholder': 'Email'}}) }}
+            {{ form_errors(form.email) }}
+            {{ form_widget(form.email, {'attr': {'class': 'username', 'placeholder': 'Email'}}) }}
 
-                        {%  for passwordField in form.plainPassword %}
-                            {%  if loop.index == 1 %}
-                                {{ form_errors(passwordField) }}
-                                {{ form_widget(passwordField, {'attr': {'class': 'full-width-input', 'placeholder': 'Password'}}) }}
-                            {% else %}
-                                {{ form_errors(passwordField) }}
-                                {{ form_widget(passwordField, {'attr': {'class': 'full-width-input', 'placeholder': 'Repeat password'}}) }}
-                            {% endif %}
-                        {% endfor %}
+            {%  for passwordField in form.plainPassword %}
+                {%  if loop.index == 1 %}
+                    {{ form_errors(passwordField) }}
+                    {{ form_widget(passwordField, {'attr': {'class': 'password', 'placeholder': 'Password'}}) }}
+                {% else %}
+                    {{ form_errors(passwordField) }}
+                    {{ form_widget(passwordField, {'attr': {'class': 'password', 'placeholder': 'Repeat password'}}) }}
+                {% endif %}
+            {% endfor %}
 
-                        {{ form_row(form.username) }}    
-                        {{ form_rest(form) }}
-                    </div>
-                    <div class="fcontent-bottom">
-                        <input class="button" type="submit" value="Sign up" />
-                    </div>
-                </form>
-            </div>
+            {{ form_row(form.username) }}    
+            {{ form_rest(form) }}
         </div>
-    </div>
+        <div class="signin-left">
+        </div>
+        <div class="signin-right">
+            <button type="submit" class="button red" id="" name="_submit">Sign up</button>
+        </div>
+    </form>
 </div>
+     
 
 

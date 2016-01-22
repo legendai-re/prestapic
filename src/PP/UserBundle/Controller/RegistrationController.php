@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use Symfony\Component\Form\FormError;
 
+use PP\UserBundle\Constant\UserConstants;
 use PP\UserBundle\Form\Type\RegistrationFormType;
 /**
  * Controller managing the registration
@@ -73,6 +74,22 @@ class RegistrationController extends Controller
                 $haveError = true;
             }
             
+            if($userRepository->findOneBy(array("username"=>$form->getData()->getUsername())) != null){
+                $form->get('username')->addError(new FormError('username already used'));
+                $haveError = true;
+            }
+            
+            $username = $form->getData()->getUsername();
+            $arrayUserName = str_split($username);
+            $allowedChar = UserConstants::getAllowedChar();
+            foreach ($arrayUserName as $character){
+                if(!in_array($character, $allowedChar)){
+                    $form->get('username')->addError(new FormError('invalid username'));
+                    $haveError = true;
+                    break;
+                }
+            }           
+            
             if(!$haveError){
                 $event = new FormEvent($form, $request);
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
@@ -92,7 +109,8 @@ class RegistrationController extends Controller
 
                 $user->setProfilImage($profilImage);            
                 $user->setRoles(array('ROLE_USER'));
-                $user->setUsername($form->getData()->getEmail());
+                $user->setName($form->getData()->getUsername());
+                $user->setSlug($form->getData()->getUsername());
                 $user->setEnabled(true);
                 $user->setEmailConfirmed(false);
                 ////////////////                                  

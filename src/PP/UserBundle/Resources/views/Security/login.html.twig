@@ -1,28 +1,37 @@
 <h3 class="overlay-title">Prestapic</h3>
-<p class="ind">Sign in to Prestapic</p>
-<div class="overlay-actions">
+<p class="ind">Welcome on Prestapic</p>
+<div id="signContainer" class="overlay-actions">
     <div class="top-form">
         If you want to post requests or help people you need to connect
     </div>
-    <div class="signin-form">
-        <form action="{{ path("fos_user_security_check") }}" method="post">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-            <input type="text" class="username" placeholder="Your email" id="username" name="_username" value="{{ last_username }}" required="required" />
-            <input type="password" class="password" placeholder="Your password" id="password" name="_password" required="required" />
-            <div class="signin-left">
-                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                <label for="remember_me">Remember me</label>
-            </div>
-            <div class="signin-right">
-                <button type="submit" class="button red signin" id="_submit" name="_submit">Sign in</button>
-            </div>
-            <div class="forgot">
-                <a href="{{ path('pp_user_resetting_request') }}">Forgot your password?</a>
-            </div>
-        </form>
+    <div id="signInContent">    
+        <div class="signin-form">
+            <form action="{{ path("fos_user_security_check") }}" method="post">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                <input type="text" class="username" placeholder="Your email" id="username" name="_username" value="{{ last_username }}" required="required" />
+                <input type="password" class="password" placeholder="Your password" id="password" name="_password" required="required" />
+                <div class="signin-left">
+                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                    <label for="remember_me">Remember me</label>
+                </div>
+                <div class="signin-right">
+                    <button type="submit" class="button red" id="_submit" name="_submit">Sign in</button>
+                </div>
+                <div class="forgot">
+                    <a href="{{ path('pp_user_resetting_request') }}">Forgot your password?</a>
+                </div>
+            </form>
+        </div>    
+        <div class="signup-form">
+            Not member yet? <a ng-click="sign.showSignUp()" href="">Sign up</a>
+        </div>
     </div>
-    <div class="signup-form">
-        Not member yet? <a href="{{ path('pp_user_register') }}">Sign up</a>
+    <div id="signUpContent" style="display: none;">
+        <div id="signUpFormContainer">
+        </div>
+        <div class="signup-form">
+            Allready registered? <a ng-click="sign.showSignIn()" href="">Sign in</a>
+        </div>        
     </div>
 </div>
 

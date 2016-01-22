@@ -42,21 +42,21 @@ class c_LoadUser implements FixtureInterface{
             $user->setPlainPassword(strtolower($namesList[$i]));
             $user->setEnabled(true);         
             $user->setEmail($emailList[$i]);
-            $user->setUsername($emailList[$i]);
+            $user->setUsername($namesList[$i]);
             $user->setEmailConfirmed(true);
             
             if(strcmp($namesList[$i], 'AlexandreJolly') == 0 || strcmp($namesList[$i], 'OlivierCoue') == 0){
                 $user->addRole('ROLE_ADMIN');
                 if(strcmp($namesList[$i], 'AlexandreJolly') == 0){
                     $user->setEmail("accounts@alexandrejolly.com");
-                    $user->setUsername("accounts@alexandrejolly.com");
+                    $user->setUsername("AlexandreJolly");
                     $user->setDescription("Student at MMI Bordeaux and passionate, everyday I learn how to design better experiences for people.");
                     $user->setContact("www.alexandrejolly.com");
                     $user->setPlainPassword("alexandre");
                 }
                 if(strcmp($namesList[$i], 'OlivierCoue') == 0){
                     $user->setEmail("olivier28.coue@gmail.com");
-                    $user->setUsername("olivier28.coue@gmail.com");
+                    $user->setUsername("OlivierCoue");
                     $user->setDescription("Hi, my name is Olivier. I am passionate about development of web, mobile or software applications.");
                     $user->setContact("oliviercoue.com");
                     $user->setPlainPassword("olivier");

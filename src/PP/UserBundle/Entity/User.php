@@ -35,9 +35,8 @@ class User extends BaseUser
     */
     private $emailConfirmed;
     
-    /**
-    * @Gedmo\Slug(fields={"name"})
-    * @ORM\Column(length=128, unique=true)
+    /**   
+    * @ORM\Column(name="slug", type="string", length=128, unique=true)
     */
     private $slug;
 
