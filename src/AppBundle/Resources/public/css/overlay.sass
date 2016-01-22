@@ -12,10 +12,7 @@ section.overlay
 	margin: 0
 	border: 0
 
-	&.sign
-		background-color: rgba(255,255,255,0.97)
-
-	&.send-report, &.send-request
+	&.send-report, &.send-request, &.sign
 		background-color: rgba(0,0,0,.85)
 
 	button.button-close
@@ -30,14 +27,14 @@ section.overlay
 		letter-spacing: 0
 		font-weight: 300
 		font-style: normal
-		color: #777
+		color: rgba(255,255,255,.5)
 
 		&:hover
-			color: $main-color
+			color: rgba(255,255,255,1)
 
 	.overlay-content
 		width: 100%
-		max-width: 750px
+		max-width: 390px
 		height: auto
 		position: absolute
 		top: 50%
@@ -45,7 +42,7 @@ section.overlay
 		@include vendor-prefix(transform, translate(-50%, -50%))
 
 		.overlay-title
-			background: url(../images/logo.png) no-repeat
+			background: url(../images/logo_white.png) no-repeat
 			background-size: cover
 			width: 60px
 			height: 48px
@@ -55,63 +52,104 @@ section.overlay
 
 		p.ind
 			font-size: 20px
-			color: #777
+			color: rgba(255,255,255,.75)
 			text-align: center
 
 		.overlay-actions
+			background: white
+			border: 1px solid rgba(0,0,0,.1)
+			border-radius: 3px
 			width: 100%
-			margin-bottom: 20px
 			display: block
 			overflow: hidden
 
+			.top-form
+				font-size: 20px
+				color: #444
+				text-align: center
+				padding: 20px 20px 15px
+				font-weight: 400
+				border-bottom: 1px solid rgba(0,0,0,.1)
+
 			.signin-form
-				width: 50%
-				padding: 30px
-				border-right: 1px solid #aaa
+				width: 100%
 				display: block
-				float: left
+				overflow: hidden
 
 				form
 					input
 						background: transparent
-						margin: 0 0 10px
-						padding: 10px
-						font-size: 20px
+						margin: 0
+						padding: 10px 15px
+						font-size: 18px
 						border: none
-						border-bottom: 1px solid #ccc
+						border-bottom: 1px solid rgba(0,0,0,.1)
 
 						&:focus
-							border-bottom: 2px solid $main-color
-							margin-bottom: 9px
+							border-bottom: 1px solid $main-color
 
 					input[type="text"], input[type="password"], input[type="mail"]
 						width: 100%
 
-					.remember
-						width: 100%
+					.signin-left, .signin-right
+						width: 50%
 						display: inline-block
-						margin: 0
+						padding: 10px 15px
+						float: left
 
-					.button
-						margin: 20px 10px 0 0
+					.signin-left
+						text-align: left
+						color: #444
+						font-size: 14px
+						line-height: 16px
+						padding: 15px
+
+						label
+							padding-top: 4px
+
+					.signin-right
+						text-align: right
+
+					.forgot
+						display: block
+						float: left
+						width: 100%
+						height: auto
+						color: #BBB
+						font-size: 12px
+						padding: 0 15px
+
+						a 
+							&:hover
+								color: $main-color
 
 			.signup-form
-				width: 50%
-				padding: 30px
+				background: #FAFAFA
+				width: 100%
+				padding: 15px
 				display: block
-				float: left
+				text-align: center
+				border-top: 1px solid rgba(0,0,0,.1)
+				margin-top: 20px
+				font-size: 20px
 
-				.message
-					font-size: 30px
-					color: #777
-
-				.button
-					margin: 20px 10px 0 0
+				a
+					&:hover
+						color: $main-color
 
 		.terms
+			width: 360px
 			text-align: center
+			padding: 10px 15px
 			font-size: 12px
-			color: #aaa
+			color: rgba(255,255,255,.33)
+
+			a
+				color: rgba(255,255,255,.5)
+				text-decoration: underline
+
+				&:hover
+					color: rgba(255,255,255,.75)
 
 	// REPORT, NEW REQUEST
 
