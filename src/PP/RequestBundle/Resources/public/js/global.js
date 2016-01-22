@@ -21,7 +21,7 @@ $("#sendRequestOverClose").click(function () {
 });
 
 $("html").click(function () {
-   $('#sendRequestOver').fadeOut();  
+   $('#sendRequestOver').fadeOut();   
 });
 
 $("#pp_requestbundle_image_request_title").one('focus', function () {
