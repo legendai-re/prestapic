@@ -33,7 +33,7 @@ reportPopupApp.controller('reportController', ['$scope', '$rootScope', '$http', 
             then(function(response) {                    
                  var reportForm = angular.element(response.data);                        
                 $compile(reportForm)($scope);                             
-                angular.element( document.querySelector('#reportPopupApp')).append(reportForm);
+                angular.element( document.querySelector('#reportPopupApp')).html(reportForm);
                 showPopup();
             }, function(response) {
                 console.log("Request failed : "+response.statusText );                        

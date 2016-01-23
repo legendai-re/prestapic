@@ -51,6 +51,7 @@ class ShowUserApiController extends Controller
         foreach($imageRequestIds as $id){
             $tempImageRequest = $imageRequestRepository->getOneImageRequest($id["id"]);
             if($tempImageRequest->getEnabled()){
+                $tempImageRequest->setDateAgo($this->container->get('pp_notification.ago')->ago($tempImageRequest->getCreatedDate()));
                 array_push($imageRequestList, $tempImageRequest);
                 $tempPropositions = $propositionRepository->getPropositions($id["id"], 3, 1);
                 $propositionsList['imageRequest_'.$id['id']] =  $tempPropositions;

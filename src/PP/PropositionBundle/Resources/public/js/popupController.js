@@ -129,13 +129,13 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
         $location.path($scope.currentLocation);
     };
 
-    var timeout = null;
+    /*var timeoutProposition = null;
     $(document).on('change', function() {
-        if (timeout !== null) {
+        if (timeoutProposition !== null) {
             $("#propActionTop").css("display", "block");
             $("#propActionBottom").css("display", "block");
             $("#propOverlay").css("display", "block");
-            clearTimeout(timeout);
+            clearTimeout(timeoutProposition);
         }
 
         timeout = setTimeout(function() {                
@@ -143,7 +143,7 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
             $("#propActionBottom").css("display", "none");
             $("#propOverlay").css("display", "none");
         }, 2000);
-    });
+    });*/
     
 
 }]);

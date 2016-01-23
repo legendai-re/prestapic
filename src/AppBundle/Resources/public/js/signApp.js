@@ -59,7 +59,8 @@
         function checkEmail() {
             $scope.emailValid = false;
             $scope.emailValid = '';
-            var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            var re = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+            console.log(re.test($scope.email));
             if(re.test($scope.email)){
                 var formAction = document.forms["pp_user_api_get_email_exist_form"].action;                
                 $http.get(formAction+"?email="+$scope.email).
@@ -137,17 +138,17 @@
                 if($scope.firstPassword.length < 3){
                     $scope.passwordValid = false;
                     $scope.passwordMessage = "to short";
-                    $event.preventDefault();
+                    //$event.preventDefault();
                 }
                 else if($scope.firstPassword == $scope.secondPassword){
                     
                 }else{
                     $scope.passwordValid = false;
                     $scope.passwordMessage = "not match";
-                    $event.preventDefault();
+                    //$event.preventDefault();
                 }
             }else{
-                $event.preventDefault();
+               //$event.preventDefault();
             }
         }
         

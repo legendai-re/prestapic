@@ -260,6 +260,13 @@ containerApp.controller('uploadController', ['$scope', '$http', '$compile', '$wi
         document.getElementById("pp_propositionbundle_proposition_image_file").value = "";
         $("#dragzoneUploaded").css("display", "none");
     }
+    
+    this.submitForm = function(){
+        if(document.getElementById("pp_propositionbundle_proposition_image_file").value != null && document.getElementById("pp_propositionbundle_proposition_image_file").value != ""){
+            document.forms["pp_propositionbundle_proposition"].submit();
+        }
+    };
+    
 }]);
 
 containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$window', '$location', function ($scope, $http, $compile, $window, $location) {
