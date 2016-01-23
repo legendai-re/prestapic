@@ -373,5 +373,61 @@ class Image
             if($src_img)imagedestroy($src_img);
     }
     
+    public function resizeWidth($foldername, $cropWidth) {
+        ini_set('memory_limit', '-1');
+       
+        $resizeRatio = $cropWidth;        
+        //$resizeRatio *= 3;
+        $size = getimagesize($this->getUploadRootDir()  .'/original/'. $this->id .'.'. $this->url);
+        $width = $size[0];
+        $height = $size[1];
+        $mime = $size['mime'];
+               
+        switch($mime){
+            case 'image/gif':
+                    $image_create = "imagecreatefromgif";
+                    $image = "imagegif";
+                    break;
+
+            case 'image/png':
+                    $image_create = "imagecreatefrompng";
+                    $image = "imagepng";
+                    $quality = 7;
+                    break;
+
+            case 'image/jpeg':
+                    $image_create = "imagecreatefromjpeg";
+                    $image = "imagejpeg";
+                    $quality = 80;
+                    break;
+
+            default:
+                    return false;
+                    break;
+        }
+                    
+        $source = $image_create($this->getUploadRootDir().'/original/'. $this->id .'.'. $this->url);
+                        
+        if($size[0] > $cropWidth){
+            $ratio = $size[0]/$size[1];
+            if( $ratio > 1) {                
+                $width = $resizeRatio;
+                $height = $resizeRatio/$ratio;
+            }
+            else {
+                $width = $resizeRatio*$ratio;
+                $height = $resizeRatio;                
+            }
+        }else{
+            $width = $size[0];
+            $height = $size[1];
+        }
+        $destination = imagecreatetruecolor($width, $height);                       
+        
+        $thumbnailDir = $this->getUploadRootDir().'/'.$foldername.'/'. $this->id .'.'. $this->url;
+        
+        imagecopyresampled($destination, $source, 0, 0, 0, 0, $width,$height,$size[0],$size[1]);        
+        imagejpeg($destination, $thumbnailDir, 100);                
+    }
     
 }
