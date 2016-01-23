@@ -7,6 +7,9 @@ header
 	padding: 0 30px
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 
+	a:hover
+		text-decoration: none
+
 	div.content
 		max-width: 1230px
 
@@ -83,10 +86,15 @@ header
 							margin-right: 5px
 							position: relative
 
-							&:hover
+							&:hover, &:focus
 								background: #777
 								color: white
 								border: 1px solid transparent
+								text-decoration: none
+
+							&:focus
+								box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(196, 75, 71, 0.5)
+								text-decoration: none
 
 							&:active
 								background: #444
@@ -118,7 +126,7 @@ header
 							background: #F3F3F3
 							margin-right: 5px
 
-							&:hover
+							&:hover, &:focus
 								background: #777
 								color: white
 
@@ -290,13 +298,6 @@ header
 					a
 						display: block
 
-						// &:hover
-						// 	color: #999
-
-						// &.active
-						// 	color: #999
-						// 	border-bottom: 2px solid #999
-
 						&.button
 							margin: 20px 0
 
@@ -310,22 +311,30 @@ header
 							overflow: hidden
 							border-radius: 50%
 
-						&.notification
-							background: transparent
-							color: #ccc
-							border: 1px solid #ccc
+							&:focus
+								box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(196, 75, 71, 0.5)
+								text-decoration: none
 
-							&:hover
-								border: 1px solid $main-color
-								color: $main-color
+						&.notification
+							background: #F3F3F3
+							color: #ccc
+
+							&:hover, &:focus
+								background: #777
+								color: white
+
+							&:active, &.open
+								background: #444!important
+								color: white
 
 						&.notification:before
 							display: block
-							width: 20px
-							height: 20px
-							padding: 9px 7px
+							width: 14px
+							height: 14px
+							padding: 11px
 							text-align: center
 							font-family: 'pp-font'
+							font-size: 14px
 							speak: none
 							font-style: normal
 							font-weight: normal
@@ -350,11 +359,6 @@ header
 								padding: 4px 0
 								text-align: center
 								color: white
-
-						&.notification.open
-							border-color: $main-color
-							color: $main-color
-							box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
 
 						&.account
 							img

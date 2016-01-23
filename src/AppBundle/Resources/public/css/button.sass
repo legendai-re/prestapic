@@ -16,6 +16,10 @@ button, .button
 		color: white
 		text-decoration: none
 
+	&:focus
+		box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(196, 75, 71, 0.5)
+		text-decoration: none
+
 	&:active
 		background: #444
 		color: white
@@ -44,9 +48,10 @@ button, .button
 			background: #444
 
 	&.green
-		&:hover
+		&:hover, &:focus
 			background: #0ABC4B
 			color: white
+			box-shadow: none
 
 		&:active
 			background: #444

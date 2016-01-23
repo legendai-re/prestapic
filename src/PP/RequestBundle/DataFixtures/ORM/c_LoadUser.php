@@ -44,6 +44,7 @@ class c_LoadUser implements FixtureInterface{
             $user->setEmail($emailList[$i]);
             $user->setUsername($namesList[$i]);
             $user->setEmailConfirmed(true);
+            $user->setSlug($namesList[$i]);
             
             if(strcmp($namesList[$i], 'AlexandreJolly') == 0 || strcmp($namesList[$i], 'OlivierCoue') == 0){
                 $user->addRole('ROLE_ADMIN');

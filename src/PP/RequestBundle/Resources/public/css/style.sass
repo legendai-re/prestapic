@@ -24,7 +24,7 @@ section.main
 				font-weight: 600
 				margin: 0 45px 0 0
 
-				&:hover
+				&:hover, &:focus
 					color: #444
 					text-decoration: none
 
@@ -57,8 +57,14 @@ section.main
 			border-bottom: 1px solid rgba(0,0,0,.1)
 
 			.count-vote
-				width: 100px
+				width: auto
 				float: right
+				padding: 0 5px
+				margin-right: -5px
+				border-radius: 3px
+
+				&:hover, &:focus
+					background: rgba(0, 0, 0, 0.03)
 
 			.request-container
 				width: 770px
@@ -79,8 +85,18 @@ section.main
 
 					a
 						&:hover
-							color: $main-color-hover
 							text-decoration: none
+
+						&:focus
+							text-decoration: none
+							position: relative
+
+							&:before
+								content: "\00b6"
+								position: absolute
+								left: -20px
+								top: 2px
+								color: #ccc
 
 				.request-content
 					width: 100%
@@ -140,8 +156,9 @@ section.main
 					&:after
 						font-weight: normal
 
-					&:hover
+					&:hover, &:focus
 						color: #444
+						text-decoration: none
 
 					&.active
 						color: $main-color
@@ -193,8 +210,12 @@ section.main
 					&:last-child
 						margin: 0
 
-					&:hover
+					&:hover, &:focus
 						background: rgba(0,0,0,.15)
+						text-decoration: none
+
+					&:focus
+						box-shadow: 0 0 0 1px #fafafa, 0 0 0 3px rgba(196, 75, 71, 0.5)
 
 					img
 						width: 240px
@@ -233,19 +254,21 @@ section.main
 				text-align: center
 				text-transform: uppercase
 
+				&:focus
+					box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(196, 75, 71, 0.5)
+
 			.reply
 				background: rgba(0,0,0,0.1)
 				width: 380px
 				height: 237px
 				display: inline-block
-				overflow: hidden
 				margin: 0 5px 10px
 				float: left
 				position: relative
 
 				.prop
 					width: 380px
-					height: 260px
+					height: 237px
 					display: block
 
 					img
@@ -258,10 +281,13 @@ section.main
 					background: -ms-linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
 					background: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.7) 100%)
 					width: 380px
-					height: 260px
+					height: 237px
 					display: block
 					position: absolute
 					top: 0
+
+					&:focus
+						box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(196, 75, 71, 0.5)
 
 				.img-title
 					position: absolute
@@ -335,12 +361,20 @@ section.main
 
 					a.count-vote
 						color: rgba(255,255,255,.75)
+						padding: 0 5px 2px
+						border-radius: 3px
 
 						&:hover, &.voted
 							color: #00D084
 
+						&:hover, &:focus
+							background: rgba(255,255,255,.1)
+
 						&.blocked
 							color: rgba(255,255,255,.5)
+
+							&:hover, &:focus
+								background: rgba(255,255,255,.1)
 
 				&.selected
 					width: 770px
@@ -393,7 +427,6 @@ section.main
 				border: 2px dashed rgba(0,0,0,.1)
 				margin-bottom: 10px
 				position: relative
-				overflow: hidden
 				z-index: 0
 
 				&:hover, &.drag
@@ -438,15 +471,19 @@ section.main
 							letter-spacing: 0
 							font-weight: 300
 							font-style: normal
-							color: white
+							color: rgba(255,255,255,.75)
 							text-shadow: 0 0 15px rgba(0,0,0,.5)
 							position: absolute
 							top: 0
 							right: 0
 
+							&:hover, &:focus
+								text-decoration: none
+								color: white
+
 				.dragzone-upload
 					width: 100%
-					min-height: 500px
+					height: 480px
 					position: relative
 					padding: 150px 0
 					z-index: 1
@@ -480,6 +517,11 @@ section.main
 						top: 0
 						left: 0
 						opacity: 0
+
+						&:focus
+							box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(196, 75, 71, 0.5)
+							opacity: 1
+							padding-top: 478px
 
 					button
 						display: block
