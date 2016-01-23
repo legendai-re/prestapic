@@ -122,7 +122,7 @@ class RegistrationController extends Controller
                     $user->setSlug($user->getSlug()."-nope");
                     $em->persist($user);
                     $em->flush();
-                }                        
+                }                    
 
                 $url = $this->generateUrl('pp_user_profile', array('slug'=>$user->getSlug()));
                 $response = new RedirectResponse($url);                                       
@@ -215,7 +215,7 @@ class RegistrationController extends Controller
         if (interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
             $tokenStorage = $this->get('security.token_storage');
         } else {
-            $tokenStorage = $this->get('security.context');
+            $tokenStorage = $this->get('security.authorization_checker');
         }
 
         $key = sprintf('_security.%s.target_path', $tokenStorage->getToken()->getProviderKey());

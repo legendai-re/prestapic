@@ -22,3 +22,4 @@ parameters:
     pp_notification.faye.client.class:  'Nc\FayeClient\Client'
     compass: 'Path/bin/compass'
     sass: 'Path/bin/sass'
+    ruby: 'Path/bin/ruby'

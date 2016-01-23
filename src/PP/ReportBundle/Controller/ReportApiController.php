@@ -24,7 +24,7 @@ class ReportApiController extends Controller
         
         $type = $request->get("type");
         
-        if ($this->get('security.context')->isGranted('ROLE_USER') && $currentUser != null && $type!=null) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser != null && $type!=null) {
             
             $em = $this->getDoctrine()->getManager();
             $reportReasonRepository = $em->getRepository("PPReportBundle:ReportReason");
@@ -52,7 +52,7 @@ class ReportApiController extends Controller
         $response = new Response();
         $currentUser = $this->getUser();
         
-        if ($this->get('security.context')->isGranted('ROLE_USER') && $currentUser != null) {            
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser != null) {            
             if($request->get("ticketType")!=null && $request->get("reasonId")!=null && $request->get("targetId")!=null){
                 
                 $targetId = $request->get("targetId");
@@ -133,7 +133,7 @@ class ReportApiController extends Controller
                     switch ($request->get("ticketType")){
                         case ReportTicketType::IMAGE_REQUEST:
                             $imageRequest = $imageRequestRepository->find($targetId);
-                            if($imageRequest != null && ($this->get('security.context')->isGranted('ROLE_MODERATOR') || $currentUser->getId() == $imageRequest->getAuthor()->getId())){                                
+                            if($imageRequest != null && ($this->get('security.authorization_checker')->isGranted('ROLE_MODERATOR') || $currentUser->getId() == $imageRequest->getAuthor()->getId())){                                
                                 $disableTicket->setDisableTicketType(ReportTicketType::IMAGE_REQUEST);
                                 $disableTicket->setTargetId($imageRequest->getId());
                                 $imageRequest->setDisableTicket($disableTicket);
@@ -145,7 +145,7 @@ class ReportApiController extends Controller
                             break;
                         case ReportTicketType::USER:
                             $user = $userRepository->find($targetId);
-                            if($user != null && ($this->get('security.context')->isGranted('ROLE_MODERATOR') || $currentUser->getId() == $user->getId())){
+                            if($user != null && ($this->get('security.authorization_checker')->isGranted('ROLE_MODERATOR') || $currentUser->getId() == $user->getId())){
                                 $user->addReportNb();
                                 $disableTicket->setDisableTicketType(ReportTicketType::USER);
                                 $disableTicket->setTargetId($user->getId());
@@ -158,7 +158,7 @@ class ReportApiController extends Controller
                             break;
                         case ReportTicketType::PROPOSITION:
                             $proposition = $propositionRepository->find($targetId);
-                            if($proposition != null && ($this->get('security.context')->isGranted('ROLE_MODERATOR') || $proposition->getAuthor()->getId() == $user->getId())){
+                            if($proposition != null && ($this->get('security.authorization_checker')->isGranted('ROLE_MODERATOR') || $proposition->getAuthor()->getId() == $user->getId())){
                                 $proposition->addReportNb();
                                 $disableTicket->setDisableTicketType(ReportTicketType::PROPOSITION);
                                 $disableTicket->setTargetId($proposition->getId());

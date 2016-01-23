@@ -85,7 +85,7 @@ class SettingController extends Controller
         
         $currentUser = $this->getUser();
         
-        if($this->get('security.context')->isGranted('ROLE_USER') && $currentUser != null && $password != null) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser != null && $password != null) {
             
             
             $user_manager = $this->get('fos_user.user_manager');

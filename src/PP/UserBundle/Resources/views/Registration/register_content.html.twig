@@ -1,19 +1,23 @@
 <div class="signin-form">
-    <form action="{{ path('pp_user_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+    <form action="{{ path("pp_user_api_get_username_exist") }}" name="pp_user_api_get_username_exist_form">
+    </form>
+    <form action="{{ path("pp_user_api_get_email_exist") }}" name="pp_user_api_get_email_exist_form">
+    </form>
+    <form  action="{{ path('pp_user_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
         <div class="signin-rigth">
-            {{ form_errors(form.username) }}
-            {{ form_widget(form.username, {'attr': {'class': 'username', 'placeholder': 'Username'}}) }}
+            {{ form_errors(form.username) }}            
+            {{ form_widget(form.username, {'attr': {'class': 'username', 'placeholder': 'Username', 'ng-change':'sign.usernameTyping()', 'ng-model':'username'}}) }}
 
             {{ form_errors(form.email) }}
-            {{ form_widget(form.email, {'attr': {'class': 'username', 'placeholder': 'Email'}}) }}
+            {{ form_widget(form.email, {'attr': {'class': 'username', 'placeholder': 'Email', 'ng-change':'sign.emailTyping()', 'ng-model':'email'}}) }}
 
             {%  for passwordField in form.plainPassword %}
                 {%  if loop.index == 1 %}
                     {{ form_errors(passwordField) }}
-                    {{ form_widget(passwordField, {'attr': {'class': 'password', 'placeholder': 'Password'}}) }}
+                    {{ form_widget(passwordField, {'attr': {'class': 'password', 'placeholder': 'Password', 'ng-model':'firstPassword'}}) }}
                 {% else %}
                     {{ form_errors(passwordField) }}
-                    {{ form_widget(passwordField, {'attr': {'class': 'password', 'placeholder': 'Repeat password'}}) }}
+                    {{ form_widget(passwordField, {'attr': {'class': 'password', 'placeholder': 'Repeat password', 'ng-model':'secondPassword'}}) }}
                 {% endif %}
             {% endfor %}
 
@@ -23,7 +27,7 @@
         <div class="signin-left">
         </div>
         <div class="signin-right">
-            <button type="submit" class="button red" id="" name="_submit">Sign up</button>
+            <button type="submit" ng-click="sign.checkForm($event)" class="button red" id="" name="_submit">Sign up</button>
         </div>
     </form>
 </div>

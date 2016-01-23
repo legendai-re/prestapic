@@ -291,7 +291,7 @@ containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$
         var canPostComment = true;
         
         this.postComment = function(requestId){
-            console.log("hello");
+            if($scope.comment.content != "" && $scope.comment.content != null)
             if(canPostComment){                
                 var newComment = {
                     content: $scope.comment.content,

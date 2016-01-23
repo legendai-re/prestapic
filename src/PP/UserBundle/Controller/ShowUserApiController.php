@@ -109,7 +109,7 @@ class ShowUserApiController extends Controller
         foreach ($propositionList as $proposition){
             $canUpvoteProposition[$proposition->getId()] = false;
             $canSelectProposition[$proposition->getId()] = false;            
-            if($this->get('security.context')->isGranted('ROLE_USER') && $currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
+            if($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
                 $canUpvoteProposition[$proposition->getId()] = true;
             }
         }
@@ -139,7 +139,7 @@ class ShowUserApiController extends Controller
         $response = new JsonResponse();
         $response->headers->set('Content-Type', 'application/json');
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             /* init repositories */
             $em = $this->getDoctrine()->getManager();            
             $userRepository = $em->getRepository('PPUserBundle:User');
@@ -212,7 +212,7 @@ class ShowUserApiController extends Controller
         $response = new JsonResponse();
         $response->headers->set('Content-Type', 'application/json');
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             $currentUser= $this->getUser();
             if($currentUser != null){
                 $em = $this->getDoctrine()->getManager();
@@ -236,7 +236,7 @@ class ShowUserApiController extends Controller
         $currentUser= $this->getUser();
         $userToBlock = $userRepository->find($request->get('idToBlock'));
         
-        if ($this->get('security.context')->isGranted('ROLE_USER') && $currentUser!=null && $userToBlock!=null) {            
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser!=null && $userToBlock!=null) {            
             if($currentUser != $userToBlock ){
                 if(!in_array($userToBlock, $currentUser->getBlockedUsers()->toArray())){
                     $currentUser->addBlockedUser($userToBlock);                
@@ -263,7 +263,7 @@ class ShowUserApiController extends Controller
         $response = new Response();
         $response->headers->set('Content-Type', 'application/x-javascript');
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             
             $currentUser = $this->getUser();
             $em = $this->getDoctrine()->getManager();
@@ -333,7 +333,7 @@ class ShowUserApiController extends Controller
         
         $currentUser = $this->getUser();
         
-        if ($this->get('security.context')->isGranted('ROLE_USER') && $currentUser!=null) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser!=null) {
             
             $editUserForm = $this->get('form.factory')->create(new EditProfileFormType($currentUser), $currentUser, array(                            
             ));
@@ -363,7 +363,7 @@ class ShowUserApiController extends Controller
         if($request->get("id")!=null){
             $pageProfile = $userRepository->find($request->get("id"));
         }        
-        if($this->get('security.context')->isGranted('ROLE_ADMIN') && $currentUser != null && $pageProfile != null) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') && $currentUser != null && $pageProfile != null) {
             if(!$pageProfile->hasRole("ROLE_MODERATOR")){$pageProfile->addRole("ROLE_MODERATOR");}
             else {$pageProfile->removeRole("ROLE_MODERATOR");}
             $em->flush();
@@ -372,7 +372,45 @@ class ShowUserApiController extends Controller
         return $response;
     }
     
-    private function getViewHandler()
+    public function getUsernameExistAction(Request $request){
+        $response = new Response();
+        $username = $request->get("username");
+        
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository('PPUserBundle:User');
+        
+        $result = array();
+        if($userRepository->findBy(array("username"=>$username)) != null){
+            $result["exist"] = true;
+        }else{
+            $result["exist"] = false;
+        }
+        
+        echo json_encode($result);
+        
+        return $response;        
+    }
+    
+    public function getEmailExistAction(Request $request){
+        $response = new Response();
+        $email = $request->get("email");
+        
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository('PPUserBundle:User');
+        
+        $result = array();
+        if($userRepository->findBy(array("email"=>$email)) != null){
+            $result["exist"] = true;
+        }else{
+            $result["exist"] = false;
+        }
+        
+        echo json_encode($result);
+        
+        return $response;        
+    }
+
+        private function getViewHandler()
     {
         return $this->container->get('fos_rest.view_handler');
     }

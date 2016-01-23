@@ -62,7 +62,7 @@ class CommentApiController extends Controller
             }
             
             $jsonCurrentUser = array();
-            if ($this->get('security.context')->isGranted('ROLE_USER')){
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')){
                 $currentUser = $this->getUser();
                 $jsonCurrentUser = new JsonUserModel(
                         $currentUser->getId(),
@@ -94,7 +94,7 @@ class CommentApiController extends Controller
         $requestId = $request->get("requestId");
         $content = $request->get("content");
         
-        if ($this->get('security.context')->isGranted('ROLE_USER') && $requestId != null && $content != null) { 
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $requestId != null && $content != null) { 
             
             $em = $this->getDoctrine()->getManager();
             $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');            
