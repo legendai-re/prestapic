@@ -46,7 +46,7 @@ class ShowUserController extends Controller
         
         $setModeratorForm = null;
         $isModerator = false;
-        if($this->get('security.context')->isGranted('ROLE_ADMIN') && $currentUser != null) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') && $currentUser != null) {
             if($this->get('pp_user.service.role')->isGranted('ROLE_MODERATOR', $pageProfile))$isModerator = true;
             
             /* create set moderator form */        
@@ -99,7 +99,7 @@ class ShowUserController extends Controller
         
         /* handle POST data */         
         if ($request->isMethod('POST')) {
-            if ($this->get('security.context')->isGranted('ROLE_USER')) {    
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {    
                 $followForm->handleRequest($request);
                                                
                 if ($followForm->isValid()) {
@@ -173,7 +173,7 @@ class ShowUserController extends Controller
         
         $currentUser = $this->getUser();            
         
-        if($this->get('security.context')->isGranted('ROLE_USER') && $currentUser != null) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser != null) {
                                   
             $editUserForm = $this->get('form.factory')->create(new EditProfileFormType($currentUser), $currentUser, array(                            
             ));                          
@@ -185,14 +185,7 @@ class ShowUserController extends Controller
                     $em->persist($currentUser);
                     $em->flush();
                     
-                    $currentUser->createThumbnail();
-                    
-                    if(in_array($currentUser->getSlug(), array("users", "_profiler"))){
-                        $em = $this->getDoctrine()->getManager();                                  
-                        $currentUser->setSlug($currentUser->getSlug()."-nope");
-                        $em->persist($currentUser);
-                        $em->flush();
-                    }
+                    $currentUser->createThumbnail();                                        
                     
                     return $this->redirect($this->generateUrl('pp_user_profile', array(
                         'slug' => $currentUser->getSlug()                        

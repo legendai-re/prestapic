@@ -14,7 +14,7 @@ class SettingApiController extends Controller
         
         $response = new Response();        
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             $currentUser= $this->getUser();
             if($currentUser != null){
                 $em = $this->getDoctrine()->getManager();

@@ -188,7 +188,7 @@ class RequestApiController extends Controller
     
     public function getRequestFormAction(){
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')){
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')){
             $imageRequest = new ImageRequest();
             $form = $this->get('form.factory')->create(new ImageRequestType, $imageRequest, array(            
                 'action' => $this->generateUrl('pp_request_add_request'),
@@ -219,7 +219,7 @@ class RequestApiController extends Controller
         
         $id = $request->get("id");
         
-        if ($this->get('security.context')->isGranted('ROLE_USER') && $id != null) { 
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $id != null) { 
             
             $em = $this->getDoctrine()->getManager();
             $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');

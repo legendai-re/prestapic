@@ -28,7 +28,7 @@ class RequestController extends Controller
     public function indexAction(Request $request)
     {                  
         /* get session and currentUser*/
-        $session = $this->getRequest()->getSession();
+        $session = $request->getSession();
         $currentUser = $this->getUser();
         
         /* will be true if search was done */
@@ -101,7 +101,7 @@ class RequestController extends Controller
         $form = $this->get('form.factory')->create(new ImageRequestType, $imageRequest);
         
         if ($request->isMethod('POST')) {
-            if ($this->get('security.context')->isGranted('ROLE_USER')) {    
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {    
                 $form->handleRequest($request);
                 if ($form->isValid()) {
                     
@@ -170,7 +170,7 @@ class RequestController extends Controller
         $form = $this->get('form.factory')->create(new ImageRequestType, $imageRequest);
         
         if ($request->isMethod('POST')) {
-            if ($this->get('security.context')->isGranted('ROLE_USER')) {    
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {    
                 $form->handleRequest($request);
                 if ($form->isValid()) {
                     /* SAVE NEW REQUEST */
@@ -261,8 +261,8 @@ class RequestController extends Controller
         
         /* create report ticket form */
         $disableTicketForm = null;
-        if($this->get('security.context')->isGranted('ROLE_USER')) {                       
-            if($currentUser!=null && $imageRequest->getAuthor()!=null && $this->get('security.context')->isGranted('ROLE_MODERATOR') || $imageRequest->getAuthor()->getId() == $currentUser->getId()) {              
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {                       
+            if($currentUser!=null && $imageRequest->getAuthor()!=null && $this->get('security.authorization_checker')->isGranted('ROLE_MODERATOR') || $imageRequest->getAuthor()->getId() == $currentUser->getId()) {              
             $disableTicketForm = $this->get('form.factory')->createNamedBuilder('pp_report_api_post_disable_ticket_form', 'form', array(), array())         
                 ->setAction($this->generateUrl('pp_report_api_post_disable_ticket', array(), true))
                 ->getForm()
@@ -318,7 +318,7 @@ class RequestController extends Controller
         
         $canProposeImage = false;
         $canUpvoteImageRequest = false;
-        if($this->get('security.context')->isGranted('ROLE_USER')) {
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             if(!in_array($currentUser, $imageRequest->getAuthor()->getBlockedUsers()->toArray()))$canProposeImage = true;
             if($currentUser->getId() != $imageRequest->getAuthor()->getId() && !$userRepository->haveLikedRequest($currentUser->getId(), $imageRequest->getId())){
                 $canUpvoteImageRequest = true;
@@ -393,7 +393,7 @@ class RequestController extends Controller
                     $action = $editPropositionForm->getClickedButton()->getName();                
                     switch ($action){                                               
                         case "delete":
-                            if($this->get('security.context')->isGranted('ROLE_MODERATEUR')) {
+                            if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATEUR')) {
                                 if($tempProposition == $accepetedProposition){
                                     $imageRequest->setAcceptedProposition(null);
                                     $imageRequest->setClosed(false);

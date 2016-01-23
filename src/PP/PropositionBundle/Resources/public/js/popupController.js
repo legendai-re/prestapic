@@ -130,8 +130,7 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
     };
 
     var timeout = null;
-
-    $(document).on('mousemove', function() {
+    $(document).on('change', function() {
         if (timeout !== null) {
             $("#propActionTop").css("display", "block");
             $("#propActionBottom").css("display", "block");
@@ -145,5 +144,6 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
             $("#propOverlay").css("display", "none");
         }, 2000);
     });
+    
 
 }]);

@@ -29,7 +29,7 @@ class NotificationApiController extends Controller
         $response = new JsonResponse();
         $response->headers->set('Content-Type', 'application/json');
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             
             $currentUser = $this->getUser();
             $em = $this->getDoctrine()->getManager();                        
@@ -52,7 +52,7 @@ class NotificationApiController extends Controller
         $response = new Response();
         $response->headers->set('Content-Type', 'application/x-javascript');
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
                       
             $currentUser = $this->getUser();
             $em = $this->getDoctrine()->getManager();                        
@@ -182,7 +182,7 @@ class NotificationApiController extends Controller
         $response = new JsonResponse();
         $response->headers->set('Content-Type', 'application/json');
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             
             $currentUser = $this->getUser();
             $em = $this->getDoctrine()->getManager();                        
@@ -219,7 +219,7 @@ class NotificationApiController extends Controller
         $response = new JsonResponse();
         $response->headers->set('Content-Type', 'application/json');
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             
             $currentUser = $this->getUser();
             $em = $this->getDoctrine()->getManager();                        

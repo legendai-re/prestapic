@@ -10,7 +10,7 @@ class NotificationController extends Controller
     {
         $notificationList = array();
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             
             $em = $this->getDoctrine()->getManager();                                                
             $currentUser = $this->getUser();

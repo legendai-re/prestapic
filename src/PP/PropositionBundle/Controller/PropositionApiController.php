@@ -38,7 +38,7 @@ class PropositionApiController extends Controller
         $isProAuthor = false;
         $isIrAuthor = false;
         $connected = false;
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             $connected = true;
             $currentUser = $this->getUser();
             if($currentUser != null && $currentUser->getId() == $propAuthor->getId()){
@@ -51,7 +51,7 @@ class PropositionApiController extends Controller
         
         $canUpvoteProposition = false;
             
-        if($this->get('security.context')->isGranted('ROLE_USER') && $currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
+        if($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
             $canUpvoteProposition = true;
         }
         
@@ -105,7 +105,7 @@ class PropositionApiController extends Controller
         
         $propositionId = $request->get("id");
         
-        if ($this->get('security.context')->isGranted('ROLE_USER') && $propositionId!=null) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $propositionId!=null) {
             
             /* init repositories */
             $em = $this->getDoctrine()->getManager();
@@ -142,7 +142,7 @@ class PropositionApiController extends Controller
         $response = new JsonResponse();
         $response->headers->set('Content-Type', 'application/json');
         
-        if ($this->get('security.context')->isGranted('ROLE_USER')) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             
             $currentUser = $this->getUser();
             
@@ -215,7 +215,7 @@ class PropositionApiController extends Controller
         $currentUser = $this->getUser();
         $proposition = $propositionRepository->find($propositionId);
             
-        if (($this->get('security.context')->isGranted('ROLE_USER') && $proposition->getAuthor()->getId() == $currentUser->getId()) || $this->get('security.context')->isGranted('ROLE_MODERATOR')) {
+        if (($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $proposition->getAuthor()->getId() == $currentUser->getId()) || $this->get('security.authorization_checker')->isGranted('ROLE_MODERATOR')) {
             
            $proposition->disable();
            $em->persist($proposition);

@@ -20,15 +20,17 @@ security:
           main:
                pattern:   ^/
                anonymous: true
-               provider:  main
+               provider:  main               
                form_login:
                     login_path: pp_request_homepage
                     check_path: fos_user_security_check
                logout:
                     path:   fos_user_security_logout
                     target: /
-               remember_me:
-                key:        %secret%
+               remember_me:                   
+                   lifetime: 604800 # 1 week in seconds
+                   path: /
+                   secret: %secret%
 
      access_control:
           - { path: ^/dashboard/, roles: ROLE_MODERATOR }
