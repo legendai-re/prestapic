@@ -95,7 +95,7 @@
                 {# profile menu #}
                 <li class="stopPropagation">
                     {# show profile menu button #}
-                    <a ng-click="header.showUserMenu()" class="account" href="" title="Send your request">
+                    <a ng-click="header.showUserMenu()" class="account" href="" title="{{ app.user.name }} ({{ app.user.username }})">
                         <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.profilImage.alt }}">
                     </a>
                     

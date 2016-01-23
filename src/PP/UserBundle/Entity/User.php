@@ -458,9 +458,9 @@ class User extends BaseUser
     * @ORM\PostPersist()
     * @ORM\PostUpdate()     
     */
-    public function createThumbnail(){               
+    public function createThumbnail(){
         $this->profilImage->resize("70x70",120, 120);
-        if($this->coverImage!=null)$this->coverImage->resize("1500x500", 1500,500);
+        if($this->coverImage!=null)$this->coverImage->resizeWidth("1500x500", 2880);
     }
 
     /**
