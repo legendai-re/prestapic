@@ -396,10 +396,10 @@ header
 				height: 10px
 				float: left
 				overflow: hidden
-				right: 14px
+				right: 20px
 
 				.caret-outer
-					border-bottom: 10px solid #eee
+					border-bottom: 10px solid #ccc
 					border-left: 10px solid transparent
 					border-right: 10px solid transparent
 					height: auto
@@ -461,9 +461,10 @@ header
 						color: #777
 						overflow: hidden
 
-						&:hover
+						&:hover, &:focus
 							background: $main-color
 							color: white
+							text-decoration: none
 
 					&.divider
 						height: 1px
@@ -473,6 +474,12 @@ header
 					&.username
 						a
 							color: #444
+
+							&:focus
+								color: white
+
+								small
+									color: white
 
 							small
 								display: block
