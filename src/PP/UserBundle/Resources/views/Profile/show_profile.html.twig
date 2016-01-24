@@ -26,6 +26,7 @@
                   <img src="{{ asset(pageProfile.profilImage.webPath("70x70")) }}" alt="{{ pageProfile.profilImage.alt }}">
                 </div>
                 <h1 class="username">{{ pageProfile.name }}</h1>
+                <div class="screenname">@{{ pageProfile.username }}</div>
                 <p class="bio">{{ pageProfile.description }}</p>
                 <div class="profile-actions">
                     {% if is_granted('ROLE_USER') %}

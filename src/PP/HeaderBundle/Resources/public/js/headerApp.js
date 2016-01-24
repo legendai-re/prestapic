@@ -14,7 +14,7 @@ headerApp.service('FayeClient', function () {
 });
 
 
-headerApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeClient, $http) {
+headerApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeClient, $http) {                
     $rootScope.notifications = []        
 
     var form = document.forms["pp_notification_api_get_thread_form"];        
@@ -54,6 +54,10 @@ var messageIsOpen = false;
 
 headerApp.controller('headerController', ['$scope', '$http', '$compile', '$location', '$window', function ($scope, $http, $compile, $location, $window) {
         
+        $("#sendRequestOverClose").click(function () {
+           $('#sendRequestOver').fadeOut();  
+        });       
+        
         $(".fixeBodyHover").mouseover(function() { $("#body").css("position", "fixed");});
         $(".fixeBodyHover").mouseout(function() { $("#body").css("position", "absolute");});
         
@@ -63,12 +67,14 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
         $scope.showMoreNotification = true;
         
         this.showNewRequestForm = function(){
+            closeAll();
             var getRequestForm = document.forms["pp_request_api_get_request_form"];
             if(!haveLoadNewRequestForm){
                 haveLoadNewRequestForm = true;
                 $http.get(getRequestForm.action+".html").
                     then(function(response) {
-                        $("#sendRequestContent").html(response.data);                           
+                        $("#sendRequestContent").html(response.data);
+                        $(".addRequestForm").preventDoubleSubmission();
                     }, function(response) {
                      console.log("Request failed : "+response.statusText );                        
                     }
@@ -313,7 +319,8 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
         });                     
 
         /* hide menu on click out */
-        $('html').click(function() {                
+        $('html').click(function() {
+            $('#sendRequestOver').fadeOut();
             closeAll();                
         });
         

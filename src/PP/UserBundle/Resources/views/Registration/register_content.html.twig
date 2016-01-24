@@ -7,27 +7,30 @@
         <div class="signin-username">
             {{ form_errors(form.username) }}            
             {{ form_widget(form.username, {'attr': {'class': 'username', 'placeholder': 'Username', 'ng-change':'sign.usernameTyping()', 'ng-model':'username'}}) }}
-            <div class="icon-container success">
+            {% verbatim %}
+            <div id="signup_username_error" class="icon-container">
                 <span>Success</span>
                 <div class="sidepop">
                     <span>
-                        Username has already been taken.
+                        {{ usernameMessage }}
                     </span>
                 </div>
             </div>
+            {% endverbatim %}
         </div>
         <div class="signin-email">
             {{ form_errors(form.email) }}
             {{ form_widget(form.email, {'attr': {'class': 'username', 'placeholder': 'Email', 'ng-change':'sign.emailTyping()', 'ng-model':'email'}}) }}
-            <div class="icon-container danger">
+            {% verbatim %}
+            <div id="signup_email_error" class="icon-container">
                 <span>Danger</span>
                 <div class="sidepop">
                     <span>
-                        This email is already registered.<br/>
-                        Want to <a href="">login</a> or <a href="">recover your password</a>?
+                        {{ emailMessage }}
                     </span>
                 </div>
             </div>
+            {% endverbatim %}
         </div>
         <div class="signin-pwds">
             {%  for passwordField in form.plainPassword %}
@@ -35,27 +38,31 @@
                 <div class="signin-pwd">
                     {{ form_errors(passwordField) }}
                     {{ form_widget(passwordField, {'attr': {'class': 'password', 'placeholder': 'Password', 'ng-model':'firstPassword'}}) }}
-                    <div class="icon-container">
+                    {% verbatim %}
+                    <div id="signup_password_one_error"class="icon-container">
                         <span>Danger</span>
                         <div class="sidepop">
                             <span>
-                                Your password must be at least 6 characters.
+                                {{ passwordOneMessage }}
                             </span>
                         </div>
                     </div>
+                    {% endverbatim %}
                 </div>
                 {% else %}
                 <div class="signin-pwd">
                     {{ form_errors(passwordField) }}
                     {{ form_widget(passwordField, {'attr': {'class': 'password', 'placeholder': 'Repeat password', 'ng-model':'secondPassword'}}) }}
-                    <div class="icon-container">
+                    {% verbatim %}
+                    <div id="signup_password_two_error" class="icon-container">
                         <span>Danger</span>
                         <div class="sidepop">
                             <span>
-                                The password does not match.
+                                {{ passwordTwoMessage }}
                             </span>
                         </div>
                     </div>
+                    {% endverbatim %}
                 </div>
                 {% endif %}
             {% endfor %}

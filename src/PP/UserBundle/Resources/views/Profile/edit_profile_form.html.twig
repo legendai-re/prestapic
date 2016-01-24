@@ -25,7 +25,10 @@
         </div>
         <output id="list"></output>
         <h1 class="username">{{ form_row(editUserForm.name, {'attr':  {'placeholder': 'Name'}}) }}</h1>
-        <p class="bio">{{ form_row(editUserForm.description, {'attr':  {'placeholder': 'Insert your bio here...', 'class': 'bio', 'rows': '3'}}) }}</p>
+        <div class="screenname">@{{ currentUser.username }}</div>
+        <div class="bio">
+            {{ form_row(editUserForm.description, {'attr':  {'placeholder': 'Insert your bio here...', 'class': 'bio', 'rows': '2'}}) }}
+        </div>
         <input class="button green" type="submit" value="Save" />
         <a href="" id="cancelButton" class="button" ng-click="profile.cancelEditProfile()">Cancel</a>
 

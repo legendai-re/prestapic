@@ -28,80 +28,101 @@
         $scope.firstPassword = '';
         $scope.secondPassword = '';
         $scope.passwordValid = true;
-        $scope.passwordMessage = true;
+        $scope.passwordOneMessage = '';
+        $scope.passwordTwoMessage = '';
         
         var timeoutUsername = null;
         var timeoutEmail = null;
        
         
-        this.usernameTyping = function(){
+        this.usernameTyping = function(){            
             $scope.usernameValid = false;
             if (timeoutUsername !== null) {                
                 clearTimeout(timeoutUsername);
-            }
-            
-            timeoutUsername = setTimeout(function() {                
+            }            
+            timeoutUsername = setTimeout(function() {
+                resetUsernameMessage();
                 checkUsername();
-            }, 1500);
+            }, 1000);
         };
         
-        this.emailTyping = function(){
+        this.emailTyping = function(){            
             $scope.emailValid = false;
             if (timeoutEmail !== null) {                
                 clearTimeout(timeoutEmail);
-            }
-            
-            timeoutEmail = setTimeout(function() {                
+            }            
+            timeoutEmail = setTimeout(function() {
+                resetEmailMessage();
                 checkEmail();
-            }, 1500);
+            }, 1000);
         };
         
-        function checkEmail() {
+        function resetUsernameMessage(){
+            $("#signup_username_error").removeClass("success");
+            $("#signup_username_error").removeClass("danger");
+        }
+        
+        function resetEmailMessage(){
+            $("#signup_email_error").removeClass("success");
+            $("#signup_email_error").removeClass("danger");
+        }
+        
+        function checkEmail() {            
             $scope.emailValid = false;
-            $scope.emailValid = '';
-            var re = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-            console.log(re.test($scope.email));
-            if(re.test($scope.email)){
-                var formAction = document.forms["pp_user_api_get_email_exist_form"].action;                
-                $http.get(formAction+"?email="+$scope.email).
-                    then(function(response) {                                    
-                        if(response.data.exist){
+            $scope.emailMessage = '';
+            var re = /^[a-zA-Z0-9.\-_]+@[a-zA-Z0-9.\-_]+\.[a-z\.]{2,6}$/;
+            if($scope.email != null && $scope.email != ''){
+                if(re.test($scope.email)){
+                    var formAction = document.forms["pp_user_api_get_email_exist_form"].action;                
+                    $http.get(formAction+"?email="+$scope.email).
+                        then(function(response) {                                    
+                            if(response.data.exist){
+                                $scope.emailValid = false;                            
+                                $scope.emailMessage = "This email is already registered"; 
+                                $("#signup_email_error").addClass("danger");
+                            }else{
+                                $scope.emailValid = true;
+                                $scope.emailMessage = "";
+                                $("#signup_email_error").addClass("success");
+                            }
+                            if(!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                        }, function(response) {
                             $scope.emailValid = false;
-                            console.log("email already used");
-                            $scope.emailValid = "already used"; 
-                        }else{
-                            $scope.emailValid = true;
-                            console.log("email Ok");
+                            console.log("Request failed : "+response.statusText );                        
                         }
-                    }, function(response) {
-                        $scope.emailValid = false;
-                        console.log("Request failed : "+response.statusText );                        
-                    }
-                );
-            }else{
-               $scope.emailMessage = 'not a valid email';
-               $scope.emailValid = false;
-               console.log("email invalid");
+                    );
+                }else{
+                   $scope.emailMessage = 'Enter a valid email.';
+                   $scope.emailValid = false;
+                   $("#signup_email_error").addClass("danger");               
+                }
+            }
+            if(!$scope.$$phase) {
+                $scope.$apply();
             }
         }
         
-        var checkUsername = function(){
-            console.log("check");
+        var checkUsername = function(){            
             $scope.usernameValid = false;
             $scope.usernameMessage = '';
             if($scope.username != null && $scope.username != ''){
                 if($scope.username.length > 30){
                     $scope.usernameValid = false;
-                    $scope.usernameMessage = "to long"; 
+                    $scope.usernameMessage = "Username too long (max 30 characters).";
+                    $("#signup_username_error").addClass("danger");
                 }else if($scope.username.length < 2){
                     $scope.usernameValid = false;
-                    $scope.usernameMessage = "to short"; 
+                    $scope.usernameMessage = "Username too short (min 2 characters)."; 
+                    $("#signup_username_error").addClass("danger");
                 }else{
                     $scope.usernameValid = true;
                     for(var i=0; i<$scope.username.length; i++){                    
                         if(allowedChar.indexOf($scope.username[i]) < 0){
                             $scope.usernameValid = false;
-                            $scope.usernameMessage = "invalid only letters, number and - _ ."; ; 
+                            $scope.usernameMessage = "Enter a valid username you can user letters, numbers, scores, underscores and dot.";
+                            $("#signup_username_error").addClass("danger");
                             break;
                         }
                     }
@@ -110,45 +131,60 @@
                         $http.get(formAction+"?username="+$scope.username).
                             then(function(response) {                                    
                                 if(response.data.exist){
-                                    $scope.usernameValid = false;
-                                    console.log("name already used");
-                                    $scope.usernameMessage = "already used"; 
+                                    $scope.usernameValid = false;                                    
+                                    $scope.usernameMessage = "This username has already been taken."; 
+                                    $("#signup_username_error").addClass("danger");
                                 }else{
                                     $scope.usernameValid = true;
-                                    $scope.usernameMessage = "OK";
-                                    console.log("name Ok");
+                                    $scope.usernameMessage = "";                                    
+                                    $("#signup_username_error").addClass("success");
+                                }
+                                if(!$scope.$$phase) {
+                                    $scope.$apply();
                                 }
                             }, function(response) {
                                 $scope.usernameValid = false;
                                 console.log("Request failed : "+response.statusText );                        
                             }
                         );
-                    }else{                        
-                        console.log($scope.usernameMessage);
                     }
                 }                 
             }
+            if(!$scope.$$phase) {
+                $scope.$apply();
+            }
         }
         
-        this.checkForm = function($event){
-            if($scope.usernameValid && $scope.emailValid ){
-                
-                $scope.passwordValid = false;
-                $scope.passwordMessage = "true";
-                if($scope.firstPassword.length < 3){
+        this.checkForm = function($event){            
+            
+            $("#signup_password_one_error").removeClass("danger");
+            $("#signup_password_two_error").removeClass("danger");
+            $scope.passwordValid = false;
+            $scope.passwordOneMessage = "";
+            $scope.passwordTwoMessage = "";
+            
+            if($scope.firstPassword != null && $scope.firstPassword != ""){
+                if($scope.firstPassword.length < 5){
                     $scope.passwordValid = false;
-                    $scope.passwordMessage = "to short";
-                    //$event.preventDefault();
+                    $scope.passwordOneMessage = "Password too short (min 5 characters).";
+                    $event.preventDefault();
+                    $("#signup_password_one_error").addClass("danger");
                 }
                 else if($scope.firstPassword == $scope.secondPassword){
-                    
+                    $scope.passwordValid = true;
                 }else{
                     $scope.passwordValid = false;
-                    $scope.passwordMessage = "not match";
-                    //$event.preventDefault();
+                    $scope.passwordTwoMessage = "Passwords do not match.";
+                    $("#signup_password_two_error").addClass("danger");
+                    $event.preventDefault();
                 }
+            }
+            
+            if($scope.usernameValid && $scope.emailValid && $scope.passwordValid){
+                
+                
             }else{
-               //$event.preventDefault();
+               $event.preventDefault();
             }
         }
         
@@ -175,7 +211,7 @@
                 $http.get(formAction+".html").
                     then(function(response) {                                    
                         var signUpForm = angular.element(response.data);                        
-                        $compile(signUpForm)($scope);                                              
+                        $compile(signUpForm)($scope);
                         angular.element( document.querySelector('#signUpFormContainer')).append(signUpForm);                        
                         $(".fos_user_registration_register").preventDoubleSubmission();
                         $("#signInContent").css("display", "none");
