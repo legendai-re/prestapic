@@ -1,6 +1,6 @@
 {% if (proposition.image is not null) %}                    
         <div class="reply">
-            <div class="prop">
+            <div class="prop" style="background-color: #{{ proposition.image.avgColor }};">
                 <img 
                 bn-lazy-src="{{ asset(proposition.image.webPath("single")) }}"
                 alt="{{ proposition.image.alt }}"

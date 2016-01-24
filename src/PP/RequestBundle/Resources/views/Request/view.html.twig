@@ -99,7 +99,7 @@
 
         {% if imageRequest.closed %}
         <div class="reply selected">
-            <div class="prop">
+            <div class="prop" style="background-color: #{{ acceptedProposition.image.avgColor }};">
               <img src="{{ asset(acceptedProposition.image.webPath("selected")) }}" alt="{{ acceptedProposition.title }}">
             </div>
             <a ng-click="propositions.showPopup({{ acceptedProposition.id }})" title="{{ acceptedProposition.title }}" class="overlay" ng-href="{{ asset(acceptedProposition.image.webPath("original")) }}" title=""></a>
