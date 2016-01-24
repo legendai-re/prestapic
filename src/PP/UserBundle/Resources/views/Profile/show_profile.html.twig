@@ -9,9 +9,13 @@
 
 {% block bellowHeader %}
 <div id="profileApp" >
+    
     <base href=" " />
     {% if pageProfile.enabled == true %}
-        
+    <script>
+        var d = document.getElementById("header");
+        d.className += " profile";
+    </script>    
     {# display profile header #}
     <section class="profile" ng-controller="profileController as profile" >
         <div id="profileHeaderContainer">
