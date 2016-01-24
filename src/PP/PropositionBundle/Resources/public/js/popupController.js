@@ -125,10 +125,23 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
         $("#popupPropApp").css("display", "none");
         $("#propositionUpvoteButton").removeClass("voted");
         $("#propositionUpvoteButton").removeClass("blocked");
+        hideInfo();
         $scope.proposition = null;  
-        $location.path($scope.currentLocation);
+        $location.path($scope.currentLocation);        
     };
-
+    
+    
+    this.openInfo = function(){
+        $("#propPopupInfo").css("display", "block");
+    };
+    
+    this.closeInfo = function(){
+        hideInfo();
+    };
+    
+    var hideInfo = function(){
+        $("#propPopupInfo").css("display", "none");
+    };
     /*var timeoutProposition = null;
     $(document).on('change', function() {
         if (timeoutProposition !== null) {

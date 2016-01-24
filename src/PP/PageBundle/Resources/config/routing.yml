@@ -1,0 +1,22 @@
+page_about:
+    path:     /about/
+    defaults: { _controller: PPPageBundle:Page:about }
+    
+page_terms:
+    path:     /terms/
+    defaults: { _controller: PPPageBundle:Page:terms }
+    
+page_cookies:
+    path:     /cookies/
+    defaults: { _controller: PPPageBundle:Page:cookies }
+
+page_privacy:
+    path:     /privacy/
+    defaults: { _controller: PPPageBundle:Page:privacy }
+    
+page_license:
+    path:     /license/
+    defaults: { _controller: PPPageBundle:Page:license }
+
+
+ 

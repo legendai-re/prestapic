@@ -9,11 +9,14 @@ namespace PP\PropositionBundle\JsonModel;
  */
 class JsonIRPopupModel {
     
-    public function __construct($id, $title, $author, $url, $createdDate){
+    public function __construct($id, $title, $author, $url, $category, $categoryUrl, $tagList, $createdDate){
         $this->id = $id;
         $this->title = $title;
         $this->author = $author;
         $this->url = $url;
+        $this->category = $category;
+        $this->categoryUrl = $categoryUrl;
+        $this->tagList = $tagList;
         $this->createdDate = $createdDate;
     }
     
@@ -21,6 +24,9 @@ class JsonIRPopupModel {
     public $title;    
     public $author;    
     public $url;
+    public $category;
+    public $categoryUrl;
+    public $tagList;
     public $createdDate;    
     
 }

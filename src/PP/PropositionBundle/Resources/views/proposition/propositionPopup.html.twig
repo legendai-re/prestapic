@@ -1,50 +1,85 @@
-<section id="popupPropApp" class="slideshow" style="display: none;" >
-    
-    {{ form(getPropositionForm) }}
-    {{ form(upvotePropositionForm) }}
-    {{ form(disablePropositionForm) }}
-    {% verbatim %}                
-    <div ng-controller="popupController as popup" >
-        <base href=" " />                        
-	<img ng-if="proposition.image" alt="image" class="single-photo" ng-src="{{ proposition.image }}">
-	<div  id="propOverlay" class="overlay"></div>
-	<div class="content-slideshow">
-		<div id="propActionTop" class="action-top">
-			<div class="action-group left">
-                <a target="_self" href="{{ path('pp_request_homepage') }}" title="Prestapic" class="galery-logo"></a>
-			</div>                   
+<div id="popupPropApp" ng-controller="popupController as popup" style="display: none;" >
 
-			<div class="action-group center">
-				<a class="icon share" href="#"></a>
-                <a class="icon infos" href="#"></a>
-				<a target="_self" class="icon download" href="{{ proposition.image }}" download="{{ proposition.title }}"></a>
-                                {% endverbatim %}
-                                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-				<a ng-if="!proposition.author.isAuthor" class="icon report" href="" ng-click="popup.showReportPopup(proposition.id,2)"></a>                                
-				<a ng-if="proposition.author.isAuthor" class="icon delete" href="" ng-click="popup.patchDisable()"></a>
-                                {% endif %}
-                                {% verbatim %}
-			</div>                        
-			<div class="action-group right">
-				<a ng-if="proposition.selected"class="selecting-prop selected" href="#">Selected picture</a>
-				<button ng-click="popup.close()" class="button-close">×</button>
-			</div>
-		</div>
-        <div id="propActionBottom"> 
-            <div class="img-title">
-                <a target="_self" class="avatar" href="{{ proposition.author.url }}">
-                    <img ng-src="{{ proposition.author.image }}">
-                </a>
-                <div class="infos">
-                    {{ proposition.timestamp | date: 'MMMM d, yyyy' }} by
-                    <a class="author" target="_self" href="{{ proposition.author.url }}">{{ proposition.author.name }}</a>
+    <section class="slideshow" >
+
+        {{ form(getPropositionForm) }}
+        {{ form(upvotePropositionForm) }}
+        {{ form(disablePropositionForm) }}
+        {% verbatim %}                    
+            <base href=" " />                        
+            <img ng-if="proposition.image" alt="image" class="single-photo" ng-src="{{ proposition.image }}">
+            <div  id="propOverlay" class="overlay"></div>
+            <div class="content-slideshow">
+                    <div id="propActionTop" class="action-top">
+                            <div class="action-group left">
+                    <a target="_self" href="{{ path('pp_request_homepage') }}" title="Prestapic" class="galery-logo"></a>
+                            </div>                   
+
+                            <div class="action-group center">
+                                    <a class="icon share" href="#"></a>
+                                    <a class="icon infos" ng-click="popup.openInfo()" href="#"></a>
+                                    <a target="_self" class="icon download" href="{{ proposition.image }}" download="{{ proposition.title }}"></a>
+                                    {% endverbatim %}
+                                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                    <a ng-if="!proposition.author.isAuthor" class="icon report" href="" ng-click="popup.showReportPopup(proposition.id,2)"></a>                                
+                                    <a ng-if="proposition.author.isAuthor" class="icon delete" href="" ng-click="popup.patchDisable()"></a>
+                                    {% endif %}
+                                    {% verbatim %}
+                            </div>                        
+                            <div class="action-group right">
+                                    <a ng-if="proposition.selected"class="selecting-prop selected" href="#">Selected picture</a>
+                                    <button ng-click="popup.close()" class="button-close">×</button>
+                            </div>
+                    </div>
+            <div id="propActionBottom"> 
+                <div class="img-title">
+                    <a target="_self" class="avatar" href="{{ proposition.author.url }}">
+                        <img ng-src="{{ proposition.author.image }}">
+                    </a>
+                    <div class="infos">
+                        {{ proposition.dateAgo }} by
+                        <a class="author" target="_self" href="{{ proposition.author.url }}">{{ proposition.author.name }}</a>
+                    </div>
+                </div>
+                <div class="action-bottom">
+                    <a class="count-vote" id="propositionUpvoteButton" href="" ng-click="popup.postPropositionVote(proposition.id)">{{ proposition.upvoteNb }}</a>                                
                 </div>
             </div>
-            <div class="action-bottom">
-                <a class="count-vote" id="propositionUpvoteButton" href="" ng-click="popup.postPropositionVote(proposition.id)">{{ proposition.upvoteNb }}</a>                                
-            </div>
+            </div>        
+    </section>
+  
+    <section id="propPopupInfo" class="overlay infos-popup" style="display: none;">
+        <base href=" " />
+        <div class="box-container report">
+            <div class="box-content" >           
+                    <div class="box-top">
+                        Infos
+                        <button ng-click="popup.closeInfo()" class="button-close">×</button>
+                    </div>
+                <div id="reportContainer">
+                    <div class="box-text">
+                        {{ proposition.dateAgo }}
+                        
+                    </div>
+                    <div class="box-text">
+                        <a target="_self" href="{{ proposition.imageRequest.url }}">{{ proposition.imageRequest.title }}</a>
+                        by
+                        <a target="_self" href="{{ proposition.imageRequest.author.url }}">{{ proposition.imageRequest.author.name }}</a>
+                        in 
+                        <a target="_self" href="{{ proposition.imageRequest.categoryUrl }}">{{ proposition.imageRequest.category }}</a>
+                    </div>
+                    <div class="box-text">
+                        <ul>
+                            <li ng-repeat="tag in proposition.imageRequest.tagList">
+                                <a target="_self" href="{{ tag.url }}">{{ tag.name }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="reportContainerAfter">
+                </div>
+            </div>        
         </div>
-	</div>
-    </div>
+    </section>
     {% endverbatim %}
-</section>
+</div>

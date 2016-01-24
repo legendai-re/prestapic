@@ -14,6 +14,7 @@ use PP\NotificationBundle\Constant\NotificationType;
 use PP\PropositionBundle\JsonModel\JsonPropositionPopupModel;
 use PP\PropositionBundle\JsonModel\JsonUserModel;
 use PP\PropositionBundle\JsonModel\JsonIRPopupModel;
+use PP\PropositionBundle\JsonModel\JsonTagModel;
 
 class PropositionApiController extends Controller
 {
@@ -32,7 +33,7 @@ class PropositionApiController extends Controller
                 
         $proposition = $propositionRepository->find($propositionId);
         $imageRequest = $proposition->getImageRequest();        
-        
+        $tags = $imageRequest->getTags();
         $irAuthor = $imageRequest->getAuthor();
         $propAuthor = $proposition->getAuthor();
         $isProAuthor = false;
@@ -53,6 +54,12 @@ class PropositionApiController extends Controller
             
         if($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser!=null && $currentUser->getId() != $proposition->getAuthor()->getId() && !$userRepository->haveLikedProposition($currentUser->getId(), $proposition->getId())){
             $canUpvoteProposition = true;
+        }
+        
+        $tagList = array();
+        
+        foreach ($tags as $tag){
+            array_push($tagList, new JsonTagModel($tag->getId(), $tag->getName(), $this->generateUrl("pp_request_homepage", array("tags"=>$tag->getName()) )));
         }
         
         $jsonProposition = new JsonPropositionPopupModel(
@@ -80,11 +87,14 @@ class PropositionApiController extends Controller
                                                     $isIrAuthor
                                                 ),
                                                 $this->generateUrl("pp_request_view", array("slug"=>$imageRequest->getSlug()), true),
+                                                $imageRequest->getCategory()->getName(),
+                                                $this->generateUrl("pp_request_homepage", array("category"=>$imageRequest->getCategory()->getId())),
+                                                $tagList,
                                                 $imageRequest->getCreatedDate()
                                         ),
                                         $canUpvoteProposition,
                                         $proposition->getCreatedDate(),
-                                        strtotime($proposition->getCreatedDate()->format('Y-m-d H:i:s'))
+                                        $this->container->get('pp_notification.ago')->ago($proposition->getCreatedDate())                                        
         );
         
         echo json_encode($jsonProposition);
