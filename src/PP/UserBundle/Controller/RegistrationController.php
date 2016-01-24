@@ -90,6 +90,11 @@ class RegistrationController extends Controller
                 }
             }           
             
+            if(in_array(strtolower($form->getData()->getUsername()), UserConstants::getForbidddenName())){
+                $form->get('username')->addError(new FormError('username already used'));
+                $haveError = true;
+            } 
+            
             if(!$haveError){
                 $event = new FormEvent($form, $request);
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
@@ -115,14 +120,7 @@ class RegistrationController extends Controller
                 $user->setEmailConfirmed(false);
                 ////////////////                                  
             
-                $userManager->updateUser($user);
-
-                if(in_array($user->getSlug(), array("users", "_profiler"))){                
-                    $user = $userRepository->find($user->getId());
-                    $user->setSlug($user->getSlug()."-nope");
-                    $em->persist($user);
-                    $em->flush();
-                }                    
+                $userManager->updateUser($user);                                  
 
                 $url = $this->generateUrl('pp_user_profile', array('slug'=>$user->getSlug()));
                 $response = new RedirectResponse($url);                                       

@@ -43,7 +43,7 @@ class e_LoadProposition implements FixtureInterface{
             $y=0;
         } else $y++;
         
-        $imgName = rand(31, 97);        
+        $imgName = rand(31, 106);        
         copy(__DIR__.'/../../../../../web/Resources/public/images/proposition/'.$imgName.'.jpeg', __DIR__.'/../../../../../web/uploads/img/proposition/original/new'.$i.'.jpeg');
         $profilImage = new \PP\ImageBundle\Entity\Image();
         $profilImage->setUploadDir('proposition');

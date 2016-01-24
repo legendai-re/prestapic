@@ -94,29 +94,7 @@ class ShowUserController extends Controller
         $form = $this->get('form.factory')->create(new ImageRequestType, $imageRequest, array(            
             'action' => $this->generateUrl('pp_request_add_request'),
             'method' => 'POST',
-        ));                
-       
-        
-        /* handle POST data */         
-        if ($request->isMethod('POST')) {
-            if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {    
-                $followForm->handleRequest($request);
-                                               
-                if ($followForm->isValid()) {
-                    if(!in_array($pageProfile, $currentUser->getFollowing()->toArray())){
-                        $currentUser->addFollowing($pageProfile);
-                        $em->persist($currentUser);                        
-                    }else{
-                        $currentUser->removeFollowing($pageProfile);
-                        $em->persist($currentUser);
-                    }
-                    $em->flush();
-                     return $this->redirect($this->generateUrl('pp_user_profile', array(
-                        'slug' => $slug,                        
-                    )));
-                }
-            }
-        }
+        ));                                       
         
         $galleryImgages = $propositionRepository->getOneUserPropositions($pageProfile->getId(), 4);
         $galleryImgagesNb = $propositionRepository->countOneUserPropositions($pageProfile->getId());

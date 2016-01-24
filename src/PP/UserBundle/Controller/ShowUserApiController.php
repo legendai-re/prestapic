@@ -19,6 +19,7 @@ use PP\NotificationBundle\Constant\NotificationType;
 use PP\NotificationBundle\JsonNotificationModel\JsonNotification;
 
 use PP\MessageBundle\JsonModel\JsonUserModel;
+use PP\UserBundle\Constant\UserConstants;
 
 class ShowUserApiController extends Controller
 {
@@ -384,7 +385,11 @@ class ShowUserApiController extends Controller
         if($userRepository->findBy(array("username"=>$username)) != null){
             $result["exist"] = true;
         }else{
-            $result["exist"] = false;
+            if(in_array(strtolower($username), UserConstants::getForbidddenName())){                                
+                $result["exist"] = true;
+            }else{
+                $result["exist"] = false;
+            }
         }
         
         echo json_encode($result);

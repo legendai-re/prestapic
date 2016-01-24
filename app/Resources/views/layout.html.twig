@@ -24,11 +24,13 @@
 <body id="body">
     
     <div class="container">
+        {% block header %}
         <header id="header" class="navbar">
                 <div class="content" ng-app="headerApp">
                         {{ render(controller("PPHeaderBundle:Header:showHeader")) }}                                        
                 </div>
         </header>
+        {% endblock %}
 
         {# ALERT BANNER #}        
         <section id="alert-banner" class="alert-banner">

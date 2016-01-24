@@ -6,6 +6,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class PageController extends Controller
 {
+     public function headerAction()
+    {
+        return $this->render('PPPageBundle:help:header.html.twig');
+    }
+    
+    public function helpAction()
+    {
+        return $this->render('PPPageBundle:help:help.html.twig');
+    }
+    
     public function aboutAction()
     {
         return $this->render('PPPageBundle:about:about.html.twig');

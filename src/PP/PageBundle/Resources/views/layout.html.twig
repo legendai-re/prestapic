@@ -7,14 +7,16 @@
   
 {% endblock %}
 
+{% block header %}
+    {{ render(controller("PPPageBundle:Page:header")) }}   
+{% endblock%}
+    
 {% block bellowHeader %}
     
 {% endblock %}
 
 {% block body %}
-    
-    
-    
+            
     {% block pageBody %}
 
     {% endblock %}
