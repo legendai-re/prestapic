@@ -83,9 +83,9 @@
                                         <span ng-if="!notification.isViewed && !notification.isClicked" class="dot new" ></span></span>
                                     </a>
                                     
-                                </li>
-                                <li class="more-notif">
-                                    <a ng-if="showMoreNotification" ng-click="header.showMoreNotifications()" href="">Show more notification</a>
+                                </li>                                
+                                <li ng-if="showMoreNotification" ng-show="notifications.length" class="more-notif">
+                                    <a ng-click="header.showMoreNotifications()" href="">Show more notification</a>
                                 </li>                            
                             </ul>                        
                         </div>                            

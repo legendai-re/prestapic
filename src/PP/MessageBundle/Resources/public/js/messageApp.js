@@ -312,24 +312,49 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
         
         var linesNumber = 0;
         var text = document.getElementById('chatTextArea');
-        var chatComposer = document.getElementById('chatComposer');
-        //$('#chatTextArea').elastic();
-        $('#chatTextArea').on('keydown', function(event) {
-            if (event.keyCode == 13){                                   
-                sendMessage($scope.messageContent);
-                setTimeout(goDown,10);
-                $scope.messageContent = null;
-                setTimeout(function(){
-                    $('#chatTextArea').html('');
-                    $('#chatTextArea').val().replace(/^(\r\n)|(\n)/,'');
-                    document.getElementById('chatTextArea').style.height = 'auto';
-                    text.style.minHeight = 70+'px';
-                    text.style.maxHeight = 70+'px';  
-                    chatComposer.style.minHeight = 70+'px';
-                    chatComposer.style.maxHeight = 70+'px';
-                }, 10);
+        var chatComposer = document.getElementById('chatComposer');           
+        
+        $('#chatTextArea').keyup(function (event) {
+            if (event.keyCode == 13) {
+                var content = this.value;  
+                var caret = getCaret(this);          
+                if(event.shiftKey){
+                    this.value = content.substring(0, caret - 1) + "\n" + content.substring(caret, content.length);
+                    event.stopPropagation();
+                } else {
+                    this.value = content.substring(0, caret - 1) + content.substring(caret, content.length);
+                    sendMessage($scope.messageContent);
+                    setTimeout(goDown,10);
+                    $scope.messageContent = null;
+                    setTimeout(function(){
+                        $('#chatTextArea').html('');
+                        $('#chatTextArea').val().replace(/^(\r\n)|(\n)/,'');
+                        document.getElementById('chatTextArea').style.height = 'auto';
+                        text.style.minHeight = 70+'px';
+                        text.style.maxHeight = 70+'px';  
+                        chatComposer.style.minHeight = 70+'px';
+                        chatComposer.style.maxHeight = 70+'px';
+                    }, 10);
+                }
             }
-        });               
+        });
+
+        function getCaret(el) { 
+            if (el.selectionStart) { 
+                return el.selectionStart; 
+            } else if (document.selection) { 
+                el.focus();
+                var r = document.selection.createRange(); 
+                if (r == null) { 
+                    return 0;
+                }
+                var re = el.createTextRange(), rc = re.duplicate();
+                re.moveToBookmark(r.getBookmark());
+                rc.setEndPoint('EndToStart', re);
+                return rc.text.length;
+            }  
+            return 0; 
+        }
         
         function lines()
         {
@@ -356,3 +381,4 @@ $('#searchButton').click(function(){
         isInSearch = false;
     }    
 });
+
