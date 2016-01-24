@@ -83,7 +83,8 @@ class PropositionApiController extends Controller
                                                 $imageRequest->getCreatedDate()
                                         ),
                                         $canUpvoteProposition,
-                                        $proposition->getCreatedDate()
+                                        $proposition->getCreatedDate(),
+                                        strtotime($proposition->getCreatedDate()->format('Y-m-d H:i:s'))
         );
         
         echo json_encode($jsonProposition);
