@@ -11,11 +11,12 @@
 	<div class="content-slideshow">
 		<div id="propActionTop" class="action-top">
 			<div class="action-group left">
-                            <a class="icon infos" href="#"></a>                            
+                <a target="_self" href="{{ path('pp_request_homepage') }}" title="Prestapic" class="galery-logo"></a>
 			</div>                   
 
 			<div class="action-group center">
 				<a class="icon share" href="#"></a>
+                <a class="icon infos" href="#"></a>
 				<a target="_self" class="icon download" href="{{ proposition.image }}" download="{{ proposition.title }}"></a>
                                 {% endverbatim %}
                                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -35,11 +36,8 @@
                     <img ng-src="{{ proposition.author.image }}">
                 </a>
                 <div class="infos">
-                    <div class="name">{{ proposition.title }}</div>
-                    <div class="author">
-                        by 
-                        <a  target="_self" href="{{ proposition.author.url }}">{{ proposition.author.name }}</a>
-                    </div>
+                    {{ proposition.timestamp | date: 'MMMM d, yyyy' }} by
+                    <a class="author" target="_self" href="{{ proposition.author.url }}">{{ proposition.author.name }}</a>
                 </div>
             </div>
             <div class="action-bottom">

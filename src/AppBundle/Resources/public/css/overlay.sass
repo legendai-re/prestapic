@@ -111,7 +111,7 @@ section.overlay
 								display: none
 
 							.sidepop
-								display: block
+								display: none
 								width: 225px
 								height: auto
 								min-height: 22px
@@ -119,7 +119,7 @@ section.overlay
 								position: absolute
 								color: rgba(255,255,255,.33)
 								top: 50%
-								left: -190px
+								left: -205px
 								padding: 5px 10px
 								@include vendor-prefix(transform, translateY(-50%))
 								border-radius: 0 3px 3px 
@@ -154,9 +154,10 @@ section.overlay
 								color: #F23F2D
 
 								&:before
-									content: $icon-checked
+									content: $icon-cross
 
 								.sidepop
+									display: block
 									left: 38px
 									@include vendor-prefix(transition, left .5s ease)
 

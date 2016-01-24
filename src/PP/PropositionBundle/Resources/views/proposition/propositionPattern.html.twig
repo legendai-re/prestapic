@@ -13,7 +13,7 @@
             {% endif %}
             <div class="img-title">                                
                 <div class="infos">
-                    {{ proposition.createdDate|date('Y-m-d') }} by 
+                    {{ proposition.createdDate|date('F j, Y') }} by 
                     <a target="_self" class="author" href="{{ path('pp_user_profile', {'slug': proposition.author.slug}) }}" title="{{ proposition.author.name }}">{{  proposition.author.name }}</a>
                 </div>
             </div>                             

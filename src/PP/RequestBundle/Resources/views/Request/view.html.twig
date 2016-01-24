@@ -109,7 +109,7 @@
                     <img src="{{ asset(acceptedProposition.author.profilImage.webPath("70x70")) }}" alt="{{ acceptedProposition.author.profilImage.alt }}">                    
                 </a>
                 <div class="infos">
-                    {{ acceptedProposition.createdDate|date('Y-m-d') }} by 
+                    {{ acceptedProposition.createdDate|date('F j, Y') }} by 
                     <a class="author" href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" title="{{ acceptedProposition.author.name }}">{{  acceptedProposition.author.name }}</a>                
                 </div>
             </div>

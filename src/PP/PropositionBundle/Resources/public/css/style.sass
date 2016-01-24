@@ -1,25 +1,4 @@
-// VARS
-$main-color: #C24C4A
-$content: #444
-$background: #EEEEEE
-
-// ICONS
-
-$icon-checked: "\e908"
-$icon-edit: "\e903"
-$icon-new: "\e90b"
-$icon-share: "\e907"
-$icon-delete: "\e902"
-$icon-filters: "\e90a"
-$icon-notification: "\e90c"
-$icon-upload: "\e90d"
-$icon-download: "\e901"
-$icon-hearth: "\e904"
-$icon-report: "\e900"
-$icon-upvote: "\e90e"
-$icon-dropdown: "\e909"
-$icon-infos: "\e905"
-$icon-search: "\e906"
+@import ../../../../../AppBundle/Resources/public/css/init.sass
 
 section.slideshow
 	background: rgba(0,0,0,.97)
@@ -87,14 +66,24 @@ section.slideshow
 					text-align: right
 
 				a.galery-logo
-					background: url("../images/galery-logo.svg") no-repeat
-					background-size: contain
+					background: transparent
 					width: 40px
 					height: 32px
-					text-indent: -9999px
-					color: transparent
+					color: rgba(255,255,255,.75)
 					display: block
 					margin-top: 15px
+					float: left
+
+					&:before
+						content: $logo
+						font-family: "pp-font"
+						font-size: 32px
+						line-height: 32px
+						font-weight: normal
+
+					&:hover, &:focus
+						color: white
+						text-decoration: none
 					
 				a.selecting-prop
 					color: rgba(255,255,255,0)
@@ -104,6 +93,7 @@ section.slideshow
 					font-size: 15px
 					line-height: 20px
 					text-transform: uppercase
+					text-decoration: none
 
 					&:hover
 						&:after
@@ -138,7 +128,7 @@ section.slideshow
 						content: $icon-hearth
 						float: right
 						color: rgba(255,255,255,.75)
-						
+
 				a.icon
 					background: transparent
 					width: 32px
@@ -158,6 +148,7 @@ section.slideshow
 					-webkit-font-smoothing: antialiased
 					-moz-osx-font-smoothing: grayscale
 					padding: 6px 0
+					text-decoration: none
 
 					&:hover
 						color: white
@@ -212,9 +203,9 @@ section.slideshow
 			padding: 0 20px 20px
 			
 			a.avatar
-				background: rgba(255, 255, 255, 0.25)
-				width: 60px
-				height: 60px
+				background: rgba(255, 255, 255, 0.5)
+				width: 48px
+				height: 48px
 				overflow: hidden
 				border-radius: 50%
 				display: block
@@ -222,23 +213,20 @@ section.slideshow
 				border: 1px solid rgba(255,255,255,.5)
 				
 				img
-					width: 60px
-					height: 60px
+					width: 100%
 					
 			.infos
+				font-size: 15px
+				color: rgba(255, 255, 255, 0.75)
 				float: left
-				margin-left: 10px
+				padding-left: 10px
 				
-				.name
-					font-size: 28px
-					display: inline
-				
-				.author
-					font-size: 18px
-					
-					a
-						color: rgba(255, 255, 255, 0.75)
-						font-weight: bold
+				a.author
+					width: auto
+					display: block
+					font-size: 19px
+					color: white
+
 		.action-bottom
 			position: absolute
 			bottom: 0

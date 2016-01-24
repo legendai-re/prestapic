@@ -14,8 +14,7 @@ header
 		max-width: 1230px
 
 		h1.logo
-			background: url("../images/logo.png") no-repeat
-			background-size: contain
+			background: transparent
 			width: 50px
 			height: 40px
 			text-indent: -99999px
@@ -27,9 +26,25 @@ header
 			float: left
 
 			a
+				text-indent: 0
 				display: block
 				width: 50px
 				height: 40px
+				position: relative
+				z-index: 1
+
+				&:focus
+					&:before
+						color: #444
+
+				&:before
+					content: $logo
+					font-family: "pp-font"
+					font-size: 40px
+					line-height: 40px
+					color: $main-color
+					position: absolute
+					z-index: 0
 
 		.search
 			width: calc(100% - 70px - 400px)
@@ -41,18 +56,19 @@ header
 				position: relative
 
 				input.main-search
+					background: transparent
 					width: 100%
 					height: 76px
 					font-size: 20px
-					color: 1px solid rgba(0, 0, 0, 0.1)
-					padding: 25px 30px
+					color: #444
+					padding: 26px 30px 25px
 					border: none
 					border-left: 1px solid rgba(0, 0, 0, 0.1)
-					border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 
 					&:active, &:focus
+						padding: 26px 30px 24px
 						border-bottom: 2px solid $main-color
-						border-right: 1px solid #eee
+						border-right: 1px solid rgba(0,0,0,.1)
 
 				ul.search-options
 					margin: 0
@@ -181,7 +197,7 @@ header
 									background: rgba(0,0,0,.1)
 
 								&:active
-									background: #444							
+									background: #444
 
 								&:after
 									display: block
@@ -244,11 +260,13 @@ header
 								&:hover
 									background: #F3F3F3
 									color: #777
+									text-decoration: none
 
 								&:focus
 									background: $main-color
 									color: white
 									outline: none
+									text-decoration: none
 
 							a
 								display: inline-block
@@ -722,3 +740,127 @@ header
 							&.choosen
 								background: #C24C4A
 								color: rgba(255, 255, 255, 0.75)
+
+	&.profile
+		background: rgba(0,0,0,.025)
+		position: absolute
+		z-index: 4
+		border-color: rgba(255,255,255,.25)
+
+		div.content
+			h1.logo
+				a
+					&:hover, &:focus
+						&:before
+							color: white
+
+					&:before
+						color: rgba(255,255,255,.75)
+
+
+			.search
+				form
+					input.main-search
+						border-left: 1px solid rgba(255,255,255,.25)
+						color: white
+
+						&::-webkit-input-placeholder, &:-moz-placeholder, &::-moz-placeholder, &:-ms-input-placeholder
+							color: rgba(255,255,255,.75)
+
+						&:active, &:focus
+							border-bottom: 2px solid rgba(255,255,255,.33)
+							border-right: 1px solid rgba(255,255,255,.25)
+
+					ul.search-options
+						li.option
+							a.filters, button.go-search
+								&:focus
+									box-shadow: 0 0 0 1px transparent, 0 0 0 1px rgba(255,255,255,0.5)
+									text-decoration: none
+
+							a.filters
+								background: transparent
+								color: rgba(255,255,255,.33)
+								border: 1px solid rgba(255,255,255,.25)
+
+								&:hover, &:focus
+									border: 1px solid rgba(255,255,255,.5)
+									color: rgba(255,255,255,.66)
+
+							button.go-search
+								background: rgba(255,255,255,.25)
+								color: rgba(255,255,255,.33)
+
+								&:hover, &:focus
+									background: rgba(255,255,255,.5)
+									color: rgba(255,255,255,.66)
+
+							.filter-choose-category
+								.filter-choose-text
+									color: rgba(255,255,255,.75)
+
+								.filter-select
+									background: rgba(255,255,255,.25)
+
+									&:hover
+										background: rgba(255,255,255,.5)
+
+									&:active
+										background: rgba(255,255,255,.75)
+
+					.search-options-list
+						display: block
+						background: rgba(0,0,0,.1)
+						border: 1px solid rgba(255,255,255,.25)
+
+						ul
+							li
+								a, .infos-all-search
+									&:hover, &:focus
+										background: rgba(255,255,255,.25)
+										color: white
+
+								a
+									color: white
+
+									.avatar
+										background: transparent
+										color: rgba(255, 255, 255, 0.5)
+										border: 1px solid rgba(255, 255, 255, 0.5)
+
+			nav.menu
+				ul
+					li
+						a
+							&.button
+								background: rgba(255,255,255,.33)
+								color: rgba(255,255,255,.66)
+
+								&:hover, &:focus
+									background: rgba(255,255,255,.66)
+									color: rgba(255,255,255,.75)
+
+								&:focus
+									box-shadow: 0 0 0 1px  transparent, 0 0 0 1px rgba(255,255,255,0.5)
+									text-decoration: none
+
+							&.notification, &.account
+								background: rgba(255, 255, 255,.25)
+								color: rgba(255,255,255,.33)
+
+								&:hover, &:focus
+									background: rgba(255,255,255,.5)
+									color: rgba(255,255,255,.66)
+
+								&:focus
+									box-shadow: 0 0 0 1px transparent, 0 0 0 1px rgba(255,255,255,0.5)
+									text-decoration: none
+
+							&.account
+								opacity: 0.75
+
+								&:hover, &:focus
+									opacity: 1
+
+			.dropdown, & nav.menu .dropdown
+				opacity: .75
