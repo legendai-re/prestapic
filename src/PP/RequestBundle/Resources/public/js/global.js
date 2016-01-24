@@ -14,16 +14,6 @@ jQuery.fn.preventDoubleSubmission = function() {
   return this;
 };
 
-$(".addRequestForm").preventDoubleSubmission();
-
-$("#sendRequestOverClose").click(function () {
-   $('#sendRequestOver').fadeOut();  
-});
-
-$("html").click(function () {
-   $('#sendRequestOver').fadeOut();   
-});
-
 $("#pp_requestbundle_image_request_title").one('focus', function () {
    $('#requestFormRest').slideToggle();
    $('.content').removeClass("init");

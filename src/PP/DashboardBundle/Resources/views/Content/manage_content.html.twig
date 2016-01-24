@@ -4,79 +4,106 @@
 {% block dashbordBody %}
     {{ form(getContentForm) }}
     
-    <div style="display: inline-block;">
-        <h1>Categories</h1>
-        {% verbatim %}
-        <div ng-controller="categoriesController as categories" style="width: 300px; background-color: #DDD;">
-            <div  style="width: 300px; height: 400px; max-height: 400px; overflow: auto;">
-                <ul style="list-style-type: none; padding: 0px; margin: 0px;">
-                    <li ng-repeat="category in content.categories" ng-if="category.name && category.name != 'Uncategorize'" style="padding-top: 5px; padding-bottom: 5px;">
-                        {{ category.name }}
-                        <div style="float: right;">
-                            <input style="display: inline;" type="submit" value="delete" ng-click="categories.deleteCategory( category.id )" />
-                            <input style="display: inline;" type="submit" value="edit" ng-click="categories.patchCategory( category.id )" />
-                        </div>
-                    </li>            
-                </ul>
-            </div>
-            <div style="width: 300px; padding-top: 10px;">
-                <h3>Add new category</h3>
-                <form ng-submit="categories.postCategory()">
-                    <input style="display: inline;" required type="text" ng-model="newCategory.name" />
-                    <input style="display: inline;" type="submit" value="submit" />
-                    <p>{{ postCategoryError }}</p>
-                </form>
-            </div>
-        </div>
+    <div class="full-main-top">
+        <h1>Content management</h1>
     </div>
-    {% endverbatim %}
     
-    <div style="display: inline-block; margin-left: 50px;">
-        <h1>Tags</h1>
-        {% verbatim %}
-        <div ng-controller="tagsController as tags" style="width: 300px; background-color: #DDD;">
-            <div  style="width: 300px; height: 496px; max-height: 496px; overflow: auto;">
-                <ul style="list-style-type: none; padding: 0px; margin: 0px;">
-                    <li ng-repeat="tag in content.tags" ng-if="tag.name" style="padding-top: 5px; padding-bottom: 5px;">
-                        {{ tag.name }}
-                        <div style="float: right;">
-                            <input type="submit" value="delete" ng-click="tags.deleteTag( tag.id )" />                            
-                        </div>
-                    </li>            
-                </ul>
-            </div>
-            <p>{{ tagError }}</p>
-        </div>
-    </div>
-        
-    <div style="display: inline-block; margin-left: 50px;">
-        <h1>Reports</h1>
-        <div ng-controller="reportController as report" style="width: 300px; background-color: #DDD;">
-            <select ng-model="currentReportReasonType">
-                <option value="1">Image Request</option>
-                <option value="2">Proposition</option>
-                <option value="3">User</option>
-            </select>
-            <div  style="width: 300px; height: 496px; max-height: 496px; overflow: auto;">
-                <ul style="list-style-type: none; padding: 0px; margin: 0px;">
-                    <li ng-repeat="reason in content.reportReasons" ng-if="reason.type == currentReportReasonType" style="padding-top: 5px; padding-bottom: 5px;">
-                        {{ reason.name }}
-                        <div style="float: right;">
-                            <input type="submit" value="delete" ng-click="report.deleteReportReason( reason.id )" />                            
-                        </div>
-                    </li>
-                </ul>
-                <div style="width: 300px; padding-top: 10px;">
-                    <h3>Add new report reason</h3>
-                    <form ng-submit="report.postReportReason()">
-                        <input style="display: inline;" required type="text" ng-model="newReportReason.name" />
-                        <input style="display: inline;" type="submit" value="submit" />                            
-                    </form>
+    <div class="full-main-container">
+        <div class="full-main-container-left">
+            <div class="full-main-content">
+                <div class="fcontent-top">
+                    Categories
                 </div>
-            </div>            
+                {% verbatim %}
+                <div ng-controller="categoriesController as categories" >
+                    <div class="fcontent-choice" style="max-height: 409px; overflow: auto;">
+                        <ul class="fcontent-choice-list">
+                            <li ng-repeat="category in content.categories" ng-if="category.name && category.name != 'Uncategorize'" class="fcontent-choice-item">
+                                {{ category.name }}
+                                <div style="float: right;">
+                                    <input style="display: inline;" type="submit" value="delete" ng-click="categories.deleteCategory( category.id )" />
+                                    <input style="display: inline;" type="submit" value="edit" ng-click="categories.patchCategory( category.id )" />
+                                </div>
+                            </li>            
+                        </ul>
+                    </div>
+                    <div class="fcontent-text">
+                        Add a new category
+                    </div>
+                    <div class="fcontent-bottom">
+                        <form ng-submit="categories.postCategory()">
+                            <input style="display: inline;" required type="text" ng-model="newCategory.name" />
+                            <input style="display: inline;" type="submit" value="submit" />
+                            <p>{{ postCategoryError }}</p>
+                        </form>
+                    </div>                    
+                </div>
+            </div>
         </div>
+        {% endverbatim %}
+
+        <div class="full-main-container-center">
+            <div class="full-main-content">
+                <div class="fcontent-top">
+                    Tags
+                </div>
+                {% verbatim %}
+                <div ng-controller="tagsController as tags">
+                    <div class="fcontent-choice"  style="max-height: 500px; overflow: auto;">
+                        <ul class="fcontent-choice-list">
+                            <li ng-repeat="tag in content.tags" ng-if="tag.name" class="fcontent-choice-item">
+                                {{ tag.name }}
+                                <div style="float: right;">
+                                    <input type="submit" value="delete" ng-click="tags.deleteTag( tag.id )" />                            
+                                </div>
+                            </li>            
+                        </ul>
+                    </div>
+                    <div class="fcontent-bottom">
+                        {{ tagError }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="full-main-container-right">
+            <div class="full-main-content">
+                <div class="fcontent-top">
+                    Report reasons
+                </div>
+                <div ng-controller="reportController as report">
+                    <div class="fcontent-text">
+                        <select ng-model="currentReportReasonType">
+                            <option value="1">Image Request</option>
+                            <option value="2">Proposition</option>
+                            <option value="3">User</option>
+                        </select>
+                    </div>
+                    <div class="fcontent-choice"  style="max-height: 500px; overflow: auto;">
+                        <ul class="fcontent-choice-list">
+                            <li ng-repeat="reason in content.reportReasons" ng-if="reason.type == currentReportReasonType" class="fcontent-choice-item">
+                                {{ reason.name }}
+                                <div style="float: right;">
+                                    <input type="submit" value="delete" ng-click="report.deleteReportReason( reason.id )" />                            
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="fcontent-text">
+                        Add a new report reason
+                    </div>
+                    <div class="fcontent-bottom">                        
+                        <form ng-submit="report.postReportReason()">
+                            <input style="display: inline;" required type="text" ng-model="newReportReason.name" />
+                            <input style="display: inline;" type="submit" value="submit" />                            
+                        </form>
+                    </div>                             
+                </div>
+            </div>
+        </div>
+        {% endverbatim %}
     </div>
-    {% endverbatim %}
+    
     
 {% endblock %}
 

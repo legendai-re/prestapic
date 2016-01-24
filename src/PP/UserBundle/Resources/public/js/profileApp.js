@@ -18,6 +18,9 @@
     // souscription au channel "/messages"
     
     containerApp.run(['$rootScope','FayeClient', '$location', function ($rootScope, FayeClient, $location) {
+            
+        $("#header").addClass("profile");
+        
         FayeClient.subscribe('/messages', function (message) {
             $rootScope.$broadcast('notification', message);            
         });
