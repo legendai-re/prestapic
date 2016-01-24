@@ -359,7 +359,7 @@ class RequestController extends Controller
                         $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
 
                         $faye = $this->container->get('pp_notification.faye.client');                    
-                        $channel = '/notification/'.$imageRequestAuthorThread->getSlug();
+                        $channel = '/notification/'.$imageRequestAuthorThread->getId();
                         $jsonNotication = new JsonNotification(
                                 NotificationType::NEW_PROPOSITION,
                                 false,

@@ -36,7 +36,7 @@ class NotificationApiController extends Controller
             
             if($currentUser != null){               
                 
-                $response->setData(json_encode(array('notifThreadSlug'=>$currentUser->getNotificationThread()->getSlug())));
+                $response->setData(json_encode(array('notifThreadSlug'=>$currentUser->getNotificationThread()->getId())));
                 
             }else   $response->setStatusCode(Response::HTTP_FORBIDDEN);            
         
@@ -64,7 +64,7 @@ class NotificationApiController extends Controller
             $notificationCommentRepository = $em->getRepository('PPNotificationBundle:NotificationComment');                    
                     
             if($currentUser != null){
-                $data["notifThreadSlug"] = $currentUser->getNotificationThread()->getSlug();
+                $data["notifThreadSlug"] = $currentUser->getNotificationThread()->getId();
                 $data["showMoreApiUrl"] = $this->generateUrl('pp_notification_api_get_notification', array('page'=>$page+1), true);
                 $data["notifications"] = array();
                 $data["showMore"] = true;

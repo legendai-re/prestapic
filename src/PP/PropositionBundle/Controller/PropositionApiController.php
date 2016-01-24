@@ -179,7 +179,7 @@ class PropositionApiController extends Controller
                      /* send notification */
                     $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
                     $faye = $this->container->get('pp_notification.faye.client');                    
-                    $channel = '/notification/'.$propositionAuthorThread->getSlug();                
+                    $channel = '/notification/'.$propositionAuthorThread->getId();                
                     $jsonNotication = new JsonNotification(
                                 NotificationType::PROPOSITION_SELECTED,
                                 false,

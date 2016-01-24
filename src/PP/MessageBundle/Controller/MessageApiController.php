@@ -240,7 +240,7 @@ class MessageApiController extends Controller
                         $em->flush();
 
                         $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
-                        $channel = '/notification/'.$targetUser->getSlug();                    
+                        $channel = '/notification/'.$targetUser->getNotificationThread()->getId();                    
                         $jsonNotication = new JsonNotification(
                                 NotificationType::MESSAGE,
                                 false,

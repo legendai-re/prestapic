@@ -175,7 +175,7 @@ class ShowUserApiController extends Controller
                         $setClickedUrl = $this->generateUrl('pp_notification_api_patch_clicked', array("id"=>$notification->getId()));
 
                         $faye = $this->container->get('pp_notification.faye.client');                    
-                        $channel = '/notification/'.$pageProfileNotifThread->getSlug();                    
+                        $channel = '/notification/'.$pageProfileNotifThread->getId();                    
                         $jsonNotication = new JsonNotification(
                                 NotificationType::FOLLOW,
                                 false,
