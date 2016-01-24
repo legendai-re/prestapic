@@ -379,9 +379,12 @@ header
 								color: white
 
 						&.account
+							background: white
+							border: 1px solid white
+
 							img
-								width: 36px
-								height: 36px
+								width: 100%
+								height: 100%
 
 		.dropdown, & nav.menu .dropdown
 			position: absolute
@@ -857,10 +860,60 @@ header
 									text-decoration: none
 
 							&.account
-								opacity: 0.75
+								border: 1px solid rgba(255,255,255,.33)
+
+								img
+									opacity: 0.75
 
 								&:hover, &:focus
 									opacity: 1
 
+							&.notification.alert
+								background: rgba(255,255,255,.33)
+								border: 1px solid rgba(255,255,255,.33)
+
+								.number
+									color: rgba(255,255,255,.66)
+
 			.dropdown, & nav.menu .dropdown
-				opacity: .75
+				background: rgba(255,255,255,.75)
+				border: 1px solid rgba(255,255,255,.25)
+
+				.dropdown-caret
+					.caret-outer
+						border-bottom: 10px solid rgba(255,255,255,.25)
+
+					.caret-inner
+						border-bottom: 9px solid rgba(255,255,255,.5)
+
+				ul
+					li
+						a
+							&:hover, &:focus
+								background: rgba(0,0,0,.2)
+
+						&.notif
+							a
+								color: rgba(0,0,0,.5)
+
+								&:hover
+									background: rgba(0,0,0,.1)
+
+						&.username
+							a
+								color: rgba(0,0,0,.75)
+
+								&:hover
+									color: white
+
+									small
+										color: white
+
+								small
+									color: rgba(0,0,0,.5)
+
+						&.divider
+							background: rgba(0,0,0,.1)
+
+						&.more-notif
+							background: rgba(255,255,255,.75)
