@@ -19,7 +19,7 @@
     {# display profile header #}
     <section class="profile" ng-controller="profileController as profile" >
         <div id="profileHeaderContainer">
-            <div class="profile-cover">
+            <div class="profile-cover" style="background-color: #{{ pageProfile.coverImage.avgColor }};">
                 {% if pageProfile.coverImage != null %}
                     <div class="banner" style="background-image: url({{ asset(pageProfile.coverImage.webPath("1500x500")) }})"></div>
                     <div class="overlay"></div> 

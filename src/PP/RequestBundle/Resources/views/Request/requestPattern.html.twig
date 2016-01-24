@@ -53,7 +53,7 @@
         <div class="propositions-container" >
             <span class="prop-num">{{ imageRequest.propositionsNb }} propositions</span>
             {% for proposition in propositionsList['imageRequest_'~imageRequest.id] if not break %}                
-                <a class="prop-img" ng-href="{{ asset(proposition.image.webPath("original")) }}" ng-click="requests.showPopup({{ proposition.id }})">
+                <a class="prop-img" style="background-color: #{{ proposition.image.avgColor }};" ng-href="{{ asset(proposition.image.webPath("original")) }}" ng-click="requests.showPopup({{ proposition.id }})">
                     <img 
                     bn-lazy-src="{{ asset(proposition.image.webPath("home")) }}"
                     alt="{{ proposition.image.alt }}"

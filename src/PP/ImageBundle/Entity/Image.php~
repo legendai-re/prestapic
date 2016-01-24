@@ -15,28 +15,26 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Image
 {
+     public function __construct()
+    {
+         $this->sizeList = array();
+    }
+    
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="string", length=36)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     private $id;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="upload_dire_original", type="string", length=255)
+     * @ORM\Column(name="upload_dire", type="string", length=255)
      */
-    private $uploadDirOriginal;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="upload_dire_thumbnail", type="string", length=255)
-     */
-    private $uploadDirThumbnail;
+    private $uploadDir;
     
     /**
      * @var string
@@ -44,6 +42,13 @@ class Image
      * @ORM\Column(name="alt", type="string", length=255)
      */
     private $alt;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="avgColor", type="string", length=255)
+     */
+    private $avgColor;
 
     /**
      * @var string
@@ -117,26 +122,56 @@ class Image
         return $this->url;
     }
     
+    
+    /**
+     * Set sizeList
+     *
+     * @param array $sizeList
+     *
+     * @return Image
+     */
+    public function setSizeList($sizeList)
+    {
+        $this->sizeList = $sizeList;
+
+        return $this;
+    }
+
+    /**
+     * Get sizeList
+     *
+     * @return array
+     */
+    public function getSizeList()
+    {
+        return $this->sizeList;
+    }
+    
+    public function addSizeList($size)
+    {
+        return array_push($this->sizeList, $size);
+    }
+    
     //////////////////////////////////////////////
     //////////////////////////////////////////////
     
     /**
+    *@Assert\File(
+    *     maxSize = "5M",   
+    *     maxSizeMessage = "The file is too large ({{ size }}Mo). Allowed maximum size is {{ limit }}Mo"
+    *)
     *@Assert\Image()
     */
     private $file;
 
-    private $tempFilenameOriginal;
-    private $tempFilenameThumbnail;
+    private $tempFilename;
+    private $tempId;
 
-    public function getWebPathOriginal()
+    public function getWebPath($size)
     {
-            return $this->getUploadDirOriginal().'/'.$this->getId().'.'.$this->getUrl();
+            return $this->getUploadDir().'/'.$size.'/'.$this->getId().'.'.$this->getUrl();
     }
     
-     public function getWebPathThumbnail()
-    {
-            return $this->getUploadDirThumbnail().'/'.$this->getId().'.'.$this->getUrl();
-    }
 
     public function getFile()
     {
@@ -150,7 +185,7 @@ class Image
         // On vérifie si on avait déjà un fichier pour cette entité
         if (null !== $this->url) {
           // On sauvegarde l'extension du fichier pour le supprimer plus tard
-          $this->tempFilenameOriginal = $this->url;
+          $this->tempFilename = $this->url;
 
           // On réinitialise les valeurs des attributs url et alt
           $this->url = null;
@@ -175,6 +210,32 @@ class Image
 
         // Et on génère l'attribut alt de la balise <img>, à la valeur du nom du fichier sur le PC de l'internaute
         $this->alt = $this->file->getClientOriginalName();
+        
+        $rTotal = null;
+        $gTotal = null;
+        $bTotal = null;
+        $total = null;
+        $i = imagecreatefromjpeg($this->file);
+        for ($x=0;$x<imagesx($i);$x++) {
+                for ($y=0;$y<imagesy($i);$y++) {
+                        $rgb = imagecolorat($i,$x,$y);
+                        $r   = ($rgb >> 16) & 0xFF;
+                        $g   = ($rgb >> 8) & 0xFF;
+                        $b   = $rgb & 0xFF;
+                        $rTotal += $r;
+                        $gTotal += $g;
+                        $bTotal += $b;
+                        $total++;
+                }
+        }
+        $rAverage = round($rTotal/$total);
+        $gAverage = round($gTotal/$total);
+        $bAverage = round($bTotal/$total);
+        
+        //echo "<div style='width: 100px; height: 100px; background-color: rgba($rAverage,$gAverage,$bAverage);></div>";
+        echo dechex($rAverage).'/';
+        echo dechex($gAverage).'/';
+        echo dechex($bAverage);     
     }
   
     /**
@@ -188,22 +249,16 @@ class Image
           return;
         }
         
-        if (null !== $this->tempFilenameOriginal) {
-          $oldFile = $this->getUploadRootDirOriginal().'/'.$this->id.'.'.$this->tempFilenameOriginal;
+        if (null !== $this->tempFilename) {
+          $oldFile = $this->getUploadRootDir().'/original/'.$this->id.'.'.$this->tempFilename;
           if (file_exists($oldFile)) {
             unlink($oldFile);
           }
-        }
-        if (null !== $this->tempFilenameThumbnail) {
-          $oldFile = $this->getUploadRootDirThumbnail().'/'.$this->id.'.'.$this->tempFilenameThumbnail;
-          if (file_exists($oldFile)) {
-            unlink($oldFile);
-          }
-        }
+        }        
 
         // On déplace le fichier envoyé dans le répertoire de notre choix
         $this->file->move(
-          $this->getUploadRootDirOriginal(), // Le répertoire de destination
+          $this->getUploadRootDir().'/original', // Le répertoire de destination
           $this->id.'.'.$this->url   // Le nom du fichier à créer, ici « id.extension »
         );
     }
@@ -214,8 +269,8 @@ class Image
     public function preRemoveUpload()
     {
             // On sauvegarde temporairement le nom du fichier, car il dépend de l'id
-            $this->tempFilenameOriginal = $this->getUploadRootDirOriginal().'/'.$this->id.'.'.$this->url;
-            $this->tempFilenameThumbnail = $this->getUploadRootDirThumbnail().'/'.$this->id.'.'.$this->url;
+            $this->tempFilename = $this->getUploadRootDir().'/original/'.$this->id.'.'.$this->url;
+            $this->tempId = $this->id;
     }
 
     /**
@@ -223,48 +278,66 @@ class Image
     */
     public function removeUpload()
     {            
-            if (file_exists($this->tempFilenameOriginal)) {              
-              unlink($this->tempFilenameOriginal);
+            if (file_exists($this->tempFilename)) {              
+              unlink($this->tempFilename);
+              foreach ($this->sizeList as $size){
+                  unlink($this->getUploadRootDir().'/'.$size.'/'.$this->tempId.'.'.$this->url);
             }
-             if (file_exists($this->tempFilenameThumbnail)) {              
-              unlink($this->tempFilenameThumbnail);
-            }
+            }            
     }
 
-    public function getUploadDirOriginal()
+    public function getUploadDir()
     {            
-            return $this->uploadDirOriginal;
+            return $this->uploadDir;
     }
     
-    public function setUploadDirOriginal($folder)
+    public function setUploadDir($folder)
     {
-            $this->uploadDirOriginal = 'uploads/img/'.$folder.'/original';
-            $this->uploadDirThumbnail = 'uploads/img/'.$folder.'/thumbnail';
-    }
-    
-    public function getUploadDirThumbnail()
-    {            
-            return $this->uploadDirThumbnail;
-    }        
+            $this->uploadDir = 'uploads/img/'.$folder;            
+    }  
 
-    public function getUploadRootDirOriginal()
+    public function getUploadRootDir()
     {            
-            return __DIR__.'/../../../../web/'.$this->getUploadDirOriginal();
+            return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
     
-     public function getUploadRootDirThumbnail()
-    {            
-            return __DIR__.'/../../../../web/'.$this->getUploadDirThumbnail();
-    }
-    
-    public function resize($cropWidth, $cropHeight){
+    public function resize($foldername, $cropWidth, $cropHeight){
+        ini_set('memory_limit', '-1');
+       
         $resizeRatio = $cropWidth;
         if($cropHeight > $resizeRatio)$resizeRatio =$cropHeight;
-        $resizeRatio *= 3;
+        //$resizeRatio *= 3;
+        $size = getimagesize($this->getUploadRootDir()  .'/original/'. $this->id .'.'. $this->url);
+        $width = $size[0];
+        $height = $size[1];
+        $mime = $size['mime'];
         
-        $source = imagecreatefromjpeg($this->getUploadRootDirOriginal() .'/'. $this->id .'.'. $this->url);
+        switch($mime){
+            case 'image/gif':
+                    $image_create = "imagecreatefromgif";
+                    $image = "imagegif";
+                    break;
+
+            case 'image/png':
+                    $image_create = "imagecreatefrompng";
+                    $image = "imagepng";
+                    $quality = 7;
+                    break;
+
+            case 'image/jpeg':
+                    $image_create = "imagecreatefromjpeg";
+                    $image = "imagejpeg";
+                    $quality = 80;
+                    break;
+
+            default:
+                    return false;
+                    break;
+        }
+                    
+        $source = $image_create($this->getUploadRootDir().'/original/'. $this->id .'.'. $this->url);
                         
-        $size = getimagesize($this->getUploadRootDirOriginal()  .'/'. $this->id .'.'. $this->url);
+        
         $ratio = $size[0]/$size[1];
         if( $ratio > 1) {                
             $width = $resizeRatio;
@@ -276,20 +349,21 @@ class Image
         }
         $destination = imagecreatetruecolor($width, $height);                       
         
-        $thumbnailDir = $this->getUploadRootDirThumbnail() .'/'. $this->id .'.'. $this->url;
+        $thumbnailDir = $this->getUploadRootDir().'/'.$foldername.'/'. $this->id .'.'. $this->url;
         
         imagecopyresampled($destination, $source, 0, 0, 0, 0, $width,$height,$size[0],$size[1]);        
-        imagejpeg($destination, $thumbnailDir);
-        $this->crop($cropWidth, $cropHeight, $thumbnailDir, $thumbnailDir);
+        imagejpeg($destination, $thumbnailDir, 100);
+        $this->crop($cropWidth, $cropHeight, $thumbnailDir, $thumbnailDir);                
+        
     }
     
     public function crop($max_width, $max_height, $source_file, $dst_dir, $quality = 80){
-            $imgsize = getimagesize($source_file);
-            $width = $imgsize[0];
-            $height = $imgsize[1];
-            $mime = $imgsize['mime'];
-
-            switch($mime){
+        $imgsize = getimagesize($source_file);
+        $width = $imgsize[0];
+        $height = $imgsize[1];           
+        $mime = $imgsize['mime'];
+        
+        switch($mime){
                     case 'image/gif':
                             $image_create = "imagecreatefromgif";
                             $image = "imagegif";
@@ -304,14 +378,12 @@ class Image
                     case 'image/jpeg':
                             $image_create = "imagecreatefromjpeg";
                             $image = "imagejpeg";
-                            $quality = 80;
+                            $quality = 100;
                             break;
 
                     default:
-                            return false;
-                            break;
-            }
-
+                            return false;                            
+            }                        
             $dst_img = imagecreatetruecolor($max_width, $max_height);
             $src_img = $image_create($source_file);
 
@@ -335,4 +407,61 @@ class Image
             if($src_img)imagedestroy($src_img);
     }
     
+    public function resizeWidth($foldername, $cropWidth) {
+        ini_set('memory_limit', '-1');
+       
+        $resizeRatio = $cropWidth;        
+        //$resizeRatio *= 3;
+        $size = getimagesize($this->getUploadRootDir()  .'/original/'. $this->id .'.'. $this->url);
+        $width = $size[0];
+        $height = $size[1];
+        $mime = $size['mime'];
+               
+        switch($mime){
+            case 'image/gif':
+                    $image_create = "imagecreatefromgif";
+                    $image = "imagegif";
+                    break;
+
+            case 'image/png':
+                    $image_create = "imagecreatefrompng";
+                    $image = "imagepng";
+                    $quality = 7;
+                    break;
+
+            case 'image/jpeg':
+                    $image_create = "imagecreatefromjpeg";
+                    $image = "imagejpeg";
+                    $quality = 80;
+                    break;
+
+            default:
+                    return false;
+                    break;
+        }
+                    
+        $source = $image_create($this->getUploadRootDir().'/original/'. $this->id .'.'. $this->url);
+                        
+        if($size[0] > $cropWidth){
+            $ratio = $size[0]/$size[1];
+            if( $ratio > 1) {                
+                $width = $resizeRatio;
+                $height = $resizeRatio/$ratio;
+            }
+            else {
+                $width = $resizeRatio*$ratio;
+                $height = $resizeRatio;                
+            }
+        }else{
+            $width = $size[0];
+            $height = $size[1];
+        }
+        $destination = imagecreatetruecolor($width, $height);                       
+        
+        $thumbnailDir = $this->getUploadRootDir().'/'.$foldername.'/'. $this->id .'.'. $this->url;
+        
+        imagecopyresampled($destination, $source, 0, 0, 0, 0, $width,$height,$size[0],$size[1]);        
+        imagejpeg($destination, $thumbnailDir, 100);                
+    }
+      
 }

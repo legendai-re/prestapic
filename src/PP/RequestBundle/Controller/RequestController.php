@@ -41,7 +41,7 @@ class RequestController extends Controller
             if($request->get('search_query') != null || $request->get('categories') != null || $request->get('tags') != null || $request->get('me') != null){
                 $haveSearchParam = true;             
             }            
-        }                                                              
+        }                                                                              
         
         /* init repositories */
         $em = $this->getDoctrine()->getManager();

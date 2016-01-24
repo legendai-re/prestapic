@@ -42,6 +42,13 @@ class Image
      * @ORM\Column(name="alt", type="string", length=255)
      */
     private $alt;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="avgColor", type="string", length=255)
+     */
+    private $avgColor;
 
     /**
      * @var string
@@ -114,6 +121,7 @@ class Image
     {
         return $this->url;
     }
+    
     
     /**
      * Set sizeList
@@ -202,6 +210,49 @@ class Image
 
         // Et on génère l'attribut alt de la balise <img>, à la valeur du nom du fichier sur le PC de l'internaute
         $this->alt = $this->file->getClientOriginalName();
+        
+        $rTotal = null;
+        $gTotal = null;
+        $bTotal = null;
+        $total = null;
+        $size = getimagesize($this->file);
+        $width = $size[0];
+        $height = $size[1];
+        $mime = $size['mime'];        
+        switch($mime){
+            case 'image/gif':
+                    $image_create = "imagecreatefromgif";
+                    break;
+
+            case 'image/png':
+                    $image_create = "imagecreatefrompng";
+                    break;
+
+            case 'image/jpeg':
+                    $image_create = "imagecreatefromjpeg";
+                    break;
+            default:
+                    return false;
+                    break;
+        }
+        $i = $image_create($this->file);
+        for ($x=0;$x<imagesx($i);$x++) {
+                for ($y=0;$y<imagesy($i);$y++) {
+                        $rgb = imagecolorat($i,$x,$y);
+                        $r   = ($rgb >> 16) & 0xFF;
+                        $g   = ($rgb >> 8) & 0xFF;
+                        $b   = $rgb & 0xFF;
+                        $rTotal += $r;
+                        $gTotal += $g;
+                        $bTotal += $b;
+                        $total++;
+                }
+        }
+        $rAverage = round($rTotal/$total);
+        $gAverage = round($gTotal/$total);
+        $bAverage = round($bTotal/$total);
+        
+        $this->avgColor = dechex($rAverage).dechex($gAverage). dechex($bAverage);
     }
   
     /**
@@ -429,5 +480,29 @@ class Image
         imagecopyresampled($destination, $source, 0, 0, 0, 0, $width,$height,$size[0],$size[1]);        
         imagejpeg($destination, $thumbnailDir, 100);                
     }
-    
+      
+
+    /**
+     * Set avgColor
+     *
+     * @param string $avgColor
+     *
+     * @return Image
+     */
+    public function setAvgColor($avgColor)
+    {
+        $this->avgColor = $avgColor;
+
+        return $this;
+    }
+
+    /**
+     * Get avgColor
+     *
+     * @return string
+     */
+    public function getAvgColor()
+    {
+        return $this->avgColor;
+    }
 }
