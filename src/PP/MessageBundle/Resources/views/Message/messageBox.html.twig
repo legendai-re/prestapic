@@ -64,13 +64,13 @@
                         </div>
                         <div  ng-repeat="message in currentUser.threadList[currentThread.id].messageList" >
                             <div ng-if="message.messageFromUs" class="message me">
-                                <div class="message-content" ng-bind-html="message.content | linky">
+                                <div class="message-content" style="white-space: pre;" ng-bind-html="message.content | linky">
                                     {{ message.content }}
                                 </div>                         
                             </div>
 
                             <div ng-if="!message.messageFromUs" class="message">
-                                <div class="message-content" ng-bind-html="message.content | linky">
+                                <div class="message-content" style="white-space: pre;" ng-bind-html="message.content | linky ">
                                     {{ message.content }}
                                 </div>
                                 <div class="avatar" ng:class="{true:'avatar last', false:'avatar'}[!currentUser.threadList[currentThread.id].messageList[$index+1] || currentUser.threadList[currentThread.id].messageList[$index+1].messageFromUs]">
