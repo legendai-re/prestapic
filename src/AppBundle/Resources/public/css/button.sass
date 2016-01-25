@@ -1,19 +1,19 @@
 // BUTTON
 
 button, .button
-	background: #F3F3F3
+	background: $highlight
 	border: none
 	text-transform: uppercase
 	font-weight: 600
-	color: #777
+	color: $texts
 	padding: 8px 16px
 	border-radius: 3px
 	display: inline-block
 	font-size: 16px
 
 	&:hover
-		background: #777
-		color: white
+		background: $button-hover
+		color: $texts
 		text-decoration: none
 
 	&:focus
@@ -21,37 +21,37 @@ button, .button
 		text-decoration: none
 
 	&:active
-		background: #444
+		background: $content
 		color: white
 
 	&:disabled
-		background: #FAFAFA
-		color: #CCC
+		background: $disabled
+		color: $placeholder
 
 	&.red
 		background: $main-color
 		color: white
 
 		&:hover
-			background: $main-color
+			background: $main-color-hover
 
 		&:active
-			background: #444
+			background: $content
 
 	&.grey
-		background: #DEDEDE
+		background: $button-hover
 
 		&:hover
-			background: #777
+			background: $texts
 
 		&:active
-			background: #444
+			background: $content
 
 	&.green
 		&:hover, &:focus
-			background: #0ABC4B
+			background: $success
 			color: white
 			box-shadow: none
 
 		&:active
-			background: #444
+			background: $content

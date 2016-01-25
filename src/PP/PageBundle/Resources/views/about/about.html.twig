@@ -5,6 +5,20 @@
     About | Prestapic Help Center
 {% endblock %}
 
+{% block bellowHeader %}
+    <section class="breadcrumb">
+        <div class="content">
+            <div class="path">
+                <a class="home" href="{{ url("page_help") }}">Home</a>
+                <span class="path-arrow"></span>
+                <a href="{{ url("page_about") }}">About</a>
+                <span class="path-arrow"></span>
+                <a class="current" href="{{ url("page_about") }}">What is Prestapic</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
 {% block pageBody %}
     <h1>About</h1>
     

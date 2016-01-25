@@ -54,7 +54,7 @@ section.main
 			display: block
 			margin: 0 0 15px
 			display: inline-block
-			border-bottom: 1px solid rgba(0,0,0,.1)
+			border-bottom: 1px solid $borders
 
 			.count-vote
 				width: auto
@@ -204,7 +204,7 @@ section.main
 					color: #777
 
 				a.prop-img, a.prop-more
-					background: rgba(0,0,0,.1)
+					background: $borders
 					width: 240px
 					height: 150px
 					display: inline-block
@@ -255,7 +255,7 @@ section.main
 				display: inline-block
 				margin: 0 5px
 				padding: 10px 0
-				border-bottom: 1px solid rgba(0,0,0,.1)
+				border-bottom: 1px solid $borders
 				text-align: center
 				text-transform: uppercase
 
@@ -414,7 +414,7 @@ section.main
 			background: white
 			width: 770px
 			height: auto
-			border-bottom: 1px solid rgba(0,0,0,.1)
+			border-bottom: 1px solid $borders
 			padding: 15px 20px 25px
 			margin: 25px 0
 			display: inline-block
@@ -429,7 +429,7 @@ section.main
 			.dragzone
 				width: 730px
 				height: 480px
-				border: 2px dashed rgba(0,0,0,.1)
+				border: 2px dashed $borders
 				margin-bottom: 10px
 				position: relative
 				z-index: 0
@@ -501,7 +501,7 @@ section.main
 						&:before
 							display: block
 							font-family: "pp-font"
-							color: rgba(0,0,0,.1)
+							color: $borders
 							content: $icon-upload
 							font-size: 120px
 							margin-bottom: 10px
@@ -571,7 +571,7 @@ section.main
 
 			ul.list-comments
 				background: white
-				border-bottom: 1px solid rgba(0,0,0,.1)
+				border-bottom: 1px solid $borders
 				padding: 0
 				margin: 0
 
@@ -579,7 +579,7 @@ section.main
 					padding: 15px 20px
 					list-style: none
 					overflow: hidden
-					border-bottom: 1px solid rgba(0,0,0,.1)
+					border-bottom: 1px solid $borders
 
 					&:last-child
 						border: none
@@ -654,15 +654,17 @@ section.main
 			height: auto
 			display: block
 			float: left
-			margin-bottom: 20px
-			padding-bottom: 10px
-			border-bottom: 1px solid #ddd
+			margin-bottom: 25px
+
+			&.tags
+				margin-bottom: 15px
 
 			&:last-child
-				border-bottom: none
+				border-top: 1px solid $borders
+				padding-top: 10px
 
-			h1
-				margin: 0 0 15px
+			.widget-title
+				margin: 0 0 10px
 				padding: 0
 				font-size: 22px
 				display: inline-block
@@ -683,6 +685,41 @@ section.main
 					background: #ddd
 					color: #555
 
+			ul.widget-gallery-container
+				display: inline-block
+				width: 100%
+				height: auto
+				float: left
+
+				li.widget-gallery-item
+					width: 120px
+					height: 120px
+					display: block
+					float: left
+					margin-right: 5px
+					margin-bottom: 5px
+					overflow: hidden
+
+					&:nth-child(3n)
+						margin-right: 0
+
+					&:nth-child(n+4)
+						margin-bottom: 0
+
+					a.widget-gallery-banner
+						display: block
+						width: 120px
+						height: 120px
+						margin: 0
+						padding: 0
+						background-size: cover
+						background-position: center center
+
+			.widget-gallery-number
+				display: inline-block
+				margin-top: 10px
+				float: left
+
 			ul.tag-list, ul.users, ul.subjects
 				margin: 0
 				padding: 0
@@ -691,17 +728,12 @@ section.main
 					list-style: none
 
 				li.tag-item
-					margin-bottom: 5px
+					margin: 0 10px 10px 0
+					display: inline
+					float: left
 
-					span.subject-count
-						margin-left: 5px
-						font-size: 14px
-						color: #a2a2a2
-
-					.tag-desc
-						font-size: 14px
-						display: block
-						padding: 5px 0
+					.tag
+						margin: 0
 
 				li.user
 					width: 100%
@@ -714,9 +746,9 @@ section.main
 						margin-bottom: 15px
 
 					a.avatar
-						background: rgba(0,0,0,.1)
-						width: 25px
-						height: 25px
+						background: $borders
+						width: 48px
+						height: 48px
 						border-radius: 50%
 						display: inline-block
 						float: left
@@ -728,6 +760,7 @@ section.main
 
 					a.username
 						font-size: 18px
+						line-height: 48px
 
 				li.subject
 					width: 100%
@@ -748,11 +781,11 @@ section.main
 						margin-left: 5px
 
 		.footer
-			color: #aaa
+			color: $content
 			font-size: 14px
 
 			a
-				color: #aaa
+				color: $texts
 
 				&:hover
 					text-decoration: underline
@@ -765,12 +798,15 @@ section.main
 					list-style: none
 					display: inline
 
-					&:after
-						content: "\00b7"
-						margin: 0 5px
+					&:last-child
+						&:after
+							display: none
 
-				li:last-child:after
-					content: ""
+					&:after
+						content: "\00B7"
+						margin: 0 5px
+						color: $texts
+						font-weight: bold
 
 			.copy
 				margin-top: 10px

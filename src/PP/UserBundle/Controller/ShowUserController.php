@@ -96,7 +96,7 @@ class ShowUserController extends Controller
             'method' => 'POST',
         ));                                       
         
-        $galleryImgages = $propositionRepository->getOneUserPropositions($pageProfile->getId(), 4);
+        $galleryImgages = $propositionRepository->getOneUserPropositions($pageProfile->getId(), 6);
         $galleryImgagesNb = $propositionRepository->countOneUserPropositions($pageProfile->getId());
              
         

@@ -4,14 +4,14 @@ header
 	background: white
 	width: 100%
 	height: 76px
-	padding: 0 30px
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 
 	a:hover
 		text-decoration: none
 
 	div.content
-		max-width: 1230px
+		width: 1260px
+		padding: 0 45px
 
 		h1.logo
 			background: transparent
@@ -33,9 +33,13 @@ header
 				position: relative
 				z-index: 1
 
+				&:hover
+					&:before
+						color: $main-color-hover
+
 				&:focus
 					&:before
-						color: #444
+						color: $title
 
 				&:before
 					content: $logo
@@ -60,7 +64,7 @@ header
 					width: 100%
 					height: 76px
 					font-size: 20px
-					color: #444
+					color: $content
 					padding: 26px 30px 25px
 					border: none
 					border-left: 1px solid rgba(0, 0, 0, 0.1)
@@ -68,7 +72,7 @@ header
 					&:active, &:focus
 						padding: 26px 30px 24px
 						border-bottom: 2px solid $main-color
-						border-right: 1px solid rgba(0,0,0,.1)
+						border-right: 1px solid $borders
 
 				ul.search-options
 					margin: 0
@@ -93,17 +97,17 @@ header
 							padding: 0
 							overflow: hidden
 							border-radius: 50%
-							color: #ccc
+							color: $texts
 							border: 1px solid transparent
 							font-size: 14px
 
 						a.filters
-							border: 1px solid rgba(0,0,0,.1)
+							border: 1px solid $borders
 							margin-right: 5px
 							position: relative
 
 							&:hover, &:focus
-								background: #777
+								background: $texts
 								color: white
 								border: 1px solid transparent
 								text-decoration: none
@@ -113,7 +117,7 @@ header
 								text-decoration: none
 
 							&:active
-								background: #444
+								background: $content
 								color: white
 
 							&.open
@@ -139,15 +143,15 @@ header
 								content: $icon-filters
 
 						button.go-search
-							background: #eee
+							background: $button-hover
 							margin-right: 5px
 
 							&:hover, &:focus
-								background: #777
+								background: $texts
 								color: white
 
 							&:active
-								background: #444
+								background: $content
 								color: white
 
 							&:before
@@ -183,7 +187,7 @@ header
 								height: 36px
 								padding: 5px 5px 5px 0
 								float: left
-								color: #ccc
+								color: $placeholder
 
 							.filter-select
 								width: 175px
@@ -194,10 +198,10 @@ header
 								border-radius: 3px
 
 								&:hover
-									background: rgba(0,0,0,.1)
+									background: $borders
 
 								&:active
-									background: #444
+									background: $content
 
 								&:after
 									display: block
@@ -220,7 +224,7 @@ header
 									right: 6px
 									z-index: 1
 									font-size: 14px
-									color: #ccc
+									color: $placeholder
 
 								.filter-choose-list
 									background: transparent
@@ -231,7 +235,7 @@ header
 									-webkit-appearance: none
 									-moz-appearance: none
 									appearance: none
-									color: #777
+									color: $texts
 									padding: 5px 10px
 									z-index: 2
 									position: absolute
@@ -241,7 +245,7 @@ header
 					z-index: 4
 					position: relative
 					overflow: hidden
-					border: 1px solid #ccc
+					border: 1px solid $placeholder
 					border-top: none
 					border-radius: 0 0 3px 3px
 
@@ -259,7 +263,7 @@ header
 
 								&:hover
 									background: #F3F3F3
-									color: #777
+									color: $texts
 									text-decoration: none
 
 								&:focus
@@ -271,11 +275,10 @@ header
 							a
 								display: inline-block
 								padding: 10px 20px
-								color: #777
+								color: $texts
 
 								.avatar
 									background: #F3F3F3
-									color: rgba(0,0,0,.25)
 									font-size: 18px
 									width: 36px
 									height: 36px
@@ -321,7 +324,7 @@ header
 
 						&.notification, &.account
 							display: block
-							background: #ccc
+							background: $placeholder
 							width: 36px
 							height: 36px
 							margin: 20px 0
@@ -334,15 +337,15 @@ header
 								text-decoration: none
 
 						&.notification
-							background: #eee
-							color: #ccc
+							background: $button-hover
+							color: $texts
 
 							&:hover, &:focus
-								background: #777
+								background: $texts
 								color: white
 
 							&:active, &.open
-								background: #444!important
+								background: $content!important
 								color: white
 
 						&.notification:before
@@ -393,7 +396,7 @@ header
 			padding: 5px 0
 			margin: 2px 0 0 -252px
 			background: #fff
-			border: 1px solid #ccc
+			border: 1px solid $placeholder
 			border-radius: 3px
 			box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
 			background-clip: padding-box
@@ -419,7 +422,7 @@ header
 				right: 20px
 
 				.caret-outer
-					border-bottom: 10px solid #ccc
+					border-bottom: 10px solid $placeholder
 					border-left: 10px solid transparent
 					border-right: 10px solid transparent
 					height: auto
@@ -478,7 +481,7 @@ header
 						width: 100%
 						height: auto
 						padding: 10px 25px
-						color: #777
+						color: $texts
 						overflow: hidden
 
 						&:hover, &:focus
@@ -493,7 +496,7 @@ header
 
 					&.username
 						a
-							color: #444
+							color: $content
 
 							&:focus
 								color: white
@@ -503,7 +506,7 @@ header
 
 							small
 								display: block
-								color: #777
+								color: $texts
 
 							&:hover
 								color: white
@@ -529,14 +532,14 @@ header
 					&.no-notification
 						padding: 40px 0 6px
 						text-align: center
-						color: #777
+						color: $texts
 
 					&.notif 
 						a
-							color: #444
+							color: $content
 							font-size: 14px
 							padding: 15px 15px
-							border-bottom: 1px solid rgba(0,0,0,.1)
+							border-bottom: 1px solid $borders
 							position: relative
 
 							&:last-child
@@ -565,7 +568,7 @@ header
 
 								small
 									display: block
-									color: #777
+									color: $texts
 									font-size: 14px
 
 							span.dot
@@ -597,7 +600,7 @@ header
 						bottom: 0
 						height: 38px
 						background: white
-						border-top: 1px solid rgba(0,0,0,.1)
+						border-top: 1px solid $borders
 
 						&:before
 							content: ''
@@ -607,7 +610,7 @@ header
 
 						a
 							font-size: 14px
-							color: #777
+							color: $texts
 							text-align: center
 							padding: 10px 0 5px
 
@@ -615,138 +618,7 @@ header
 								text-decoration: underline
 								background: transparent
 
-			.filters-type
-				background: white
-				border-right: 1px solid #ccc
-
-			.filters-type, .filter-cat, .filter-tags
-				width: 50%
-				height: 290px
-				padding: 20px 25px
-				margin: -5px 0
-				float: left
-				display: block
-				overflow: auto
-
-				.dropdown-title
-					color: #444
-					font-size: 16px
-					display: block
-					margin-bottom: 10px
-
-				ul.list-filters
-					margin: 0
-					padding: 0
-					display: block
-					width: 100%
-					height: auto
-
-					li.filter, li.filter-group
-						padding-top: 15px
-						color: #777
-						font-size: 18px
-
-					li.filter-group
-						padding: 0
-						margin-left: -25px
-
-						a
-							width: 298px
-							display: block
-							padding: 7px 25px
-
-							&:hover
-								color: #444
-								background: #efefef
-
-							&.open
-								border-bottom: 1px solid #ccc
-								border-top: 1px solid #ccc
-								background: #fafafa
-
-								&:hover
-									background: #efefef
-
-			.filter-cat, .filter-tags
-				&::-webkit-scrollbar
-					width: 2px
-
-				&::-webkit-scrollbar-track
-					background-color: transparent
-					border: none
-				
-				&::-webkit-scrollbar-thumb
-					background-color: transparent
-					border-radius: 1px
-
-				&::-webkit-scrollbar-thumb:hover
-					background-color: rgba(0,0,0,.5)
-
-				&:hover
-					&::-webkit-scrollbar
-						width: 2px
-
-					&::-webkit-scrollbar-thumb
-						background-color: rgba(0,0,0,.25)
-
-				.dropdown-title
-					position: absolute
-					background: #fafafa
-					padding: 0 0 5px
-					display: block
-					z-index: 1
-					width: 250px
-					box-shadow: 0 0 10px 10px #fafafa
-
-					&.no-shadow
-						box-shadow: none
-
-				ul.list-filters
-					padding-top: 21px
-
-			.filter-tags
-				display: none
-
-				input.list-tags
-					width: 100%
-					position: relative
-					margin-top: 30px
-					padding: 7px
-
-				small.comment
-					display: block
-					margin-bottom: 15px
-
-				.sugg-title
-					margin-bottom: 10px
-
-				ul.sugg-tags
-					margin: 0
-					padding: 0
-
-					li.sugg
-						list-style: none
-						display: inline-block
-						width: auto
-
-						a
-							background: white
-							display: inline-block
-							padding: 4px 10px
-							color: rgba(0, 0, 0, 0.5)
-							font-size: 15px
-							border-radius: 3px
-							border: 1px solid rgba(0, 0, 0, 0.1)
-							width: auto
-							height: auto
-
-							&:hover
-								background: #dedede
-
-							&.choosen
-								background: #C24C4A
-								color: rgba(255, 255, 255, 0.75)
-
+	// PROFILE HEADER
 	&.profile
 		background: rgba(0,0,0,.025)
 		position: absolute
@@ -768,9 +640,18 @@ header
 				form
 					input.main-search
 						border-left: 1px solid rgba(255,255,255,.25)
-						color: white
+						color: rgba(255,255,255,.75)
 
-						&::-webkit-input-placeholder, &:-moz-placeholder, &::-moz-placeholder, &:-ms-input-placeholder
+						&::-webkit-input-placeholder
+							color: rgba(255,255,255,.75)
+
+						&:-moz-placeholder
+							color: rgba(255,255,255,.75)
+
+						&::-moz-placeholder
+							color: rgba(255,255,255,.75)
+
+						&:-ms-input-placeholder
 							color: rgba(255,255,255,.75)
 
 						&:active, &:focus
@@ -816,7 +697,7 @@ header
 
 					.search-options-list
 						display: block
-						background: rgba(0,0,0,.1)
+						background: $borders
 						border: 1px solid rgba(255,255,255,.25)
 
 						ul
@@ -904,7 +785,7 @@ header
 									border: 1px solid rgba(255,255,255,.25)
 
 								&:hover
-									background: rgba(0,0,0,.1)
+									background: $borders
 
 								span.dot
 									box-shadow-color: rgba(255,255,255,.25)
@@ -923,7 +804,7 @@ header
 									color: rgba(0,0,0,.5)
 
 						&.divider
-							background: rgba(0,0,0,.1)
+							background: $borders
 
 						&.more-notif
 							background: rgba(255,255,255,.75)

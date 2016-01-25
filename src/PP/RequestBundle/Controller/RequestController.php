@@ -444,8 +444,8 @@ class RequestController extends Controller
         $popularRequestRepository = $em->getRepository('PPRequestBundle:PopularRequest');
         $tagRepository = $em->getRepository('PPRequestBundle:Tag');
         
-        $popularTags = $tagRepository->getPopularTags(5);
-        $activeUsers = $activeUserRepository->getActiveUsers(3);        
+        $popularTags = $tagRepository->getPopularTags(25);
+        $activeUsers = $activeUserRepository->getActiveUsers(5);        
         $imageRequests = $popularRequestRepository->getPopularImageRequests(5);       
         
         return $this->render('PPRequestBundle:Request:sideInfo.html.twig', array(

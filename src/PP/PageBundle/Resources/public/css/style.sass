@@ -1,0 +1,92 @@
+@import ../../../../../AppBundle/Resources/public/css/init.sass
+
+header
+	&.helpcenter
+		div.content
+			h1.logo
+				a
+					&:before
+						color: $content
+
+					&:hover
+						&:before
+							color: $title
+
+			.helpcenter-title
+				line-height: 40px
+				margin: 18px 15px 18px 0
+				text-transform: uppercase
+				font-weight: 600
+				float: left
+
+				a
+					font-size: 22px
+					color: $texts
+
+			.helpcenter-right
+				float: right
+				padding: 20px 0
+
+section.breadcrumb
+	background: $highlight
+	width: 100%
+	height: auto
+	border-bottom: 1px solid $borders
+	overflow: hidden
+
+	div.content
+		.path
+			a
+				display: block
+				padding: 13px 0
+				float: left
+				color: $texts
+				font-size: 16px
+				line-height: 20px
+				font-weight: 600
+				text-transform: uppercase
+
+				&:hover
+					border-bottom: 2px solid $content
+					padding: 13px 0 11px
+					color: $content
+					text-decoration: none
+
+				&.home
+					&:before
+						display: block
+						float: left
+						width: 20px
+						height: 20px
+						content: $icon-explore
+						font-family: "pp-font"
+						font-size: 18px
+						font-weight: normal
+						line-height: 20px
+						color: $texts
+						margin-right: 5px
+
+				&.current
+					color: $main-color
+
+					&:before
+						color: $main-color
+
+					&:hover
+						border-color: $main-color-hover
+
+						&:before
+							color: $main-color-hover
+
+		span.path-arrow
+			width: auto
+			height: auto
+			padding: 12px 10px 14px
+			display: block
+			float: left
+
+			&:before
+				content: $icon-right
+				font-family: "pp-font"
+				font-size: 9px
+				color: $borders
