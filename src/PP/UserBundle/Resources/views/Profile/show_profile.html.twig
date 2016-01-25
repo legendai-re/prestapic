@@ -94,31 +94,6 @@
         </div>
         <div id="editProfilContainer"></div>
     </section>
-    
-    {# display galery #}
-    <section class="profile-galery" ng-controller="galleryController as gallery">        
-        <div class="content">
-            <a target="_self" href="{{ path('pp_user_gallery', {'slug':pageProfile.slug})}}"><h1>Gallery ({{ galleryImagesNb }} picture{% if galleryImagesNb > 0 %}s{% endif %})</h1></a>
-            {% set break = false %}
-            <ul>
-            {% for proposition in galleryImages if not break %}
-                <li>
-                    <a ng-click="gallery.showPopup({{ proposition.id }})" ng-href="{{ asset(proposition.image.webPath("original")) }}"><img src="{{ asset(proposition.image.webPath("single")) }}" alt="{{ proposition.image.alt }}"></a>                    
-                </li>
-               {% if loop.index >= 4  %}{% set break = true %}{% endif %}
-               {% if loop.index >= 3 and galleryImagesNb > 4 %}{% set break = true %}{% endif %}
-            {% endfor %}
-
-            {% if galleryImagesNb > 4  %}
-                <li>
-                    <a target="_self" href="{{ path('pp_user_gallery', {'slug':pageProfile.slug})}}" class="more">                    
-                        +{{ galleryImagesNb-3 }}             
-                    </a>
-                </li>
-            {% endif %}
-            </ul>
-        </div>
-    </section>
     {% endif %}
 {% endblock %}
 
@@ -126,7 +101,6 @@
     <div class="main-left" >
        
         {% if pageProfile.enabled == true %}
-            
             {#{% if isHownProfile == true %}{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}{% endif %}#}
 
             <div ng-controller="requestsController as requests" ng-init="requests.init({{ pageProfile.id }})" >
@@ -147,6 +121,28 @@
             <p>Details : {{ pageProfile.disableTicket.details }}</p>
         {% endif %}
     </div>        
+{% endblock %}
+
+{% block sideInfoTop %}
+    <div class="widget gallery" ng-controller="galleryController as gallery">        
+       <div class="widget-title">Gallery</div>
+        {% set break = false %}
+        <ul class="widget-gallery-container">
+        {% for proposition in galleryImages if not break %}
+            <li class="widget-gallery-item">
+                <a class="widget-gallery-banner" style="background-image:url({{ asset(proposition.image.webPath("single")) }});" ng-click="gallery.showPopup({{ proposition.id }})" ng-href="{{ asset(proposition.image.webPath("original")) }}"></a>          
+            </li>
+           {% if loop.index >= 7  %}{% set break = true %}{% endif %}
+           {% if loop.index >= 6 and galleryImagesNb > 7 %}{% set break = true %}{% endif %}
+        {% endfor %}
+        </ul>
+
+        {% if galleryImagesNb > 7  %}
+            <a class="widget-gallery-number" target="_self" href="{{ path('pp_user_gallery', {'slug':pageProfile.slug})}}" class="more">                    
+                Show gallery ({{ galleryImagesNb-6 }} more suggestion{% if galleryImagesNb > 0 %}s{% endif %})
+            </a>
+        {% endif %}
+    </div>
 {% endblock %}
 
 

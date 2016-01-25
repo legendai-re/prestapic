@@ -1,18 +1,17 @@
 
-<div class="widget">
-    <h1>Tag trends </h1>    
+<div class="widget tags">
+    <div class="widget-title">Tag trends </div>    
     <ul class="tag-list">
         {% for tag in popularTags %}    
             <li class="tag-item">
-                <a target="_self" class="tag" href="{{ path('pp_request_homepage', {'page': 1, 'tags':tag.name }) }}" title="">{{ tag.name }}</a>                
-                <span class="subject-count">{{tag.usedNb}} sujets</span>
+                <a target="_self" class="tag" href="{{ path('pp_request_homepage', {'page': 1, 'tags':tag.name }) }}" title="{{tag.usedNb}} request{% if tag.usedNb > 1 %}s{% endif %}">{{ tag.name }}</a>
             </li>            
         {% endfor %}
     </ul>
 </div>
     
 <div class="widget">    
-    <h1>Most active users</h1>        
+    <div class="widget-title">Most active users</div>
     <ul class="users">
         {% for user in activeUsers %}    
             <li class="user">
@@ -26,7 +25,7 @@
 </div>
     
 <div class="widget">    
-    <h1>Most popular subjects </h1>
+    <div class="widget-title">Most popular subjects </div>
     <ul class="subjects">
         {% for imageRequest in imageRequests %}    
             <li class="subject">
@@ -43,6 +42,9 @@
     
 <div class='widget footer'>
     <ul>        
+        <li>
+            <a target="_self" href='{{ url('page_help') }}' title="Privacy">Help Center</a>
+        </li>
         <li>
             <a target="_self" href='{{ url('page_privacy') }}' title="Privacy">Privacy</a>
         </li>

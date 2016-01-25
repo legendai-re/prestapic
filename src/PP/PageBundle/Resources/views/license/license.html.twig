@@ -5,6 +5,20 @@
     License | Prestapic Help Center
 {% endblock %}
 
+{% block bellowHeader %}
+    <section class="breadcrumb">
+        <div class="content">
+            <div class="path">
+                <a class="home" href="{{ url("page_help") }}">Home</a>
+                <span class="path-arrow"></span>
+                <a href="{{ url("page_license") }}">Policies</a>
+                <span class="path-arrow"></span>
+                <a class="current" href="{{ url("page_license") }}">License</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
 {% block pageBody %}
     <h1>License</h1>
     <p>

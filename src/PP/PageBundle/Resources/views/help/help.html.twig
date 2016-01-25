@@ -5,80 +5,103 @@
     Prestapic Help Center
 {% endblock %}
 
-{% block pageBody %}
-    <section class="main">
+{% block bellowHeader %}
+    <section class="breadcrumb">
         <div class="content">
-            <div class="full-main">                     
-                <div class="full-main-top">
-                    <h1>HELP CENTER</h1>
-                </div>
-    
-                <div class="full-main-container">
-                    <div class="full-main-container-left">
-                        <div class="full-main-content">
-                            <div class="fcontent-top">
-                                ABOUT
-                            </div>
-                            <div class="fcontent-text">
-                                In this section you will find all informations about Prestapic, ressources and contact adresses.
-                            </div>
-                            <div class="fcontent-choice">
-                                <ul class="fcontent-choice-list">
-                                    <li>
-                                        <a target="_self" href='{{ url('page_about') }}' title='about'>About</a>
-                                    </li>
-                                </ul>
-                            </div>                            
-                            <div class="fcontent-bottom">
-
-                            </div>                    
-                        </div>
-                    </div>
-
-                    <div class="full-main-container-center">
-                        <div class="full-main-content">
-                            <div class="fcontent-top">
-                                HELP
-                            </div>
-                            <div class="fcontent-text">
-                                In this section you will find all informations you need to fully use and understand Prestapic.
-                            </div>
-                            <div class="fcontent-choice">
-                                <ul class="fcontent-choice-list">
-
-                                </ul>
-                            </div>
-                            <div class="fcontent-bottom">
-
-                            </div>                
-                        </div>
-                    </div>
-
-                    <div class="full-main-container-right">
-                        <div class="full-main-content">
-                            <div class="fcontent-top">
-                                POLICIES
-                            </div>
-                            <div class="fcontent-text">
-                                In this section you will find all informations about how Prestapic use information and you rights on this site.
-                            </div>
-                            <div class="fcontent-choice">
-                                <ul class="fcontent-choice-list">                                    
-                                    <li>
-                                        <a target="_self" href='{{ url('page_terms') }}' title='terms'>Terms of use</a>
-                                    </li>
-                                    <li>
-                                        <a target="_self" href='{{ url('page_privacy') }}' title="Privacy">Privacy Policy</a>
-                                    </li>
-                                </ul>
-                            </div>                            
-                            <div class="fcontent-bottom">                        
-
-                            </div>                             
-                        </div>
-                    </div>        
-                </div>        
+            <div class="path">
+                <a class="home current" href="{{ url("page_help") }}">Home</a>
             </div>
-        </div>                
-    </section>       
+        </div>
+    </section>
+{% endblock %}
+
+{% block pageBody %}
+
+    <div class="full-main">                     
+        <div class="full-main-container">
+            <div class="full-main-container-left">
+                <div class="full-main-content">
+                    <div class="fcontent-top">
+                        About
+                    </div>
+                    <div class="fcontent-text">
+                        In this section you will find all informations about Prestapic, ressources and contact adresses.
+                    </div>
+                    <div class="fcontent-choice">
+                        <ul class="fcontent-choice-list">
+                            <li class="fcontent-choice-link">
+                                <a target="_self" href='{{ url('page_about') }}' title='What is Prestapic'>What is Prestapic</a>
+                            </li>
+                            <li class="fcontent-choice-link">
+                                <a target="_self" href='' title='The Team'>The Team</a>
+                            </li>
+                        </ul>
+                    </div>                            
+                    <div class="fcontent-bottom">
+
+                    </div>                    
+                </div>
+            </div>
+
+            <div class="full-main-container-center">
+                <div class="full-main-content">
+                    <div class="fcontent-top">
+                        Guide
+                    </div>
+                    <div class="fcontent-text">
+                        In this section you will find all informations you need to fully use and understand Prestapic.
+                    </div>
+                    <div class="fcontent-choice">
+                        <ul class="fcontent-choice-list">
+                            <li class="fcontent-choice-link">
+                                <a target="_self" href='' title='Glossary of Terms'>Glossary of Terms</a>
+                            </li>
+                            <li class="fcontent-choice-link">
+                                <a target="_self" href='' title='Get started'>Get started</a>
+                            </li>
+                            <li class="fcontent-choice-link">
+                                <a target="_self" href='' title='Press ressources'>Press ressources</a>
+                            </li>
+                            <li class="fcontent-choice-link">
+                                <a target="_self" href='' title='Contact Prestapic'>Contact Prestapic</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="fcontent-bottom">
+
+                    </div>                
+                </div>
+            </div>
+
+            <div class="full-main-container-right">
+                <div class="full-main-content">
+                    <div class="fcontent-top">
+                        Policies
+                    </div>
+                    <div class="fcontent-text">
+                        In this section you will find all informations about how Prestapic use information and you rights on this site.
+                    </div>
+                    <div class="fcontent-choice">
+                        <ul class="fcontent-choice-list">                                    
+                            <li class="fcontent-choice-link">
+                                <a target="_self" href='{{ url('page_license') }}' title='License'>License</a>
+                            </li>
+                            <li class="fcontent-choice-link">
+                                <a target="_self" href='{{ url('page_terms') }}' title='Terms'>Terms of use</a>
+                            </li>
+                            <li class="fcontent-choice-link">
+                                <a target="_self" href='{{ url('page_privacy') }}' title="Privacy">Privacy Policy</a>
+                            </li>
+                            <li class="fcontent-choice-link">
+                                <a target="_self" href='{{ url('page_cookies') }}' title="Cookies">Cookies</a>
+                            </li>
+                        </ul>
+                    </div>                            
+                    <div class="fcontent-bottom">                        
+
+                    </div>                             
+                </div>
+            </div>        
+        </div>        
+    </div>
 {% endblock %}

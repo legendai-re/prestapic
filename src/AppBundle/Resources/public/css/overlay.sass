@@ -1,3 +1,5 @@
+@import init
+
 section.overlay
 	position: fixed
 	overflow: auto
@@ -57,7 +59,7 @@ section.overlay
 
 		.overlay-actions
 			background: white
-			border: 1px solid rgba(0,0,0,.1)
+			border: 1px solid $borders
 			border-radius: 3px
 			width: 100%
 			height: 323px
@@ -74,7 +76,7 @@ section.overlay
 				text-align: center
 				padding: 20px 20px 15px
 				font-weight: 400
-				border-bottom: 1px solid rgba(0,0,0,.1)
+				border-bottom: 1px solid $borders
 
 			.signin-form
 				width: 100%
@@ -87,7 +89,7 @@ section.overlay
 						padding: 10px 15px
 						font-size: 18px
 						border: none
-						border-bottom: 1px solid rgba(0,0,0,.1)
+						border-bottom: 1px solid $borders
 
 						&:focus
 							border-bottom: 1px solid $main-color
@@ -186,11 +188,12 @@ section.overlay
 						float: left
 						width: 100%
 						height: auto
-						color: #BBB
 						font-size: 12px
 						padding: 0 15px 20px
 
-						a 
+						a
+							color: $texts
+
 							&:hover
 								color: $main-color
 
@@ -200,7 +203,7 @@ section.overlay
 				padding: 15px
 				display: block
 				text-align: center
-				border-top: 1px solid rgba(0,0,0,.1)
+				border-top: 1px solid $borders
 				font-size: 20px
 				float: left
 
@@ -234,7 +237,7 @@ section.overlay
 		border-radius: 3px
 		border: 1px solid #ccc
 		overflow: hidden
-		box-shadow: 0 0 50px rgba(0,0,0,.1)
+		box-shadow: 0 0 50px $borders
 
 		&.report
 			width: 445px
@@ -276,7 +279,7 @@ section.overlay
 		.box-infos
 			padding: 10px 15px 15px
 			color: #444
-			border-bottom: 1px solid rgba(0,0,0,.1)
+			border-bottom: 1px solid $borders
 
 			&:last-child
 				border-bottom: none
@@ -346,7 +349,7 @@ section.overlay
 				min-height: 325px
 
 			.add-tags
-				border-left: 1px solid rgba(0,0,0,.1)
+				border-left: 1px solid $borders
 	
 		.box-bottom
 			padding: 10px 15px
