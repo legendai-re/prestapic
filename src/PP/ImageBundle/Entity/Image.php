@@ -56,6 +56,20 @@ class Image
      * @ORM\Column(name="url", type="string", length=255)
      */
     private $url;
+    
+    /**
+     * @var Integer
+     *
+     * @ORM\Column(name="width", type="integer")
+     */
+    private $width;
+    
+    /**
+     * @var Integer
+     *
+     * @ORM\Column(name="height", type="integer")
+     */
+    private $height;
 
     /**
      * @var array
@@ -218,6 +232,8 @@ class Image
         $size = getimagesize($this->file);
         $width = $size[0];
         $height = $size[1];
+        $this->width = $width;
+        $this->height = $height;
         $mime = $size['mime'];        
         switch($mime){
             case 'image/gif':
@@ -236,16 +252,18 @@ class Image
                     break;
         }
         $i = $image_create($this->file);
-        for ($x=0;$x<imagesx($i);$x++) {
-                for ($y=0;$y<imagesy($i);$y++) {
-                        $rgb = imagecolorat($i,$x,$y);
-                        $r   = ($rgb >> 16) & 0xFF;
-                        $g   = ($rgb >> 8) & 0xFF;
-                        $b   = $rgb & 0xFF;
-                        $rTotal += $r;
-                        $gTotal += $g;
-                        $bTotal += $b;
-                        $total++;
+        for ($x=0;$x<imagesx($i);$x+=3) {
+                for ($y=0;$y<imagesy($i);$y+=3) {
+                        if($x<$width && $y<$height){
+                            $rgb = imagecolorat($i,$x,$y);
+                            $r   = ($rgb >> 16) & 0xFF;
+                            $g   = ($rgb >> 8) & 0xFF;
+                            $b   = $rgb & 0xFF;
+                            $rTotal += $r;
+                            $gTotal += $g;
+                            $bTotal += $b;
+                            $total++;
+                        }
                 }
         }
         $rAverage = round($rTotal/$total);
@@ -504,5 +522,53 @@ class Image
     public function getAvgColor()
     {
         return $this->avgColor;
+    }
+
+    /**
+     * Set width
+     *
+     * @param integer $width
+     *
+     * @return Image
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
+
+        return $this;
+    }
+
+    /**
+     * Get width
+     *
+     * @return integer
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * Set height
+     *
+     * @param integer $height
+     *
+     * @return Image
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * Get height
+     *
+     * @return integer
+     */
+    public function getHeight()
+    {
+        return $this->height;
     }
 }

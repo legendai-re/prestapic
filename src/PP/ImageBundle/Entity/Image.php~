@@ -56,6 +56,20 @@ class Image
      * @ORM\Column(name="url", type="string", length=255)
      */
     private $url;
+    
+    /**
+     * @var Integer
+     *
+     * @ORM\Column(name="width", type="integer")
+     */
+    private $width;
+    
+    /**
+     * @var Integer
+     *
+     * @ORM\Column(name="height", type="integer")
+     */
+    private $height;
 
     /**
      * @var array
@@ -215,7 +229,27 @@ class Image
         $gTotal = null;
         $bTotal = null;
         $total = null;
-        $i = imagecreatefromjpeg($this->file);
+        $size = getimagesize($this->file);
+        $width = $size[0];
+        $height = $size[1];
+        $mime = $size['mime'];        
+        switch($mime){
+            case 'image/gif':
+                    $image_create = "imagecreatefromgif";
+                    break;
+
+            case 'image/png':
+                    $image_create = "imagecreatefrompng";
+                    break;
+
+            case 'image/jpeg':
+                    $image_create = "imagecreatefromjpeg";
+                    break;
+            default:
+                    return false;
+                    break;
+        }
+        $i = $image_create($this->file);
         for ($x=0;$x<imagesx($i);$x++) {
                 for ($y=0;$y<imagesy($i);$y++) {
                         $rgb = imagecolorat($i,$x,$y);
@@ -232,10 +266,7 @@ class Image
         $gAverage = round($gTotal/$total);
         $bAverage = round($bTotal/$total);
         
-        //echo "<div style='width: 100px; height: 100px; background-color: rgba($rAverage,$gAverage,$bAverage);></div>";
-        echo dechex($rAverage).'/';
-        echo dechex($gAverage).'/';
-        echo dechex($bAverage);     
+        $this->avgColor = dechex($rAverage).dechex($gAverage). dechex($bAverage);
     }
   
     /**
@@ -464,4 +495,28 @@ class Image
         imagejpeg($destination, $thumbnailDir, 100);                
     }
       
+
+    /**
+     * Set avgColor
+     *
+     * @param string $avgColor
+     *
+     * @return Image
+     */
+    public function setAvgColor($avgColor)
+    {
+        $this->avgColor = $avgColor;
+
+        return $this;
+    }
+
+    /**
+     * Get avgColor
+     *
+     * @return string
+     */
+    public function getAvgColor()
+    {
+        return $this->avgColor;
+    }
 }
