@@ -73,9 +73,9 @@
                                 <div class="message-content" style="white-space: pre;" ng-bind-html="message.content | linky ">
                                     {{ message.content }}
                                 </div>
-                                <div class="avatar" ng:class="{true:'avatar last', false:'avatar'}[!currentUser.threadList[currentThread.id].messageList[$index+1] || currentUser.threadList[currentThread.id].messageList[$index+1].messageFromUs]">
+                                <a target="_self" href="{{ message.author.url }}" class="avatar" ng:class="{true:'avatar last', false:'avatar'}[!currentUser.threadList[currentThread.id].messageList[$index+1] || currentUser.threadList[currentThread.id].messageList[$index+1].messageFromUs]">
                                     <img ng-src="{{ message.author.image }}">
-                                </div>
+                                </a>
                             </div>
                         </div>                        
                     </div>
@@ -88,7 +88,7 @@
                                                 padding: 15px;
                                                 outline: none;    
                                                 resize: none;" 
-                    id="chatTextArea" placeholder="Type your text here ..."  name="message_value" ng-model="messageContent"></textarea>
+                        id="chatTextArea" placeholder="Type your text here ..."  name="message_value" ng-model="messageContent"></textarea>
                         <button style="margin: 15px;" type="submit" ng-click="chat.callSendMessage()">Send</button>
                     </form>
                 </div>

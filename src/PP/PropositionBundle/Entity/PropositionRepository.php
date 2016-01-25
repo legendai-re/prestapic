@@ -96,8 +96,8 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
             $i = 0;
             foreach ($tagsParam as $tagName){
                 $qb = $qb
-                        ->andWhere($qb->expr()->like('t.name', ':nameT'.$i))
-                        ->setParameter('nameT'.$i, '%'.$tagName.'%');
+                        ->andWhere($qb->expr()->like('t.id', ':nameT'.$i))
+                        ->setParameter('nameT'.$i, $tagName);
                 $i++;
             }                
         }

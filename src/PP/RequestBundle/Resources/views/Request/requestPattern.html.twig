@@ -40,7 +40,7 @@
         {% set break = false %}
         <div class="tag-list">                
             {% for tag in imageRequest.tags if not break%}
-                <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'tags':tag.name }) }}">{{ tag.name }}</a>
+                <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'tags':tag.id }) }}">{{ tag.name }}</a>
                 {% if loop.index == 3  %}{% set break = true %}{% endif %}
             {% endfor %}
         </div>              

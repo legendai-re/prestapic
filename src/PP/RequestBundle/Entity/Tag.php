@@ -3,6 +3,7 @@
 namespace PP\RequestBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Tag
@@ -30,6 +31,12 @@ class Tag
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 25,
+     *      minMessage = "Your tag must be at least {{ limit }} characters long",
+     *      maxMessage = "Your tag title cannot be longer than {{ limit }} characters"
+     * )
      */
     private $name;
 

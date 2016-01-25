@@ -126,7 +126,9 @@ class RequestController extends Controller
                             }
                             else {
                                 if(!empty($actualTag)){
-                                    array_push($tagList, $actualTag);                                            
+                                    if(strlen($actualTag)<26){
+                                        array_push($tagList, $actualTag);
+                                    }
                                 }
                                 $actualTag = "";
                             }
@@ -186,7 +188,9 @@ class RequestController extends Controller
                         }
                         else {
                             if(!empty($actualTag)){
-                                array_push($tagList, $actualTag);                                            
+                                if(strlen($actualTag)<26){
+                                    array_push($tagList, $actualTag);
+                                }
                             }
                             $actualTag = "";
                         }

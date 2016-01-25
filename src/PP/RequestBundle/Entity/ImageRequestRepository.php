@@ -79,7 +79,7 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                 $request = '';
                 foreach ($tagsParam as $tagName){
                     if($i>0)$request .= ' OR ';
-                    $request .= 't.name = :nameT'.$i;
+                    $request .= 't.id = :nameT'.$i;
                     $qb = $qb                            
                             ->setParameter('nameT'.$i, $tagName);
                     $i++;                    

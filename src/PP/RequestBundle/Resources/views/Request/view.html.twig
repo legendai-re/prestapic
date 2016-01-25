@@ -54,7 +54,7 @@
             {% set break = false %}
             <div class="tag-list">                
                 {% for tag in imageRequest.tags if not break%}
-                    <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'tags':tag.name }) }}">{{ tag.name }}</a>
+                    <a target="_self" class="tag" href="{{ path('pp_request_homepage', { 'tags':tag.id }) }}">{{ tag.name }}</a>
                     {% if loop.index == 6  %}{% set break = true %}{% endif %}
                 {% endfor %}
             </div>
@@ -110,7 +110,7 @@
                 </a>
                 <div class="infos">
                     {{ acceptedProposition.createdDate|date('F j, Y') }} by 
-                    <a class="author" href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" title="{{ acceptedProposition.author.name }}">{{  acceptedProposition.author.name }}</a>                
+                    <a target="_self" class="author" href="{{ path('pp_user_profile', {'slug': acceptedProposition.author.slug}) }}" title="{{ acceptedProposition.author.name }}">{{  acceptedProposition.author.name }}</a>                
                 </div>
             </div>
             <div class="actions">               
