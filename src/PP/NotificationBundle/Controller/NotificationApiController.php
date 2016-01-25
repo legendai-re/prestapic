@@ -196,15 +196,16 @@ class NotificationApiController extends Controller
                     
                     foreach ($notificationsNotViewList as $notification){
                         $notification->setIsViewed(true);
-                         $currentUser->decrementNotificationsNb();
+                        $currentUser->decrementNotificationsNb();
                         $em->persist($notification);                        
                     }
-                                                           
-                    $em->persist($currentUser);
-                    $em->flush();
+                                                                               
                 }
+                $currentUser->setNotificationsNb(0);
+                $em->persist($currentUser);
+                $em->flush();
                 
-                 $response->setStatusCode(Response::HTTP_OK);
+                $response->setStatusCode(Response::HTTP_OK);
                 
             }else  $response->setStatusCode(Response::HTTP_FORBIDDEN);            
         

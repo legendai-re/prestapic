@@ -50,7 +50,8 @@ class MessageApiController extends Controller
                             $target = new JsonUserModel(
                                                 $user->getId(),
                                                 $user->getName(),
-                                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$user->getProfilImage()->getWebPath('70x70')
+                                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$user->getProfilImage()->getWebPath('70x70'),
+                                                $this->generateUrl("pp_user_profile", array("slug"=>$user->getSlug(), true))
                             );
                             break;
                         }                        
@@ -67,7 +68,8 @@ class MessageApiController extends Controller
                     $formatedLastMessageAuthor = new JsonUserModel(
                                                 $lastMessageAuthor->getId(),
                                                 $lastMessageAuthor->getName(),
-                                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$lastMessageAuthor->getProfilImage()->getWebPath('70x70')
+                                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$lastMessageAuthor->getProfilImage()->getWebPath('70x70'),
+                                                $this->generateUrl("pp_user_profile", array("slug"=>$lastMessageAuthor->getSlug()), true)
                     );
                     
                     $lastMessage = new JsonMessageModel(
@@ -165,7 +167,12 @@ class MessageApiController extends Controller
                                                 $messageThread->getId(),
                                                 999,
                                                 $postData->messageContent,
-                                                new JsonUserModel($currentUser->getId(), $currentUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70')),                            
+                                                new JsonUserModel(
+                                                            $currentUser->getId(),
+                                                            $currentUser->getName(),
+                                                            $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70'),
+                                                            $this->generateUrl("pp_user_profile", array("slug"=>$currentUser->getSlug()), true)
+                                                ),                            
                                                 true,
                                                 new \DateTime(),
                                                 $this->container->get('pp_notification.ago')->ago(new \DateTime())
@@ -173,7 +180,11 @@ class MessageApiController extends Controller
 
                             $newThread = new JsonMessageThreadModel(
                                                 $messageThread->getId(),
-                                                new JsonUserModel($targetUser->getId(), $targetUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$targetUser->getProfilImage()->getWebPath('70x70')),                            
+                                                new JsonUserModel($targetUser->getId(),
+                                                            $targetUser->getName(),
+                                                            $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$targetUser->getProfilImage()->getWebPath('70x70'),
+                                                            $this->generateUrl("pp_user_profile", array("slug"=>$targetUser->getSlug()), true)
+                                                ),                            
                                                 $jsonMessage,
                                                 array($jsonMessage),
                                                 true,
@@ -206,14 +217,24 @@ class MessageApiController extends Controller
                             $messageThread->getId(),
                             $message->getId(),
                             $message->getContent(),
-                            new JsonUserModel($currentUser->getId(), $currentUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70')),                            
+                            new JsonUserModel(
+                                        $currentUser->getId(),
+                                        $currentUser->getName(),
+                                        $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70'),
+                                        $this->generateUrl("pp_user_profile", array("slug"=>$currentUser->getSlug()), true)
+                            ),                            
                             false,
                             $message->getCreatedDate(),
                             $this->container->get('pp_notification.ago')->ago($message->getCreatedDate())
                     );                
                     if(isset($newThreadTosend)){
                         $newThreadTosend->lastMessage->messageFromUs = false;
-                        $newThreadTosend->target = new JsonUserModel($currentUser->getId(), $currentUser->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70'));
+                        $newThreadTosend->target = new JsonUserModel(
+                                                                    $currentUser->getId(),
+                                                                    $currentUser->getName(),
+                                                                    $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$currentUser->getProfilImage()->getWebPath('70x70'),
+                                                                    $this->generateUrl("pp_user_profile", array("slug"=>$currentUser->getSlug()), true)
+                                                        );
                     }
                     else {
                         $newThreadTosend = array();
@@ -301,7 +322,12 @@ class MessageApiController extends Controller
                                         $threadId,
                                         $message->getId(),
                                         $message->getContent(),
-                                        new JsonUserModel($message->getAuthor()->getId(), $message->getAuthor()->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$message->getAuthor()->getProfilImage()->getWebPath('70x70')),
+                                        new JsonUserModel(
+                                                    $message->getAuthor()->getId(),
+                                                    $message->getAuthor()->getName(),
+                                                    $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$message->getAuthor()->getProfilImage()->getWebPath('70x70'),
+                                                    $this->generateUrl("pp_user_profile", array("slug"=>$message->getAuthor()->getSlug()), true)
+                                        ),
                                         $fromUs,
                                         $message->getCreatedDate(),
                                         $this->container->get('pp_notification.ago')->ago($message->getCreatedDate())

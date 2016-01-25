@@ -281,7 +281,8 @@ class ShowUserApiController extends Controller
                     array_push($jsonUsers['users'], new JsonUserModel(
                                                                 $user->getId(),
                                                                 $user->getName(),
-                                                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$user->getProfilImage()->getWebPath('70x70')
+                                                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$user->getProfilImage()->getWebPath('70x70'),
+                                                                $this->generateUrl("pp_user_profile", array("slug"=>$user->getSlug()), true)
                     ));                       
                 }
                 

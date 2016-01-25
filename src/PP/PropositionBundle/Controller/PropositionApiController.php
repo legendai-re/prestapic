@@ -59,7 +59,7 @@ class PropositionApiController extends Controller
         $tagList = array();
         
         foreach ($tags as $tag){
-            array_push($tagList, new JsonTagModel($tag->getId(), $tag->getName(), $this->generateUrl("pp_request_homepage", array("tags"=>$tag->getName()) )));
+            array_push($tagList, new JsonTagModel($tag->getId(), $tag->getName(), $this->generateUrl("pp_request_homepage", array("tags"=>$tag->getId()) )));
         }
         
         $jsonProposition = new JsonPropositionPopupModel(

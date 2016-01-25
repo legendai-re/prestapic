@@ -2,8 +2,8 @@
     {% if  form is defined %}                             
         {{ form_start(form, {'attr': {'class': 'addRequestForm'}})  }}   
         <div class="box-comp">                                         
-            {{form_row(form.title)}}
-            {{form_row(form.request, {'attr': {'rows': '15'}})}}
+            {{form_row(form.title, {'attr':{'pattern': ".{3,90}"}})}}
+            {{form_row(form.request, {'attr': {'rows': '15', 'minlength': "10"}})}}
             <div class="col-6">
                 {{form_row(form.category)}}
             </div>
