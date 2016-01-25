@@ -12,7 +12,7 @@ section.overlay
 	margin: 0
 	border: 0
 
-	&.send-report, &.send-request, &.sign
+	&.send-report, &.send-request, &.sign, &.infos-popup
 		background-color: rgba(0,0,0,.85)
 
 	button.button-close
@@ -272,6 +272,47 @@ section.overlay
 		.box-text
 			padding: 10px 15px
 			color: #777
+
+		.box-infos
+			padding: 10px 15px 15px
+			color: #444
+			border-bottom: 1px solid rgba(0,0,0,.1)
+
+			&:last-child
+				border-bottom: none
+
+			.top-infos, .infos, .bot-infos
+				display: block
+
+				ul
+					li
+						display: inline-block
+
+						a
+							float: left
+
+						&:after
+							display: inline-block
+							content: ", "
+							float: left
+							margin-right: 2px
+
+						&:last-child
+							&:after
+								content: ""
+
+			.top-infos
+				color: #777
+				font-size: 14px
+				text-transform: uppercase
+
+			.infos
+				color: #444
+				font-size: 16px
+
+			.bot-infos
+				color: #777
+				font-size: 14px
 	
 		.box-choice, .box-comp
 			

@@ -52,28 +52,46 @@
         <base href=" " />
         <div class="box-container report">
             <div class="box-content" >           
-                    <div class="box-top">
-                        Infos
-                        <button ng-click="popup.closeInfo()" class="button-close">×</button>
-                    </div>
+                <div class="box-top">
+                    Infos
+                    <button ng-click="popup.closeInfo()" class="button-close">×</button>
+                </div>
                 <div id="reportContainer">
-                    <div class="box-text">
-                        {{ proposition.dateAgo }}
-                        
+                    <div class="box-infos">
+                        <span class="top-infos">
+                            Published
+                        </span>
+                        <span class="infos">
+                            {{ proposition.dateAgo }}
+                        </span>
+                        <span class="bot-infos">
+                            by <a target="_self" href="{{ proposition.author.url }}">{{ proposition.author.name }}</a>
+                        </span>
                     </div>
-                    <div class="box-text">
-                        <a target="_self" href="{{ proposition.imageRequest.url }}">{{ proposition.imageRequest.title }}</a>
-                        by
-                        <a target="_self" href="{{ proposition.imageRequest.author.url }}">{{ proposition.imageRequest.author.name }}</a>
-                        in 
-                        <a target="_self" href="{{ proposition.imageRequest.categoryUrl }}">{{ proposition.imageRequest.category }}</a>
+                    <div class="box-infos">
+                        <span class="top-infos">
+                            Related request
+                        </span>
+                        <span class="infos">
+                            <a target="_self" href="{{ proposition.imageRequest.url }}">
+                                {{ proposition.imageRequest.title }}
+                            </a>
+                        </span>
+                        <span class="bot-infos">
+                            by <a target="_self" href="{{ proposition.imageRequest.author.url }}">{{ proposition.imageRequest.author.name }}</a> in <a target="_self" href="{{ proposition.imageRequest.categoryUrl }}">{{ proposition.imageRequest.category }}</a>
+                        </span>
                     </div>
-                    <div class="box-text">
-                        <ul>
-                            <li ng-repeat="tag in proposition.imageRequest.tagList">
-                                <a target="_self" href="{{ tag.url }}">{{ tag.name }}</a>
-                            </li>
-                        </ul>
+                    <div class="box-infos">
+                        <span class="top-infos">
+                            Related tags
+                        </span>
+                        <span class="infos">
+                            <ul>
+                                <li ng-repeat="tag in proposition.imageRequest.tagList">
+                                    <a target="_self" href="{{ tag.url }}">{{ tag.name }}</a>
+                                </li>
+                            </ul>
+                        </span>
                     </div>
                 </div>
                 <div id="reportContainerAfter">
