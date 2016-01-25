@@ -71,13 +71,20 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
               ->addSelect('i')
               ->leftJoin('p.author', 'pA')
               ->addSelect('pA')              
-              ->leftJoin("p.imageRequest", "ir")
-              ->leftJoin('ir.tags', 't')
-              ->leftJoin('ir.category', 'c')
+              ->leftJoin("p.imageRequest", "ir")                            
               ->where('ir.enabled = true AND pA.enabled = true')
               ->distinct(true)
               ->andWhere('ir.enabled = true AND p.enabled = true')
         ;
+        
+        if($searchParam != null || $tagsParam != null){
+            $qb = $qb->leftJoin('ir.tags', 't');
+        }
+        
+         
+        if($searchParam != null || $categoriesParam != null){
+            $qb = $qb->leftJoin('ir.category', 'c');
+        }
         
         if($searchParam != null){
             $qb = $qb
@@ -89,10 +96,9 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
                     ->setParameter('cat', '%'.$searchParam.'%')
                     ->orWhere($qb->expr()->like('p.title', ':propTitle'))
                     ->setParameter('propTitle', '%'.$searchParam.'%');
-
         }
 
-        if($tagsParam != null){
+        if($tagsParam != null){            
             $i = 0;
             foreach ($tagsParam as $tagName){
                 $qb = $qb
