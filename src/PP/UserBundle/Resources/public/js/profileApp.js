@@ -170,7 +170,7 @@
                             angular.element( document.querySelector('#editProfilContainer')).append(editForm);
                             document.getElementById('pp_userbundle_profile_edit_profilImage_file').addEventListener('change', handleProfileFileSelect, false);
                             document.getElementById('pp_userbundle_profile_edit_coverImage_file').addEventListener('change', handleCoverFileSelect, false);
-                            $(".editProfileForm").preventDoubleSubmission();
+                            $("#editProfileForm").preventDoubleSubmission();
                         }, function(response) {
                          console.log("Request failed : "+response.statusText );                        
                         }
@@ -217,13 +217,13 @@
             
             var getRequests = function(page){
                 document.getElementById('loadingGif').style.display = 'block';                
-                var formAction = document.forms["pp_user_api_get_user_request_form_"+page].action;
+                var formAction = document.forms["pp_user_api_get_user_request"].action;
                 
-                $http.get(formAction+".html"+getParams).
+                $http.get(formAction+".html"+getParams+"&page="+page).
                     then(function(response) {                                              
                         var newPage = angular.element(response.data);                        
                         $compile(newPage)($scope);                             
-                        angular.element( document.querySelector('#loadPage'+page)).append(newPage);  
+                        angular.element( document.querySelector('#loadPage1')).append(newPage);  
                         document.getElementById('loadingGif').style.display = 'none';
 
                     }, function(response) {

@@ -52,8 +52,9 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
         }
         
         public function getImageRequestsId($em, $searchParam, $limit, $page, $displayMode, $userId, $followingIds, $tagsParam = null, $categoriesParam = null, $concerningMeParam = false, $requestType = null)
-	{
-             $qb = $this->createQueryBuilder('ir')
+	{   
+            
+            $qb = $this->createQueryBuilder('ir')
                         ->select('ir.id')
                         ->distinct(true)
                         ->leftJoin('ir.author', 'irA')
@@ -69,8 +70,7 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                         ->orWhere($qb->expr()->like('t.name', ':name'))
                         ->setParameter('name', '%'.$searchParam.'%')
                         ->orWhere($qb->expr()->like('c.name', ':cat'))
-                        ->setParameter('cat', '%'.$searchParam.'%');
-                        
+                        ->setParameter('cat', '%'.$searchParam.'%');                        
             }
             
             if($tagsParam != null){

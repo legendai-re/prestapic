@@ -33,7 +33,7 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
                 ->leftJoin('p.author', 'pA')
                 ->addSelect('pA')
                 ->leftJoin('p.image', 'pI')
-                ->addSelect('pI')                    
+                ->addSelect('pI')
                 ->where('pA.id = :userId AND p.enabled = true')
                 ->setParameter('userId', $userId)
         ;                        
@@ -77,11 +77,7 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
               ->leftJoin("p.imageRequest", "ir")
               ->where('ir.enabled = true AND pA.enabled = true AND p.enabled = true')
               ->distinct(true)
-        ;
-        
-        if($searchParam != null || $tagsParam != null || $categoriesParam != null){
-            
-        }
+        ;               
         
         if($searchParam != null || $tagsParam != null){
             $qb = $qb->leftJoin('ir.tags', 't');

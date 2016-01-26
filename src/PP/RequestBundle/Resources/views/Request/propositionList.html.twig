@@ -3,8 +3,7 @@
         {{ include("PPRequestBundle:Request:propositionPattern.html.twig") }}
         {% if loop.index == 3 %}
                 {% if haveNextPage == true %}
-                    <div  id="{{ "loadPageTrigger"~nextPage }}"></div>
-                    {{ form(loadRequestForm) }}
+                    <div  id="{{ "loadPageTrigger"~nextPage }}"></div>                    
                 {% endif %}
         {% endif %}
     {% else %}        

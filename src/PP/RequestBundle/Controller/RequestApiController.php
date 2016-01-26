@@ -32,7 +32,7 @@ class RequestApiController extends Controller
      * 
      * @return View
      */
-    public function getRequestAction(Request $request, $page)
+    public function getRequestAction(Request $request)
     {
                 
         /* get session and currentUser*/
@@ -49,6 +49,9 @@ class RequestApiController extends Controller
         
          /* handle GET data */
         if ($request->isMethod('GET')) {
+            
+            $page = $request->get("page");
+            
             if($request->get('display_mode') != null){
                 $session->set('imageRequestOrder', $request->get('display_mode'));
             }
@@ -75,9 +78,9 @@ class RequestApiController extends Controller
         $nextPage = $page+1;
         
         /* create loadPage form */
-        $loadRequestForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_get_request_form_'.$nextPage, 'form', array(), array())         
+        /*$loadRequestForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_get_request_form_'.$nextPage, 'form', array(), array())         
             ->setAction($this->generateUrl('pp_request_api_get_request', array("page"=>$nextPage), true))
-            ->getForm();
+            ->getForm();*/
         
         /* set displayMode (default ORDER_BY_DATE) */
         if($session->get('imageRequestOrder') != null){
@@ -152,8 +155,7 @@ class RequestApiController extends Controller
                     'haveNextPage' => $haveNextPage,
                     'imageRequestList' => $imageRequestList,                
                     'displayMode' => $displayMode,
-                    'propositionsList' => $propositionsList,
-                    'loadRequestForm' => $loadRequestForm->createView(),
+                    'propositionsList' => $propositionsList,                    
                     'canUpvoteImageRequest' => $canUpvoteImageRequest
                 ))
                 ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'requestList'));
@@ -163,8 +165,7 @@ class RequestApiController extends Controller
                     'page'=>$page,
                     'nextPage' => $nextPage,
                     'haveNextPage' => $haveNextPage,
-                    'propositionList' => $propositionsList,
-                    'loadRequestForm' => $loadRequestForm->createView(),
+                    'propositionList' => $propositionsList,                    
                     'canUpvoteProposition' => $canUpvoteProposition
                 ))
                 ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'propositionList'));

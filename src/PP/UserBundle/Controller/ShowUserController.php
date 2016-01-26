@@ -66,8 +66,8 @@ class ShowUserController extends Controller
         
         
         /* create loadPage form */        
-        $loadRequestForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_get_user_request_form_1', 'form', array(), array())         
-            ->setAction($this->generateUrl('pp_user_api_get_user_request', array("userId"=>$pageProfile->getId(), "page"=>1), true))
+        $loadRequestForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_get_user_request', 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_user_api_get_user_request', array("userId"=>$pageProfile->getId()), true))
             ->getForm();
         
         /*create following form */

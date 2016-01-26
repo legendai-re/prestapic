@@ -62,8 +62,8 @@ class RequestController extends Controller
         ////////////// FORM /////////////
         
         /* create loadPage form */        
-        $loadRequestForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_get_request_form_1', 'form', array(), array())         
-            ->setAction($this->generateUrl('pp_request_api_get_request', array("page"=>1), true))
+        $loadRequestForm = $this->get('form.factory')->createNamedBuilder('pp_request_api_get_request', 'form', array(), array())         
+            ->setAction($this->generateUrl('pp_request_api_get_request', array(), true))
             ->getForm();                
         
         /* create upote request form */

@@ -42,7 +42,7 @@ class e_LoadProposition implements FixtureInterface{
             $imageRequest = $imageRequestRepository->find($irId);
             $y=0;
         } else $y++;
-        
+        if($imageRequest != null){
         $imgName = rand(31, 106);        
         copy(__DIR__.'/../../../../../web/Resources/public/images/proposition/'.$imgName.'.jpeg', __DIR__.'/../../../../../web/uploads/img/proposition/original/new'.$i.'.jpeg');
         $profilImage = new \PP\ImageBundle\Entity\Image();
@@ -87,7 +87,7 @@ class e_LoadProposition implements FixtureInterface{
         
         $manager->persist($proposition);
         $manager->persist($profilImage);
-        
+        }
     }   
     
     $manager->flush();

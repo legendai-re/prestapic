@@ -32,7 +32,7 @@ class ShowUserApiController extends Controller
      *
      * @return View
      */
-    public function getUserRequestAction(Request $request, $userId, $page){                           
+    public function getUserRequestAction(Request $request, $userId){                           
         
         /* init repositories */
         $session = $this->getRequest()->getSession();
@@ -43,7 +43,10 @@ class ShowUserApiController extends Controller
                 
         $pageProfile = $userRepository->find($userId);
         
-        if ($request->isMethod('GET')) {           
+        if ($request->isMethod('GET')) {
+            
+            $page = $request->get("page");
+            
             if($request->get('content_to_display_profile') != null){
                 $session->set('contentToDisplayProfile', $request->get('content_to_display_profile'));
             }
@@ -89,15 +92,7 @@ class ShowUserApiController extends Controller
         }
         
         $nextPage = $page+1;
-                       
-        /////////////////////////
-        ////////// FORM /////////
-        
-        /* create loadPage form */
-        $loadRequestForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_get_user_request_form_'.$nextPage, 'form', array(), array())         
-            ->setAction($this->generateUrl('pp_user_api_get_user_request', array("userId"=>$pageProfile->getId(), "page"=>$nextPage), true))
-            ->getForm();
-        
+                                              
         if($contentToDisplay == UserConstants::DISPLAY_REQUEST){
             $view = View::create()
                 ->setData(array(                      
@@ -105,8 +100,7 @@ class ShowUserApiController extends Controller
                     'haveNextPage' => $haveNextPage,
                     'nextPage' => $nextPage,
                     'imageRequestList' => $imageRequestList,                
-                    'propositionsList' => $propositionsList,
-                    'loadRequestForm' => $loadRequestForm->createView(),
+                    'propositionsList' => $propositionsList,                    
                     'canUpvoteImageRequest' => $canUpvoteImageRequest
                 ))
                 ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'requestList'));
@@ -116,8 +110,7 @@ class ShowUserApiController extends Controller
                     'page'=>$page,
                     'nextPage' => $nextPage,
                     'haveNextPage' => $haveNextPage,
-                    'propositionList' => $propositionsList,
-                    'loadRequestForm' => $loadRequestForm->createView(),
+                    'propositionList' => $propositionsList,                    
                     'canUpvoteProposition' => $canUpvoteProposition
                 ))
                 ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'propositionList'));

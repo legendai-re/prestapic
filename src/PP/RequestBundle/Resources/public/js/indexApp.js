@@ -52,9 +52,9 @@
             
             var getRequests = function(page){
                 readyToChange = false;
-                var formAction = document.forms["pp_request_api_get_request_form_"+page].action;
+                var formAction = document.forms["pp_request_api_get_request"].action;
                 document.getElementById('loadingGif').style.display = 'block';                    
-                $http.get(formAction+".html"+getParams).
+                $http.get(formAction+".html"+getParams+"&page="+page).
                     then(function(response) {                        
                         var newPage = angular.element(response.data);                        
                         $compile(newPage)($scope);                             
