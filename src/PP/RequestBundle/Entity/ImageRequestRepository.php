@@ -171,7 +171,7 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
                 ->createQueryBuilder('ir')
                 ->select('ir.id')                               
                 ->leftJoin('ir.propositions', 'p')
-                ->where('p.author = :userId and p.enabled = true')               
+                //->where('p.author = :userId and p.enabled = true')               
                 ->orWhere('ir.author = :userId and ir.enabled = true')                
                 ->setParameter('userId', $userid)
                 ->orderBy('ir.createdDate', 'DESC')

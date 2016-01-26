@@ -10,7 +10,7 @@ use PP\RequestBundle\Entity\ImageRequest;
 use PP\RequestBundle\Form\Type\ImageRequestType;
 
 use PP\UserBundle\Form\Type\EditProfileFormType;
-
+use PP\UserBundle\Constant\UserConstants;
 class ShowUserController extends Controller 
 {
     public function indexAction(Request $request, $slug)
@@ -18,6 +18,11 @@ class ShowUserController extends Controller
         /* get session and currentUser*/
         $session = $this->getRequest()->getSession();
         $currentUser = $this->getUser();
+        
+        $contentToDisplay = UserConstants::DISPLAY_REQUEST;
+        if($session->get('contentToDisplayProfile') != null){
+            $contentToDisplay = $session->get('contentToDisplayProfile');
+        }else {$contentToDisplay = UserConstants::DISPLAY_REQUEST;}
         
         /* init repositories */
         $em = $this->getDoctrine()->getManager();
@@ -114,35 +119,10 @@ class ShowUserController extends Controller
             'isBlocked' => $isBlocked,
             'upvoteRequestForm' => $upvoteRequestForm->createView(),
             'setModeratorForm' => $setModeratorForm,
-            'isModerator' => $isModerator
+            'isModerator' => $isModerator,
+            'contentToDisplay' => $contentToDisplay,
         ));
-    }
-    
-    public function galleryAction($slug){
-        
-        /* get session and currentUser*/       
-        $currentUser = $this->getUser();
-        
-        /* init repositories */
-        $em = $this->getDoctrine()->getManager();	
-        $userRepository = $em->getRepository('PPUserBundle:User');        
-        
-        $pageProfile = $userRepository->getUserBySlug($slug);
-        if($pageProfile == null){
-            throw new NotFoundHttpException("L'utilisateur \"".$slug."\" n'existe pas.");			
-        }
-        
-        /* create loadPage form */
-        $loadPropositionForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_get_gallery_form', 'form', array(), array())         
-            ->setAction($this->generateUrl('pp_user_api_get_gallery',array(), true))
-            ->getForm();
-        
-        return $this->render('PPUserBundle:Gallery:gallery.html.twig', array(
-           "pageProfile" => $pageProfile,
-           "loadPropositionForm" => $loadPropositionForm->createView()
-       ));
-        
-    }
+    }        
     
     public function editAction(Request $request)
     {

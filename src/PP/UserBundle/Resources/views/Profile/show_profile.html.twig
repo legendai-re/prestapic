@@ -103,8 +103,14 @@
         {% if pageProfile.enabled == true %}
             {#{% if isHownProfile == true %}{{ include("PPRequestBundle:Request:addRequestForm.html.twig") }}{% endif %}#}
 
-            <div ng-controller="requestsController as requests" ng-init="requests.init({{ pageProfile.id }})" >
-
+            <div ng-controller="requestsController as requests" ng-init="requests.init({{ pageProfile.id }},{{ contentToDisplay }})" >
+                
+                {# display choose displayMode form #}
+                <div class="main-top">
+                    <a ng-click="requests.updateMode(1)" id="mode_1" class="section {% if contentToDisplay == 1 %}selected{% endif %}" selected href="" title="Request">Requests</a>
+                    <a ng-click="requests.updateMode(2)" id="mode_2" class="section {% if contentToDisplay == 2 %}selected{% endif %}" href="" title="Suggestion">Suggestions</a>                                                             
+                </div>      
+                                                
                 {{ form(loadRequestForm) }}
                 {{ form(upvoteRequestForm) }}
                 <div id="loadPage1"></div>
@@ -138,7 +144,7 @@
         </ul>
 
         {% if galleryImagesNb > 7  %}
-            <a class="widget-gallery-number" target="_self" href="{{ path('pp_user_gallery', {'slug':pageProfile.slug})}}" class="more">                    
+            <a class="widget-gallery-number" target="_self" href="" class="more">                    
                 Show gallery ({{ galleryImagesNb-6 }} more suggestion{% if galleryImagesNb > 0 %}s{% endif %})
             </a>
         {% endif %}

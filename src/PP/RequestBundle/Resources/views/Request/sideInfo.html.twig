@@ -4,7 +4,7 @@
     <ul class="tag-list">
         {% for tag in popularTags %}    
             <li class="tag-item">
-                <a target="_self" class="tag" href="{{ path('pp_request_homepage', {'page': 1, 'tags':tag.name }) }}" title="{{tag.usedNb}} request{% if tag.usedNb > 1 %}s{% endif %}">{{ tag.name }}</a>
+                <a target="_self" class="tag" href="{{ path('pp_request_homepage', {'tags':tag.id }) }}" title="{{tag.usedNb}} request{% if tag.usedNb > 1 %}s{% endif %}">{{ tag.name }}</a>
             </li>            
         {% endfor %}
     </ul>

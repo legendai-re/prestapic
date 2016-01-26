@@ -15,10 +15,6 @@ pp_user_profile:
 pp_user_edit:
     path:     /profile/edit
     defaults: { _controller: PPUserBundle:ShowUser:edit}
-
-pp_user_gallery:
-    path:     /{slug}/gallery
-    defaults: { _controller: PPUserBundle:ShowUser:gallery}
     
 pp_user_setting:
     path:     /{slug}/settings

@@ -46,7 +46,6 @@ class RequestApiController extends Controller
         $categoriesParam = array();
         $concerningMeParam = false;
         $requestTypeParam = Constants::REQUEST_PENDING;
-        $getParameters = array('page'=>1);
         
          /* handle GET data */
         if ($request->isMethod('GET')) {
@@ -58,30 +57,20 @@ class RequestApiController extends Controller
             }
             if($request->get('search_query') != null){
                 $haveSearchParam = true;
-                $searchParam = $request->get('search_query');
-                $getParameters['search_query'] = $searchParam;                
+                $searchParam = $request->get('search_query');           
             }
             if($request->get('tags') != null){                
                 $tagsParam = explode(" ",  $request->get('tags'));                
             }
             if($request->get('categories') != null){
                 $categoriesParam = explode(" ",  $request->get('categories'));
-            }
-            
-            if($currentUser!=null && $request->get('me') != null && $request->get('me') == "true"){
-                $concerningMeParam = true;
-            }
-                         
+            }                                 
         }                
         
         /* init repositories */
-        $em = $this->getDoctrine()->getManager();
-	$imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
+        $em = $this->getDoctrine()->getManager();	
         $propositionRepository = $em->getRepository('PPPropositionBundle:Proposition');
-        $userRepository = $em->getRepository('PPUserBundle:User');        
-        
-        /* set page to GET parameters */
-        $getParameters['page'] = $page;
+        $userRepository = $em->getRepository('PPUserBundle:User');              
                 
         $nextPage = $page+1;
         
@@ -120,6 +109,7 @@ class RequestApiController extends Controller
         $haveNextPage = true;       
         
         if($contentToDisplay == Constants::DISPLAY_REQUEST_PENDING || $contentToDisplay == Constants::DISPLAY_REQUEST_CLOSED){
+            $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
             $canUpvoteImageRequest = array();
             $imageRequestsId = $imageRequestRepository->getImageRequestsId($em, $searchParam, Constants::REQUEST_PER_PAGE, $page, $displayMode, $userId, $followingIds, $tagsParam, $categoriesParam, $concerningMeParam, $contentToDisplay);            
             foreach($imageRequestsId as $id){
@@ -138,7 +128,7 @@ class RequestApiController extends Controller
                      
         }else if($contentToDisplay == Constants::DISPLAY_PROPOSITION){
             $canUpvoteProposition = array();            
-            $propositionsList =  $propositionRepository->getPropositions(null, Constants::PROPOSITION_PER_HOME_PAGE, $page, $displayMode, $userId, $followingIds, $searchParam, $tagsParam, $categoriesParam, $concerningMeParam);
+            $propositionsList =  $propositionRepository->getPropositions(null, Constants::PROPOSITION_PER_HOME_PAGE, $page, $displayMode, $userId, $followingIds, $searchParam, $tagsParam, $categoriesParam, null);
             
             if($currentUser!=null){
                 foreach($propositionsList as $proposition){
@@ -151,7 +141,7 @@ class RequestApiController extends Controller
             
             if(sizeof($propositionsList) < Constants::PROPOSITION_PER_HOME_PAGE){
                 $haveNextPage = false;
-            }            
+            }                    
         }                        
         
         if($contentToDisplay == Constants::DISPLAY_REQUEST_PENDING || $contentToDisplay == Constants::DISPLAY_REQUEST_CLOSED){

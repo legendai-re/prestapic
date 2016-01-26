@@ -202,20 +202,24 @@
     containerApp.controller('requestsController', ['$rootScope', '$scope', '$http', '$compile', '$location', function ($rootScope, $scope, $http, $compile, $location) {
             
             var pageProfileId = null;
+            this.contentToDisplay = null;
+            var readyToChange = true;
+            var getParams = "?";
             
-            this.init = function(id){
+            this.init = function(id, contentToDisplay){
+                this.contentToDisplay = contentToDisplay;
                 pageProfileId = id;
                 getRequests(1);                                
             }
             
             var nextLoadTrigger = '#loadPageTrigger2';            
-            var nextPage = 2;                      
+            var nextPage = 2;                                              
             
             var getRequests = function(page){
                 document.getElementById('loadingGif').style.display = 'block';                
                 var formAction = document.forms["pp_user_api_get_user_request_form_"+page].action;
                 
-                $http.get(formAction+".html").
+                $http.get(formAction+".html"+getParams).
                     then(function(response) {                                              
                         var newPage = angular.element(response.data);                        
                         $compile(newPage)($scope);                             
@@ -227,6 +231,26 @@
                     }
                 );                                            
             }                       
+            
+            this.update = function(contentToDisplay){
+                if(readyToChange){
+                    $("#loadPage1").html("");
+                    nextLoadTrigger = '#loadPageTrigger2';            
+                    nextPage = 2;
+                    getParams = "?content_to_display_profile="+contentToDisplay;
+                    getRequests(1);
+                    this.contentToDisplay = contentToDisplay;                                                            
+                }
+            }; 
+            
+            this.updateMode = function(mode){
+                if(readyToChange){
+                    this.contentToDisplay = mode;
+                    $('.section').removeClass("selected");
+                    $('#mode_'+mode).addClass("selected");
+                    this.update(this.contentToDisplay);
+                }
+            }
             
             var readyForRequestVote = true;
             var upvotedRequest = []
@@ -263,6 +287,34 @@
                 }
                 angular.element(document.getElementById('popupPropApp')).scope().$emit('showPopup', message);                                                
             };
+            
+            var readyForPropositionVote = true;
+            var upvotedPropositions = [];
+            this.postPropositionVote = function(propositionId){
+                if(readyForPropositionVote && upvotedPropositions[propositionId] == null){
+                    upvotedPropositions[propositionId] = true;
+                    readyForPropositionVote = false;
+                    $("#propositionUpvoteButton_"+propositionId).addClass("animate");
+                    $("#propositionUpvoteButton_"+propositionId).addClass("voted");
+                    document.getElementById('propositionUpvoteButton_'+propositionId).innerHTML = parseInt($('#propositionUpvoteButton_'+propositionId).html())+1; 
+                    var myData = {
+                        id: propositionId
+                    }
+                    var formAction = document.forms["pp_proposition_api_patch_proposition_vote_form"].action;
+                    $http({
+                        method: 'PATCH',
+                        url: formAction,                    
+                        data: JSON.stringify(myData)
+                         }).
+                        then(function(response){
+                            readyForPropositionVote = true;
+                        },function(response) {
+                            console.log("Request failed : "+response.statusText );
+                            readyForPropositionVote = true;
+                        }
+                    );
+                }
+            };                                   
             
             $(window).scroll(function() {
                 if($(nextLoadTrigger).offset() != null){

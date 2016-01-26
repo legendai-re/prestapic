@@ -41,7 +41,10 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
         $qb = $qb
           ->setFirstResult(($page-1) * $limit)
           ->setMaxResults($limit)
-        ;      
+        ;
+        
+        $qb = $qb
+                ->orderBy('p.createdDate', 'DESC');
 
         return $qb
               ->getQuery()
@@ -71,16 +74,18 @@ class PropositionRepository extends \Doctrine\ORM\EntityRepository
               ->addSelect('i')
               ->leftJoin('p.author', 'pA')
               ->addSelect('pA')              
-              ->leftJoin("p.imageRequest", "ir")                            
-              ->where('ir.enabled = true AND pA.enabled = true')
+              ->leftJoin("p.imageRequest", "ir")
+              ->where('ir.enabled = true AND pA.enabled = true AND p.enabled = true')
               ->distinct(true)
-              ->andWhere('ir.enabled = true AND p.enabled = true')
         ;
+        
+        if($searchParam != null || $tagsParam != null || $categoriesParam != null){
+            
+        }
         
         if($searchParam != null || $tagsParam != null){
             $qb = $qb->leftJoin('ir.tags', 't');
-        }
-        
+        }        
          
         if($searchParam != null || $categoriesParam != null){
             $qb = $qb->leftJoin('ir.category', 'c');

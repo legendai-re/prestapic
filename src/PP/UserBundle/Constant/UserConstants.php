@@ -7,6 +7,10 @@ namespace PP\UserBundle\Constant;
  * @author Olivier
  */
 class UserConstants {
+    
+    const DISPLAY_REQUEST = 1;
+    const DISPLAY_PROPOSITION = 2;
+    
     public static function getForbidddenName(){
         return array("users", "_profiler", "help", "prestapic");
     } 
