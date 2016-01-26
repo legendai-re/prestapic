@@ -51,7 +51,7 @@
     {% if imageRequest.propositionsNb > 0 %}
         {% set break = false %}    
         <div class="propositions-container" >
-            <span class="prop-num">{{ imageRequest.propositionsNb }} propositions</span>
+            <span class="prop-num">{{ imageRequest.propositionsNb }} Suggestion{% if imageRequest.propositionsNb > 1%}s{% endif %}</span>
             {% for proposition in propositionsList['imageRequest_'~imageRequest.id] if not break %}                
                 <a class="prop-img" style="background-color: #{{ proposition.image.avgColor }};" ng-href="{{ asset(proposition.image.webPath("original")) }}" ng-click="requests.showPopup({{ proposition.id }})">
                     <img 

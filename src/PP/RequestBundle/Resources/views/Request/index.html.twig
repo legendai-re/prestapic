@@ -16,7 +16,7 @@
                 {% endif %}                              
 
                 <div class="dropdown-container stopPropagation">
-                    <a href="" id="contentToDisplaySelected" ng-click="requests.showContentToDisplayFilters()" class="dropdown-text">{% if contentToDisplay == 2 %}Propositions{% else %}Requests{% endif %}</a>
+                    <a href="" id="contentToDisplaySelected" ng-click="requests.showContentToDisplayFilters()" class="dropdown-text">{% if contentToDisplay == 2 %}Suggestions{% else %}Requests{% endif %}</a>
 
                     <ul class="dropdown-choices" style="z-index: 1; display: none;" id="contentToDisplayFilters">
                         <li class="dropdown-cat">
@@ -25,8 +25,8 @@
                             <a ng-click="requests.update(4)" id="content_mode_4" class="dropdown-choice {% if contentToDisplay == 4 %}selected{% endif %}" href="" title="closed">Closed requests</a>                            
                         </li>
                         <li class="dropdown-cat">
-                            <div class="dropdown-cat-title">Propositions</div>                            
-                            <a ng-click="requests.update(2)" id="content_mode_2" class="dropdown-choice {% if contentToDisplay == 2 %}selected{% endif %}" href="" title="proposition">Galery of propositions</a>
+                            <div class="dropdown-cat-title">Suggestions</div>                            
+                            <a ng-click="requests.update(2)" id="content_mode_2" class="dropdown-choice {% if contentToDisplay == 2 %}selected{% endif %}" href="" title="Suggestions">Galery of suggestions</a>
                         </li>
                     </ul>
                 </div>

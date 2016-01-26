@@ -129,7 +129,7 @@
         {% set break = false %}
         <ul class="widget-gallery-container">
         {% for proposition in galleryImages if not break %}
-            <li class="widget-gallery-item">
+            <li class="widget-gallery-item" style="background-color: #{{ proposition.image.avgColor }};">
                 <a class="widget-gallery-banner" style="background-image:url({{ asset(proposition.image.webPath("single")) }});" ng-click="gallery.showPopup({{ proposition.id }})" ng-href="{{ asset(proposition.image.webPath("original")) }}"></a>          
             </li>
            {% if loop.index >= 7  %}{% set break = true %}{% endif %}

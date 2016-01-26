@@ -252,8 +252,8 @@ class Image
                     break;
         }
         $i = $image_create($this->file);
-        for ($x=0;$x<imagesx($i);$x+=3) {
-                for ($y=0;$y<imagesy($i);$y+=3) {
+        for ($x=0;$x<imagesx($i);$x+=10) {
+                for ($y=0;$y<imagesy($i);$y+=10) {
                         if($x<$width && $y<$height){
                             $rgb = imagecolorat($i,$x,$y);
                             $r   = ($rgb >> 16) & 0xFF;

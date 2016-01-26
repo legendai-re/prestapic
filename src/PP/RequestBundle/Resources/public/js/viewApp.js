@@ -143,6 +143,9 @@ containerApp.controller('propositionsController', ['$rootScope', '$scope', '$htt
                         if($('#showMoreButton') != null && page == 1){
                             $('#showMoreButton').css("display", "inline-block");
                         }
+                        if(page==1){
+                            $('#suggestFormComments').css("display",'block');
+                        }
                     },function(response) {
                         console.log("Request failed : "+response.statusText );                        
                     }
@@ -272,11 +275,20 @@ containerApp.controller('uploadController', ['$scope', '$http', '$compile', '$wi
 containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$window', '$location', function ($scope, $http, $compile, $window, $location) {
         
         var requestId = null;
+        var commentTotalSet = false;
         $scope.commentList = [];
-        
-        this.init = function(requestId){            
-            getComments(1, requestId);
+        $scope.commentLoadedNb = 0;
+        $scope.commentTotal = 0;
+        var page = 1;
+        this.init = function(id){
+            requestId = id;
+            getComments(page, id);
         };
+        
+        this.loadMore = function(){
+            page++;
+            getComments(page, requestId);
+        }
         
         var getComments = function(page, requestId){
             var formAction = document.forms["pp_request_api_get_comments_form"].action;
@@ -284,8 +296,13 @@ containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$
             $http.get(formAction+".html?page="+page+"&requestId="+requestId).
                 then(function(response){                    
                     $scope.commentThread = response.data;
+                    if(!commentTotalSet){
+                        commentTotalSet = true;
+                        $scope.commentTotal = $scope.commentThread.commentNb;
+                    }
                     for(var i=0; i<response.data.comments.length; i++){
                         $scope.commentList.unshift(response.data.comments[i]);
+                        $scope.commentLoadedNb ++;
                     }
                     $scope.currentUser = response.data.currentUser;
                 },function(response) {
@@ -298,35 +315,38 @@ containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$
         var canPostComment = true;
         
         this.postComment = function(requestId){
-            if($scope.comment.content != "" && $scope.comment.content != null)
-            if(canPostComment){                
-                var newComment = {
-                    content: $scope.comment.content,
-                    author: {
-                        id: $scope.currentUser.id,
-                        image: $scope.currentUser.image,
-                        name: $scope.currentUser.name,
-                        url: $scope.currentUser.url
-                    }
-                };                
-                $scope.commentList.push(newComment);
-                
-                canPostComment = false;
-                $scope.comment.requestId = requestId;
-                console.log($scope.comment);
-                var formAction = document.forms["pp_request_api_post_comment_form"].action;
-                $http({
-                    method: 'POST',
-                    url: formAction,                    
-                    data: JSON.stringify($scope.comment)
-                     }).                
-                    then(function(response){                        
+            if($scope.comment.content != "" && $scope.comment.content != null){                            
+                if(canPostComment){
+                    $scope.commentThread.commentNb++;
+                    var newComment = {
+                        content: $scope.comment.content,
+                        author: {
+                            id: $scope.currentUser.id,
+                            image: $scope.currentUser.image,
+                            name: $scope.currentUser.name,
+                            url: $scope.currentUser.url
+                        }
+                    };                
+                    $scope.commentList.push(newComment);
 
-                    },function(response) {
-                        console.log("Request failed : "+response.statusText );                        
-                    }
-                );
-                $scope.comment.content = "";
+                    canPostComment = false;
+                    $scope.comment.requestId = requestId;
+                    console.log($scope.comment);
+                    var formAction = document.forms["pp_request_api_post_comment_form"].action;
+                    $http({
+                        method: 'POST',
+                        url: formAction,                    
+                        data: JSON.stringify($scope.comment)
+                         }).                
+                        then(function(response){                        
+                            canPostComment = true;
+                        },function(response) {
+                            console.log("Request failed : "+response.statusText );
+                            canPostComment = true;
+                        }
+                    );
+                    $scope.comment.content = "";
+                }
             }
         };
 }]);

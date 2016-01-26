@@ -43,7 +43,7 @@ class CommentApiController extends Controller
         if($requestId!=null && $page!=null){
             $imageRequest = $imageRequestRepository->find($requestId);
             $commentThread = $imageRequest->getCommentThread();
-            $comments = $commentRepository->getComments($requestId, 4, $page);
+            $comments = $commentRepository->getComments($requestId, 10, $page);
             
             $jsonComments = array();
             

@@ -89,7 +89,7 @@
                     $('#content_mode_'+contentToDisplay).addClass("selected");
                     $("#contentToDisplayFilters").css("display", "none");
                     if(contentToDisplay == DISPLAY_PROPOSITION){
-                        $('#contentToDisplaySelected').html("Propositions");
+                        $('#contentToDisplaySelected').html("Suggestions");
                     }else{
                         $('#contentToDisplaySelected').html("Requests");
                     }

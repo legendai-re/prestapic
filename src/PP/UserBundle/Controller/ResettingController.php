@@ -117,8 +117,10 @@ class ResettingController extends Controller
         if (null !== $event->getResponse()) {
             return $event->getResponse();
         }
-
-        $form = $formFactory->createForm();
+        
+        $form = $this->get('form.factory')->create(new \FOS\UserBundle\Form\Type\ResettingFormType(\PP\UserBundle\Entity\User::class), $user, array());
+        
+        //$form = $formFactory->createForm();
         $form->setData($user);
 
         $form->handleRequest($request);

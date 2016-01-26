@@ -72,10 +72,12 @@
                     <ul id="show_more_request_option" class="dropdown-choices" style="display: none;">
                         {% if isAuthor == true %}
                         <li class="dropdown-cat">
+                            {% if not imageRequest.closed %}
                             <span>
                                 {{ form(getEditForm)}}  
                                 <input class="dropdown-choice" type="submit" value="Edit" ng-click="request.getEditForm({{ imageRequest.id }})" title="Edit"/>
                             </span>
+                            {% endif %}
                             <span>
                                 <input class="dropdown-choice" type="submit" value="Delete request" ng-click="request.postDisableRequest({{ imageRequest.id }})" />
                                 {{ form(disableTicketForm) }}
@@ -91,9 +93,7 @@
             </div>
             {% endif %} 
         </div>        
-    </article> 
-                 
-
+    </article>                 
         
     <article class="replies" ng-controller="propositionsController as propositions" ng-init="propositions.init({{imageRequest.id}})">
 
@@ -140,10 +140,11 @@
                 <span class="bubble"></span>
         </div>                
     </article>
+    <div id="suggestFormComments" style="display: none;">    
     {% if is_granted("ROLE_USER") %}
         {% if not imageRequest.closed and imageRequest.author.id != app.user.id and canProposeImage == true %}
             <article ng-controller="uploadController as upload" class="add-prop">  
-                <div class="title-boxe">Add your proposition</div>
+                <div class="title-boxe">Suggest</div>
                 {{ form_start(propositionForm) }}
                 <div class="dragzone" id="dragzone_proposition">
                     <div class="dragzone-uploaded" id="dragzoneUploaded" style="display: none;">
@@ -163,41 +164,59 @@
             </article>
         {% endif %}    
     
-    <article class="comments" ng-controller="commentsController as comments" ng-init="comments.init({{ imageRequest.id }})">
-        {{ form(getCommentForm) }}
-        {% verbatim %}
-        <div class="title-section">{{ commentThread.commentNb }} comments</div>
-        {% endverbatim %}
-        <ul class="list-comments">
-            {% verbatim %}
-            <li class="comment" ng-repeat="comment in commentList">
-                 <a target="_self" class="avatar" href="{{ comment.author.url }}" title="">
-                     <img ng-src="{{ comment.author.image }}" alt="{{ comment.author.name }}">                    
-                 </a>
-                 <div class="comment-container">
-                     <a target="_self" class="username" href="{{ comment.author.url }}" title="">{{ comment.author.name }}</a>
-                     <div class="comment-content">
-                         {{ comment.content }}
-                     </div>
-                 </div>
-            </li>
+        <article class="comments" ng-controller="commentsController as comments" ng-init="comments.init({{ imageRequest.id }})">
+            {{ form(getCommentForm) }}
+            {% verbatim %}        
+                <div ng-cloak ng-if="commentThread.commentNb == 1" class="title-section">{{ commentThread.commentNb }} comment</div>
+                <div ng-cloak ng-if="commentThread.commentNb > 1" class="title-section">{{ commentThread.commentNb }} comments</div>
             {% endverbatim %}
-            {% if is_granted("ROLE_USER") %}
-            <li class="comment">
-              {{ form(postCommentForm) }}
-              <form  ng-submit="comments.postComment({{ imageRequest.id }})">
-                <a target="_self" class="avatar" href="{{ path('pp_user_profile', {'slug': currentUser.slug}) }}" title="">
-                  <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.name }}">
+            <ul class="list-comments">
+                {% verbatim %}
+                <a ng-click="comments.loadMore()" href="">
+                <li ng-cloak ng-if="commentLoadedNb < commentTotal" class="comment">
+                     <div class="comment-container">                     
+                         <div class="comment-content">
+                            Load more comments
+                         </div>
+                     </div>
+                </li>
                 </a>
-                <div class="composer-container">
-                  <textarea ng-model="comment.content" class="comment-composer" placeholder="Type your comment here..." row="1" type="text"></textarea>
-                  <button class="button-comment" type="submit">Send</button>
-                </div>
-              </form>
-            </li>
-            {% endif %}
-        </ul>
-    </article>
+                <li ng-cloak ng-if="commentThread.commentNb < 1" class="comment">                
+                     <div class="comment-container">                     
+                         <div class="comment-content">
+                            Be the firts to comment !
+                         </div>
+                     </div>
+                </li>
+                <li ng-cloak class="comment" ng-repeat="comment in commentList">
+                     <a target="_self" class="avatar" href="{{ comment.author.url }}" title="">
+                         <img ng-src="{{ comment.author.image }}" alt="{{ comment.author.name }}">                    
+                     </a>
+                     <div class="comment-container">
+                         <a target="_self" class="username" href="{{ comment.author.url }}" title="">{{ comment.author.name }}</a>
+                         <div class="comment-content">
+                             {{ comment.content }}
+                         </div>
+                     </div>
+                </li>
+                {% endverbatim %}
+                {% if is_granted("ROLE_USER") %}
+                <li class="comment">
+                  {{ form(postCommentForm) }}
+                  <form  ng-submit="comments.postComment({{ imageRequest.id }})">
+                    <a target="_self" class="avatar" href="{{ path('pp_user_profile', {'slug': currentUser.slug}) }}" title="">
+                      <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.name }}">
+                    </a>
+                    <div class="composer-container">
+                      <textarea ng-model="comment.content" class="comment-composer" placeholder="Type your comment here..." row="1" type="text"></textarea>
+                      <button class="button-comment" type="submit">Send</button>
+                    </div>
+                  </form>
+                </li>
+                {% endif %}
+            </ul>
+        </article>
+    </div>
     {% endif %}
             
     {% else %}
