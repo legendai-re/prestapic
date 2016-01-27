@@ -64,6 +64,8 @@ class SettingController extends Controller
 
             $url = $this->generateUrl('pp_user_setting', array('slug'=>$currentUser->getSlug()));
             $response = new RedirectResponse($url);
+            
+            $this->get('session')->getFlashBag()->set('passwordChangeResult', 'success');
         }        
         /////////////////////               
         /* enable notification */

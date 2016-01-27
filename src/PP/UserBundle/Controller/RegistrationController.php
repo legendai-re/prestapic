@@ -184,6 +184,7 @@ class RegistrationController extends Controller
         if (null === $response = $event->getResponse()) {
             $url = $this->generateUrl('pp_user_profile', array('slug'=>$user->getSlug()));
             $response = new RedirectResponse($url);
+            $this->get('session')->getFlashBag()->set('emailConfirmed', 'success');
         }
 
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));

@@ -199,6 +199,8 @@
             }
     }]);
     
+    var DISPLAY_REQUEST = 1;
+    var DISPLAY_PROPOSITION = 2;
     containerApp.controller('requestsController', ['$rootScope', '$scope', '$http', '$compile', '$location', function ($rootScope, $scope, $http, $compile, $location) {
             
             var pageProfileId = null;
@@ -207,6 +209,11 @@
             var getParams = "?";
             
             this.init = function(id, contentToDisplay){
+                if(contentToDisplay == DISPLAY_REQUEST){
+                    $('#widgetGallery').css("display", "block");
+                }else{
+                    $('#widgetGallery').css("display", "none");
+                }
                 this.contentToDisplay = contentToDisplay;
                 pageProfileId = id;
                 getRequests(1);                                
@@ -232,8 +239,13 @@
                 );                                            
             }                       
             
-            this.update = function(contentToDisplay){
+            this.update = function(contentToDisplay){                
                 if(readyToChange){
+                    if(contentToDisplay == DISPLAY_REQUEST){
+                        $('#widgetGallery').css("display", "block");
+                    }else{
+                        $('#widgetGallery').css("display", "none");
+                    }
                     $("#loadPage1").html("");
                     nextLoadTrigger = '#loadPageTrigger2';            
                     nextPage = 2;
@@ -250,7 +262,13 @@
                     $('#mode_'+mode).addClass("selected");
                     this.update(this.contentToDisplay);
                 }
-            }
+            }                        
+            
+            var requestsController = this;
+            
+            $("#widgetShowGalleryButton").click(function(){
+                requestsController.updateMode(2);
+            });
             
             var readyForRequestVote = true;
             var upvotedRequest = []

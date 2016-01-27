@@ -452,7 +452,7 @@ class User extends BaseUser
     }
     
      /////////////////////////////////
-    //////// create thumbnail ///////
+    //////// create thumbnail ///////       
     
     /**
     * @ORM\PostPersist()
