@@ -4,6 +4,14 @@
     {{ imageRequest.title }}
 {% endblock %}
 
+{% block fashbagJs %}
+    {% if propositionForm.image.file.vars.errors|length > 0 %}
+        <script>
+        showBannerAlert("danger", "Failed", "There is a problem with the file you have uploaded");
+        </script>
+    {% endif %}
+{% endblock %}
+
 {% block requestBody %}
 <div id="viewApp" >
 <base href=" " />
@@ -145,7 +153,9 @@
         {% if not imageRequest.closed and imageRequest.author.id != app.user.id and canProposeImage == true %}
             <article ng-controller="uploadController as upload" class="add-prop">  
                 <div class="title-boxe">Suggest</div>
+                
                 {{ form_start(propositionForm) }}
+              
                 <div class="dragzone" id="dragzone_proposition">
                     <div class="dragzone-uploaded" id="dragzoneUploaded" style="display: none;">
                         <div class="banner" id="uploaded_proposition"></div>
@@ -216,8 +226,9 @@
                 {% endif %}
             </ul>
         </article>
+        {% endif %}
     </div>
-    {% endif %}
+    
             
     {% else %}
         {# if image request disabled #}

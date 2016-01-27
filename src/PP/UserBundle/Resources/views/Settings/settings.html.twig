@@ -7,15 +7,28 @@
     Settings
 {% endblock %}
 
+
+{% block fashbagJs %}
+    {% for flashMessage in app.session.flashbag.get('passwordChangeResult') %}            
+        {% if flashMessage == "success" %}
+        <script>  
+            showBannerAlert("success", "Well done !", "Your password have been successfully changed");
+        </script>   
+        {% endif%}
+    {% endfor %}
+{% endblock %}
+
 {% block body %}
    
     {% if user.enabled == true %}
-
+        
+        
+        
         <div class="full-main">
             <div class="full-main-top">
                 <h1>Settings</h1>
             </div>
-
+            
             <div class="full-main-container" ng-controller="settingController as settings">
                 <base href=" " />
 
