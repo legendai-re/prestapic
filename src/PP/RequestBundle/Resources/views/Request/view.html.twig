@@ -4,6 +4,14 @@
     {{ imageRequest.title }}
 {% endblock %}
 
+{% block fashbagJs %}
+    {% if propositionForm.image.file.vars.errors|length > 0 %}
+        <script>
+        showBannerAlert("danger", "Failed", "There is a problem with the file you have uploaded");
+        </script>
+    {% endif %}
+{% endblock %}
+
 {% block requestBody %}
 <div id="viewApp" >
 <base href=" " />
@@ -61,8 +69,18 @@
         </div>        
 
         <div class="actions-container">
-            <div class="actions-left">
-                <a href="" class="action share">share</a>
+            <div class="actions-left">                
+                <div class="dropdown-container stopPropagation">
+                    <a href="" ng-click="request.showShare()" class="action share">share</a>                    
+                    <ul id="share_container" class="dropdown-choices" style="display: none; left: 0;">
+                        <li class="dropdown-cat">
+                            <a target="_blank" href="https://www.facebook.com/dialog/share?app_id=184105271951012&amp;display=popup&amp;href={{ "http:" ~ url("pp_request_view",{"slug":imageRequest.slug},true)|url_encode }}&amp;redirect_uri={{ "http:" ~ url("pp_request_view",{"slug":imageRequest.slug},true)|url_encode }}" class="dropdown-choice">Facebook</a>                              
+                        </li>
+                        <li class="dropdown-cat">
+                            <a target="_blank" class="twitter-share-button dropdown-choice" href="https://twitter.com/intent/tweet?text=Image+request&via=prestapic&url={{ "http:" ~ url("pp_request_view",{"slug":imageRequest.slug},true)|url_encode }}">Tweet</a>
+                        </li>                                                
+                    </ul>
+                </div>
             </div>
             {% if is_granted("ROLE_USER") %}
             <div class="actions-right">
@@ -145,7 +163,9 @@
         {% if not imageRequest.closed and imageRequest.author.id != app.user.id and canProposeImage == true %}
             <article ng-controller="uploadController as upload" class="add-prop">  
                 <div class="title-boxe">Suggest</div>
+                
                 {{ form_start(propositionForm) }}
+              
                 <div class="dragzone" id="dragzone_proposition">
                     <div class="dragzone-uploaded" id="dragzoneUploaded" style="display: none;">
                         <div class="banner" id="uploaded_proposition"></div>
@@ -216,8 +236,9 @@
                 {% endif %}
             </ul>
         </article>
+        {% endif %}
     </div>
-    {% endif %}
+    
             
     {% else %}
         {# if image request disabled #}

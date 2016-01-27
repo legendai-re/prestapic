@@ -130,6 +130,9 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
         $location.path($scope.currentLocation);        
     };
     
+    $(document).keyup(function(e) {       
+        if (e.keyCode == 27) $('#closePopupPropositionButton').click(); 
+    });
     
     this.openInfo = function(){
         $("#propPopupInfo").css("display", "block");

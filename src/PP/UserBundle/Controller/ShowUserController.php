@@ -132,21 +132,26 @@ class ShowUserController extends Controller
         $currentUser = $this->getUser();            
         
         if($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser != null) {
-                                  
-            $editUserForm = $this->get('form.factory')->create(new EditProfileFormType($currentUser), $currentUser, array(                            
-            ));                          
-                        
+            
+            $formUser = new \PP\UserBundle\Entity\User();
+            $editUserForm = $this->get('form.factory')->create(new EditProfileFormType($currentUser), $formUser);                          
+            $editUserForm->setData($currentUser);   
+            
             if ($request->isMethod('POST')) {            
                 $editUserForm->handleRequest($request);
                 if ($editUserForm->isValid()) {
                     
+                    if($formUser->getName() != null)$currentUser->setName($formUser->getName());
+                    if($formUser->getProfilImage() != null)$currentUser->setProfilImage($formUser->getProfilImage());
+                    if($formUser->getCoverImage() != null)$currentUser->setCoverImage($formUser->getCoverImage());
+                    if($formUser->getDescription() != null)$currentUser->setDescription($formUser->getDescription());
+                    if($formUser->getContact() != null)$currentUser->setContact($formUser->getContact());
+                    
                     $em->persist($currentUser);
                     $em->flush();
-                    
-                    $currentUser->createThumbnail();                                        
-                    
+                    $currentUser->createThumbnail();                    
                     return $this->redirect($this->generateUrl('pp_user_profile', array(
-                        'slug' => $currentUser->getSlug()                        
+                        'slug' => $currentUser->getSlug()
                     )));
                 }
             }
@@ -157,7 +162,7 @@ class ShowUserController extends Controller
         }else{
             return $this->redirect($this->generateUrl('pp_request_homepage', array(                
             )));
-        }
+        }               
     }
     
    public function searchResultAction(){

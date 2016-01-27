@@ -496,7 +496,7 @@ class Image
         $thumbnailDir = $this->getUploadRootDir().'/'.$foldername.'/'. $this->id .'.'. $this->url;
         
         imagecopyresampled($destination, $source, 0, 0, 0, 0, $width,$height,$size[0],$size[1]);        
-        imagejpeg($destination, $thumbnailDir, 100);                
+        imagejpeg($destination, $thumbnailDir, 100);                 
     }
       
 

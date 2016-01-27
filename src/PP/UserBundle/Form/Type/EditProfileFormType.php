@@ -25,6 +25,7 @@ class EditProfileFormType extends AbstractType
         $this->user = $user;
     }
     
+     
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -50,12 +51,12 @@ class EditProfileFormType extends AbstractType
             ->add('description',     'textarea',array(
                 'label'     => false,
                 'required'  => false,
-                'data'      => $this->user->getDescription()
+                 'data'      => $this->user->getDescription()
                 ))
             ->add('contact',     'text',array(
                 'label'     => false,
                 'required'  => false,
-                'data'      => $this->user->getContact()
+                 'data'      => $this->user->getContact()
                 ))
         ;
         

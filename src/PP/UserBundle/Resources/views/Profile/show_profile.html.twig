@@ -85,7 +85,7 @@
 {% endblock %}
 
 {% block sideInfoTop %}
-    <div class="widget gallery" ng-controller="galleryController as gallery">        
+    <div id="widgetGallery" class="widget gallery" ng-controller="galleryController as gallery">        
        <div class="widget-title">Gallery</div>
         {% set break = false %}
         <ul class="widget-gallery-container">
@@ -99,7 +99,7 @@
         </ul>
 
         {% if galleryImagesNb > 7  %}
-            <a class="widget-gallery-number" target="_self" href="" class="more">                    
+            <a id="widgetShowGalleryButton" class="widget-gallery-number" href="" class="more">                    
                 Show gallery ({{ galleryImagesNb-6 }} more suggestion{% if galleryImagesNb > 0 %}s{% endif %})
             </a>
         {% endif %}

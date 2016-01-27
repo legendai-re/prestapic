@@ -26,6 +26,25 @@
 <body id="body">
     
     <div class="container">
+        {# ALERT BANNER #}
+        {% for flashMessage in app.session.flashbag.get('emailConfirmed') %}            
+            {% if flashMessage == "success" %}
+             <section id="alert-banner" class="alert-banner success" style='display: block; position: relative;'>
+                <div class="content">
+                    <strong id="alert-banner-strong">Well Done !</strong> 
+                    <span id="alert-banner-span">You email is now confirmed</span>
+                </div>
+            </section> 
+            {% endif%}
+        {% endfor %}
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") and app.user.emailConfirmed == false %}
+            <section id="alert-banner" class="alert-banner warning" style='display: block; position: relative;'>
+                <div class="content">
+                    <strong id="alert-banner-strong">Warning</strong> 
+                    <span id="alert-banner-span">You haven't confirm you email yet. Please check your email en click on the link</span>
+                </div>
+            </section>
+        {% endif %}
         {% block header %}
         <header id="header" class="navbar">
                 <div class="content" ng-app="headerApp">
@@ -33,8 +52,7 @@
                 </div>
         </header>
         {% endblock %}
-
-        {# ALERT BANNER #}        
+        
         <section id="alert-banner" class="alert-banner">
         {# info success warning danger #}
             <div class="content">
@@ -135,6 +153,8 @@
     %}   
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}           
-
+    
+    {% block fashbagJs %}
+    {% endblock %}
 </body>
 </html>

@@ -105,14 +105,29 @@ containerApp.controller('requestController',['$scope', '$http', '$location', '$w
 
         this.showMoreOption = function(){
             if($('#show_more_request_option').css("display") == "none"){
+                closeAll();
                 $('#show_more_request_option').css("display", "block");
             }else{
-                $('#show_more_request_option').css("display", "none");
+                closeAll();
             }
         };
-
-        $('html').click(function(){
+        
+        this.showShare = function(){
+            if($('#share_container').css("display") == "none"){
+                closeAll();
+                $('#share_container').css("display", "block");
+            }else{
+                closeAll();
+            }
+        };
+        
+        var closeAll = function(){
             $('#show_more_request_option').css("display", "none");
+            $('#share_container').css("display", "none");
+        }
+        
+        $('html').click(function(){
+            closeAll();
         });
                 
 }]);
@@ -350,3 +365,4 @@ containerApp.controller('commentsController', ['$scope', '$http', '$compile', '$
             }
         };
 }]);
+
