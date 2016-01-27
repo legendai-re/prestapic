@@ -20,10 +20,10 @@ class EditProfileFormType extends AbstractType
     /**
      * @param string $class The User class name
      */
-    public function __construct($user)
+    /*public function __construct($user)
     {
         $this->user = $user;
-    }
+    }*/
     
     /**
      * @param FormBuilderInterface $builder
@@ -34,28 +34,23 @@ class EditProfileFormType extends AbstractType
         $builder
             ->add('name',           'text',array(
                 'label'     => false,
-                'required'  => false,
-                'data'      => $this->user->getName()
+                'required'  => false
                 ))           
             ->add('profilImage',    new ImageType(),array(                
                 'label'     => "profile image",
-                'required'  => false,
-                'data'      => $this->user->getProfilImage()
+                'required'  => false
                 ))
             ->add('coverImage',    new ImageType(),array(
                 'label'     => "cover Image",
-                'required'  => false,
-                'data'      => $this->user->getCoverImage()
+                'required'  => false
                 ))
             ->add('description',     'textarea',array(
                 'label'     => false,
-                'required'  => false,
-                'data'      => $this->user->getDescription()
+                'required'  => false
                 ))
             ->add('contact',     'text',array(
                 'label'     => false,
-                'required'  => false,
-                'data'      => $this->user->getContact()
+                'required'  => false
                 ))
         ;
         

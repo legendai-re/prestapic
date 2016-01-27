@@ -132,23 +132,24 @@ class ShowUserController extends Controller
         $currentUser = $this->getUser();            
         
         if($this->get('security.authorization_checker')->isGranted('ROLE_USER') && $currentUser != null) {
-                                  
-            $editUserForm = $this->get('form.factory')->create(new EditProfileFormType($currentUser), $currentUser, array(                            
-            ));                          
+            $newUser =  $currentUser;                    
+            $editUserForm = $this->get('form.factory')->create(new EditProfileFormType, $newUser);                          
                         
             if ($request->isMethod('POST')) {            
-                $editUserForm->handleRequest($request);
-                if ($editUserForm->isValid()) {
-                    
-                    $em->persist($currentUser);
-                    $em->flush();
-                    
-                    $currentUser->createThumbnail();                                        
-                    
-                    return $this->redirect($this->generateUrl('pp_user_profile', array(
-                        'slug' => $currentUser->getSlug()                        
-                    )));
-                }
+                $editUserForm->handleRequest($request);                              
+                if($newUser->getName() != null)$currentUser->setName($newUser->getName());
+                if($newUser->getProfilImage() != null)$currentUser->setProfilImage($newUser->getProfilImage());
+                if($newUser->getCoverImage() != null)$currentUser->setCoverImage($newUser->getCoverImage());
+                if($newUser->getDescription() != null)$currentUser->setDescription($newUser->getDescription());
+                if($newUser->getContact() != null)$currentUser->setContact($newUser->getContact());
+                $em->persist($currentUser);
+                $em->flush();
+
+                $currentUser->createThumbnail();
+
+                return $this->redirect($this->generateUrl('pp_user_profile', array(
+                    'slug' => $currentUser->getSlug()                        
+                )));                                             
             }
             
             return $this->redirect($this->generateUrl('pp_user_profile', array(
