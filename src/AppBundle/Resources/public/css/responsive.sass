@@ -1,0 +1,232 @@
+@import init
+
+@media (max-width: 450px)
+	div.content
+		padding: 0
+
+	header
+		background: #C24C4A
+		color: white
+		height: 56px
+
+		div.content
+			padding: 0 20px
+
+			h1.logo
+				width: 30px
+				height: 56px
+				margin: 0 15px 0 0
+
+				a
+					width: 30px
+					height: 56px
+
+					&:before
+						color: white
+						font-size: 24px
+						position: absolute
+						top: 50%
+						@include vendor-prefix(transform, translateY(-50%))
+
+			.search
+				height: 56px
+				display: none
+
+				form
+					height: 56px
+
+					input.main-search
+						height: 56px
+						font-size: 16px
+						border: none
+						padding: 0
+
+			nav.menu
+				width: calc(100% - 45px)
+				height: 56px
+
+				ul
+					li
+						margin-left: 5px
+
+						&:first-child
+							margin-left: 0
+
+						a.notification
+							position: relative
+							width: 24px
+							height: 24px
+							margin: 16px 6px
+							padding: 4px
+							background: transparent
+							color: white
+
+							&:before
+								padding: 0
+								font-size: 16px
+
+							&.open
+								background: white!important
+								color: $main-color
+
+							&.alert
+								.number
+									position: absolute
+									top: 0
+									left: 0
+									width: 100%
+									height: 100%
+									background: white
+									color: $main-color
+									padding: 0
+									font-size: 16px
+									line-height: 24px
+									font-weight: 600
+									text-align: center
+
+						a.account
+							width: 24px
+							height: 24px
+							margin: 16px 0 16px 10px
+
+						a.button
+							float: left
+							margin: 12px 0
+							padding: 7px 14px
+							background: white
+							color: #444
+							left: 65px
+							font-size: 14px
+							position: absolute
+
+	section.main
+		padding: 20px 0
+
+		.main-left
+			width: 100%
+			margin: 0
+
+			.main-top
+				width: 100%
+				margin: 0 0 10px
+				padding: 0 20px
+
+				a.section, .dropdown-container .dropdown-text
+					font-size: 15px
+					margin: 0 10px 0 0
+
+				.dropdown-container
+					.dropdown-text
+						margin: 0
+
+						&:after
+							font-size: 15px
+
+			article.request, article.request-single
+				margin: 0 0 15px
+
+				.count-vote
+					width: auto
+					padding: 0 5px
+					margin-right: -5px
+
+				a.count-vote
+					font-size: 18px
+					line-height: 18px
+
+					&:after
+						width: 12px
+						height: 12px
+						padding: 3px 0 2px 5px
+						font-size: 12px
+
+				.request-container
+					width: 100%
+					padding: 10px 20px
+
+					h1
+						width: calc(100% - 60px)
+						padding: 0
+						margin: 0 0 10px
+						font-size: 16px
+						line-height: 16px
+
+					.request-content
+						width: 100%
+						font-size: 14px
+
+					.author-container
+						width: 100%
+						height: 42px
+						font-size: 15px
+
+						a.avatar
+							width: 32px
+							height: 32px
+							margin: 0 10px 0 0
+
+						span.author-infos
+							font-size: 12px
+							padding-top: 0
+
+						a.author-username
+							font-size: 14px
+
+					.tag-list
+						width: 100%
+						float: left
+						text-align: left
+
+						.tag
+							margin: 5px 5px 0 0
+							padding: 4px 8px
+							font-size: 12px
+
+				.propositions-container, .actions-container
+					width: 100%
+
+				.actions-container
+					padding: 10px 20px
+
+					a.action
+
+						&.share, &.more
+							&:after
+								font-size: 16px
+								width: 16px
+								height: 16px
+								margin: 2px 0 0 5px
+
+					.actions-left
+						a.action
+							margin: 0 15px 0 0
+
+					.actions-right
+						a.action
+							margin: 0 0 0 15px
+
+				.propositions-container
+					padding: 10px 0
+
+					span.prop-num
+						width: 100%
+						margin-bottom: 10px
+						padding: 0 20px
+
+					a.prop-img, a.prop-more
+						width: 100%
+						height: auto
+						margin: 0 0 5px 0
+
+						img
+							width: 100%
+							height: auto
+							float: left
+
+					a.prop-more
+						font-size: 15px
+						padding: 20px 0
+
+		.sidebar
+			display: none
+
