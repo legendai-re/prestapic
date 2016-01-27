@@ -1,0 +1,76 @@
+{% if is_granted('ROLE_USER') %}
+    {% if isHownProfile == true %}
+        {{ form(editProfileForm) }}
+        <a href="" id="editButton" class="button edit" ng-click="profile.getEditProfileForm()" >
+            Edit profile
+        </a>
+    {% else %}
+        {{ form(followForm) }}
+        {{ form(blockForm) }}
+        {% if is_granted("ROLE_ADMIN") %}
+            {{ form(setModeratorForm) }}
+        {% endif %}
+        
+        {% if isFollowing == true %}
+        <div class="dropdown-container profile-options stopPropagation">
+            <a href="" id="followingButton" class="button following" ng-mouseover="profile.showUnfollow()">
+                <span>Following</span>
+            </a>
+
+            <a href="" id="unfollowButton" class="button unfollow" style="display: none;" ng-click="profile.unfollow()" ng-mouseleave="profile.hideUnfollow()">
+                <span>Unfollow</span>
+            </a>
+
+            <a href="" id="followButton" class="button follow" style="display: none;" ng-click="profile.follow()">
+                <span>Follow</span>
+            </a>
+
+            <a href="" ng-click="profile.showProfileOptions()" class="button-more"></a>
+            <ul class="dropdown-choices" id="profileOptions" style="display: none;">
+                <li class="dropdown-cat">
+                    <a href="" id="blockButton" class="dropdown-choice" ng-click="profile.patchBlock({{ pageProfile.id }})" >{% if isBlocked == true %}Unblock{% else %}Block{% endif %}</a>
+                    <a href="" class="dropdown-choice" ng-click="profile.showReportPopup({{ pageProfile.id }}, 3)">
+                        Report
+                    </a>
+                </li>
+                {% if is_granted("ROLE_ADMIN") %}
+                <li class="dropdown-cat">
+                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+        {% else %}
+        <div class="dropdown-container profile-options stopPropagation">
+            <a href="" id="followingButton" class="button following" style="display: none;" ng-mouseover="profile.showUnfollow()">
+                <span>Following</span>
+            </a>
+
+            <a href="" id="unfollowButton" class="button unfollow" style="display: none;" ng-click="profile.unfollow()" ng-mouseleave="profile.hideUnfollow()">
+                <span>Unfollow</span>
+            </a>
+
+            <a href="" id="followButton" class="button follow" ng-click="profile.follow()">
+                <span>Follow</span>
+            </a>
+
+            <a href="" ng-click="profile.showProfileOptions()" class="button-more"></a>
+            <ul class="dropdown-choices" id="profileOptions" style="display: none;">
+                <li class="dropdown-cat">
+                    <a href="" id="blockButton" class="dropdown-choice" ng-click="profile.patchBlock({{ pageProfile.id }})" >{% if isBlocked == true %}Unblock{% else %}Block{% endif %}</a>
+                    <a href="" class="dropdown-choice" ng-click="profile.showReportPopup({{ pageProfile.id }}, 3)">
+                        Report
+                    </a>
+                </li>
+                {% if is_granted("ROLE_ADMIN") %}
+                <li class="dropdown-cat">
+                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+        {% endif %}
+    {% endif %}
+{% endif %}

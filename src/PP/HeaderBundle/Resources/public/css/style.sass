@@ -5,6 +5,8 @@ header
 	width: 100%
 	height: 76px
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+	position: relative
+	z-index: 80
 
 	a:hover
 		text-decoration: none
@@ -31,7 +33,7 @@ header
 				width: 50px
 				height: 40px
 				position: relative
-				z-index: 1
+				z-index: 81
 
 				&:hover
 					&:before
@@ -48,7 +50,7 @@ header
 					line-height: 40px
 					color: $main-color
 					position: absolute
-					z-index: 0
+					z-index: 80
 
 		.search
 			width: calc(100% - 70px - 400px)
@@ -222,7 +224,7 @@ header
 									position: absolute
 									top: 0
 									right: 6px
-									z-index: 1
+									z-index: 81
 									font-size: 14px
 									color: $placeholder
 
@@ -236,13 +238,13 @@ header
 									-moz-appearance: none
 									appearance: none
 									color: $texts
-									padding: 5px 10px
-									z-index: 2
+									padding: 5px 11px
+									z-index: 82
 									position: absolute
 
 				.search-options-list
 					background: white
-					z-index: 4
+					z-index: 81
 					position: relative
 					overflow: hidden
 					border: 1px solid $placeholder
@@ -390,7 +392,7 @@ header
 
 		.dropdown, & nav.menu .dropdown
 			position: absolute
-			z-index: 999
+			z-index: 81
 			display: none
 			float: left
 			padding: 5px 0
@@ -622,7 +624,6 @@ header
 	&.profile
 		background: rgba(0,0,0,.025)
 		position: absolute
-		z-index: 4
 		border-color: rgba(255,255,255,.25)
 
 		div.content
@@ -662,25 +663,25 @@ header
 						li.option
 							a.filters, button.go-search
 								&:focus
-									box-shadow: 0 0 0 1px transparent, 0 0 0 1px rgba(255,255,255,0.5)
+									box-shadow: 0 0 0 1px white, 0 0 0 1px rgba(255,255,255,0.5)
 									text-decoration: none
 
 							a.filters
 								background: transparent
-								color: rgba(255,255,255,.33)
-								border: 1px solid rgba(255,255,255,.25)
+								color: rgba(255,255,255,.5)
+								border: 1px solid rgba(255,255,255,.5)
 
 								&:hover, &:focus
-									border: 1px solid rgba(255,255,255,.5)
-									color: rgba(255,255,255,.66)
+									border: 1px solid rgba(255,255,255,1)
+									color: rgba(255,255,255,1)
 
 							button.go-search
-								background: rgba(255,255,255,.25)
-								color: rgba(255,255,255,.33)
+								background: rgba(255,255,255,.75)
+								color: rgba(0,0,0,.5)
 
 								&:hover, &:focus
-									background: rgba(255,255,255,.5)
-									color: rgba(255,255,255,.66)
+									background: rgba(255,255,255,1)
+									color: rgba(0,0,0,.5)
 
 							.filter-choose-category
 								.filter-choose-text
@@ -699,6 +700,7 @@ header
 						display: block
 						background: $borders
 						border: 1px solid rgba(255,255,255,.25)
+						border-top: none
 
 						ul
 							li
@@ -720,31 +722,37 @@ header
 					li
 						a
 							&.button
-								background: rgba(255,255,255,.33)
-								color: rgba(255,255,255,.66)
+								background: rgba(255,255,255,.75)
+								color: rgba(0,0,0,.5)
 
 								&:hover, &:focus
-									background: rgba(255,255,255,.66)
-									color: rgba(255,255,255,.75)
+									background: rgba(255,255,255,1)
+									color: rgba(0,0,0,.5)
 
 								&:focus
-									box-shadow: 0 0 0 1px  transparent, 0 0 0 1px rgba(255,255,255,0.5)
+									box-shadow: 0 0 0 1px  white, 0 0 0 1px rgba(255,255,255,0.5)
 									text-decoration: none
 
 							&.notification, &.account
-								background: rgba(255, 255, 255,.25)
-								color: rgba(255,255,255,.33)
+								background: rgba(255,255,255,.75)
+								color: rgba(0,0,0,.5)
+
+								&.open
+									color: white
+
+									&:hover, &:focus
+										color: white
 
 								&:hover, &:focus
-									background: rgba(255,255,255,.5)
-									color: rgba(255,255,255,.66)
+									background: rgba(255,255,255,1)
+									color: rgba(0,0,0,.5)
 
 								&:focus
-									box-shadow: 0 0 0 1px transparent, 0 0 0 1px rgba(255,255,255,0.5)
+									box-shadow: 0 0 0 1px white, 0 0 0 1px rgba(255,255,255,0.5)
 									text-decoration: none
 
 							&.account
-								border: 1px solid rgba(255,255,255,.33)
+								border: 1px solid rgba(255,255,255,.25)
 
 								img
 									opacity: 0.75
@@ -753,22 +761,23 @@ header
 									opacity: 1
 
 							&.notification.alert
-								background: rgba(255,255,255,.33)
-								border: 1px solid rgba(255,255,255,.33)
+								background: rgba(255,255,255,.75)
+								border: 1px solid rgba(255,255,255,.75)
 
 								.number
-									color: rgba(255,255,255,.66)
+									color: rgba(0,0,0,.75)
 
 			.dropdown, & nav.menu .dropdown
-				background: rgba(255,255,255,.75)
-				border: 1px solid rgba(255,255,255,.25)
+				background: rgba(255,255,255,.9)
+				border: 1px solid rgba(0,0,0,.5)
 
 				.dropdown-caret
 					.caret-outer
-						border-bottom: 10px solid rgba(255,255,255,.25)
+						border-bottom: 10px solid rgba(0,0,0,.25)
 
 					.caret-inner
-						border-bottom: 9px solid rgba(255,255,255,.5)
+						border-bottom: 9px solid rgba(255,255,255,.9)
+
 
 				ul
 					li
@@ -779,6 +788,9 @@ header
 						&.notif
 							a
 								color: rgba(0,0,0,.5)
+
+								span.dot
+									opacity: 0.9
 
 								.avatar
 									background: rgba(255,255,255,.25)
