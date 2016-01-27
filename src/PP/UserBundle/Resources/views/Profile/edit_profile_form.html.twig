@@ -40,6 +40,7 @@
         <div class="profile-cover-new" id="coverImageContainer" style="background-image: url({{ asset(currentUser.coverImage.webPath("1500x500")) }})"></div>        
         <div class="profile-cover" {% if currentUser.coverImage != null %}style="background-color: #{{ currentUser.coverImage.avgColor }};background-image: url({{ asset(currentUser.coverImage.webPath("1500x500")) }});"{% endif %}></div>
     {% else %}
+        <div class="profile-cover-new" id="coverImageContainer" style="background-color: transparent"></div>
         <div class="profile-cover" style="background-color: #c24c4a;"></div>
     {% endif %}    
     {{ form_rest(editUserForm) }}

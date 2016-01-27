@@ -149,9 +149,9 @@ class ShowUserController extends Controller
                     
                     $em->persist($currentUser);
                     $em->flush();
-                                        
+                    $currentUser->createThumbnail();                    
                     return $this->redirect($this->generateUrl('pp_user_profile', array(
-                        'slug' => $currentUser->getSlug()                        
+                        'slug' => $currentUser->getSlug()
                     )));
                 }
             }
