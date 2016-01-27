@@ -8,91 +8,46 @@
 {% endblock %}
 
 {% block bellowHeader %}
-<div id="profileApp" >
-    
-    <base href=" " />
     {% if pageProfile.enabled == true %}
     <script>
         var d = document.getElementById("header");
         d.className += " profile";
-    </script>    
-    {# display profile header #}
-    <section class="profile" ng-controller="profileController as profile" >
-        <div id="profileHeaderContainer">
-            <div class="profile-cover" {% if pageProfile.coverImage != null %}style="background-color: #{{ pageProfile.coverImage.avgColor }};{% endif %}">
-                {% if pageProfile.coverImage != null %}
-                    <div class="banner" style="background-image: url({{ asset(pageProfile.coverImage.webPath("1500x500")) }})"></div>
-                    <div class="overlay"></div> 
-                {% endif %}
-            </div>      
-            <div class="profile-details">
-                <div class="avatar">
-                  <img src="{{ asset(pageProfile.profilImage.webPath("70x70")) }}" alt="{{ pageProfile.profilImage.alt }}">
+    </script>
+
+    <section class="profile-container" ng-controller="profileController as profile">
+        {# Show profile block #}
+        <div class="profile-show-cover" id="profileHeaderContainer">
+            <div class="profile-container">
+                <div class="profile-infos">
+                    <div class="avatar">
+                        <img src="{{ asset(pageProfile.profilImage.webPath("70x70")) }}" alt="{{ pageProfile.profilImage.alt }}">
+                    </div>
+                    <div class="username">{{ pageProfile.name }}</div>
+                    <div class="screenname">@{{ pageProfile.username }}</div>
+                    <div class="actions">
+                        {{ include('PPUserBundle:Profile:button_follow.html.twig') }}
+                    </div>
                 </div>
-                <h1 class="username">{{ pageProfile.name }}</h1>
-                <div class="screenname">@{{ pageProfile.username }}</div>
-                <p class="bio">{{ pageProfile.description }}</p>
-                <div class="profile-actions">
-                    {% if is_granted('ROLE_USER') %}
-                        {% if isHownProfile == true %}
-                            {{ form(editProfileForm) }}
-                            <a href="" id="editButton" class="button green" ng-click="profile.getEditProfileForm()" >
-                                Edit profile
-                            </a>
-                        {% else %}
-                            {{ form(followForm) }}
-                            {{ form(blockForm) }}
-                            {% if is_granted("ROLE_ADMIN") %}
-                                {{ form(setModeratorForm) }}
-                            {% endif %}
-                            <a href="" id="followButton" class="button green " ng-click="profile.patchFollow()" >{% if isFollowing == true %}Unfollow{% else %}Follow{% endif %}</a>
-                        {% endif %}
-                    {% endif %}                                                                                                                
-
-                    {% if isHownProfile == false %}
-                        {% if is_granted('ROLE_USER') %}
-
-                        <div class="dropdown-container profile-options stopPropagation">
-                            <a href="" ng-click="profile.showProfileOptions()" class="button"></a>
-                            <ul class="dropdown-choices" id="profileOptions" style="display: none;">
-                                <li class="dropdown-cat">
-                                    <a href="" id="blockButton" class="dropdown-choice" ng-click="profile.patchBlock({{ pageProfile.id }})" >
-                                        {% if isBlocked == true %}Unblock{% else %}Block{% endif %}
-                                    </a>
-                                    <a href="" class="dropdown-choice" ng-click="profile.showReportPopup({{ pageProfile.id }}, 3)">
-                                        Report
-                                    </a>
-                                </li>
-           
-                                {% if is_granted("ROLE_ADMIN") %}
-                                <li class="dropdown-cat">
-                                    <div class="dropdown-cat-title">Moderator commands</div>
-                                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </div>
-
-                    {% endif %}
-                {% endif %}
+                <div class="profile-stats">
+                    <ul>
+                        <li>{% if pageProfile.followingNb != null %}{{ pageProfile.followingNb }}{% else %}0{% endif %} Following</li>
+                        <li>{% if pageProfile.followersNb != null %}{{ pageProfile.followersNb }}{% else %}0{% endif %} Follower{% if pageProfile.followersNb != 1 %}s{% endif %}</li>
+                    </ul>
                 </div>
-
-                <ul class="details">
-                    <li>
-                        <strong>Following</strong>
-                        {% if pageProfile.followingNb != null %}{{ pageProfile.followingNb }}{% else %}0{% endif %}
-                    </li>
-                    <li>
-                        <strong>Followers</strong>
-                        {% if pageProfile.followersNb != null %}{{ pageProfile.followersNb }}{% else %}0{% endif %}
-                    </li>                                                         
-                    <li class="link">
-                        <a href="http://{{ pageProfile.contact }}" target="_blank" rel="nofollow" title="">{{ pageProfile.contact }}</a>                    
-                    </li>
-                </ul>
+                <div class="profile-bio">{{ pageProfile.description }}</div>
+                <div class="profile-links">
+                    <a href="http://{{ pageProfile.contact }}" target="_blank" rel="nofollow" title="{{ pageProfile.contact }}">
+                        {{ pageProfile.contact }}
+                    </a>
+                </div>
             </div>
+            {% if pageProfile.coverImage != null %}
+                <div class="profile-overlay"></div>
+            {% endif %}
+            <div class="profile-cover" {% if pageProfile.coverImage != null %}style="background-color: #{{ pageProfile.coverImage.avgColor }};background-image: url({{ asset(pageProfile.coverImage.webPath("1500x500")) }});"{% endif %}></div>
         </div>
-        <div id="editProfilContainer"></div>
+        {# Edit profile block #}
+        <div class="profile-edit-cover" id="editProfilContainer" style="display: none;"></div>
     </section>
     {% endif %}
 {% endblock %}
@@ -126,7 +81,7 @@
             <p>reason : {{ pageProfile.disableTicket.reason.name }}</p>
             <p>Details : {{ pageProfile.disableTicket.details }}</p>
         {% endif %}
-    </div>        
+    </div>
 {% endblock %}
 
 {% block sideInfoTop %}

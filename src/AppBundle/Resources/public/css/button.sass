@@ -47,11 +47,97 @@ button, .button
 		&:active
 			background: $content
 
-	&.green
-		&:hover, &:focus
-			background: $success
-			color: white
-			box-shadow: none
+	// PROFILE BUTTONS
+
+	&.follow, &.following, &.unfollow, &.edit, &.changes, &.cancel
+		background: white
+		color: rgba(0,0,0,.5)
+		font-size: 18px
+		padding: 7px 16px 7px 12px
+
+		&:before
+			display: block
+			float: left
+			color: rgba(0,0,0,.25)
+			font-family: "pp-font"
+			font-size: 14px
+			line-height: 14px
+			width: 14px
+			height: 14px
+			margin-right: 5px
+			padding: 5px 0 3px
 
 		&:active
-			background: $content
+			color: rgba(255,255,255,.5)
+
+			&:before
+				color: rgba(255,255,255,.25)
+
+	&.following, &.unfollow
+		width: 168px
+
+	&.follow, &.following, &.unfollow
+		padding: 7px 35px 7px 12px
+
+	// HOVERS
+
+	&.follow, &.changes
+		&:hover
+			background: $success
+
+	&.unfollow, &.cancel
+		&:hover
+			background: $danger
+
+	&.edit
+		&:hover
+			background: $infos
+
+	// ICONS
+
+	&.follow
+		&:before
+			content: $icon-plus
+
+	&.following
+		&:before
+			font-size: 10px
+			line-height: 14px
+			content: $icon-checked
+
+	&.unfollow
+		&:before
+			content: $icon-minus
+
+	&.edit
+		&:before
+			content: $icon-edit
+
+	&.changes
+		&:before
+			content: $icon-edit
+
+	&.cancel
+		&:before
+			content: $icon-cross
+
+.button-more
+	color: rgba(0,0,0,.5)
+	position: absolute
+	padding: 9px 6px 8px
+	border-left: 1px solid $borders
+	top: -9px
+	right: 0
+	text-decoration: none
+
+	&:hover, &:focus
+		text-decoration: none
+		background: $placeholder
+		border-radius: 0 3px 3px 0
+
+	&:before
+		content: $icon-dots
+		font-family: "pp-font"
+		font-size: 14px
+		width: 3px
+		height: 14px

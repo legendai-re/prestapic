@@ -49,10 +49,8 @@
                       var reader = new FileReader();                                            
                       reader.onload = (function(theFile) {
                         return function(e) {
+                            $("#profileImageContainer").css("background-image","url("+e.target.result+")");
                           var div = document.getElementById('profileImageContainer');
-                          div.innerHTML = ['<img src="', e.target.result,
-                                            '" title="', escape(theFile.name), '"/>'].join('');                          
-                          
                         };
                       })(f);
                       reader.readAsDataURL(f);                    
@@ -60,33 +58,60 @@
             }
             
             function handleCoverFileSelect(evt) {
-                    console.log(evt.target);
-                    var files = evt.target.files; // FileList object
-                   
-                    for (var i = 0, f; f = files[i]; i++) {                                          
-                      if (!f.type.match('image.*')) {
-                        continue;
-                      }
+                console.log(evt.target);
 
-                      var reader = new FileReader();                                            
-                      reader.onload = (function(theFile) {
+                var files = evt.target.files; // FileList object
+                for (var i = 0, f; f = files[i]; i++) {                                          
+                    if (!f.type.match('image.*')) {
+                        continue;
+                    }
+
+                    var reader = new FileReader();                                            
+                    reader.onload = (function(theFile) {
                         return function(e) {
-                          var div = document.getElementById('coverImageContainer');
-                          div.innerHTML = ['<div class="cover-upload" style="background-image: url(', e.target.result,
-                                            ')"></div>'].join('');                          
-                          
-                        };
-                      })(f);
-                      reader.readAsDataURL(f);                    
+                            $("#coverImageContainer").css("background-image", "url("+ e.target.result+")");
+                        }
+                    })(f);
+                    reader.readAsDataURL(f);                    
                 }
             }
             
             var canFollow = true;
-            this.patchFollow = function(){
+            this.showUnfollow = function() {
+                if($("#followButton").css("display") == "none") {
+                    $("#unfollowButton").css("display", "inline-block");
+                    $("#followingButton").css("display", "none");
+                }
+            }
+
+            this.hideUnfollow = function() {
+                if($("#followButton").css("display") == "none"){
+                    $("#unfollowButton").css("display", "none");
+                    $("#followingButton").css("display", "inline-block");
+                }
+            }
+
+            this.follow = function() {
+                if (canFollow) {
+                    $("#followingButton").css("display", "inline-block");
+                    $("#followButton").css("display", "none");
+                    patchFollow();
+                };
+            }
+
+            this.unfollow = function() {
+                if (canFollow) {
+                    $("#followingButton").css("display", "none");
+                    $("#unfollowButton").css("display", "none");
+                    $("#followButton").css("display", "inline-block");
+                    patchFollow();
+                }
+            }
+
+            var patchFollow = function(){
                 if(canFollow){
                     canFollow = false;
-                    if($("#followButton").html() == "Follow")$("#followButton").html("Unfollow")
-                    else $("#followButton").html("Follow")
+                    
                     var formAction = document.forms["pp_user_api_patch_user_follow_form"].action;
                     var myData = {};                    
                     $http({
@@ -167,6 +192,7 @@
                             var editForm = angular.element(response.data);                        
                             $compile(editForm)($scope);
                             $('#profileHeaderContainer').css("display", "none");
+                            $('#editProfilContainer').css("display", "block");
                             angular.element( document.querySelector('#editProfilContainer')).append(editForm);
                             document.getElementById('pp_userbundle_profile_edit_profilImage_file').addEventListener('change', handleProfileFileSelect, false);
                             document.getElementById('pp_userbundle_profile_edit_coverImage_file').addEventListener('change', handleCoverFileSelect, false);
