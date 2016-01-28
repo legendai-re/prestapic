@@ -50,15 +50,41 @@ class ShowUserController extends Controller
         }
         
         $setModeratorForm = null;
-        $isModerator = false;
+        $setAdminForm = null;
+        $isAdmin = false;
         if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') && $currentUser != null) {
-            if($this->get('pp_user.service.role')->isGranted('ROLE_MODERATOR', $pageProfile))$isModerator = true;
+            $isAdmin = true;
             
             /* create set moderator form */        
             $setModeratorForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_patch_moderator_form', 'form', array(), array())         
                 ->setAction($this->generateUrl('pp_user_api_patch_moderator', array("userId"=>$pageProfile->getId(), "page"=>1), true))
                 ->getForm()
                 ->createView();
+            
+            /* create set admin form */
+            $data = array();
+            $setAdminForm = $this->createFormBuilder($data);
+            
+            if(!$pageProfile->hasRole("ROLE_ADMIN")){
+                $setAdminForm->add('set admin', 'submit');               
+            }
+            else{
+                $setAdminForm->add('unset admin', 'submit');
+            }                        
+            $setAdminForm = $setAdminForm->setAction($this->generateUrl('pp_user_profile', array('slug' => $pageProfile->getSlug())))->getForm();                       
+            if ($request->isMethod('POST')) {
+                $setAdminForm->handleRequest($request);
+                if ($setAdminForm->isValid()){
+                    if(!$pageProfile->hasRole("ROLE_ADMIN")){$pageProfile->addRole("ROLE_ADMIN");}
+                    else {$pageProfile->removeRole("ROLE_ADMIN");}
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('pp_user_profile', array(
+                        'slug' => $pageProfile->getSlug()
+                    )));
+                }        
+            }
+            
+            $setAdminForm = $setAdminForm->createView();
         }               
         
         /////////////////////////////////
@@ -119,8 +145,9 @@ class ShowUserController extends Controller
             'isBlocked' => $isBlocked,
             'upvoteRequestForm' => $upvoteRequestForm->createView(),
             'setModeratorForm' => $setModeratorForm,
-            'isModerator' => $isModerator,
+            'isAdmin' => $isAdmin,
             'contentToDisplay' => $contentToDisplay,
+            'setAdminForm' => $setAdminForm
         ));
     }        
     

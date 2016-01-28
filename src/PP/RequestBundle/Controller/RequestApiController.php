@@ -46,7 +46,7 @@ class RequestApiController extends Controller
         $categoriesParam = array();
         $concerningMeParam = false;
         $requestTypeParam = Constants::REQUEST_PENDING;
-        
+        $screenWidth = 1920;
          /* handle GET data */
         if ($request->isMethod('GET')) {
             
@@ -67,7 +67,10 @@ class RequestApiController extends Controller
             }
             if($request->get('categories') != null){
                 $categoriesParam = explode(" ",  $request->get('categories'));
-            }                                 
+            }
+            if($request->get('w') != null){
+                $screenWidth = $request->get('w');
+            }  
         }                
         
         /* init repositories */
@@ -156,7 +159,8 @@ class RequestApiController extends Controller
                     'imageRequestList' => $imageRequestList,                
                     'displayMode' => $displayMode,
                     'propositionsList' => $propositionsList,                    
-                    'canUpvoteImageRequest' => $canUpvoteImageRequest
+                    'canUpvoteImageRequest' => $canUpvoteImageRequest,
+                    'screenWidth' => $screenWidth
                 ))
                 ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'requestList'));
         }else if($contentToDisplay == Constants::DISPLAY_PROPOSITION){

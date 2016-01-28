@@ -1,6 +1,6 @@
 <?php
 $err_level = error_reporting(0);  
-$mysqli = new mysqli("localhost", "root", "bubule28", "symfony");
+$mysqli = new mysqli("localhost", "root", "", "");
 
 $result = $mysqli->query("TRUNCATE TABLE active_user;");
 $result = $mysqli->query("

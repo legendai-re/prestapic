@@ -35,8 +35,11 @@
                 </li>
                 {% if is_granted("ROLE_ADMIN") %}
                 <li class="dropdown-cat">
-                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
+                    {{ form(setAdminForm) }}
                 </li>
+                <li class="dropdown-cat">
+                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isAdmin == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
+                </li>                
                 {% endif %}
             </ul>
 
@@ -65,8 +68,11 @@
                 </li>
                 {% if is_granted("ROLE_ADMIN") %}
                 <li class="dropdown-cat">
-                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
+                    {{ form(setAdminForm) }}
                 </li>
+                <li class="dropdown-cat">
+                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isAdmin == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
+                </li>               
                 {% endif %}
             </ul>
 

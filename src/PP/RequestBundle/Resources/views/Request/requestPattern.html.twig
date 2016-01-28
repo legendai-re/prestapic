@@ -55,9 +55,15 @@
             {% for proposition in propositionsList['imageRequest_'~imageRequest.id] if not break %}                
                 <a class="prop-img" style="background-color: #{{ proposition.image.avgColor }};" ng-href="{{ asset(proposition.image.webPath("original")) }}" ng-click="requests.showPopup({{ proposition.id }})">
                     <img 
+                    {% if screenWidth >= 450 %}
                     bn-lazy-src="{{ asset(proposition.image.webPath("home")) }}"
                     alt="{{ proposition.image.alt }}"
-                    />                
+                    />    
+                    {% else %}
+                    bn-lazy-src="{{ asset(proposition.image.webPath("single")) }}"
+                    alt="{{ proposition.image.alt }}"
+                    />
+                    {% endif %}
                     {% if loop.index == 3  %}{% set break = true %}{% endif %}
                     {% if loop.index == 2 and imageRequest.propositionsNb > 3 %}{% set break = true %}{% endif %}
                 </a> 

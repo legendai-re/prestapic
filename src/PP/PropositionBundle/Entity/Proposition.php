@@ -385,6 +385,7 @@ class Proposition
      */
     public function setDisableTicket(\PP\ReportBundle\Entity\DisableTicket $disableTicket = null)
     {
+        $this->imageRequest->removeProposition($this);
         $this->disableTicket = $disableTicket;
 
         return $this;

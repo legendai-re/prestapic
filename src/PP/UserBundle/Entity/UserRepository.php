@@ -66,6 +66,7 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         $qb = $qb   
                     ->distinct(true)
                     ->where($qb->expr()->like('u.name', ':search'))
+                    ->orWhere($qb->expr()->like('u.username', ':search'))
                     ->setParameter('search', '%'.$search.'%')
                     ->andWhere("u.enabled = true")
                     ->leftJoin('u.messageThreads', 'mT')   

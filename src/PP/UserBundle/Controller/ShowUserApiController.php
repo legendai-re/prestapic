@@ -42,6 +42,7 @@ class ShowUserApiController extends Controller
         $userRepository = $em->getRepository('PPUserBundle:User');        
                 
         $pageProfile = $userRepository->find($userId);
+        $screenWidth = 1920;
         
         if ($request->isMethod('GET')) {
             
@@ -50,6 +51,10 @@ class ShowUserApiController extends Controller
             if($request->get('content_to_display_profile') != null){
                 $session->set('contentToDisplayProfile', $request->get('content_to_display_profile'));
             }
+            
+            if($request->get('w') != null){
+                $screenWidth = $request->get('w');
+            } 
         }
         
         if($session->get('contentToDisplayProfile') != null){
@@ -101,7 +106,8 @@ class ShowUserApiController extends Controller
                     'nextPage' => $nextPage,
                     'imageRequestList' => $imageRequestList,                
                     'propositionsList' => $propositionsList,                    
-                    'canUpvoteImageRequest' => $canUpvoteImageRequest
+                    'canUpvoteImageRequest' => $canUpvoteImageRequest,
+                    'screenWidth' => $screenWidth
                 ))
                 ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'requestList'));
         }else if($contentToDisplay == UserConstants::DISPLAY_PROPOSITION){

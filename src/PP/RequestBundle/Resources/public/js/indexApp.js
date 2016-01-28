@@ -54,7 +54,7 @@
                 readyToChange = false;
                 var formAction = document.forms["pp_request_api_get_request"].action;
                 document.getElementById('loadingGif').style.display = 'block';                    
-                $http.get(formAction+".html"+getParams+"&page="+page).
+                $http.get(formAction+".html"+getParams+"&page="+page+"&w="+$(window).width()).
                     then(function(response) {                        
                         var newPage = angular.element(response.data);                        
                         $compile(newPage)($scope);                             

@@ -1,7 +1,7 @@
 <form ng-controller="filtersController as filters" name="pp_request_homepage_form" novalidate ng-submit="filters.submitForm()" >
     <input type="hidden" name="search_action" value='{{ url('pp_request_homepage', {}, true) }}' />
     
-    <input maxlength="47" id="main_search_input" tabindex="1" autocomplete="off" ng-focus="header.showSearchOptions(filters.searchQuery)" ng-change="header.showSearchChoise(filters.searchQuery)" name="name" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find pictures, requests or users on Prestapic..." />
+    <input maxlength="500" id="main_search_input" tabindex="1" autocomplete="off" ng-focus="header.showSearchOptions(filters.searchQuery)" ng-change="header.showSearchChoise(filters.searchQuery)" name="name" type='text' class="main-search stopPropagation" ng-model='filters.searchQuery' searchQueryname='search_query' placeholder="Find pictures, requests or users on Prestapic..." />
        
     <div class="search-options-list" style="display:none;" id="searchUser" class="stopPropagation">
         <ul>
