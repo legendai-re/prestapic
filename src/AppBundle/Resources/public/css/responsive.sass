@@ -1,6 +1,6 @@
 @import init
 
-@media (max-device-width: 1200px)
+@media (max-width: 1200px)
 	section.main
 		padding-bottom: 0
 
@@ -18,7 +18,7 @@
 			.widget
 				width: 770px
 
-@media (max-device-width: 980px)
+@media (max-width: 980px)
 	header
 		div.content
 			.search
@@ -42,7 +42,7 @@
 						&.search-rbutton-container
 							display: inline-block
 
-@media (max-device-width: 790px)
+@media (max-width: 790px)
 	section.main
 		.main-left
 			.main-top
@@ -52,7 +52,7 @@
 			.widget
 				padding: 0 20px
 
-@media (max-device-width: 770px)
+@media (max-width: 770px)
 	section.main
 		.sidebar
 			width: 100%
@@ -60,7 +60,7 @@
 			.widget
 				width: 100%
 
-@media (min-device-width: 580px) and (max-device-width: 770px)
+@media (min-width: 580px) and (max-width: 770px)
 	section.overlay
 		.box-container
 			width: 90%
@@ -175,7 +175,9 @@
 		background-image: none
 		padding: 60px 20px
 		font-size: 18px
-		color: #444
+
+		.line
+			color: $content
 
 		.learn
 			margin-top: 10px
@@ -346,7 +348,7 @@
 
 					a.overlay
 						width: 100%
-						height: auto
+						height: 100%
 
 					.img-title
 						padding: 0 20px 20px
@@ -636,13 +638,13 @@
 				height: 56px
 				bottom: 0
 
-@media (max-device-width: 370px)
+@media (max-width: 370px)
 	header
 		div.content
 			.header-actions
 				.header-actions-buttons
-					ul
-						li
+					ul.connected
+						li.header-actions-new
 							a.button
 								position: relative
 								width: 24px
