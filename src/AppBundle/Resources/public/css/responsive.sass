@@ -8,6 +8,7 @@
 			float: initial
 			display: block
 			margin: 0 auto
+			overflow: hidden
 
 		.sidebar
 			float: initial
@@ -35,7 +36,7 @@
 						padding: 0
 
 			nav.menu
-				width: 153px
+				max-width: 153px
 
 				ul
 					li
@@ -152,10 +153,13 @@
 					ul
 						height: 56px
 
-						&.connected
+						&.connected, &.disconnected
 							position: absolute
 							left: 66px
 							top: 0
+
+							li
+								margin-left: 0
 
 						li
 							&.header-action-new
@@ -647,21 +651,21 @@
 						li.header-actions-new
 							a.button
 								position: relative
-								width: 24px
-								height: 24px
-								margin: 16px 6px
+								width: 32px
+								height: 32px
+								margin: 12px 6px 12px 0
 								padding: 4px
 								font-size: 0
 								color: transparent
 
 								&:before
 									display: block
-									width: 16px
-									height: 16px
+									width: 24px
+									height: 24px
 									padding: 0
 									text-align: center
 									font-family: "pp-font"
 									font-size: 14px
-									line-height: 17px
+									line-height: 25px
 									content: $icon-plus
 									color: $main-color
