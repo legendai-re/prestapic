@@ -6,145 +6,160 @@
 
         <div class="search">                                                        
             {{ render(controller('PPHeaderBundle:header:showFilters')) }}
-        </div>
-        <nav class="menu">            
-            <ul>
-            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                {# new request button #}
-                <li ><a class="button red stopPropagation" href="" title="Send your request" ng-click="header.showNewRequestForm()">Send your request</a></li>                                                
-                
-                {# notification #}
-                <li class="stopPropagation">
+        </div>   
+        <div class="header-actions">       
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <div class="header-actions-buttons">
+                <ul class="connected">
+                    {# new request button #}
+                    <li><a class="button red stopPropagation" href="" title="Send your request" ng-click="header.showNewRequestForm()">Send your request</a></li>
+                </ul>
+            </div>
+            <nav class="menu">
+                <ul>
+                    <li class="search-rbutton-container">
+                        <a href="" class="search-rbutton" title="Find pictures, requests or users on Prestapic..."></a>
+                    </li>
+                    {# notification #}
+                    <li class="stopPropagation">
+                        
+                        {# notification button #}                    
+                        <a id="notificationButton" class="notification {% if currentUser.notificationsNb > 0 %}alert{% endif %}" href="" title="Notifications" id="notificationsNew" ng-click="header.showNotifications()">
+                            <div id="notificationsNb" class="number">{% if currentUser.notificationsNb != null %}{{ currentUser.notificationsNb }}{% else %}0{% endif %}</div>
+                        </a>                   
+                        
+                        {# notification list #}
+                        {% verbatim %}                     
+                            <div id="notificationList" class="dropdown notif">
+                                <div class="dropdown-caret">
+                                    <span class="caret-outer"></span>
+                                    <span class="caret-inner"></span>
+                                </div>                           
+                                <ul class="notifs">
+                                    <li id="noNotification" class="no-notification" style="display:none;">No notification yet</li>
+                                    <li id="loadingNotif" style="height: 50px" class="notif load-content">                                    
+                                        <span class="bubble"></span>                                    
+                                    </li>
+                                    <li ng-repeat="notification in notifications" ng-cloak class="notif">
+                                       
+                                        <a  ng-click="header.patchNotificationClicked($index)"  >
+                                            <div class="avatar">
+                                                <img ng-src="{{ notification.authorImg }}" alt="{{ notification.authorName }} profile image" />
+                                            </div>
+                                            
+                                            <!-- follow -->
+                                            <div ng-if="notification.type==1" class="desc">
+                                                <b>{{ notification.authorName }}</b>
+                                                followed you
+                                                <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
+                                            </div>
+                                            
+                                            <!-- new proposition -->
+                                            <div class="desc" ng-if="notification.type==3">
+                                                <b>{{ notification.authorName }}</b>
+                                                sent a reply to
+                                                <b>{{ notification.targetTitle }}</b>
+                                                <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
+                                            </div>
+                                            
+                                            <!-- proposition selected -->
+                                            <div class="desc" ng-if="notification.type==2">
+                                                <b>{{ notification.authorName }}</b>
+                                                selected your picture for
+                                                <b>{{ notification.targetTitle }}</b>
+                                                <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
+                                            </div>
+                                            
+                                            <!-- proposition selected -->
+                                            <div class="desc" ng-if="notification.type==4">
+                                                <b>{{ notification.authorName }}</b>
+                                                send you a private message
+                                                <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
+                                            </div>
+                                            
+                                            <!-- proposition comment -->
+                                            <div class="desc" ng-if="notification.type==5">
+                                                <b>{{ notification.authorName }}</b>
+                                                post a comment on
+                                                <b>{{ notification.targetTitle }}</b>
+                                                <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
+                                            </div>
+                                            
+                                            <span ng-if="notification.isClicked"class="dot visited"></span>
+                                            <span ng-if="notification.isViewed && !notification.isClicked" class="dot seen" ></span>
+                                            <span ng-if="!notification.isViewed && !notification.isClicked" class="dot new" ></span></span>
+                                        </a>
+                                        
+                                    </li>                                
+                                    <li ng-if="showMoreNotification" ng-show="notifications.length" class="more-notif">
+                                        <a ng-click="header.showMoreNotifications()" href="">Show more notification</a>
+                                    </li>                            
+                                </ul>                        
+                            </div>                            
+                        {% endverbatim %}
+                    </li>
                     
-                    {# notification button #}                    
-                    <a id="notificationButton" class="notification {% if currentUser.notificationsNb > 0 %}alert{% endif %}" href="" title="Notifications" id="notificationsNew" ng-click="header.showNotifications()">
-                        <div id="notificationsNb" class="number">{% if currentUser.notificationsNb != null %}{{ currentUser.notificationsNb }}{% else %}0{% endif %}</div>
-                    </a>                   
-                    
-                    {# notification list #}
-                    {% verbatim %}                     
-                        <div id="notificationList" class="dropdown notif">
+                    {# profile menu #}
+                    <li class="stopPropagation">
+                        {# show profile menu button #}
+                        <a ng-click="header.showUserMenu()" class="account" href="" title="{{ app.user.name }} ({{ app.user.username }})">
+                            <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.profilImage.alt }}">
+                        </a>
+                        
+                        {# profile menu #}
+                        <div id="userMenu" class="dropdown menu">
                             <div class="dropdown-caret">
                                 <span class="caret-outer"></span>
                                 <span class="caret-inner"></span>
-                            </div>                           
-                            <ul class="notifs">
-                                <li id="noNotification" class="no-notification" style="display:none;">No notification yet</li>
-                                <li id="loadingNotif" style="height: 50px" class="notif load-content">                                    
-                                    <span class="bubble"></span>                                    
-                                </li>
-                                <li ng-repeat="notification in notifications" ng-cloak class="notif">
-                                   
-                                    <a  ng-click="header.patchNotificationClicked($index)"  >
-                                        <div class="avatar">
-                                            <img ng-src="{{ notification.authorImg }}" alt="{{ notification.authorName }} profile image" />
-                                        </div>
-                                        
-                                        <!-- follow -->
-                                        <div ng-if="notification.type==1" class="desc">
-                                            <b>{{ notification.authorName }}</b>
-                                            followed you
-                                            <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
-                                        </div>
-                                        
-                                        <!-- new proposition -->
-                                        <div class="desc" ng-if="notification.type==3">
-                                            <b>{{ notification.authorName }}</b>
-                                            sent a reply to
-                                            <b>{{ notification.targetTitle }}</b>
-                                            <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
-                                        </div>
-                                        
-                                        <!-- proposition selected -->
-                                        <div class="desc" ng-if="notification.type==2">
-                                            <b>{{ notification.authorName }}</b>
-                                            selected your picture for
-                                            <b>{{ notification.targetTitle }}</b>
-                                            <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
-                                        </div>
-                                        
-                                        <!-- proposition selected -->
-                                        <div class="desc" ng-if="notification.type==4">
-                                            <b>{{ notification.authorName }}</b>
-                                            send you a private message
-                                            <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
-                                        </div>
-                                        
-                                        <!-- proposition comment -->
-                                        <div class="desc" ng-if="notification.type==5">
-                                            <b>{{ notification.authorName }}</b>
-                                            post a comment on
-                                            <b>{{ notification.targetTitle }}</b>
-                                            <small title="{{ notification.date }}">{{ notification.dateLight }}</small>
-                                        </div>
-                                        
-                                        <span ng-if="notification.isClicked"class="dot visited"></span>
-                                        <span ng-if="notification.isViewed && !notification.isClicked" class="dot seen" ></span>
-                                        <span ng-if="!notification.isViewed && !notification.isClicked" class="dot new" ></span></span>
+                            </div>
+                            <ul>
+                                <li class="username">
+                                    <a target="_self" href="{{ path('pp_user_profile', {'slug': app.user.slug}) }}">
+                                    <b>{{ app.user.name }}</b>
+                                    <small>View profile</small>
                                     </a>
-                                    
-                                </li>                                
-                                <li ng-if="showMoreNotification" ng-show="notifications.length" class="more-notif">
-                                    <a ng-click="header.showMoreNotifications()" href="">Show more notification</a>
-                                </li>                            
-                            </ul>                        
-                        </div>                            
-                    {% endverbatim %}
-                </li>
-                
-                {# profile menu #}
-                <li class="stopPropagation">
-                    {# show profile menu button #}
-                    <a ng-click="header.showUserMenu()" class="account" href="" title="{{ app.user.name }} ({{ app.user.username }})">
-                        <img src="{{ asset(currentUser.profilImage.webPath("70x70")) }}" alt="{{ currentUser.profilImage.alt }}">
-                    </a>
-                    
-                    {# profile menu #}
-                    <div id="userMenu" class="dropdown menu">
-                        <div class="dropdown-caret">
-                            <span class="caret-outer"></span>
-                            <span class="caret-inner"></span>
+                                </li>
+                                <li class="divider"></li>
+                                {% if is_granted("ROLE_MODERATOR") %}                            
+                                <li class="follows">
+                                    <a target="_self" href="{{ path('pp_dashboard_report') }}">Dashboard</a>
+                                </li>
+                                <li class="divider"></li>
+                                {% endif %}
+                                <li class="pm">
+                                    <a href="" ng-click="header.showMessage()">
+                                    Messages                               
+                                    </a>
+                                </li>
+                                {#<li class="follows">
+                                    <a href="">Manage follows</a>
+                                </li>#}
+                                <li class="divider"></li>
+                                <li class="settings">
+                                    <a target="_self" href="{{ path('pp_user_setting', {'slug': app.user.slug}) }}">Settings</a>
+                                </li>
+                                <li class="logout">
+                                    <a target="_self" href="{{ path('fos_user_security_logout') }}">Log out</a>
+                                </li>
+                            </ul>
                         </div>
-                        <ul>
-                            <li class="username">
-                                <a target="_self" href="{{ path('pp_user_profile', {'slug': app.user.slug}) }}">
-                                <b>{{ app.user.name }}</b>
-                                <small>View profile</small>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            {% if is_granted("ROLE_MODERATOR") %}                            
-                            <li class="follows">
-                                <a target="_self" href="{{ path('pp_dashboard_report') }}">Dashboard</a>
-                            </li>
-                            <li class="divider"></li>
-                            {% endif %}
-                            <li class="pm">
-                                <a href="" ng-click="header.showMessage()">
-                                Messages                               
-                                </a>
-                            </li>
-                            {#<li class="follows">
-                                <a href="">Manage follows</a>
-                            </li>#}
-                            <li class="divider"></li>
-                            <li class="settings">
-                                <a target="_self" href="{{ path('pp_user_setting', {'slug': app.user.slug}) }}">Settings</a>
-                            </li>
-                            <li class="logout">
-                                <a target="_self" href="{{ path('fos_user_security_logout') }}">Log out</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                
-            {% else %}
-                {# if not connected #}
-                <li><a target="_self" class="button signInUp" href="" >Send your request</a></li>                                                                       
-                <li><a target="_self" class="button red signInUp" href=""  title="Sign in / Sign up">Sign in / Sign up</a></li>
-            {% endif %}
-            </ul>
-        </nav>
+                    </li>
+                </ul>
+            </nav>
+        {% else %}
+            {# if not connected #}
+            <div class="header-actions-buttons">
+                <ul class="disconnected">
+                    <li class="header-action-new">
+                        <a target="_self" class="button signInUp" href="" >Send your request</a>
+                    </li>
+                    <li class="header-action-sign">
+                        <a target="_self" class="button red signInUp" href=""  title="Sign in / Sign up">Sign in / Sign up</a>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+        </div>
         
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             {{ form(notificationForm) }}

@@ -1,9 +1,71 @@
 @import init
 
-@media (max-width: 450px)
-	div.content
-		padding: 0
+@media (max-device-width: 1200px)
+	section.main
+		padding-bottom: 0
 
+		.main-left
+			float: initial
+			display: block
+			margin: 0 auto
+
+		.sidebar
+			float: initial
+			display: block
+			margin: 0 auto
+			width: 770px
+
+			.widget
+				width: 770px
+
+@media (max-device-width: 980px)
+	header
+		div.content
+			.search
+				height: 56px
+				display: none
+
+				form
+					height: 56px
+
+					input.main-search
+						height: 56px
+						font-size: 16px
+						border: none
+						padding: 0
+
+			nav.menu
+				width: 153px
+
+				ul
+					li
+						&.search-rbutton-container
+							display: inline-block
+
+@media (max-device-width: 790px)
+	section.main
+		.main-left
+			.main-top
+				padding: 0 20px
+
+		.sidebar
+			.widget
+				padding: 0 20px
+
+@media (max-device-width: 770px)
+	section.main
+		.sidebar
+			width: 100%
+
+			.widget
+				width: 100%
+
+@media (min-device-width: 580px) and (max-device-width: 770px)
+	section.overlay
+		.box-container
+			width: 90%
+
+@media (max-width: 770px)
 	header
 		background: #C24C4A
 		color: white
@@ -21,6 +83,10 @@
 					width: 30px
 					height: 56px
 
+					&:hover
+						&:before
+							color: white
+
 					&:before
 						color: white
 						font-size: 24px
@@ -28,22 +94,10 @@
 						top: 50%
 						@include vendor-prefix(transform, translateY(-50%))
 
-			.search
-				height: 56px
-				display: none
-
-				form
-					height: 56px
-
-					input.main-search
-						height: 56px
-						font-size: 16px
-						border: none
-						padding: 0
-
 			nav.menu
-				width: calc(100% - 45px)
+				width: 116px
 				height: 56px
+				margin-left: 10px
 
 				ul
 					li
@@ -52,7 +106,7 @@
 						&:first-child
 							margin-left: 0
 
-						a.notification
+						a.notification, a.search-rbutton
 							position: relative
 							width: 24px
 							height: 24px
@@ -61,16 +115,20 @@
 							background: transparent
 							color: white
 
+							.number
+								display: none
+
 							&:before
 								padding: 0
 								font-size: 16px
 
-							&.open
+							&:hover, &.open, &:focus
 								background: white!important
 								color: $main-color
 
 							&.alert
 								.number
+									display: block
 									position: absolute
 									top: 0
 									left: 0
@@ -89,15 +147,44 @@
 							height: 24px
 							margin: 16px 0 16px 10px
 
-						a.button
-							float: left
-							margin: 12px 0
-							padding: 7px 14px
-							background: white
-							color: #444
-							left: 65px
-							font-size: 14px
+			.header-actions
+				.header-actions-buttons
+					ul
+						height: 56px
+
+						&.connected
 							position: absolute
+							left: 66px
+							top: 0
+
+						li
+							&.header-action-new
+								display: none
+
+							a
+								&.button
+									float: left
+									margin: 12px 0
+									padding: 7px 14px
+									background: white
+									color: #444
+									font-size: 14px
+
+	section.jumbotron
+		background: #D8D8D8
+		background-image: none
+		padding: 60px 20px
+		font-size: 18px
+		color: #444
+
+		.learn
+			margin-top: 10px
+
+	section.main
+		padding: 20px 0
+	
+	div.content
+		padding: 0
 
 	section.main
 		padding: 20px 0
@@ -227,6 +314,352 @@
 						font-size: 15px
 						padding: 20px 0
 
+			// PROPOSITION SINGLE
+
+			article.replies
+				width: 100%
+				margin: 0
+
+				.more-replies
+					width: 100%
+					font-size: 17px
+					margin: 0
+					padding: 10px 0
+
+				.reply
+					width: 100%
+					height: auto
+					display: inline-block
+					margin: 0 0 5px
+					float: left
+					position: relative
+
+					.prop
+						width: 100%
+						height: auto
+						min-height: 200px
+
+						img
+							width: 100%
+							height: auto
+							float: left
+
+					a.overlay
+						width: 100%
+						height: auto
+
+					.img-title
+						padding: 0 20px 20px
+
+						.infos
+							font-size: 15px
+
+							a.author
+								width: auto
+								font-size: 19px
+
+					a.selecting-prop
+						color: rgba(255,255,255,0)
+						top: 20px
+						right: 20px
+						padding: 5px 5px 5px 10px
+						font-size: 15px
+						line-height: 20px
+
+						&:after
+							width: 24px
+							height: 20px
+							margin-left: 5px
+							font-size: 20px
+
+					.actions
+						padding: 0 20px 20px
+
+						a.count-vote
+							padding: 0 5px 2px
+
+					&.selected
+						width: 100%
+						height: auto
+
+						.prop
+							width: 100%
+							height: auto
+
+							img
+								width: 100%
+								height: auto
+
+						a.overlay
+							width: 100%
+							height: auto
+
+						.img-title
+							a.avatar
+								width: 48px
+								height: 48px
+
+							.infos
+								padding-left: 10px
+
+			article.add-prop
+				width: 100%
+				padding: 15px 20px 25px
+				margin: 25px 0
+
+				.title-boxe
+					font-size: 17px
+					margin-bottom: 10px
+
+				.dragzone
+					width: 100%
+					height: 480px
+					margin-bottom: 10px
+
+					&:hover, &.drag
+						border-color: rgba(0,0,0,.25)
+
+					.dragzone-uploaded
+						position: absolute
+						top: 50%
+						left: 50%
+						@include vendor-prefix(transform, translate(-50%,-50%))
+						min-width: 100%
+						min-height: 100%
+						z-index: 2
+
+						.banner, .overlay
+							position: absolute
+							top: 50%
+							left: 50%
+							@include vendor-prefix(transform, translate(-50%,-50%))
+							min-width: 100%
+							min-height: 100%
+							z-index: 2
+
+							.img-preview
+								background-repeat: no-repeat
+								background-size: cover
+								position: absolute
+								top: 50%
+								left: 50%
+								@include vendor-prefix(transform, translate(-50%,-50%))
+								width: 100%
+								height: 100%
+								z-index: 2
+
+						.overlay
+							.button-close
+								background: transparent
+								border: 0
+								font-size: 32px
+								padding: 5px 20px 5px 10px
+								font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif
+								letter-spacing: 0
+								font-weight: 300
+								font-style: normal
+								color: rgba(255,255,255,.75)
+								text-shadow: 0 0 15px rgba(0,0,0,.5)
+								position: absolute
+								top: 0
+								right: 0
+
+								&:hover, &:focus
+									text-decoration: none
+									color: white
+
+					.dragzone-upload
+						width: 100%
+						height: 480px
+						position: relative
+						padding: 150px 0
+						z-index: 1
+
+						p
+							width: 100%
+							text-align: center
+							color: #777
+
+							&:before
+								display: block
+								font-family: "pp-font"
+								color: $borders
+								content: $icon-upload
+								font-size: 120px
+								margin-bottom: 10px
+
+							.choose
+								color: $main-color
+
+								&:hover
+									color: #5E1C1B
+
+						input
+							position: absolute
+							margin: 0
+							padding: 0
+							width: 100%
+							height: 100%
+							outline: none
+							top: 0
+							left: 0
+							opacity: 0
+
+							&:focus
+								box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(196, 75, 71, 0.5)
+								opacity: 1
+								padding-top: 478px
+
+						button
+							display: block
+							margin: 15px auto
+							padding: 8px 15px
+							background: transparent
+							border: 2px solid $main-color
+							color: $main-color
+							font-weight: 600
+							font-size: 15px
+							width: auto
+							height: auto
+							border-radius: 3px
+							outline: none
+							z-index: 2
+							position: relative
+
+							&:hover
+								background: $main-color
+								color: white
+
+							&:active
+								border: 0
+
+				span
+					font-size: 15px
+
+				.button
+					float: right
+
+			article.comments
+				width: 100%
+				margin: 25px 0
+
+				.title-section
+					font-size: 22px
+					margin-bottom: 15px
+
+				ul.list-comments
+					padding: 0
+					margin: 0
+
+					li.comment
+						padding: 15px 20px
+
+						a.avatar
+							width: 32px
+							height: 32px
+
+						.comment-container, .composer-container
+							width: 683px
+							height: auto
+							font-size: 15px
+							margin-left: 15px
+
+						.composer-container
+							.comment-composer
+								width: 100%
+								height: 32px
+
+							.button-comment
+								padding: 8px
+								max-height: 35px
+
 		.sidebar
 			display: none
 
+	section.overlay
+		.box-container
+			width: 100%
+			height: 100%
+			border: none
+			border-radius: 0
+
+			&.new-request
+				width: 100%
+
+			.box-content
+				position: absolute
+				width: 100%
+				height: 100%
+				top: 0
+				bottom: 0
+				left: 0
+				right: 0
+
+			.box-top
+				position: absolute
+				top: 0
+				width: 100%
+				height: 44px
+
+			.edit-request-content
+				position: absolute
+				width: 100%
+				height: calc(100% - 44px)
+				top: 45px
+				left: 0
+				right: 0
+
+				.box-comp
+					position: absolute
+					width: 100%
+					height: calc(100% - 56px)
+
+					textarea.content
+						position: absolute
+						width: 100%
+						height: calc(100% - 56px - 82px)
+						top: 54px
+
+					.comp-details
+						position: absolute
+						width: 100%
+						height: auto
+						padding: 0
+						bottom: 0
+
+						.col-6
+							width: 100%
+
+			.box-bottom
+				position: absolute
+				width: 100%
+				height: 56px
+				bottom: 0
+
+@media (max-device-width: 370px)
+	header
+		div.content
+			.header-actions
+				.header-actions-buttons
+					ul
+						li
+							a.button
+								position: relative
+								width: 24px
+								height: 24px
+								margin: 16px 6px
+								padding: 4px
+								font-size: 0
+								color: transparent
+
+								&:before
+									display: block
+									width: 16px
+									height: 16px
+									padding: 0
+									text-align: center
+									font-family: "pp-font"
+									font-size: 14px
+									line-height: 17px
+									content: $icon-plus
+									color: $main-color

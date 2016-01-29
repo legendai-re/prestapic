@@ -4,11 +4,13 @@
         <div class="box-comp">                                         
             {{form_row(editRequestForm.title)}}
             {{form_row(editRequestForm.request, {'attr': {'rows': '15'}})}}
-            <div class="col-6">
-                {{form_row(editRequestForm.category)}}
-            </div>
-            <div class="col-6">
-                {{form_row(editRequestForm.tagsStr)}} 
+            <div class="comp-details">
+                <div class="comp-details-item col-6">
+                    {{form_row(editRequestForm.category)}}
+                </div>
+                <div class="comp-details-item col-6">
+                    {{form_row(editRequestForm.tagsStr)}} 
+                </div>
             </div>
         </div>
         <div class="box-bottom">
