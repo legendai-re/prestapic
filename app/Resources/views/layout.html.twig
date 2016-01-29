@@ -19,7 +19,14 @@
         '@PPMessageBundle/Resources/public/css/style.sass'
         '@AppBundle/Resources/public/css/responsive.sass' %}
         <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
-    {% endstylesheets %}        
+    {% endstylesheets %}
+    
+    {% stylesheets filter='cssrewrite, ?yui_css'
+        '@AppBundle/Resources/public/css/alertify.core.css'
+        '@AppBundle/Resources/public/css/alertify.bootstrap.css'    
+     %}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+    {% endstylesheets %}
 
 </head>
 
@@ -150,7 +157,7 @@
                                    '@PPMessageBundle/Resources/public/js/elastic.js'
                                    '@PPPropositionBundle/Resources/public/js/popupController.js'
                                    '@PPReportBundle/Resources/public/js/reportApp.js'
-                                   '@AppBundle/Resources/public/js/popup.js'   
+                                   '@AppBundle/Resources/public/js/alertify.js'   
     %}   
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}           

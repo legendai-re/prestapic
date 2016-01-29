@@ -51,9 +51,9 @@ class ShowUserController extends Controller
         
         $setModeratorForm = null;
         $setAdminForm = null;
-        $isAdmin = false;
+        $isModerator = false;
         if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') && $currentUser != null) {
-            $isAdmin = true;
+            if($this->get('security.authorization_checker')->isGranted('ROLE_MODERATOR'))$isModerator = true;
             
             /* create set moderator form */        
             $setModeratorForm = $this->get('form.factory')->createNamedBuilder('pp_user_api_patch_moderator_form', 'form', array(), array())         
@@ -145,7 +145,7 @@ class ShowUserController extends Controller
             'isBlocked' => $isBlocked,
             'upvoteRequestForm' => $upvoteRequestForm->createView(),
             'setModeratorForm' => $setModeratorForm,
-            'isAdmin' => $isAdmin,
+            'isModerator' => $isModerator,
             'contentToDisplay' => $contentToDisplay,
             'setAdminForm' => $setAdminForm
         ));
