@@ -12,8 +12,8 @@ header
 		text-decoration: none
 
 	div.content
-		max-width: 1260px
-		padding: 0 45px
+		max-width: 1200px
+		padding: 0 15px
 
 		h1.logo
 			background: transparent
@@ -53,7 +53,7 @@ header
 					z-index: 80
 
 		.search
-			width: calc(100% - 70px - 400px)
+			width: calc(100% - 370px)
 			height: 80px
 			display: inline-block
 			float: left
@@ -301,8 +301,34 @@ header
 								border: none
 								background: none
 
+		.header-actions
+			display: inline-block
+			float: right
+
+			.header-actions-buttons
+				display: inline-block
+
+				ul
+					width: auto
+					height: 76px
+					display: inline-block
+					float: right
+
+					li
+						display: inline-block
+						float: left
+
+						&:not(:first-child)
+							margin-left: 15px
+
+						a
+							display: block
+
+							&.button
+								margin: 20px 0
+
 		nav.menu
-			width: 400px
+			width: 102px
 			height: 76px
 			display: inline-block
 			float: right
@@ -316,15 +342,15 @@ header
 					list-style: none
 					display: inline-block
 					float: left
-					margin-left: 15px
+					margin: 0 0 0 15px
+
+					&.search-rbutton-container
+						display: none
 
 					a
 						display: block
 
-						&.button
-							margin: 20px 0
-
-						&.notification, &.account
+						&.notification, &.account, &.search-rbutton
 							display: block
 							background: $placeholder
 							width: 36px
@@ -338,7 +364,7 @@ header
 								box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(196, 75, 71, 0.5)
 								text-decoration: none
 
-						&.notification
+						&.notification, &.search-rbutton
 							background: $button-hover
 							color: $texts
 
@@ -350,24 +376,23 @@ header
 								background: $content!important
 								color: white
 
-						&.notification:before
-							display: block
-							width: 14px
-							height: 14px
-							padding: 11px
-							text-align: center
-							font-family: 'pp-font'
-							font-size: 14px
-							speak: none
-							font-style: normal
-							font-weight: normal
-							font-variant: normal
-							text-transform: none
-							line-height: 1
-							/* Better Font Rendering =========== */
-							-webkit-font-smoothing: antialiased
-							-moz-osx-font-smoothing: grayscale
-							content: $icon-notification
+						&.notification, &.search-rbutton
+							&:before
+								display: block
+								width: 14px
+								height: 14px
+								padding: 11px
+								text-align: center
+								font-family: 'pp-font'
+								font-size: 14px
+
+						&.notification
+							&:before
+								content: $icon-notification
+
+						&.search-rbutton
+							&:before
+								content: $icon-search
 
 						&.notification.alert
 							border-color: $main-color
@@ -717,21 +742,27 @@ header
 										color: rgba(255, 255, 255, 0.5)
 										border: 1px solid rgba(255, 255, 255, 0.5)
 
+			.header-actions
+				.header-actions-buttons
+					ul
+						li
+							a
+								&.button
+									background: rgba(255,255,255,.75)
+									color: rgba(0,0,0,.5)
+
+									&:hover, &:focus
+										background: rgba(255,255,255,1)
+										color: rgba(0,0,0,.5)
+
+									&:focus
+										box-shadow: 0 0 0 1px  white, 0 0 0 1px rgba(255,255,255,0.5)
+										text-decoration: none
+
 			nav.menu
 				ul
 					li
 						a
-							&.button
-								background: rgba(255,255,255,.75)
-								color: rgba(0,0,0,.5)
-
-								&:hover, &:focus
-									background: rgba(255,255,255,1)
-									color: rgba(0,0,0,.5)
-
-								&:focus
-									box-shadow: 0 0 0 1px  white, 0 0 0 1px rgba(255,255,255,0.5)
-									text-decoration: none
 
 							&.notification, &.account
 								background: rgba(255,255,255,.75)
