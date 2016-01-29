@@ -34,7 +34,7 @@ messageApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeCl
         text.style.minHeight = (text.scrollHeight)+'px';
         chatComposer.style.minHeight = (text.scrollHeight)+'px';
         chatComposer.style.maxHeight = (text.scrollHeight)+'px';
-        if($('#chatTextArea').height() < 200){
+        if($('#chatTextArea').height() < 500){
             text.style.maxHeight = (text.scrollHeight)+'px';
         }else{
             $('#chatTextArea').css("overflow", 'auto');
@@ -42,7 +42,6 @@ messageApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeCl
             text.style.minHeight = 199+'px';
             chatComposer.style.minHeight = 199+'px';
             chatComposer.style.maxHeight = 199+'px';
-            console.log("max");
         }
        
         if($('#chatTextArea').val().length == 0){
@@ -307,7 +306,12 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
         };
         
         this.callSendMessage = function(){
+            var content = $('#chatTextArea').val();  
+            var caret = getCaret($('#chatTextArea'));
+            $('#chatTextArea').val(content.substring(0, caret - 1) + content.substring(caret, content.length));
             sendMessage($scope.messageContent);
+            emptyChatTextArea();
+            
         }               
         
         var linesNumber = 0;
@@ -318,27 +322,31 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
             if (event.keyCode == 13) {
                 var content = this.value;  
                 var caret = getCaret(this);          
-                if(event.shiftKey){
+                if(event.shiftKey){                    
                     this.value = content.substring(0, caret - 1) + "\n" + content.substring(caret, content.length);
                     event.stopPropagation();
                 } else {
                     this.value = content.substring(0, caret - 1) + content.substring(caret, content.length);
                     sendMessage($scope.messageContent);
-                    setTimeout(goDown,10);
-                    $scope.messageContent = null;
-                    setTimeout(function(){
-                        $('#chatTextArea').html('');
-                        $('#chatTextArea').val().replace(/^(\r\n)|(\n)/,'');
-                        document.getElementById('chatTextArea').style.height = 'auto';
-                        text.style.minHeight = 70+'px';
-                        text.style.maxHeight = 70+'px';  
-                        chatComposer.style.minHeight = 70+'px';
-                        chatComposer.style.maxHeight = 70+'px';
-                    }, 10);
+                    emptyChatTextArea();
                 }
             }
         });
-
+        
+        var emptyChatTextArea = function(){
+            setTimeout(goDown,10);
+            $scope.messageContent = null;
+            setTimeout(function(){
+                $('#chatTextArea').html('');
+                $('#chatTextArea').val().replace(/^(\r\n)|(\n)/,'');
+                document.getElementById('chatTextArea').style.height = 'auto';
+                text.style.minHeight = 70+'px';
+                text.style.maxHeight = 70+'px';  
+                chatComposer.style.minHeight = 70+'px';
+                chatComposer.style.maxHeight = 70+'px';
+            }, 10);
+        }
+        
         function getCaret(el) { 
             if (el.selectionStart) { 
                 return el.selectionStart; 
@@ -354,18 +362,7 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                 return rc.text.length;
             }  
             return 0; 
-        }
-        
-        function lines()
-        {
-            var text = document.getElementById('chatTextArea');
-            var cnt = (text.cols);
-
-            var lineCount = (text.value.length / cnt);
-            var lineBreaksCount = (text.value.split('\r\n'));
-            //alert(lineBreaksCount.length);
-            return Math.round(lineCount)+1;
-        }
+        }               
         
 }]);
 

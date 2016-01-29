@@ -571,7 +571,7 @@ class User extends BaseUser
     public function removeFollowing(\PP\UserBundle\Entity\User $following)
     {
         $this->following->removeElement($following);
-         $following->removeFollower($this);
+        $following->removeFollower($this);
         $this->following_nb--;
     }
 

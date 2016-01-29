@@ -38,7 +38,7 @@
                     {{ form(setAdminForm) }}
                 </li>
                 <li class="dropdown-cat">
-                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isAdmin == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
+                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
                 </li>                
                 {% endif %}
             </ul>
@@ -71,7 +71,7 @@
                     {{ form(setAdminForm) }}
                 </li>
                 <li class="dropdown-cat">
-                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isAdmin == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
+                    <a href="" id="setModeratorButton" class="dropdown-choice" ng-click="profile.patchModerator({{ pageProfile.id }})">{% if isModerator == true %}Unset moderator{% else %}Set moderator{% endif %}</a>
                 </li>               
                 {% endif %}
             </ul>
