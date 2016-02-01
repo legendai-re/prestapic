@@ -43,7 +43,12 @@ class ReportManageApiController extends Controller
                                     $imageRequest->getId(),
                                     $imageRequest->getTitle(),
                                     $imageRequest->getRequest(),
-                                    new JsonUserModel($imageRequest->getAuthor()->getId(), $imageRequest->getAuthor()->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$imageRequest->getAuthor()->getProfilImage()->getWebPath('70x70')),
+                                    new JsonUserModel(
+                                            $imageRequest->getAuthor()->getId(), 
+                                            $imageRequest->getAuthor()->getName(), 
+                                            $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$imageRequest->getAuthor()->getProfilImage()->getWebPath('70x70'),
+                                            $this->generateUrl("pp_user_profile", array("slug" => $imageRequest->getAuthor()->getSlug()))
+                                    ),
                                     array(),
                                     $imageRequest->getReportNb(),
                                     $imageRequest->getCreatedDate()
@@ -72,7 +77,11 @@ class ReportManageApiController extends Controller
                                     $proposition->getId(),
                                     $proposition->getTitle(),
                                     $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$proposition->getImage()->getWebPath('selected'),                                    
-                                    new JsonUserModel($proposition->getAuthor()->getId(), $proposition->getAuthor()->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$proposition->getAuthor()->getProfilImage()->getWebPath('70x70')),
+                                    new JsonUserModel(
+                                            $proposition->getAuthor()->getId(),
+                                            $proposition->getAuthor()->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$proposition->getAuthor()->getProfilImage()->getWebPath('70x70'),
+                                            $this->generateUrl("pp_user_profile", array("slug" => $proposition->getAuthor()->getSlug()))
+                                    ),
                                     $proposition->getReportNb()                                    
                 );
             }
@@ -109,7 +118,12 @@ class ReportManageApiController extends Controller
                                         $targetId,
                                         new JsonReportReasonModel($ticket->getReason()->getId(), $ticket->getReason()->getName()),
                                         $ticket->getDetails(),
-                                        new JsonUserModel($ticket->getAuthor()->getId(), $ticket->getAuthor()->getName(), $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$ticket->getAuthor()->getProfilImage()->getWebPath('70x70')),
+                                        new JsonUserModel(
+                                                $ticket->getAuthor()->getId(), 
+                                                $ticket->getAuthor()->getName(), 
+                                                $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() .'/'.$ticket->getAuthor()->getProfilImage()->getWebPath('70x70'),
+                                                $this->generateUrl("pp_user_profile", array("slug" => $ticket->getAuthor()->getSlug()))
+                                        ),
                                         $ticket->getCreatedDate()
                 ));
             }

@@ -7,7 +7,7 @@
                 <div class="inbox-top">
                     Inbox
                     <a class="button new-message" id="searchButton" href="">New PM</a>
-                    <button class="button-close">×</button>
+                    <button class="button-close buttonCloseMessage">×</button>
                 </div>
                 {% endverbatim %}{{ form(getCurrentUserForm) }}{% verbatim %}
                 <ul class="list-mess">
@@ -48,11 +48,11 @@
                 </ul>
             </div>
 
-            <div ng-controller="chatController as chat" class="chat-container" >
+            <div id="chatContainer" ng-controller="chatController as chat" class="chat-container" >
                 <div class="chat-top">
-                    <a class="back-list" href="">Back</a>
+                    <a ng-click="chat.backToInbox()" class="back-list" href="">Back</a>
                     <div class="chat-name" id="chatTitle"></div>
-                    <button id="buttonCloseMessage" class="button-close">×</button>
+                    <button class="button-close buttonCloseMessage">×</button>
                 </div>
 
                 <div id="conversation" class="chat-conversation">

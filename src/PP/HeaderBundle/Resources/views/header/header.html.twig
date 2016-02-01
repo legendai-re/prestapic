@@ -4,7 +4,8 @@
             <a tabindex="1" target="_self" href="{{ path('pp_request_homepage') }}" title="Prestapic">Prestapic</a> 
         </h1>
 
-        <div class="search">                                                        
+        <div id="searchContainer" class="search"> 
+            <a ng-click="header.hideSearchBar()" href="">BACK</a>
             {{ render(controller('PPHeaderBundle:header:showFilters')) }}
         </div>   
         <div class="header-actions">       
@@ -18,9 +19,9 @@
                 </ul>
             </div>
             <nav class="menu">
-                <ul>
+                <ul>                   
                     <li class="search-rbutton-container">
-                        <a href="" class="search-rbutton" title="Find pictures, requests or users on Prestapic..."></a>
+                        <a href="" ng-click="header.showSearchBar()" class="search-rbutton" title="Find pictures, requests or users on Prestapic..."></a>
                     </li>
                     {# notification #}
                     <li class="stopPropagation">

@@ -48,15 +48,15 @@
             <section id="alert-banner" class="alert-banner warning" style='display: block; position: relative;'>
                 <div class="content">
                     <strong id="alert-banner-strong">Warning</strong> 
-                    <span id="alert-banner-span">You haven't confirm you email yet. Please check your email en click on the link</span>
+                    <span id="alert-banner-span">You haven't confirm you email yet. Please check your email and click on the link</span>
                 </div>
             </section>
-        {% endif %}
+        {% endif %}        
         {% block header %}
-        <header id="header" class="navbar">
-                <div class="content" ng-app="headerApp">
-                        {{ render(controller("PPHeaderBundle:Header:showHeader")) }}                                        
-                </div>
+        <header id="header" class="navbar">            
+            <div class="content" ng-app="headerApp">
+                    {{ render(controller("PPHeaderBundle:Header:showHeader")) }}                                        
+            </div>           
         </header>
         {% endblock %}
         
@@ -94,10 +94,7 @@
                     </div>
                 </div>
             </section>                                        
-        </div>
-                        
-                                                    
-
+        </div>                                                                            
         <footer>         
         </footer>
     </div>    

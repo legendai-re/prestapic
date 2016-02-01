@@ -91,10 +91,16 @@ messageApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeCl
             
             var firstThread = $rootScope.currentUser.threadList[Object.keys($rootScope.currentUser.threadList)[0]];            
             if(threadToLoad!=null){
-                $rootScope.$emit('loadConversation', $rootScope.currentUser.threadList[threadToLoad.id]);
-            }else if(firstThread){
-                $rootScope.$emit('loadConversation', firstThread);                
+                $rootScope.$emit('loadConversation', $rootScope.currentUser.threadList[threadToLoad.id]);                
+            }else if(firstThread){                             
+                $rootScope.$emit('loadConversation', firstThread);
+                if(MOBILE_MODE){
+                    $("#chatContainer").css("margin-left", "0%");                       
+                }
             }else{
+                if(MOBILE_MODE){
+                    $("#chatContainer").css("margin-left", "-100%");       
+                }
                 $("#no_message").css("display", "block");
             }
             
@@ -177,12 +183,13 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
             
             $scope.conversation = [];
             $scope.messageContent = null;                                  
-            
-            
-                
+                                        
             /* load new conversation */
-            $rootScope.$on('loadConversation', function (event, thread) {                               
-                var threadFounded = true;
+            $rootScope.$on('loadConversation', function (event, thread) {
+                if(MOBILE_MODE){
+                    $("#chatContainer").css("margin-left", "-100%");                    
+                }
+                var threadFounded = true;                
                 $("#chatTitle").html(thread.target.name);
                 if(thread.id == null){
                     // if loadConv from searchUser
@@ -234,6 +241,10 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
                 }
                 setTimeout(goDown,10);
         });      
+        
+        this.backToInbox = function(){
+            $("#chatContainer").css("margin-left", "0%");            
+        }
         
         this.loadMore = function(){            
             $scope.currentThread.page++;
@@ -368,14 +379,14 @@ messageApp.controller('chatController',['$scope', '$rootScope', '$http', functio
 
 
 $('#searchButton').click(function(){
-    if(!isInSearch){
-        $('#inboxBlock').css("display", "none");
-        $('#searchBlock').css("display", "inline-block");
-        isInSearch = true;
-    }else{
-        $('#inboxBlock').css("display", "block");
-        $('#searchBlock').css("display", "none");
-        isInSearch = false;
-    }    
+    $('#inboxBlock').css("display", "none");
+    $('#searchBlock').css("display", "inline-block");
+    isInSearch = true;    
+});
+
+$('#cancelSearchButton').click(function(){
+    $('#inboxBlock').css("display", "block");
+    $('#searchBlock').css("display", "none");
+    isInSearch = false; 
 });
 

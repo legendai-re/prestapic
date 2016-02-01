@@ -748,6 +748,8 @@
 
 					.chat-container
 						width: 100%
+						@include vendor-prefix(transition, margin 0.5s ease-in-out)
+						margin-right: -100%
 
 						.chat-top
 							a.back-list

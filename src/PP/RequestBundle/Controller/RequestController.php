@@ -42,7 +42,7 @@ class RequestController extends Controller
                 $haveSearchParam = true;             
             }            
         }                                                                              
-        
+                
         /* init repositories */
         $em = $this->getDoctrine()->getManager();
 	$imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');                                                                              
@@ -52,7 +52,7 @@ class RequestController extends Controller
             $displayMode = $session->get('imageRequestOrder');
         }else {$displayMode = Constants::ORDER_BY_DATE;}
         if($currentUser == null && $displayMode == Constants::ORDER_BY_INTEREST ){$displayMode = Constants::ORDER_BY_DATE;}
-        
+    
         $contentToDisplay = Constants::DISPLAY_REQUEST_PENDING;
         if($session->get('contentToDisplay') != null){
             $contentToDisplay = $session->get('contentToDisplay');

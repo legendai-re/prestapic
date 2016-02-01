@@ -1,3 +1,21 @@
+
+if($(window).width() <= 770){
+    var MOBILE_MODE = true;
+}else{
+    var MOBILE_MODE = false;        
+}
+
+$( window ).resize(function() {
+    console.log($(window).width());
+    if($(window).width() <= 770){
+        MOBILE_MODE = true;
+        $("#chatContainer").css("margin-left", "-100%");
+    }else{
+        MOBILE_MODE = false;
+        $("#chatContainer").css("margin-left", "0");       
+    }
+});
+
 var headerApp = angular.module('headerApp',[]);       
 
 headerApp.config(['$locationProvider',function ($locationProvider) {
@@ -61,6 +79,14 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
         var haveAllreadyOpen = false;            
         var showMoreNotificationUrl = null;
         $scope.showMoreNotification = true;
+        
+        this.showSearchBar = function(){          
+            $("#searchContainer").css("display", "block");
+        };
+        
+        this.hideSearchBar = function(){
+            $("#searchContainer").css("display", "none");
+        };
         
         this.showNewRequestForm = function(){
             closeAll();
@@ -320,7 +346,7 @@ headerApp.controller('headerController', ['$scope', '$http', '$compile', '$locat
             closeAll();                
         });
         
-        $('#buttonCloseMessage').click(function(event){
+        $('.buttonCloseMessage').click(function(event){
             closeAll();
         });
         
