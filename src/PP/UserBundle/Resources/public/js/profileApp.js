@@ -387,3 +387,13 @@
         };
         
     }]);
+
+$(window).scroll(function(event){
+    didScroll = true;
+
+    if ( $(window).scrollTop() <= 260 ) {
+        $('header.navbar').addClass('profile');
+    } else {
+        $('header.navbar').removeClass('profile');
+    }
+});

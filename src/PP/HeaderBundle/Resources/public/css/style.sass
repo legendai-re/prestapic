@@ -5,8 +5,13 @@ header
 	width: 100%
 	height: 76px
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1)
-	position: relative
+	top: 0
+	position: fixed
 	z-index: 80
+	@include vendor-prefix(transition, "top 0.2s ease-in-out, background 0.2s ease-in-out")
+
+	&.nav-up
+		top: -76px
 
 	a:hover
 		text-decoration: none
@@ -469,9 +474,9 @@ header
 					border-bottom: 9px solid #fff
 
 			ul
+				width: 100%
 
 				&.notifs
-					width: 100%
 					max-height: 400px
 					overflow: auto
 					margin-bottom: 34px
@@ -648,8 +653,11 @@ header
 	// PROFILE HEADER
 	&.profile
 		background: rgba(0,0,0,.025)
-		position: absolute
+		position: fixed
 		border-color: rgba(255,255,255,.25)
+
+		&.nav-up
+			top: -76px
 
 		div.content
 			h1.logo

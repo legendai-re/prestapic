@@ -141,3 +141,19 @@ button, .button
 		font-size: 14px
 		width: 3px
 		height: 14px
+
+@media (max-width: 770px)
+	button, .button
+		padding: 8px 16px
+		font-size: 16px
+
+		&.follow, &.following, &.unfollow, &.edit, &.changes, &.cancel
+			font-size: 14px
+			padding: 7px 12px 7px 8px
+
+			&:before
+				font-size: 10px
+				line-height: 10px
+				width: 14px
+				height: 10px
+				padding: 4px 0 0

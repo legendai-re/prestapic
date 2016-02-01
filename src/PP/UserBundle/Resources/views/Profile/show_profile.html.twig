@@ -53,6 +53,10 @@
 {% endblock %}
 
 {% block body %}   
+    <script>
+        var e = document.getElementById("maincontainer");
+        e.className += " profile";
+    </script>
     <div class="main-left" >
        
         {% if pageProfile.enabled == true %}

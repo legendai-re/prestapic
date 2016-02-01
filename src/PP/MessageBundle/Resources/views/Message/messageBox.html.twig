@@ -1,22 +1,14 @@
 <div class="messages stopPropagation">
     <div class="container" >    
         <base href=" " />    
-
-        <div class="message-top">
-            <div class="inbox-top">
-                Inbox
-                <a class="button new-message" id="searchButton" href="">New PM</a>
-            </div>
-            <div class="chat-top">
-                  <div class="chat-name" id="chatTitle"></div>
-                  <button id="buttonCloseMessage" class="button-close">×</button>
-            </div>
-        </div>
-
-
         {% verbatim %}
-        <div class="message-bottom" >
+        <div class="message" >
             <div id="inboxBlock" ng-controller="inboxController as inbox" class="inbox">
+                <div class="inbox-top">
+                    Inbox
+                    <a class="button new-message" id="searchButton" href="">New PM</a>
+                    <button class="button-close">×</button>
+                </div>
                 {% endverbatim %}{{ form(getCurrentUserForm) }}{% verbatim %}
                 <ul class="list-mess">
                     <li ng-repeat="thread in currentUser.threadList track by $index" ng-if="thread.target.name" class="message" >                    
@@ -40,6 +32,10 @@
             </div>
 
             <div id="searchBlock" ng-controller="searchController as search" class="search-box" style="display: none;">
+                <div class="inbox-top">
+                    Inbox
+                    <a class="button new-message" id="cancelSearchButton" href="">Cancel</a>
+                </div>
                 <form action="{% endverbatim %}{{ path('pp_user_api_get_search_user') }}{% verbatim %}" name="pp_user_api_get_search_user_form">
                     <input autocomplete="off" placeholder="Type an username here..." class="search-box-input" type="text" name="search" ng-model="search.search" ng-change="search.searchUser()"/>
                 </form>                
@@ -53,6 +49,12 @@
             </div>
 
             <div ng-controller="chatController as chat" class="chat-container" >
+                <div class="chat-top">
+                    <a class="back-list" href="">Back</a>
+                    <div class="chat-name" id="chatTitle"></div>
+                    <button id="buttonCloseMessage" class="button-close">×</button>
+                </div>
+
                 <div id="conversation" class="chat-conversation">
                     <div ng-show="!currentUser.threadList[currentThread.id].messageList.length && !firstMessage" class="chat-scroller" id="no_message">
                         <h2>No message yet</h2>

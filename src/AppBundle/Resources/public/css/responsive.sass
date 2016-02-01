@@ -19,6 +19,16 @@
 			.widget
 				width: 770px
 
+	.full-main
+		max-width: 795px
+
+		.full-main-container
+			.full-main-container-center
+				margin-right: 0
+
+			.full-main-container-right
+				margin-right: 15px
+
 @media (max-width: 980px)
 	header
 		div.content
@@ -43,6 +53,14 @@
 						&.search-rbutton-container
 							display: inline-block
 
+@media (max-width: 815px)
+	.full-main
+		max-width: 390px
+
+		.full-main-container
+			.full-main-container-left, .full-main-container-center, .full-main-container-right
+				margin-right: 0
+
 @media (max-width: 790px)
 	section.main
 		.main-left
@@ -55,6 +73,11 @@
 
 @media (max-width: 770px)
 	section.main
+		margin-top: 56px
+
+		&.profile
+			margin-top: 0
+
 		.sidebar
 			width: 100%
 
@@ -71,6 +94,22 @@
 		background: #C24C4A
 		color: white
 		height: 56px
+
+		&.nav-up
+			top: -56px
+
+		&.profile
+			div.content
+				nav.menu
+					ul
+						li
+							a.search-rbutton, a.notification
+								background: transparent
+								color: rgba(255,255,255,.75)
+
+				nav.menu .dropdown
+					background: white
+					border: none
 
 		div.content
 			padding: 0 20px
@@ -174,6 +213,31 @@
 									color: #444
 									font-size: 14px
 
+			nav.menu .dropdown
+				right: 0px
+				top: 54px
+				border-radius: 0px
+				border: 0px
+				height: calc(100% - 56px)
+				position: fixed
+
+				&.menu, &.notif
+					width: 100%
+
+					.caret-outer
+						border-bottom-color: white
+
+				&.notif
+					.dropdown-caret
+						right: 68px
+
+				&.menu
+					.dropdown-caret
+						right: 23px
+
+				.dropdown-caret
+					top: -9px
+
 	section.jumbotron
 		background: #D8D8D8
 		background-image: none
@@ -185,6 +249,71 @@
 
 		.learn
 			margin-top: 10px
+
+	article.profile-card
+		margin: 0 auto 10px
+		float: initial
+
+		&:nth-child(odd)
+			margin-right: auto
+
+	section.profile-container
+		.profile-show-cover, .profile-edit-cover
+			.profile-container
+				.profile-infos
+					.avatar
+						width: 100px
+						height: 100px
+
+						.profile-avatar-new
+							width: 100%
+							height: 100%
+
+					.username
+						font-size: 20px
+
+						div
+							height: 25px
+
+							input, textarea
+								font-size: 20px
+
+					.screenname
+						font-size: 14px
+
+						div
+							height: 18px
+
+							input, textarea
+								font-size: 14px
+
+				.profile-stats
+					font-size: 14px
+
+				.profile-bio
+					font-size: 16px
+
+					div
+						height: 40px
+
+						input, textarea
+							font-size: 16px
+
+				.profile-links
+
+					a
+						font-size: 14px
+
+					div
+						input, textarea
+							font-size: 14px
+
+			.profile-cover-dropzone
+				&:before
+					top: 71px
+
+				&:after
+					top: 69px
 
 	section.main
 		padding: 20px 0
@@ -224,29 +353,32 @@
 					margin-right: -5px
 
 				a.count-vote
-					font-size: 18px
-					line-height: 18px
+					font-size: 22px
+					line-height: 22px
 
 					&:after
-						width: 12px
-						height: 12px
+						width: 16px
+						height: 16px
 						padding: 3px 0 2px 5px
-						font-size: 12px
+						font-size: 16px
 
 				.request-container
 					width: 100%
-					padding: 10px 20px
+					padding: 15px 20px 10px
 
 					h1
 						width: calc(100% - 60px)
 						padding: 0
 						margin: 0 0 10px
-						font-size: 16px
-						line-height: 16px
+						font-size: 20px
+						line-height: 20px
 
 					.request-content
 						width: 100%
 						font-size: 14px
+
+						p:first-child
+							margin-top: 0
 
 					.author-container
 						width: 100%
@@ -277,6 +409,7 @@
 
 				.propositions-container, .actions-container
 					width: 100%
+					font-size: 14px
 
 				.actions-container
 					padding: 10px 20px
@@ -358,31 +491,35 @@
 						padding: 0 20px 20px
 
 						.infos
-							font-size: 15px
+							font-size: 12px
 
 							a.author
 								width: auto
-								font-size: 19px
+								font-size: 14px
 
 					a.selecting-prop
-						color: rgba(255,255,255,0)
-						top: 20px
-						right: 20px
-						padding: 5px 5px 5px 10px
-						font-size: 15px
-						line-height: 20px
+						font-size: 14px
+						line-height: 16px
 
 						&:after
-							width: 24px
-							height: 20px
-							margin-left: 5px
-							font-size: 20px
+							width: 20px
+							height: 16px
+							font-size: 16px
+							line-height: 16px
 
 					.actions
 						padding: 0 20px 20px
 
 						a.count-vote
-							padding: 0 5px 2px
+							padding: 0 5px
+							font-size: 22px
+							line-height: 22px
+
+							&:after
+								font-size: 16px
+								padding: 3px 0 2px 5px
+								width: 16px
+								height: 16px
 
 					&.selected
 						width: 100%
@@ -402,8 +539,8 @@
 
 						.img-title
 							a.avatar
-								width: 48px
-								height: 48px
+								width: 32px
+								height: 32px
 
 							.infos
 								padding-left: 10px
@@ -550,8 +687,9 @@
 				margin: 25px 0
 
 				.title-section
-					font-size: 22px
+					font-size: 15px
 					margin-bottom: 15px
+					padding: 0 20px
 
 				ul.list-comments
 					padding: 0
@@ -565,7 +703,7 @@
 							height: 32px
 
 						.comment-container, .composer-container
-							width: 683px
+							width: calc(100% - 32px - 15px)
 							height: auto
 							font-size: 15px
 							margin-left: 15px
@@ -581,6 +719,45 @@
 
 		.sidebar
 			display: none
+
+	section.overlay-messages
+		.messages
+			width: 100%
+			max-height: 100%
+			border-radius: 0
+			border: 0
+
+			.container
+				.message
+					.inbox, .search-box
+						.inbox-top
+							a.button
+								&.new-message
+									right: 48px
+
+							.button-close
+								display: block
+
+					.inbox
+						border-right: 0
+						width: 100%
+
+					.search-box
+						width: 100%
+						border-right: 0
+
+					.chat-container
+						width: 100%
+
+						.chat-top
+							a.back-list
+								display: inline-block
+
+							.chat-name
+								padding-left: 20px
+
+							.button-close
+								display: none
 
 	section.overlay
 		.box-container
@@ -641,6 +818,37 @@
 				width: 100%
 				height: 56px
 				bottom: 0
+
+@media (max-width: 415px)
+	.full-main
+		.full-main-top
+			padding-left: 15px
+			margin-bottom: 15px
+
+@media (max-width: 390px)
+	.full-main
+		.full-main-top
+			padding: 0 20px
+
+		.full-main-container
+			.full-main-container-left, .full-main-container-center, .full-main-container-right
+				width: 100%
+
+				.full-main-content
+					width: 100%
+
+					.fcontent-top, .fcontent-text, .fcontent-bottom
+						padding: 10px 20px
+
+					.fcontent-choice
+						.fcontent-choice-list
+							.fcontent-choice-item
+								padding: 10px 20px 15px
+
+@media (max-width: 380px)
+	article.profile-card
+		width: 100%
+		height: auto
 
 @media (max-width: 370px)
 	header
