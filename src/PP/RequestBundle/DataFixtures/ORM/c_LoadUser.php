@@ -22,8 +22,8 @@ class c_LoadUser implements FixtureInterface{
             array_push($emailList, strtolower($name).'@gmail.com');
         }
 
-        for($i=0; $i<15; $i++){
-             
+        for($i=0; $i<1000; $i++){
+            if($i%100 == 0)echo " -->  ".$i; 
             $imgName = rand(1, 7);        
             copy(__DIR__.'/../../../../../web/Resources/public/images/profile/avatar_'.$imgName.'.jpg',  __DIR__.'/../../../../../web/uploads/img/user/profile/original/new'.$i.'.jpg');
             $profilImage = new \PP\ImageBundle\Entity\Image();
@@ -36,17 +36,22 @@ class c_LoadUser implements FixtureInterface{
             $profilImage->setFile($file);
 
             $user = new User();
-            $user->setName($namesList[$i]);
+            //$user->setName($namesList[$i]);
+            $user->setName("user_".$i);
             $user->setProfilImage($profilImage);
             $user->setRoles(array('ROLE_USER'));
-            $user->setPlainPassword(strtolower($namesList[$i]));
+            //$user->setPlainPassword(strtolower($namesList[$i]));
+            $user->setPlainPassword("user_".$i);
             $user->setEnabled(true);         
-            $user->setEmail($emailList[$i]);
-            $user->setUsername($namesList[$i]);
+            //$user->setEmail($emailList[$i]);
+            $user->setEmail("user_".$i."@gmail.com");
+            //$user->setUsername($namesList[$i]);
+            $user->setUsername("user_".$i);
             $user->setEmailConfirmed(true);
-            $user->setSlug($namesList[$i]);
+            //$user->setSlug($namesList[$i]);
+            $user->setSlug("user_".$i);
             
-            if(strcmp($namesList[$i], 'AlexandreJolly') == 0 || strcmp($namesList[$i], 'OlivierCoue') == 0){
+            /*if(strcmp($namesList[$i], 'AlexandreJolly') == 0 || strcmp($namesList[$i], 'OlivierCoue') == 0){
                 $user->addRole('ROLE_ADMIN');
                 if(strcmp($namesList[$i], 'AlexandreJolly') == 0){
                     $user->setEmail("accounts@alexandrejolly.com");
@@ -62,7 +67,7 @@ class c_LoadUser implements FixtureInterface{
                     $user->setContact("oliviercoue.com");
                     $user->setPlainPassword("olivier");
                 } 
-            }            
+            }     */       
             $em->persist($user);                    
         }                
         $em->flush();
