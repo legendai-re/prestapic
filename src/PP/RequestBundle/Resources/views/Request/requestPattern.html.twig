@@ -31,8 +31,11 @@
                 <img bn-lazy-src="{{ asset(imageRequest.author.profilImage.webPath("70x70")) }}" alt="{{ imageRequest.author.profilImage.alt }}">
             </a>
             <span class="author-infos">
-                <span title="{{ imageRequest.createdDate|date('Y-m-d H:i:s') }}">{{ imageRequest.dateAgo }}</span> in                 
-                <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'categories': imageRequest.category.id }) }}" >{{ imageRequest.category.name }}</a> by            
+                <span title="{{ imageRequest.createdDate|date('Y-m-d H:i:s') }}">{{ imageRequest.dateAgo }}</span> in
+                {% if imageRequest.category != null %}
+                <a  target="_self" class="tag cat" href="{{ path('pp_request_homepage', { 'categories': imageRequest.category.id }) }}" >{{ imageRequest.category.name }}</a>
+                by
+                {% endif %}
             </span>
             <a target="_self" class="author-username" href="{{ path('pp_user_profile', {'slug': imageRequest.author.slug}) }}">{{ imageRequest.author.name }}</a>  
         </div>

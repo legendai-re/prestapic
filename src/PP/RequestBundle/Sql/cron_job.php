@@ -31,4 +31,16 @@ $result = $mysqli->query("
 	DESC LIMIT 3;
 ");
 
+$result = $mysqli->query("TRUNCATE TABLE popular_tag;");
+$result = $mysqli->query("
+        INSERT INTO popular_tag (tag_id, createdDate)
+        SELECT DISTINCT t0_.id AS id_0, CURRENT_TIMESTAMP() as currentDate 
+        FROM tag t0_ 
+        LEFT JOIN image_request_tag i2_ ON t0_.id = i2_.tag_id 
+        LEFT JOIN image_request i1_ ON i1_.id = i2_.image_request_id 
+        WHERE i1_.createdDate BETWEEN SUBTIME(CURRENT_TIMESTAMP(), '7 00:00:00.000000') AND CURRENT_TIMESTAMP() 
+        ORDER BY t0_.usedNb DESC 
+        LIMIT 25;
+");
+
 $mysqli->close();

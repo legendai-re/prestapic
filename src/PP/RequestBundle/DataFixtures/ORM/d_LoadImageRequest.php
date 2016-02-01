@@ -37,8 +37,8 @@ class d_LoadImageRequest implements FixtureInterface{
     
     $y = 1;
     $reuseUpvote = 0;
-    for($i=0; $i<250; $i++){
-        
+    for($i=0; $i<100000; $i++){
+        if($i%100 == 0)echo " IR-->  ".$i;
         $nameLenght = rand(3, 8);
         $name = "";
         for($x = 0; $x<$nameLenght; $x++){
@@ -86,15 +86,15 @@ Aliquam finibus fringilla erat, et bibendum tortor iaculis et. Praesent id arcu 
         }
         
         $manager->persist($imageRequest); 
-        $manager->flush();
+       
         
-        $commentThread = new CommentThread($imageRequest->getId());
+        /*$commentThread = new CommentThread($imageRequest->getId());
         $imageRequest->setCommentThread($commentThread);
         $manager->persist($commentThread);
-        $manager->flush();
+        $manager->flush();*/
     }  
     
-   
+    $manager->flush();
   }
   
 }

@@ -441,10 +441,10 @@ class RequestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();                
         $activeUserRepository = $em->getRepository('PPUserBundle:ActiveUser');
-        $popularRequestRepository = $em->getRepository('PPRequestBundle:PopularRequest');
-        $tagRepository = $em->getRepository('PPRequestBundle:Tag');
-        
-        $popularTags = $tagRepository->getPopularTags(25);
+        $popularRequestRepository = $em->getRepository('PPRequestBundle:PopularRequest');       
+        $popularTagRepository = $em->getRepository('PPRequestBundle:PopularTag');
+                 
+        $popularTags = $popularTagRepository->getPopularTags(25);    
         $activeUsers = $activeUserRepository->getActiveUsers(5);        
         $imageRequests = $popularRequestRepository->getPopularImageRequests(5);       
         

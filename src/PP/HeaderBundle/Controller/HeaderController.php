@@ -45,14 +45,11 @@ class HeaderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();                        
         $categotyRepository = $em->getRepository('PPRequestBundle:Category');
-        $tagRepository = $em->getRepository('PPRequestBundle:Tag');
         
-        $categories = $categotyRepository->findAll();
-        $tags = $tagRepository->getPopularTags(9);
+        $categories = $categotyRepository->findAll();        
                 
         return $this->render('PPHeaderBundle:header:filters.html.twig', array(
-            'categories' => $categories,
-            'tags' => $tags
+            'categories' => $categories,            
         ));
     }
 }
