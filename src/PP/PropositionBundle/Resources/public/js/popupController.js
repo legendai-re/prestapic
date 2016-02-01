@@ -95,22 +95,28 @@ popupPropApp.controller('popupController', ['$scope', '$rootScope', '$http', '$c
     }                
 
     this.patchDisable = function(){
-        var myData = {
-            id: $scope.proposition.id
-        }
-        var formAction = document.forms["pp_proposition_api_patch_disable_form"].action;
-        $http({
-            method: 'PATCH',
-            url: formAction,                    
-            data: JSON.stringify(myData)
-             }).
-            then(function(response){
-                $location.path($scope.currentLocation);
-                $window.location.href = $location.$$absUrl;
-            },function(response) {
-                console.log("Request failed : "+response.statusText );                   
+        alertify.confirm("Do you realy want to delete this suggestion ?", function (e) {
+            if (e) {           
+                var myData = {
+                    id: $scope.proposition.id
+                }
+                var formAction = document.forms["pp_proposition_api_patch_disable_form"].action;
+                $http({
+                    method: 'PATCH',
+                    url: formAction,                    
+                    data: JSON.stringify(myData)
+                     }).
+                    then(function(response){
+                        $location.path($scope.currentLocation);
+                        $window.location.href = $location.$$absUrl;
+                    },function(response) {
+                        console.log("Request failed : "+response.statusText );                   
+                    }
+                );
+            }else{
+
             }
-        );
+        });
     };       
     
     this.showReportPopup = function(id, type){
