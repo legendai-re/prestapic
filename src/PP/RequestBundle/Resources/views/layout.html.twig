@@ -23,6 +23,14 @@
 
 
 {% block body %}
+    {% if  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        
+    {% else %}
+    <script>
+        var e = document.getElementById("maincontainer");
+        e.className += " notop";
+    </script>
+    {% endif %}  
     <div class="main-left" >
         {% block requestBody %}
         {% endblock %}
