@@ -6,7 +6,6 @@ if($(window).width() <= 770){
 }
 
 $( window ).resize(function() {
-    console.log($(window).width());
     if($(window).width() <= 770){
         MOBILE_MODE = true;
         $("#chatContainer").css("margin-left", "-100%");
