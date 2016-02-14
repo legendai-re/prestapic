@@ -29,21 +29,29 @@
 			.full-main-container-right
 				margin-right: 15px
 
+@media (min-width: 980px)
+	header div.content .search
+		display: inline-block!important
+
 @media (max-width: 980px)
 	header
 		div.content
 			.search
-				height: 56px
 				display: none
+				position: absolute
+				width: 100%
+				height: 100%
+				background: white
+				z-index: 81
+				left: 0
+				top: 0
 
 				form
-					height: 56px
+					input.main-search, input.main-search:active, input.main-search:focus
+						padding-left: 70px
 
-					input.main-search
-						height: 56px
-						font-size: 16px
-						border: none
-						padding: 0
+				.back-search
+					display: block
 
 			nav.menu
 				max-width: 153px
@@ -72,6 +80,62 @@
 				padding: 0 20px
 
 @media (max-width: 770px)
+	header
+		div.content
+			.search
+				width: 100%
+				height: 100%
+				position: fixed
+
+				form
+					height: 56px
+
+					input.main-search
+						height: 56px
+						font-size: 16px
+						border: none
+						padding: 0
+						border-bottom: 1px solid $borders
+
+					.search-options-list
+						border: none
+
+					ul.search-options
+						width: 87px
+
+						li.option
+							a.filters, button.go-search
+								width: 24px
+								height: 24px
+								margin: 16px 6px
+								padding: 4px
+								background: transparent
+								border: none
+
+								&:before
+									width: 14px
+									height: 14px
+									padding: 0
+									font-size: 16px
+
+							a.filters
+								&:before
+									font-size: 14px
+
+				form
+					input.main-search, input.main-search:active, input.main-search:focus
+						padding-left: 60px
+
+				.back-search
+					display: block
+					left: 20px
+					top: 16px
+					width: 24px
+					height: 24px
+					font-size: 16px
+					line-height: 16px
+					padding: 6px
+
 	section.main
 		margin-top: 56px
 
@@ -97,19 +161,6 @@
 
 		&.nav-up
 			top: -56px
-
-		&.profile
-			div.content
-				nav.menu
-					ul
-						li
-							a.search-rbutton, a.notification
-								background: transparent
-								color: rgba(255,255,255,.75)
-
-				nav.menu .dropdown
-					background: white
-					border: none
 
 		div.content
 			padding: 0 20px
