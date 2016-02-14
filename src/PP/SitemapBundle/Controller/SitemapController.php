@@ -14,8 +14,8 @@ class SitemapController extends Controller
         $userRepository = $em->getRepository('PPUserBundle:User');
         $imageRequestRepository = $em->getRepository('PPRequestBundle:ImageRequest');
         
-        $userPageNb = sizeof($userRepository->findAll())/Constants::USER_PER_PAGE;
-        $irPageNb = sizeof($imageRequestRepository->findAll())/Constants::IMPAGE_REQUEST_PER_PAGE;
+        $userPageNb = (sizeof($userRepository->findAll())/Constants::USER_PER_PAGE)+1;
+        $irPageNb = (sizeof($imageRequestRepository->findAll())/Constants::IMPAGE_REQUEST_PER_PAGE)+1;
         
         return $this->render('SitemapBundle:Sitemap:sitemap.xml.twig', array(
             "userPageNb" => $userPageNb,

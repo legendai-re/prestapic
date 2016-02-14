@@ -5,16 +5,16 @@
     </sitemap>
     
     {# users sitemaps #}
-     {% for i in 0..userPageNb %}           
+     {% for i in 0..userPageNb if i>0%}
      <sitemap>
-        <loc>{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('sitemap_user', {'page' : i+1} ) }}</loc>      
+        <loc>{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('sitemap_user', {'page' : i} ) }}</loc>      
      </sitemap>
      {% endfor %}
      
       {# users imageRequest #}
-     {% for i in 0..irPageNb %}           
+     {% for i in 0..irPageNb if i>0 %}           
      <sitemap>
-        <loc>{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('sitemap_image_request', {'page' : i+1} ) }}</loc>      
+        <loc>{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('sitemap_image_request', {'page' : i} ) }}</loc>      
      </sitemap>
      {% endfor %}
      
