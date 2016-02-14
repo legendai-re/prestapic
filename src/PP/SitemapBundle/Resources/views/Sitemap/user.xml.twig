@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+    
+  {%for user in users %}
+  <url>
+    <loc>{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('pp_user_profile', {'slug' : user.slug} ) }}</loc> 
+  </url>
+  {% endfor %}
+</urlset>

@@ -1,0 +1,27 @@
+{% extends "::layout.html.twig" %}
+
+{% block bellowHeader %}                
+        {% if  is_granted("IS_AUTHENTICATED_REMEMBERED") %}            
+        {% else %}
+        <section id="bellowHeader" class="jumbotron"> 
+            <div class="jumbotext">      
+                <p class="line">Error 404</p>
+                <p class="line"><strong>Sorry, this page isn't available</strong></p>
+                <p class="line">The link you followed may be broken, or the page may have been removed.</p>
+                
+                <a class="button learn" href={{ path("pp_request_homepage") }}>Back to homepage</a>      
+             </div>
+         </section>
+        {% endif %}                    
+{% endblock %}
+
+
+{% block body %}
+    <div class="main-left" >
+        {% block requestBody %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block sideInfo %}
+{% endblock %}

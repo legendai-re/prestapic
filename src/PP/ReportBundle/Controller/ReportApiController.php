@@ -4,7 +4,6 @@ namespace PP\ReportBundle\Controller;
 
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,7 +39,7 @@ class ReportApiController extends Controller
                     "reportReasons" => $reportReasons,
                     "reportTicketForm" => $reportTicketForm
                 ))
-                ->setTemplate(new TemplateReference('PPReportBundle', 'Popup', 'reportForm'));   
+                ->setTemplate('PPReportBundle:Popup:reportForm.html.twig');   
              
             return $this->getViewHandler()->handle($view);
         }else return new Response();
