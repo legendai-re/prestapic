@@ -13,7 +13,6 @@ namespace PP\RequestBundle\Controller;
 
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -162,7 +161,7 @@ class RequestApiController extends Controller
                     'canUpvoteImageRequest' => $canUpvoteImageRequest,
                     'screenWidth' => $screenWidth
                 ))
-                ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'requestList'));
+                ->setTemplate('PPRequestBundle:Request:requestList.html.twig');
         }else if($contentToDisplay == Constants::DISPLAY_PROPOSITION){
             $view = View::create()
                 ->setData(array(                                      
@@ -172,7 +171,7 @@ class RequestApiController extends Controller
                     'propositionList' => $propositionsList,                    
                     'canUpvoteProposition' => $canUpvoteProposition
                 ))
-                ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'propositionList'));
+                ->setTemplate('PPRequestBundle:Request:propositionList.html.twig');
         }else{
             return new \Symfony\Component\HttpFoundation\Response();
         }
@@ -194,7 +193,7 @@ class RequestApiController extends Controller
                 ->setData(array(                                      
                     'form' => $form->createView()
             ))
-            ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'addRequestForm'));
+            ->setTemplate('PPRequestBundle:Request:addRequestForm.html.twig');
             return $this->getViewHandler()->handle($view);
         }else return new Response();
         
@@ -308,7 +307,7 @@ class RequestApiController extends Controller
                 'loadPropositionForm' => $loadPropositionForm->createView(),                
                 'selectPropositionForms' => $selectPropositionForms
             ))
-            ->setTemplate(new TemplateReference('PPPropositionBundle', 'proposition', 'propositionList'));
+            ->setTemplate('PPPropositionBundle:proposition:propositionList.html.twig');
 
         return $this->getViewHandler()->handle($view);
     }
@@ -349,7 +348,7 @@ class RequestApiController extends Controller
                     ->setData(array(                      
                         "editRequestForm" => $editRequestForm->createView()
                 ))
-                ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'editRequestForm'));
+                ->setTemplate('PPRequestBundle:Request:editRequestForm.html.twig');
 
                 return $this->getViewHandler()->handle($view);
             }else{$response->setStatusCode(Response::HTTP_FORBIDDEN);}

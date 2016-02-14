@@ -1,0 +1,19 @@
+sitemap_schema:
+    path:     /sitemap.{_format}
+    defaults: { _controller: SitemapBundle:Sitemap:index, _format: xml }
+    
+sitemap_main:
+    path:     /main.{_format}
+    defaults: { _controller: SitemapBundle:Sitemap:main, _format: xml }    
+            
+sitemap_user:
+    path:     /user/{page}.{_format}
+    defaults: { _controller: SitemapBundle:Sitemap:user, _format: xml }
+    requirements:
+        page: \d+
+      
+sitemap_image_request:
+    path:     /request/{page}.{_format}
+    defaults: { _controller: SitemapBundle:Sitemap:imageRequest, _format: xml }
+    requirements:
+        page: \d+

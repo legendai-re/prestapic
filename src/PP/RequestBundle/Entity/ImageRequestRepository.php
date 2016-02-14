@@ -12,6 +12,26 @@ use PP\RequestBundle\Constant\Constants;
  */
 class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
 {   
+    
+    public function getImageRequest($limit, $page){
+        
+         $qb = $this->createQueryBuilder('ir')
+                    ->distinct(true)
+                    ->leftJoin('ir.author', 'irA')
+                    ->where('ir.enabled = true AND irA.enabled = true')
+        ;
+         
+         $qb = $qb
+                  ->setFirstResult(($page-1) * $limit)
+                  ->setMaxResults($limit)
+        ;
+
+        return $qb
+           ->getQuery()
+           ->getResult()
+        ;      
+        
+    }
     public function getImageRequestByTag($tagId){
         $qb = $this->createQueryBuilder('ir')                        
                         ->distinct(true)
@@ -49,165 +69,165 @@ class ImageRequestRepository extends \Doctrine\ORM\EntityRepository
             return  $qb
                         ->getQuery()
                         ->getSingleScalarResult();
-        }
+    }
         
-        public function getImageRequestsId($em, $searchParam, $limit, $page, $displayMode, $userId, $followingIds, $tagsParam = null, $categoriesParam = null, $concerningMeParam = false, $requestType = null)
-	{   
-            
-            $qb = $this->createQueryBuilder('ir')
-                        ->select('ir.id')
-                        ->distinct(true)
-                        ->leftJoin('ir.author', 'irA')
-                        ->leftJoin('ir.category', 'c')
-                        ->where('ir.enabled = true AND irA.enabled = true')
-            ;
-             
-            if($searchParam != null){
-                $qb = $qb
-                        ->leftJoin('ir.tags', 't')                        
-                        ->where($qb->expr()->like('ir.title', ':title'))
-                        ->setParameter('title', '%'.$searchParam.'%')
-                        ->orWhere($qb->expr()->like('t.name', ':name'))
-                        ->setParameter('name', '%'.$searchParam.'%')
-                        ->orWhere($qb->expr()->like('c.name', ':cat'))
-                        ->setParameter('cat', '%'.$searchParam.'%');                        
-            }
-            
-            if($tagsParam != null){
-                $qb = $qb->leftJoin('ir.tags', 't');
-                $i = 0;
-                $request = '';
-                foreach ($tagsParam as $tagName){
-                    if($i>0)$request .= ' OR ';
-                    $request .= 't.id = :nameT'.$i;
-                    $qb = $qb                            
-                            ->setParameter('nameT'.$i, $tagName);
-                    $i++;                    
-                }
-                $qb = $qb
-                            ->andWhere($request);
-            }
-            
-            if($categoriesParam != null){                
-                $i = 0;
-                $request = '';
-                foreach ($categoriesParam as $cat){
-                    if($i>0)$request .= ' OR ';
-                    $request .= 'c.id = :idC'.$i;
-                    $qb = $qb                            
-                            ->setParameter('idC'.$i, $cat);
-                    $i++;
-                }
-                 $qb = $qb
-                            ->andWhere($request);
-            }
-            
-            if($concerningMeParam){
-                $qb = $qb
-                        ->leftJoin('ir.propositions', 'p')
-                        ->leftJoin('p.author', 'pA')
-                        ->andWhere("irA.id = :userId2 OR pA.id = :userId2")
-                        ->setParameter('userId2', $userId);
-            }
-            
-            if($displayMode == Constants::ORDER_BY_DATE){
-                $qb = $qb->orderBy('ir.createdDate', 'DESC'); 
-            }else if($displayMode == Constants::ORDER_BY_UPVOTE){
-                $qb = $qb->orderBy('ir.upvote + (ir.propositionsNb*2)', 'DESC'); 
-            }else if($displayMode == Constants::ORDER_BY_INTEREST){
-                $qb = $qb                                               
-                        ->from('PPUserBundle:User', 'u')                        
-                        ->andwhere('u.id = :userId')                        
-                        ->setParameter('userId', $userId)                        
-                        ->leftJoin('u.following', 'uF')                       
-                        ->andwhere("irA.id IN(:followingIds) AND irA.enabled = true")
-                        ->setParameter('followingIds', array_values($followingIds))
-                        ->orderBy('ir.createdDate', 'DESC'); 
-                ;
-            }
-            
-            if($requestType != null){
-                if($requestType == Constants::DISPLAY_REQUEST_CLOSED){
-                    $qb = $qb->andwhere('ir.closed = true');       
-                }else if($requestType == Constants::DISPLAY_REQUEST_PENDING){
-                    $qb = $qb->andwhere('ir.closed = false');       
-                }
-            }
-            
-            $qb = $qb
-                      ->setFirstResult(($page-1) * $limit)
-                      ->setMaxResults($limit)
-            ;
-             
-            return $qb
-               ->getQuery()
-               ->getResult()
-            ;           		  
-	}
-                        
-    	public function getOneImageRequest($id)
-	{
-            $qb = $this
-                ->createQueryBuilder('ir')
-                ->where('ir.id = :id')
-                ->setParameter('id', $id)
-                ->leftJoin('ir.author', 'irA')
-                ->addSelect('irA')
-                ->leftJoin('ir.category', 'c')
-                ->addSelect('c')
-                ->leftJoin('ir.tags', 't')                
-                ->addSelect('t')                
-            ;                                    
-          
-	  return $qb
-		->getQuery()
-		->getSingleResult()
-	  ;
-	}
-        
-        /* query for profile page */        
-        public function getUserImageRequestContributionIds($userid, $limit, $page){
-             $qb = $this
-                ->createQueryBuilder('ir')
-                ->select('ir.id')                               
-                ->leftJoin('ir.propositions', 'p')
-                //->where('p.author = :userId and p.enabled = true')               
-                ->orWhere('ir.author = :userId and ir.enabled = true')                
-                ->setParameter('userId', $userid)
-                ->orderBy('ir.createdDate', 'DESC')
-                ->distinct(true)                
-            ;
-             
-            $qb = $qb
-                   ->setFirstResult(($page-1) * $limit)
-                   ->setMaxResults($limit)
-               ;
-            return $qb
-               ->getQuery()
-               ->getResult()
-            ;  
-        }
-        
-        public function getPopularImageRequests($limit){
-            $today = new \DateTime();         
-            $lastWeek = new \DateTime();        
-            $lastWeek->sub(new \DateInterval('P7D'));         
+    public function getImageRequestsId($em, $searchParam, $limit, $page, $displayMode, $userId, $followingIds, $tagsParam = null, $categoriesParam = null, $concerningMeParam = false, $requestType = null)
+    {   
 
-            $qb = $this->createQueryBuilder('ir')
-                        ->distinct(true)
-                        ->leftJoin('ir.author', 'irA')
-                        ->select('ir.id as imageRequestId')
-                        ->where('ir.createdDate BETWEEN :lastWeek AND :today' )                        
-                        ->setParameter('lastWeek', $lastWeek)
-                        ->setParameter('today', $today)
-                        ->andWhere('irA.enabled = true')
-                        ->andWhere('ir.enabled = true')
-                        ->addOrderBy('ir.upvote + ir.propositionsNb', 'DESC')
-                        ->setMaxResults($limit)
-        ; 
-        return  $qb
-                           ->getQuery()
-                           ->getResult(); 
+        $qb = $this->createQueryBuilder('ir')
+                    ->select('ir.id')
+                    ->distinct(true)
+                    ->leftJoin('ir.author', 'irA')
+                    ->leftJoin('ir.category', 'c')
+                    ->where('ir.enabled = true AND irA.enabled = true')
+        ;
+
+        if($searchParam != null){
+            $qb = $qb
+                    ->leftJoin('ir.tags', 't')                        
+                    ->where($qb->expr()->like('ir.title', ':title'))
+                    ->setParameter('title', '%'.$searchParam.'%')
+                    ->orWhere($qb->expr()->like('t.name', ':name'))
+                    ->setParameter('name', '%'.$searchParam.'%')
+                    ->orWhere($qb->expr()->like('c.name', ':cat'))
+                    ->setParameter('cat', '%'.$searchParam.'%');                        
         }
+
+        if($tagsParam != null){
+            $qb = $qb->leftJoin('ir.tags', 't');
+            $i = 0;
+            $request = '';
+            foreach ($tagsParam as $tagName){
+                if($i>0)$request .= ' OR ';
+                $request .= 't.id = :nameT'.$i;
+                $qb = $qb                            
+                        ->setParameter('nameT'.$i, $tagName);
+                $i++;                    
+            }
+            $qb = $qb
+                        ->andWhere($request);
+        }
+
+        if($categoriesParam != null){                
+            $i = 0;
+            $request = '';
+            foreach ($categoriesParam as $cat){
+                if($i>0)$request .= ' OR ';
+                $request .= 'c.id = :idC'.$i;
+                $qb = $qb                            
+                        ->setParameter('idC'.$i, $cat);
+                $i++;
+            }
+             $qb = $qb
+                        ->andWhere($request);
+        }
+
+        if($concerningMeParam){
+            $qb = $qb
+                    ->leftJoin('ir.propositions', 'p')
+                    ->leftJoin('p.author', 'pA')
+                    ->andWhere("irA.id = :userId2 OR pA.id = :userId2")
+                    ->setParameter('userId2', $userId);
+        }
+
+        if($displayMode == Constants::ORDER_BY_DATE){
+            $qb = $qb->orderBy('ir.createdDate', 'DESC'); 
+        }else if($displayMode == Constants::ORDER_BY_UPVOTE){
+            $qb = $qb->orderBy('ir.upvote + (ir.propositionsNb*2)', 'DESC'); 
+        }else if($displayMode == Constants::ORDER_BY_INTEREST){
+            $qb = $qb                                               
+                    ->from('PPUserBundle:User', 'u')                        
+                    ->andwhere('u.id = :userId')                        
+                    ->setParameter('userId', $userId)                        
+                    ->leftJoin('u.following', 'uF')                       
+                    ->andwhere("irA.id IN(:followingIds) AND irA.enabled = true")
+                    ->setParameter('followingIds', array_values($followingIds))
+                    ->orderBy('ir.createdDate', 'DESC'); 
+            ;
+        }
+
+        if($requestType != null){
+            if($requestType == Constants::DISPLAY_REQUEST_CLOSED){
+                $qb = $qb->andwhere('ir.closed = true');       
+            }else if($requestType == Constants::DISPLAY_REQUEST_PENDING){
+                $qb = $qb->andwhere('ir.closed = false');       
+            }
+        }
+
+        $qb = $qb
+                  ->setFirstResult(($page-1) * $limit)
+                  ->setMaxResults($limit)
+        ;
+
+        return $qb
+           ->getQuery()
+           ->getResult()
+        ;           		  
+    }
+                        
+    public function getOneImageRequest($id)
+    {
+        $qb = $this
+            ->createQueryBuilder('ir')
+            ->where('ir.id = :id')
+            ->setParameter('id', $id)
+            ->leftJoin('ir.author', 'irA')
+            ->addSelect('irA')
+            ->leftJoin('ir.category', 'c')
+            ->addSelect('c')
+            ->leftJoin('ir.tags', 't')                
+            ->addSelect('t')                
+        ;                                    
+
+      return $qb
+            ->getQuery()
+            ->getSingleResult()
+      ;
+    }
+        
+    /* query for profile page */        
+    public function getUserImageRequestContributionIds($userid, $limit, $page){
+         $qb = $this
+            ->createQueryBuilder('ir')
+            ->select('ir.id')                               
+            ->leftJoin('ir.propositions', 'p')
+            //->where('p.author = :userId and p.enabled = true')               
+            ->orWhere('ir.author = :userId and ir.enabled = true')                
+            ->setParameter('userId', $userid)
+            ->orderBy('ir.createdDate', 'DESC')
+            ->distinct(true)                
+        ;
+
+        $qb = $qb
+               ->setFirstResult(($page-1) * $limit)
+               ->setMaxResults($limit)
+           ;
+        return $qb
+           ->getQuery()
+           ->getResult()
+        ;  
+    }
+        
+    public function getPopularImageRequests($limit){
+        $today = new \DateTime();         
+        $lastWeek = new \DateTime();        
+        $lastWeek->sub(new \DateInterval('P7D'));         
+
+        $qb = $this->createQueryBuilder('ir')
+                    ->distinct(true)
+                    ->leftJoin('ir.author', 'irA')
+                    ->select('ir.id as imageRequestId')
+                    ->where('ir.createdDate BETWEEN :lastWeek AND :today' )                        
+                    ->setParameter('lastWeek', $lastWeek)
+                    ->setParameter('today', $today)
+                    ->andWhere('irA.enabled = true')
+                    ->andWhere('ir.enabled = true')
+                    ->addOrderBy('ir.upvote + ir.propositionsNb', 'DESC')
+                    ->setMaxResults($limit)
+    ; 
+    return  $qb
+                       ->getQuery()
+                       ->getResult(); 
+    }
     
 }

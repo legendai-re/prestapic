@@ -4,7 +4,6 @@ namespace PP\UserBundle\Controller;
 
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -109,7 +108,7 @@ class ShowUserApiController extends Controller
                     'canUpvoteImageRequest' => $canUpvoteImageRequest,
                     'screenWidth' => $screenWidth
                 ))
-                ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'requestList'));
+                ->setTemplate('PPRequestBundle:Request:requestList.html.twig');
         }else if($contentToDisplay == UserConstants::DISPLAY_PROPOSITION){
              $view = View::create()
                 ->setData(array(                                      
@@ -119,7 +118,7 @@ class ShowUserApiController extends Controller
                     'propositionList' => $propositionsList,                    
                     'canUpvoteProposition' => $canUpvoteProposition
                 ))
-                ->setTemplate(new TemplateReference('PPRequestBundle', 'Request', 'propositionList'));
+                ->setTemplate('PPRequestBundle:Request:propositionList.html.twig');
         }
         else{
             return new \Symfony\Component\HttpFoundation\Response();
@@ -320,7 +319,7 @@ class ShowUserApiController extends Controller
                 'haveNextPage' => $haveNextPage,
                 'userList' => $userList
             ))
-            ->setTemplate(new TemplateReference('PPUserBundle', 'Search', 'userList'));
+            ->setTemplate('PPUserBundle:Search:userList.html.twig');
 
         return $this->getViewHandler()->handle($view);
     }
@@ -339,7 +338,7 @@ class ShowUserApiController extends Controller
                     'currentUser' => $currentUser,
                     'editUserForm' => $editUserForm->createView()
                 ))
-                ->setTemplate(new TemplateReference('PPUserBundle', 'Profile', 'edit_profile_form'));
+                ->setTemplate('PPUserBundle:Profile:edit_profile_form.html.twig');
         
             return $this->getViewHandler()->handle($view);
         }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap>
+       <loc>{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('sitemap_main') }}</loc>     
+    </sitemap>
+    
+    {# users sitemaps #}
+     {% for i in 0..userPageNb %}           
+     <sitemap>
+        <loc>{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('sitemap_user', {'page' : i+1} ) }}</loc>      
+     </sitemap>
+     {% endfor %}
+     
+      {# users imageRequest #}
+     {% for i in 0..irPageNb %}           
+     <sitemap>
+        <loc>{{ app.request.scheme ~'://' ~ app.request.httpHost ~ path('sitemap_image_request', {'page' : i+1} ) }}</loc>      
+     </sitemap>
+     {% endfor %}
+     
+</sitemapindex>

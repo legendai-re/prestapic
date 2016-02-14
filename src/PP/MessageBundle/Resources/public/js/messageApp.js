@@ -77,12 +77,12 @@ messageApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeCl
             $rootScope.$emit('loadConversation', $rootScope.currentUser.threadList[threadToLoad.id]);
             $rootScope.currentThread = $rootScope.currentUser.threadList[threadToLoad.id];
         }
-    });
+    });       
         
     /* get inbox threads + current user info*/
     $http.get(formAction).
         then(function(response){
-            $rootScope.currentUser = response.data;                                
+            $rootScope.currentUser = response.data;
             
             /* start message listener */
             FayeClient.subscribe('/messages/'+$rootScope.currentUser.id, function (message) {            
@@ -99,7 +99,7 @@ messageApp.run(['$rootScope', 'FayeClient', '$http',function ($rootScope, FayeCl
                 }
             }else{
                 if(MOBILE_MODE){
-                    $("#chatContainer").css("margin-left", "-100%");       
+                    $("#chatContainer").css("margin-left", "0");       
                 }
                 $("#no_message").css("display", "block");
             }

@@ -10,8 +10,9 @@
                     <button class="button-close buttonCloseMessage">×</button>
                 </div>
                 {% endverbatim %}{{ form(getCurrentUserForm) }}{% verbatim %}
+                    <!--   track by $index -->
                 <ul class="list-mess">
-                    <li ng-repeat="thread in currentUser.threadList track by $index" ng-if="thread.target.name" class="message" >                    
+                    <li ng-repeat="thread in currentUser.threadList track by $index | orderBy:'lastMessageDate':true " ng-if="thread.target.name" class="message" >                         
                         <a href="" ng-click="inbox.gotToConversation(thread)"  ng-class="{open: thread.id == currentUser.selectedThreadId}" >
                             <div class="avatar">
                                 <img ng-src="{{ thread.target.image }}">

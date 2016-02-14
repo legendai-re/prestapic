@@ -27,7 +27,6 @@ use Symfony\Component\Form\FormError;
 
 use FOS\RestBundle\View\View;
 
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 
 use PP\UserBundle\Constant\UserConstants;
 use PP\UserBundle\Form\Type\RegistrationFormType;
@@ -60,7 +59,7 @@ class RegistrationApiController extends Controller
             ->setData(array( 
                 'form' => $form->createView()                
             ))
-            ->setTemplate(new TemplateReference('FOSUserBundle', 'Registration', 'register_content'));
+            ->setTemplate('FOSUserBundle:Registration:register_content.html.twig');
 
         return $this->getViewHandler()->handle($view);
         
