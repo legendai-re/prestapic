@@ -23,14 +23,14 @@
             
             {# upvote #}
             {% if canUpvoteImageRequest == true %}
-                {{ form_start(upvoteRequestForm) }}            
+                {{ form_start(upvoteRequestForm) }}        
                 {{ form_end(upvoteRequestForm) }}
             {% endif %}
             <a id="imageRequestUpvoteButton_{{ imageRequest.id }}" href="" title="Up vote"
                 {% if  is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                     {% if app.user.id == imageRequest.author.id %}
                         class="count-vote blocked"
-                    {% elseif canUpvoteImageRequest == true %}                
+                    {% elseif canUpvoteImageRequest == true %}
                         ng-click="request.postRequestVote({{ imageRequest.id }})"
                         class="count-vote"
                     {% else %}
@@ -87,7 +87,7 @@
             </div>
             {% if is_granted("ROLE_USER") %}
             <div class="actions-right">
-                <a href="" class="action">ask clarification</a>
+                <a href="#comment_section" class="action">ask clarification</a>
                 <div class="dropdown-container stopPropagation">
                     <a ng-click="request.showMoreOption()" href="" class="action more">More</a>
                     <ul id="show_more_request_option" class="dropdown-choices" style="display: none;">
@@ -187,7 +187,7 @@
             </article>
         {% endif %}    
     
-        <article class="comments" ng-controller="commentsController as comments" ng-init="comments.init({{ imageRequest.id }})">
+        <article id="comment_section" class="comments" ng-controller="commentsController as comments" ng-init="comments.init({{ imageRequest.id }})">
             {{ form(getCommentForm) }}
             {% verbatim %}        
                 <div ng-cloak ng-if="commentThread.commentNb == 1" class="title-section">{{ commentThread.commentNb }} comment</div>

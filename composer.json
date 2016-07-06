@@ -23,7 +23,7 @@
         "stof/doctrine-extensions-bundle": "~1.1",
         "jms/serializer-bundle": "1.1.0",
         "friendsofsymfony/user-bundle": "dev-master",
-        "friendsofsymfony/rest-bundle": "dev-master",    
+        "friendsofsymfony/rest-bundle": "dev-master",
         "coresphere/console-bundle": "dev-master",
         "nc/faye-client": "v1.1.1"
     },

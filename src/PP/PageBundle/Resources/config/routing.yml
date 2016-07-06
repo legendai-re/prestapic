@@ -1,5 +1,5 @@
 page_help:
-    path:     /
+    path:     /help
     defaults: { _controller: PPPageBundle:Page:help }
 
 page_about:
@@ -7,19 +7,19 @@ page_about:
     defaults: { _controller: PPPageBundle:Page:about }
     
 page_terms:
-    path:     /terms/
+    path:     /policies/terms/
     defaults: { _controller: PPPageBundle:Page:terms }
     
 page_cookies:
-    path:     /cookies/
+    path:     /policies/cookies/
     defaults: { _controller: PPPageBundle:Page:cookies }
 
 page_privacy:
-    path:     /privacy/
+    path:     /policies/privacy/
     defaults: { _controller: PPPageBundle:Page:privacy }
     
 page_license:
-    path:     /license/
+    path:     /policies/license/
     defaults: { _controller: PPPageBundle:Page:license }
 
 

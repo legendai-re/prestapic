@@ -4,7 +4,7 @@ sitemap:
 
 page:
     resource: "@PPPageBundle/Resources/config/routing.yml"
-    prefix:   /help/
+    prefix:   /
 
 pp_comment:
     resource: "@PPCommentBundle/Resources/config/routing.yml"

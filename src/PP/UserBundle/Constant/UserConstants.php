@@ -12,7 +12,7 @@ class UserConstants {
     const DISPLAY_PROPOSITION = 2;
     
     public static function getForbidddenName(){
-        return array("users", "_profiler", "help", "prestapic");
+        return array("users", "_profiler", "help", "prestapic", "about", "guide", "policies");
     } 
     
     public static function getAllowedChar(){
